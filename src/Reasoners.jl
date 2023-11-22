@@ -49,25 +49,51 @@ children(tableaunode::TableauNode) = tableaunode.children[]
 """
 Add one or more children to a tableau node
 """
-function pushchildren!(tableaunode::TableauNode, children::TableauNode...)
-    push!(Reasoners.children(tableaunode), children...)
-end
+pushchildren!(tableaunode::TableauNode, children::TableauNode...) = push!(Reasoners.children(tableaunode), children...)
 
-struct TableauLeaf
-    leafnode::Ref{TableauNode}
-    expansionnode::Ref{TableauNode}
+"""
+Evaluate the height of the tableau node
+"""
+height(tableaunode::TableauNode) = length(children(tableaunode)) == 0 ? 0 : 1 + maximum(height(c) for c in children(tableaunode))
 
-    function TableauLeaf(leafnode::Ref{TableauNode}, expansionnode::Ref{TableauNode})
+############################################################################################
+#### TableauBranch #########################################################################
+############################################################################################
+
+"""
+    struct TableauBranch
+        leafnode::TableauNode
+        expansionnode::TableauNode
+    end
+
+A branch of the tableau is characterized by leaf node and a respective expansion node
+"""
+struct TableauBranch
+    leafnode::TableauNode
+    expansionnode::TableauNode
+
+    function TableauBranch(leafnode::TableauNode, expansionnode::TableauNode)
         return new(leafnode, expansionnode)
     end
 end
 
+"""
+Getter for the leaf node of a tableau branch
+"""
+leafnode(tableaubranch::TableauBranch) = tableaubranch.leafnode
+
+
+"""
+Getter for the expansion node of a tableau branch
+"""
+expansionnode(tableaubranch::TableauBranch) = tableaubranch.expansionnode
+
 struct HeapNode
     weight::Int
-    leaf::TableauLeaf
+    tableaubranch::TableauBranch
 
-    function HeapNode(weight::Int, leaf::TableauLeaf)
-        return new(weight, leaf)
+    function HeapNode(weight::Int, tableaubranch::TableauBranch)
+        return new(weight, tableaubranch)
     end
 end
 
@@ -80,8 +106,8 @@ struct WeightOrdering <: Base.Order.Ordering end
 import Base.Order.lt
 lt(o::WeightOrdering, a::HeapNode, b::HeapNode) = isless(weight(a), weight(b))
 
-function leaf(heapnode::HeapNode)::TableauLeaf
-    return heapnode.leaf
+function tableaubranch(heapnode::HeapNode)::TableauBranch
+    return heapnode.tableaubranch
 end
 
 struct InformationHeap
@@ -105,31 +131,31 @@ function informationtype(informationheap::InformationHeap)::Function
     return informationheap.informationtype
 end
 
-function chooseleaf(heaps::Set{InformationHeap})::TableauLeaf
-    candidates = Vector{TableauLeaf}()
+function chooseleaf(heaps::Set{InformationHeap})::TableauBranch
+    candidates = Vector{TableauBranch}()
     for informationheap ∈ heaps
-        push!(candidates, leaf(first(heap(informationheap))))
+        push!(candidates, tableaubranch(first(heap(informationheap))))
     end
     candidatesdict = countmap(candidates)
     return collect(keys(candidatesdict))[argmax(collect(values(candidatesdict)))]
 end
 
-function sat(leavesset::Set{TableauLeaf}, heaps::Set{InformationHeap})
-    leaf = chooseleaf(heaps)
-    println(leaf)
+function sat(leavesset::Set{TableauBranch}, heaps::Set{InformationHeap})
+    tableaubranch = chooseleaf(heaps)
+    println(tableaubranch)
 end
 
 function sat(φ::Formula, information::Function...)
     # Init
-    leavesset = Set{TableauLeaf}()
-    heaps = Set{InformationHeap}() # Heaps to be used for leaf selection based on meta-data information
+    leavesset = Set{TableauBranch}()
+    heaps = Set{InformationHeap}() # Heaps to be used for tableaubranch selection based on meta-data information
 
     for informationtype ∈ information
         push!(heaps, InformationHeap(informationtype))
     end
 
     rootnode = TableauNode(φ)
-    rootleaf = TableauLeaf(Ref(rootnode), Ref(rootnode))
+    rootleaf = TableauBranch(Ref(rootnode), Ref(rootnode))
 
     push!(leavesset, rootleaf)
     for informationheap ∈ heaps
