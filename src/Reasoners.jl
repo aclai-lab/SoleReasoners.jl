@@ -6,17 +6,51 @@ using SoleLogics
 using DataStructures
 using StatsBase
 
+############################################################################################
+#### Atom ##################################################################################
+############################################################################################
+
+"""
+    struct TableauNode
+        φ::Formula
+        children::Base.RefValue{Set{TableauNode}}
+    end
+
+The atomic structure of a tableu, it contains a formula φ (which structure is defined in
+the SoleLogics package) and a reference to a set of children tableau nodes.
+"""
 struct TableauNode
     φ::Formula
-    children::Union{TableauNode,Nothing}
+    children::Base.RefValue{Set{TableauNode}}
 
-    function TableauNode(φ::Formula, children::Union{TableauNode, Nothing})
+    function TableauNode(φ::Formula, children::Base.RefValue{Set{TableauNode}})
         return new(φ, children)
     end
 
-    function TableauNode(φ::Formula)
-        return TableauNode(φ, nothing)
+    function TableauNode(φ::Formula, children::Set{TableauNode}) 
+        return TableauNode(φ, Ref(children))
     end
+
+    function TableauNode(φ::Formula)
+        return TableauNode(φ, Set{TableauNode}())
+    end
+end
+
+"""
+Getter for the formula of a tableau node
+"""
+φ(tableaunode::TableauNode) = tableaunode.φ
+
+"""
+Getter for the children of a tableau node
+"""
+children(tableaunode::TableauNode) = tableaunode.children[]
+
+"""
+Add one or more children to a tableau node
+"""
+function pushchildren!(tableaunode::TableauNode, children::TableauNode...)
+    push!(Reasoners.children(tableaunode), children...)
 end
 
 struct TableauLeaf
