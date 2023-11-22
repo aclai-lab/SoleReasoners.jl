@@ -6,6 +6,8 @@ using SoleLogics
 using DataStructures
 using StatsBase
 
+import Base.Order.lt
+
 ############################################################################################
 #### TableauNode ###########################################################################
 ############################################################################################
@@ -37,24 +39,28 @@ struct TableauNode
 end
 
 """
-Getter for the formula of a tableau node
+Getter for the formula of a tableau node.
 """
 φ(tableaunode::TableauNode) = tableaunode.φ
 
 """
-Getter for the children of a tableau node
+Getter for the children of a tableau node.
 """
 children(tableaunode::TableauNode) = tableaunode.children[]
 
 """
-Add one or more children to a tableau node
+Add one or more children to a tableau node.
 """
-pushchildren!(tableaunode::TableauNode, children::TableauNode...) = push!(Reasoners.children(tableaunode), children...)
+function pushchildren!(tableaunode::TableauNode, children::TableauNode...)
+    push!(Reasoners.children(tableaunode), children...)
+end
 
 """
-Evaluate the height of the tableau node
+Evaluate the height of the tableau node.
 """
-height(tableaunode::TableauNode) = length(children(tableaunode)) == 0 ? 0 : 1 + maximum(height(c) for c in children(tableaunode))
+function height(tableaunode::TableauNode)
+    length(children(tableaunode)) == 0 ? 0 : 1 + maximum(height(c) for c in children(tableaunode))
+end
 
 ############################################################################################
 #### TableauBranch #########################################################################
@@ -66,7 +72,7 @@ height(tableaunode::TableauNode) = length(children(tableaunode)) == 0 ? 0 : 1 + 
         expansionnode::TableauNode
     end
 
-A branch of the tableau is characterized by leaf node and a respective expansion node
+A branch of the tableau is characterized by leaf node and a respective expansion node.
 """
 struct TableauBranch
     leafnode::TableauNode
@@ -78,38 +84,80 @@ struct TableauBranch
 end
 
 """
-Getter for the leaf node of a tableau branch
+Getter for the leaf node of a tableau branch.
 """
 leafnode(tableaubranch::TableauBranch) = tableaubranch.leafnode
 
-
 """
-Getter for the expansion node of a tableau branch
+Getter for the expansion node of a tableau branch.
 """
 expansionnode(tableaubranch::TableauBranch) = tableaubranch.expansionnode
 
+############################################################################################
+#### HeapNode ##############################################################################
+############################################################################################
+
+"""
+    struct HeapNode
+        value::Int
+        tableaubranch::TableauBranch
+    end
+
+The atomic element of an heap, it contains a tableau branch and a value for it associated to
+a specific kind of information, parameter of the respective heap.
+"""
 struct HeapNode
-    weight::Int
+    informationvalue::Int
     tableaubranch::TableauBranch
 
-    function HeapNode(weight::Int, tableaubranch::TableauBranch)
-        return new(weight, tableaubranch)
+    function HeapNode(informationvalue::Int, tableaubranch::TableauBranch)
+        return new(informationvalue, tableaubranch)
     end
 end
 
-function weight(heapnode::HeapNode)
-    return heapnode.weight
+"""
+Getter for the information value of a heap node.
+"""
+informationvalue(heapnode::HeapNode) = heapnode.informationvalue
+
+
+"""
+Getter for the tableau branch of a heap node.
+"""
+tableaubranch(heapnode::HeapNode) = heapnode.tableaubranch
+
+############################################################################################
+#### HeapOrdering ##########################################################################
+############################################################################################
+
+"""
+Definition of a new ordering for the heaps treating them as min heaps ordered on the
+information value.
+"""
+struct HeapOrdering <: Base.Order.Ordering end
+
+"""
+Definition of the lt function for the new ordering.
+"""
+function lt(o::HeapOrdering, a::HeapNode, b::HeapNode)
+    isless(informationvalue(a), informationvalue(b))
 end
 
-struct WeightOrdering <: Base.Order.Ordering end
+############################################################################################
+#### InformationHeap #######################################################################
+############################################################################################
 
-import Base.Order.lt
-lt(o::WeightOrdering, a::HeapNode, b::HeapNode) = isless(weight(a), weight(b))
+"""
+    struct InformationHeap
+        heap::BinaryHeap{HeapNode}
+        informationtype::Function
+    end
 
-function tableaubranch(heapnode::HeapNode)::TableauBranch
-    return heapnode.tableaubranch
-end
-
+An information heap is basically a heap parametrized over an informationtype, i.e., a
+function which extract some information about a tableau branch, therefore containing in each
+node a tabluea branch and the relative information value, and which is ordered as a min heap
+over this information value.
+"""
 struct InformationHeap
     heap::BinaryHeap{HeapNode}
     informationtype::Function
@@ -123,13 +171,19 @@ struct InformationHeap
     end
 end
 
-function heap(informationheap::InformationHeap)::AbstractHeap{HeapNode}
-    return informationheap.heap
-end
+"""
+Getter for the heap of an information heap.
+"""
+heap(informationheap::InformationHeap)::AbstractHeap{HeapNode} = informationheap.heap
 
-function informationtype(informationheap::InformationHeap)::Function
-    return informationheap.informationtype
-end
+"""
+Getter for the information type of an information heap.
+"""
+informationtype(informationheap::InformationHeap)::Function = informationheap.informationtype
+
+############################################################################################
+#### SAT ###################################################################################
+############################################################################################
 
 function chooseleaf(heaps::Set{InformationHeap})::TableauBranch
     candidates = Vector{TableauBranch}()
