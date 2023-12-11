@@ -1,222 +1,460 @@
 module Reasoners
 
-export sat
+export Tableau, sat
 
-using SoleLogics
 using DataStructures
+using SoleLogics
 using StatsBase
 
-import Base.Order.lt
+children(φ::Formula) = SoleLogics.children(φ)
+
+import Base.isempty, Base.push!, Base.pop!, Base.Order.lt
 
 ############################################################################################
-#### TableauNode ###########################################################################
+#### Tableau ###############################################################################
 ############################################################################################
 
 """
-    struct TableauNode
+    struct Tableau
         φ::Formula
-        children::Base.RefValue{Set{TableauNode}}
+        father::Base.RefValue{Set{Tableau}}
+        children::Base.RefValue{Set{Tableau}}
+        literals::Base.RefValue{Set{Formula}}
     end
+A recursive structure resembling a tree which contains a formula φ (which structure is
+defined in the SoleLogics package) and references to the father, the set of children and
+the set of literals (atoms and negation of atoms) found in the same branch.
 
-The atomic structure of a tableu, it contains a formula φ (which structure is defined in
-the SoleLogics package) and a reference to a set of children tableau nodes.
+A tableau is a dynamic structure used to solve the satisfiability problem following the
+analytic tableau approach. At a specific instant in time, the root represents a possible
+expansion node of the tableau, while each path from a root to one of its leaves represents
+a branch, with literals in the leaves containing the literals (atoms and negation of atoms)
+encountered it the expanded nodes for that branch.
+    
+This allows to delegate to the Julia garbage collector the deallocation of expanded nodes,
+while simplifying root (expansion node) search and branch management.
+
+Note that, while at initialization only there is only one root, the structure later on
+can be divided in many tree-like structures, with each root representing an expansion node
+and each set of leaves representing the leaves (or branches) associated with that expansion
+node.
 """
-struct TableauNode
+struct Tableau
     φ::Formula
-    children::Base.RefValue{Set{TableauNode}}
+    father::Base.RefValue{Set{Tableau}} # Note that this set contains at most one element
+    children::Base.RefValue{Set{Tableau}}
+    literals::Base.RefValue{Set{Formula}}
 
-    function TableauNode(φ::Formula, children::Base.RefValue{Set{TableauNode}})
-        return new(φ, children)
+    function Tableau(φ::Formula, father::Base.RefValue{Set{Tableau}},
+                     children::Base.RefValue{Set{Tableau}},
+                     literals::Base.RefValue{Set{Formula}})::Tableau
+        return new(φ, father, children, literals)
     end
 
-    function TableauNode(φ::Formula, children::Set{TableauNode}) 
-        return TableauNode(φ, Ref(children))
+    function Tableau(φ::Formula)::Tableau
+        return Tableau(φ, Ref(Set{Tableau}()), Ref(Set{Tableau}()), Ref(Set{Formula}()))
     end
 
-    function TableauNode(φ::Formula)
-        return TableauNode(φ, Set{TableauNode}())
+    function Tableau(φ::Formula, _::Nothing)::Tableau
+        return Tableau(φ)
+    end
+
+    function Tableau(φ::Formula, father::Base.RefValue{Set{Tableau}})::Tableau
+        return Tableau(φ, father, Ref(Set{Tableau}()), Ref(Set{Formula}()))
+    end
+
+    function Tableau(φ::Formula, father::Base.RefValue{Set{Tableau}},
+                     literals::Base.RefValue{Set{Formula}})::Tableau
+        returnTableau(φ, father, Ref(Set{Tableau}()), literals)
+    end
+
+    function Tableau(φ::Formula, father::Tableau)::Tableau
+        tableau = Tableau(φ, Ref(Set{Tableau}([father])))
+        pushchildren!(father, tableau)
+        for atom in literals(father)
+            pushliterals!(tableau, atom)
+        end
+        return tableau
     end
 end
 
 """
-Getter for the formula of a tableau node.
+Getter for the formula of a tableau.
 """
-φ(tableaunode::TableauNode) = tableaunode.φ
+φ(tableau::Tableau)::Formula = tableau.φ
 
 """
-Getter for the children of a tableau node.
+Getter for the set containing the father of a tableau.
 """
-children(tableaunode::TableauNode) = tableaunode.children[]
+fatherset(tableau::Tableau)::Set{Tableau} = tableau.father[]
 
 """
-Add one or more children to a tableau node.
+Getter for the father of a tableau.
 """
-function pushchildren!(tableaunode::TableauNode, children::TableauNode...)
-    push!(Reasoners.children(tableaunode), children...)
+function father(tableau::Tableau)::Union{Tableau, Nothing}
+    return isempty(fatherset(tableau)) ? nothing : first(fatherset(tableau))
 end
 
 """
-Evaluate the height of the tableau node.
+Getter for the set containing the children of a tableau.
 """
-function height(tableaunode::TableauNode)
-    length(children(tableaunode)) == 0 ? 0 : 1 + maximum(height(c) for c in children(tableaunode))
+childrenset(tableau::Tableau)::Set{Tableau} = tableau.children[]
+
+"""
+Getter for the set containing the literals of a tableau.
+"""
+literals(tableau::Tableau)::Set{Formula} = tableau.literals[]
+
+"""
+Getter for the leaves of a tableau.
+"""
+function leaves(tableau::Tableau)::Set{Tableau}
+    children = childrenset(tableau)
+    if isempty(children)
+        return Set{Tableau}([tableau])
+    else
+        leavesset = Set{Tableau}()
+        for child ∈ children
+            union!(leavesset, leaves(child))
+        end
+        return leavesset
+    end
 end
+
+"""
+Push new father to a tableau.
+"""
+function pushfather!(tableau::Tableau, newfather::Tableau)::Set{Tableau}
+    push!(fatherset(tableau), newfather)
+end
+
+"""
+Pop father of a tableau (the tableau becomes a root).
+"""
+popfather!(tableau::Tableau)::Tableau = pop!(fatherset(tableau))
+
+"""
+Push new children to a tableau.
+"""
+function pushchildren!(tableau::Tableau, children::Tableau...)::Set{Tableau}
+    push!(childrenset(tableau), children...)
+end
+
+"""
+Push new literals to a tableau.
+"""
+function pushliterals!(tableau::Tableau, newliterals::Formula...)::Set{Formula}
+    push!(literals(tableau), newliterals...)
+end
+
+"""
+Find root starting from the leaf (i.e., the expansion node relative to that leaf).
+"""
+function findroot(tableau::Tableau)::Tableau
+    father(tableau) === nothing ? tableau : findroot(father(tableau))
+end
+
+"""
+Return true if the tableau is still a leaf, false otherwise.
+"""
+isleaf(tableau::Tableau)::Bool = isempty(childrenset(tableau)) ? true : false
 
 ############################################################################################
-#### TableauBranch #########################################################################
+#### MetricHeapNode ########################################################################
 ############################################################################################
 
 """
-    struct TableauBranch
-        leafnode::TableauNode
-        expansionnode::TableauNode
+    struct MetricHeapNode
+        metricvalue::Int
+        tableau::Tableau
     end
 
-A branch of the tableau is characterized by leaf node and a respective expansion node.
+The atomic element of a MetricHeap, it contains a tableau branch and a value for the metric
+associated with the MetricHeap it is contained in.
 """
-struct TableauBranch
-    leafnode::TableauNode
-    expansionnode::TableauNode
+struct MetricHeapNode
+    metricvalue::Int
+    tableau::Tableau
 
-    function TableauBranch(leafnode::TableauNode, expansionnode::TableauNode)
-        return new(leafnode, expansionnode)
+    function MetricHeapNode(metricvalue::Int, tableau::Tableau)
+        return new(metricvalue, tableau)::MetricHeapNode
+    end
+
+    function MetricHeapNode(metric::Function, tableau::Tableau)
+        MetricHeapNode(metric(tableau), tableau)::MetricHeapNode
     end
 end
 
 """
-Getter for the leaf node of a tableau branch.
+Getter for the metric value of a heap node.
 """
-leafnode(tableaubranch::TableauBranch) = tableaubranch.leafnode
-
-"""
-Getter for the expansion node of a tableau branch.
-"""
-expansionnode(tableaubranch::TableauBranch) = tableaubranch.expansionnode
-
-############################################################################################
-#### HeapNode ##############################################################################
-############################################################################################
-
-"""
-    struct HeapNode
-        value::Int
-        tableaubranch::TableauBranch
-    end
-
-The atomic element of an heap, it contains a tableau branch and a value for it associated to
-a specific kind of information, parameter of the respective heap.
-"""
-struct HeapNode
-    informationvalue::Int
-    tableaubranch::TableauBranch
-
-    function HeapNode(informationvalue::Int, tableaubranch::TableauBranch)
-        return new(informationvalue, tableaubranch)
-    end
-end
-
-"""
-Getter for the information value of a heap node.
-"""
-informationvalue(heapnode::HeapNode) = heapnode.informationvalue
-
+metricvalue(metricheapnode::MetricHeapNode) = metricheapnode.metricvalue
 
 """
 Getter for the tableau branch of a heap node.
 """
-tableaubranch(heapnode::HeapNode) = heapnode.tableaubranch
+tableau(metricheapnode::MetricHeapNode) = metricheapnode.tableau
 
 ############################################################################################
-#### HeapOrdering ##########################################################################
+#### MetricHeapOrdering ####################################################################
 ############################################################################################
 
 """
 Definition of a new ordering for the heaps treating them as min heaps ordered on the
-information value.
+metric value.
 """
-struct HeapOrdering <: Base.Order.Ordering end
+struct MetricHeapOrdering <: Base.Order.Ordering end
 
 """
 Definition of the lt function for the new ordering.
 """
-function lt(o::HeapOrdering, a::HeapNode, b::HeapNode)
-    isless(informationvalue(a), informationvalue(b))
+function lt(o::MetricHeapOrdering, a::MetricHeapNode, b::MetricHeapNode)::Bool
+    isless(metricvalue(a), metricvalue(b))
 end
 
 ############################################################################################
-#### InformationHeap #######################################################################
+#### MetricHeap ############################################################################
 ############################################################################################
 
 """
-    struct InformationHeap
-        heap::BinaryHeap{HeapNode}
-        informationtype::Function
+    struct MetricHeap
+        heap::BinaryHeap{MetricHeapNode}
+        metric::Function
     end
 
-An information heap is basically a heap parametrized over an informationtype, i.e., a
-function which extract some information about a tableau branch, therefore containing in each
-node a tabluea branch and the relative information value, and which is ordered as a min heap
-over this information value.
+A MetricHeap is basically a heap parametrized over a metric, i.e., a function which extracts
+some information about a tableau branch, therefore containing in each node a tableau branch
+and the relative value for the metric, and which is ordered as a min heap over this
+metric value.
 """
-struct InformationHeap
-    heap::BinaryHeap{HeapNode}
-    informationtype::Function
+struct MetricHeap
+    heap::BinaryHeap{MetricHeapNode}
+    metric::Function
 
-    function InformationHeap(heap::BinaryHeap{HeapNode}, informationtype::Function)::InformationHeap
-        return new(heap, informationtype)
+    function MetricHeap(heap::BinaryHeap{MetricHeapNode}, metric::Function)::MetricHeap
+        return new(heap, metric)
     end
 
-    function InformationHeap(informationtype::Function)
-        return InformationHeap(BinaryHeap{HeapNode}(WeightOrdering()), informationtype)::InformationHeap
+    function MetricHeap(metric::Function)::MetricHeap
+        heap = BinaryHeap{MetricHeapNode}(MetricHeapOrdering())
+        return MetricHeap(heap, metric)::MetricHeap
     end
 end
 
 """
-Getter for the heap of an information heap.
+Getter for the binary heap of a MetricHeap.
 """
-heap(informationheap::InformationHeap)::AbstractHeap{HeapNode} = informationheap.heap
+heap(metricheap::MetricHeap)::BinaryHeap{MetricHeapNode} = metricheap.heap
 
 """
-Getter for the information type of an information heap.
+Getter for the metric function of a MetricHeap.
 """
-informationtype(informationheap::InformationHeap)::Function = informationheap.informationtype
+metric(metricheap::MetricHeap)::Function = metricheap.metric
+
+"""
+Push new metricheapnode to a MetricHeap.
+"""
+function push!(metricheap::MetricHeap,
+               metricheapnode::MetricHeapNode)::BinaryHeap{MetricHeapNode}
+    push!(heap(metricheap), metricheapnode)
+end
+
+"""
+Push new tableau to a MetricHeap.
+"""
+function push!(metricheap::MetricHeap, tableau::Tableau)::BinaryHeap{MetricHeapNode}
+    push!(metricheap, MetricHeapNode(metric(metricheap), tableau))
+end
+
+"""
+Pop head of a MetricHeap and return the tableau associated with it.
+"""
+pop!(metricheap::MetricHeap)::Tableau = tableau(pop!(heap(metricheap)))
+
+"""
+Returns true if the MetricHeap is empty, false otherwise.
+"""
+isempty(metricheap::MetricHeap)::Bool = DataStructures.isempty(heap(metricheap))
 
 ############################################################################################
 #### SAT ###################################################################################
 ############################################################################################
 
-function chooseleaf(heaps::Set{InformationHeap})::TableauBranch
-    candidates = Vector{TableauBranch}()
-    for informationheap ∈ heaps
-        push!(candidates, tableaubranch(first(heap(informationheap))))
+"""
+Choose a leaf using the provided metric heaps.
+"""
+function chooseleaf(metricheaps::Set{MetricHeap})::Union{Tableau, Nothing}
+    candidates = Vector{Tableau}()
+    for metricheap ∈ metricheaps
+        head = tableau(first(heap(metricheap)))
+        while !isleaf(head) && !isempty(metricheap)
+            pop!(metricheap)
+            if !isempty(metricheap)
+                head = tableau(first(heap(metricheap)))
+            end
+        end
+        if !isempty(metricheap)
+            push!(candidates, head)
+        end
     end
     candidatesdict = countmap(candidates)
-    return collect(keys(candidatesdict))[argmax(collect(values(candidatesdict)))]
+    if isempty(candidatesdict)
+        return nothing
+    else
+        return collect(keys(candidatesdict))[argmax(collect(values(candidatesdict)))]
+    end
 end
 
-function sat(leavesset::Set{TableauBranch}, heaps::Set{InformationHeap})
-    tableaubranch = chooseleaf(heaps)
-    println(tableaubranch)
+"""
+Push leaf to each metric heap.
+"""
+function push!(metricheaps::Set{MetricHeap}, tableau::Tableau)::Nothing
+    for metricheap ∈ metricheaps
+        push!(metricheap, tableau)
+    end
 end
 
-function sat(φ::Formula, information::Function...)
-    # Init
-    leavesset = Set{TableauBranch}()
-    heaps = Set{InformationHeap}() # Heaps to be used for tableaubranch selection based on meta-data information
-
-    for informationtype ∈ information
-        push!(heaps, InformationHeap(informationtype))
+"""
+Given a formula, return true if an interpretation that satisfies the formula exists, false
+otherwise.
+"""
+function sat(metricheaps::Set{MetricHeap})::Bool
+    leaf = chooseleaf(metricheaps)
+    if leaf === nothing
+        return false
+    else
+        root = findroot(leaf)
+        φroot = φ(root)        
+        if φroot isa Atom
+            # Atom case
+            if leaf === root
+                if ¬φroot ∉ literals(leaf)
+                    return true
+                else
+                    # Create fake child and don't push it to heaps
+                    pushfather!(leaf, leaf)
+                    pushchildren!(leaf, leaf) # Use the node itself to not waste space
+                end
+            else
+                push!(metricheaps, leaf)   # Push leaf back inside heaps
+                for l ∈ leaves(root)
+                    if ¬φroot ∉ literals(l)
+                        pushliterals!(l, φroot)
+                    else
+                        # Create fake child and don't push it to heaps
+                        pushfather!(l, l)
+                        pushchildren!(l, l) # Use the node itself to not waste space
+                    end
+                end
+            end
+        else
+            tokentype = typeof(token(φroot))
+            if tokentype === NamedConnective{:¬}
+                # Negation case
+                φi = children(φroot)[1]
+                if φi isa Atom
+                    # ¬φi where φi is an atom case
+                    if leaf === root
+                        if φi ∉ literals(leaf)
+                            return true
+                        else
+                            # Create fake child and don't push it to heap
+                            pushfather!(leaf, leaf)
+                            pushchildren!(leaf, leaf) # Use the node itself to not waste space
+                        end
+                    else
+                        push!(metricheaps, leaf)   # Push leaf back inside heap
+                        for l ∈ leaves(root)
+                            if φi ∉ literals(l)
+                                pushliterals!(l, φroot)
+                            else
+                                # Create fake child and don't push it to heap
+                                pushfather!(l, l)
+                                pushchildren!(l, l) # Use the node itself to not waste space
+                            end
+                        end
+                    end
+                else
+                    tokentype = typeof(token(φi))
+                    if tokentype === NamedConnective{:¬}
+                        for leaf ∈ leaves(root)
+                            t = Tableau(children(φi)[1], leaf)
+                            push!(metricheaps, t)
+                        end
+                    elseif tokentype === NamedConnective{:∨}
+                        t = leaf
+                        for φj ∈ children(φi)
+                            t = Tableau(¬φj, t)
+                        end
+                        push!(metricheaps, t)
+                    elseif tokentype === NamedConnective{:∧}
+                        for leaf ∈ leaves(root)
+                            for φj ∈ children(φi)
+                                t = Tableau(¬φj, leaf)
+                                push!(metricheaps, t)
+                            end
+                        end
+                    elseif tokentype === NamedConnective{:→}
+                        φ1, φ2 = children(φroot)
+                        φis = (φ1, ¬φ2)
+                        t = leaf
+                        for φi ∈ children(φis)
+                            t = Tableau(φi, t)
+                        end
+                        push!(metricheaps, t)
+                    end
+                end
+            elseif tokentype === NamedConnective{:∨}
+                # Disjunction case
+                for l ∈ leaves(root)
+                    for φi ∈ children(φroot)
+                        t = Tableau(φi, l)
+                        push!(metricheaps, t)
+                    end
+                end
+            elseif tokentype === NamedConnective{:∧}
+                # Conjunction case
+                for l ∈ leaves(root)
+                    t = l
+                    for φi ∈ children(φroot)
+                        t = Tableau(φi, t)
+                    end
+                    push!(metricheaps, t)
+                end
+            elseif tokentype === NamedConnective{:→}
+                # Implication case
+                φ1, φ2 = children(φroot)
+                φis = (¬φ1, φ2)
+                for leaf ∈ leaves(root)
+                    for φi ∈ φis
+                        t = Tableau(φi, leaf)
+                        push!(metricheaps, t)
+                    end
+                end
+            end
+        end
+        for child ∈ childrenset(root)
+            popfather!(child)
+        end
     end
+    sat(metricheaps)
+end
 
-    rootnode = TableauNode(φ)
-    rootleaf = TableauBranch(Ref(rootnode), Ref(rootnode))
-
-    push!(leavesset, rootleaf)
-    for informationheap ∈ heaps
-        push!(heap(informationheap), HeapNode(informationtype(informationheap)(φ), rootleaf))
+function sat(φ::Formula, metrics::Function...)::Bool
+    metricheaps = Set{MetricHeap}()   # Heaps to be used for tableau selection
+    for metric ∈ metrics
+        push!(metricheaps, MetricHeap(metric))
     end
-    
-    sat(leavesset, heaps)
+    root = Tableau(φ)
+    for metricheap ∈ metricheaps
+        push!(heap(metricheap), MetricHeapNode(metric(metricheap), root))
+    end
+    sat(metricheaps)
+end
+
+function sat(φ::Formula)::Bool
+    randombranch(tableau::Tableau) = rand(Int)
+    sat(φ, randombranch)
 end
 
 end # module Reasoners

@@ -8,16 +8,18 @@ Simply type the following commands in Julia's REPL
 
 ```julia
 # Install package
-using Pkg; Pkg.add("SoleLogics");
 using Pkg; Pkg.add("Reasoners");
 
 # Import packages
-using SoleLogics
+using SoleLogics    # Needed to write formulas
 using Reasoners
 
 # Instantiate a formula
-φ = parseformula("p∧q")
+φ = parseformula("(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)")   # false
+
+# Instantiate one ore more metrics (functions taking as input a Tableau and giving as output an Int)
+randombranch(tableau::Tableau) = rand(Int)
 
 # Call sat con the formula
-sat(φ, height, ntokens, natoms)
+sat(φ, randombranch)
 ``````
