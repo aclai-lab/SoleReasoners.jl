@@ -151,7 +151,7 @@ end
 Find root starting from the leaf (i.e., the expansion node relative to that leaf).
 """
 function findroot(tableau::Tableau)::Tableau
-    father(tableau) === nothing ? tableau : findroot(father(tableau))
+    isnothing(father(tableau)) ? tableau : findroot(father(tableau))
 end
 
 """
@@ -282,19 +282,19 @@ isempty(metricheap::MetricHeap)::Bool = DataStructures.isempty(heap(metricheap))
 
 """
 Choose a leaf using the provided metric heaps.
+At this moment, it simply returns the leaf which compares the most as head of the heaps.
 """
 function chooseleaf(metricheaps::Set{MetricHeap})::Union{Tableau, Nothing}
     candidates = Vector{Tableau}()
     for metricheap ∈ metricheaps
-        head = tableau(first(heap(metricheap)))
-        while !isleaf(head) && !isempty(metricheap)
-            pop!(metricheap)
-            if !isempty(metricheap)
-                head = tableau(first(heap(metricheap)))
+        while !isempty(metricheap)
+            head = tableau(first(heap(metricheap)))
+            if isleaf(head)
+                push!(candidates, head)
+                break
+            else
+                pop!(metricheap)
             end
-        end
-        if !isempty(metricheap)
-            push!(candidates, head)
         end
     end
     candidatesdict = countmap(candidates)
@@ -320,7 +320,7 @@ otherwise.
 """
 function sat(metricheaps::Set{MetricHeap})::Bool
     leaf = chooseleaf(metricheaps)
-    if leaf === nothing
+    if isnothing(leaf)
         return false
     else
         root = findroot(leaf)
@@ -402,6 +402,8 @@ function sat(metricheaps::Set{MetricHeap})::Bool
                             t = Tableau(φi, t)
                         end
                         push!(metricheaps, t)
+                    else
+                        error("Error: unrecognized NamedConnective.")
                     end
                 end
             elseif tokentype === NamedConnective{:∨}
@@ -431,6 +433,8 @@ function sat(metricheaps::Set{MetricHeap})::Bool
                         push!(metricheaps, t)
                     end
                 end
+            else
+                error("Error: unrecognized NamedConnective.")
             end
         end
         for child ∈ childrenset(root)
