@@ -5,6 +5,7 @@ export Tableau, sat
 using DataStructures
 using SoleLogics
 using StatsBase
+using Random
 
 children(φ::Formula) = SoleLogics.children(φ)
 
@@ -456,8 +457,8 @@ function sat(φ::Formula, metrics::Function...)::Bool
     sat(metricheaps)
 end
 
-function sat(φ::Formula)::Bool
-    randombranch(tableau::Tableau) = rand(Int)
+function sat(φ::Formula; rng = Random.GLOBAL_RNG)::Bool
+    randombranch(tableau::Tableau) = rand(rng, Int)
     sat(φ, randombranch)
 end
 
