@@ -3,9 +3,11 @@ module Reasoners
 export Tableau, sat
 
 using DataStructures
-using SoleLogics
 using StatsBase
 using Random
+using Reexport
+
+@reexport using SoleLogics
 
 children(φ::Formula) = SoleLogics.children(φ)
 
@@ -109,17 +111,20 @@ literals(tableau::Tableau)::Set{Formula} = tableau.literals[]
 """
 Getter for the leaves of a tableau.
 """
-function leaves(tableau::Tableau)::Set{Tableau}
+function leaves(leavesset::Set{Tableau}, tableau::Tableau)::Set{Tableau}
     children = childrenset(tableau)
     if isempty(children)
-        return Set{Tableau}([tableau])
+        push!(leavesset, tableau)
     else
-        leavesset = Set{Tableau}()
         for child ∈ children
-            union!(leavesset, leaves(child))
+            leaves(leavesset, child)
         end
-        return leavesset
     end
+    return leavesset
+end
+
+function leaves(tableau::Tableau)::Set{Tableau}
+    leaves(Set{Tableau}(), tableau)
 end
 
 """
