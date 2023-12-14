@@ -1,6 +1,6 @@
 module Reasoners
 
-export Tableau, sat
+export Tableau, sat, dimacstosole
 
 using DataStructures
 using StatsBase
@@ -325,129 +325,147 @@ Given a formula, return true if an interpretation that satisfies the formula exi
 otherwise.
 """
 function sat(metricheaps::Set{MetricHeap})::Bool
-    leaf = chooseleaf(metricheaps)
-    if isnothing(leaf)
-        return false
-    else
-        root = findroot(leaf)
-        φroot = φ(root)        
-        if φroot isa Atom
-            # Atom case
-            if leaf === root
-                if ¬φroot ∉ literals(leaf)
-                    return true
-                else
-                    # Create fake child and don't push it to heaps
-                    pushfather!(leaf, leaf)
-                    pushchildren!(leaf, leaf) # Use the node itself to not waste space
-                end
-            else
-                push!(metricheaps, leaf)   # Push leaf back inside heaps
-                for l ∈ leaves(root)
-                    if ¬φroot ∉ literals(l)
-                        pushliterals!(l, φroot)
+    while true
+        leaf = chooseleaf(metricheaps)
+        if isnothing(leaf)
+            return false
+        else
+            root = findroot(leaf)
+            φroot = φ(root)        
+            if φroot isa Atom
+                # Atom case
+                if leaf === root
+                    if ¬φroot ∉ literals(leaf)
+                        return true
                     else
                         # Create fake child and don't push it to heaps
-                        pushfather!(l, l)
-                        pushchildren!(l, l) # Use the node itself to not waste space
+                        pushfather!(leaf, leaf)
+                        pushchildren!(leaf, leaf) # Use the node itself to not waste space
+                    end
+                else
+                    push!(metricheaps, leaf)   # Push leaf back inside heaps
+                    for l ∈ leaves(root)
+                        if ¬φroot ∉ literals(l)
+                            pushliterals!(l, φroot)
+                        else
+                            # Create fake child and don't push it to heaps
+                            pushfather!(l, l)
+                            pushchildren!(l, l) # Use the node itself to not waste space
+                        end
                     end
                 end
-            end
-        else
-            tokentype = typeof(token(φroot))
-            if tokentype === NamedConnective{:¬}
-                # Negation case
-                φi = children(φroot)[1]
-                if φi isa Atom
-                    # ¬φi where φi is an atom case
-                    if leaf === root
-                        if φi ∉ literals(leaf)
-                            return true
+            else
+                tokentype = typeof(token(φroot))
+                if tokentype === NamedConnective{:¬}
+                    # Negation case
+                    φi = children(φroot)[1]
+                    if φi isa Atom
+                        # ¬φi where φi is an atom case
+                        if leaf === root
+                            if φi ∉ literals(leaf)
+                                return true
+                            else
+                                # Create fake child and don't push it to heap
+                                pushfather!(leaf, leaf)
+                                pushchildren!(leaf, leaf) # Use the node itself to not waste space
+                            end
                         else
-                            # Create fake child and don't push it to heap
-                            pushfather!(leaf, leaf)
-                            pushchildren!(leaf, leaf) # Use the node itself to not waste space
+                            push!(metricheaps, leaf)   # Push leaf back inside heap
+                            for l ∈ leaves(root)
+                                if φi ∉ literals(l)
+                                    pushliterals!(l, φroot)
+                                else
+                                    # Create fake child and don't push it to heap
+                                    pushfather!(l, l)
+                                    pushchildren!(l, l) # Use the node itself to not waste space
+                                end
+                            end
                         end
                     else
-                        push!(metricheaps, leaf)   # Push leaf back inside heap
-                        for l ∈ leaves(root)
-                            if φi ∉ literals(l)
-                                pushliterals!(l, φroot)
-                            else
+                        tokentype = typeof(token(φi))
+                        if tokentype === NamedConnective{:¬}
+                            for leaf ∈ leaves(root)
+                                t = Tableau(children(φi)[1], leaf)
+                                push!(metricheaps, t)
+                            end
+                        elseif tokentype === NamedConnective{:∨}
+                            t = leaf
+                            for φj ∈ children(φi)
+                                t = Tableau(¬φj, t)
+                            end
+                            push!(metricheaps, t)
+                        elseif tokentype === NamedConnective{:∧}
+                            for leaf ∈ leaves(root)
+                                for φj ∈ children(φi)
+                                    t = Tableau(¬φj, leaf)
+                                    push!(metricheaps, t)
+                                end
+                            end
+                        elseif tokentype === NamedConnective{:→}
+                            φ1, φ2 = children(φroot)
+                            φis = (φ1, ¬φ2)
+                            t = leaf
+                            for φi ∈ children(φis)
+                                t = Tableau(φi, t)
+                            end
+                            push!(metricheaps, t)
+                        elseif tokentype === Top
+                            # do nothing
+                        elseif tokentype === Bot
+                            for l ∈ leaves(root)
                                 # Create fake child and don't push it to heap
                                 pushfather!(l, l)
                                 pushchildren!(l, l) # Use the node itself to not waste space
                             end
+                        else
+                            error("Error: unrecognized NamedConnective ")
                         end
                     end
-                else
-                    tokentype = typeof(token(φi))
-                    if tokentype === NamedConnective{:¬}
-                        for leaf ∈ leaves(root)
-                            t = Tableau(children(φi)[1], leaf)
+                elseif tokentype === NamedConnective{:∨}
+                    # Disjunction case
+                    for l ∈ leaves(root)
+                        for φi ∈ children(φroot)
+                            t = Tableau(φi, l)
                             push!(metricheaps, t)
                         end
-                    elseif tokentype === NamedConnective{:∨}
-                        t = leaf
-                        for φj ∈ children(φi)
-                            t = Tableau(¬φj, t)
-                        end
-                        push!(metricheaps, t)
-                    elseif tokentype === NamedConnective{:∧}
-                        for leaf ∈ leaves(root)
-                            for φj ∈ children(φi)
-                                t = Tableau(¬φj, leaf)
-                                push!(metricheaps, t)
-                            end
-                        end
-                    elseif tokentype === NamedConnective{:→}
-                        φ1, φ2 = children(φroot)
-                        φis = (φ1, ¬φ2)
-                        t = leaf
-                        for φi ∈ children(φis)
+                    end
+                elseif tokentype === NamedConnective{:∧}
+                    # Conjunction case
+                    for l ∈ leaves(root)
+                        t = l
+                        for φi ∈ children(φroot)
                             t = Tableau(φi, t)
                         end
                         push!(metricheaps, t)
-                    else
-                        error("Error: unrecognized NamedConnective.")
                     end
-                end
-            elseif tokentype === NamedConnective{:∨}
-                # Disjunction case
-                for l ∈ leaves(root)
-                    for φi ∈ children(φroot)
-                        t = Tableau(φi, l)
-                        push!(metricheaps, t)
+                elseif tokentype === NamedConnective{:→}
+                    # Implication case
+                    φ1, φ2 = children(φroot)
+                    φis = (¬φ1, φ2)
+                    for leaf ∈ leaves(root)
+                        for φi ∈ φis
+                            t = Tableau(φi, leaf)
+                            push!(metricheaps, t)
+                        end
                     end
-                end
-            elseif tokentype === NamedConnective{:∧}
-                # Conjunction case
-                for l ∈ leaves(root)
-                    t = l
-                    for φi ∈ children(φroot)
-                        t = Tableau(φi, t)
+                elseif tokentype === Top
+                    # do nothing
+                elseif tokentype === Bot
+                    for l ∈ leaves(root)
+                        # Create fake child and don't push it to heap
+                        pushfather!(l, l)
+                        pushchildren!(l, l) # Use the node itself to not waste space
                     end
-                    push!(metricheaps, t)
+                else
+                    error("Error: unrecognized NamedConnective ")
                 end
-            elseif tokentype === NamedConnective{:→}
-                # Implication case
-                φ1, φ2 = children(φroot)
-                φis = (¬φ1, φ2)
-                for leaf ∈ leaves(root)
-                    for φi ∈ φis
-                        t = Tableau(φi, leaf)
-                        push!(metricheaps, t)
-                    end
-                end
-            else
-                error("Error: unrecognized NamedConnective.")
+            end
+            for child ∈ childrenset(root)
+                popfather!(child)
             end
         end
-        for child ∈ childrenset(root)
-            popfather!(child)
-        end
     end
-    sat(metricheaps)
+    # sat(metricheaps)
 end
 
 function sat(φ::Formula, metrics::Function...)::Bool
@@ -465,6 +483,37 @@ end
 function sat(φ::Formula; rng = Random.GLOBAL_RNG)::Bool
     randombranch(tableau::Tableau) = rand(rng, Int)
     sat(φ, randombranch)
+end
+
+############################################################################################
+#### Utils #################################################################################
+############################################################################################
+
+"""
+Simple parsing from DIMACS CNF format to a SoleLogics Formula.
+
+`dimacscnf` is the path of the file containing the formula in DIMACS CNF format.
+"""
+function dimacstosole(dimacscnf::String)::Formula
+    disjunctions = Set{Formula}()
+    for line in readlines(dimacscnf)
+        if !startswith(line, "c") && !startswith(line, "p") && !startswith(line, "%") && !startswith(line, "0") && line != ""
+            words = split(line)
+            literals = Set{Formula}()
+            for word ∈ words
+                if word != "0"
+                    if startswith(word, "-")
+                        literal = ¬Atom(abs(parse(Int, word)))
+                    else
+                        literal = Atom(abs(parse(Int, word)))
+                    end
+                    push!(literals, literal)
+                end
+            end
+            push!(disjunctions, ∨(literals...))
+        end
+    end
+    return ∧(disjunctions...)
 end
 
 end # module Reasoners
