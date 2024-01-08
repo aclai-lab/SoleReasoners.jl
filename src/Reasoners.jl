@@ -1,6 +1,6 @@
 module Reasoners
 
-export Tableau, sat, dimacstosole
+export Tableau, φ, literals, naivechooseleaf, roundrobin, sat, sat2, dimacstosole
 
 using DataStructures
 using StatsBase
@@ -182,11 +182,11 @@ struct MetricHeapNode
     metricvalue::Int
     tableau::Tableau
 
-    function MetricHeapNode(metricvalue::Int, tableau::Tableau)
+    function MetricHeapNode(metricvalue::Int, tableau::Tableau)::MetricHeapNode
         return new(metricvalue, tableau)::MetricHeapNode
     end
 
-    function MetricHeapNode(metric::Function, tableau::Tableau)
+    function MetricHeapNode(metric::Function, tableau::Tableau)::MetricHeapNode
         MetricHeapNode(metric(tableau), tableau)::MetricHeapNode
     end
 end
@@ -289,8 +289,10 @@ isempty(metricheap::MetricHeap)::Bool = DataStructures.isempty(heap(metricheap))
 """
 Choose a leaf using the provided metric heaps.
 At this moment, it simply returns the leaf which compares the most as head of the heaps.
+
+To prevent starvation, use roundrobin instead.
 """
-function chooseleaf(metricheaps::Set{MetricHeap})::Union{Tableau, Nothing}
+function naivechooseleaf(metricheaps::Vector{MetricHeap})::Union{Tableau, Nothing}
     candidates = Vector{Tableau}()
     for metricheap ∈ metricheaps
         while !isempty(metricheap)
@@ -311,10 +313,48 @@ function chooseleaf(metricheaps::Set{MetricHeap})::Union{Tableau, Nothing}
     end
 end
 
+function naivechooseleaf(metricheaps::Vector{MetricHeap}, cycle::Int)
+    naivechooseleaf(metricheaps)
+end
+
+"""
+Choose a leaf using the provided metric heaps, alternating between them at each cycle.
+"""
+function roundrobin(metricheaps::Vector{MetricHeap}, cycle::Int)::Union{Tableau, Nothing}
+    counter = 0
+    leaf = nothing
+    while counter != length(metricheaps)
+        metricheap = metricheaps[((cycle + counter) % length(metricheaps)) + 1]
+        if !isempty(metricheap)
+            leaf = pop!(metricheap)
+            while (!isleaf(leaf) && !isempty(metricheap))
+                leaf = pop!(metricheap)
+            end
+            if isleaf(leaf)
+                break
+            else
+                counter +=1
+            end
+        else
+            counter += 1
+        end
+    end
+    if counter == length(metricheaps)
+        return nothing
+    else
+        return leaf    
+    end
+end
+
 """
 Push leaf to each metric heap.
 """
 function push!(metricheaps::Set{MetricHeap}, tableau::Tableau)::Nothing
+    for metricheap ∈ metricheaps
+        push!(metricheap, tableau)
+    end
+end
+function push!(metricheaps::Vector{MetricHeap}, tableau::Tableau)::Nothing
     for metricheap ∈ metricheaps
         push!(metricheap, tableau)
     end
@@ -324,9 +364,10 @@ end
 Given a formula, return true if an interpretation that satisfies the formula exists, false
 otherwise.
 """
-function sat(metricheaps::Set{MetricHeap})::Bool
+function sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)::Bool
+    cycle = 0
     while true
-        leaf = chooseleaf(metricheaps)
+        leaf = chooseleaf(metricheaps, cycle)
         if isnothing(leaf)
             return false
         else
@@ -464,12 +505,12 @@ function sat(metricheaps::Set{MetricHeap})::Bool
                 popfather!(child)
             end
         end
+        cycle += 1
     end
-    # sat(metricheaps)
 end
 
-function sat(φ::Formula, metrics::Function...)::Bool
-    metricheaps = Set{MetricHeap}()   # Heaps to be used for tableau selection
+function sat(φ::Formula, chooseleaf::Function, metrics::Function...)::Bool
+    metricheaps = Vector{MetricHeap}()   # Heaps to be used for tableau selection
     for metric ∈ metrics
         push!(metricheaps, MetricHeap(metric))
     end
@@ -477,12 +518,17 @@ function sat(φ::Formula, metrics::Function...)::Bool
     for metricheap ∈ metricheaps
         push!(heap(metricheap), MetricHeapNode(metric(metricheap), root))
     end
-    sat(metricheaps)
+    sat(metricheaps, chooseleaf)
+end
+
+function sat(φ::Formula, chooseleaf::Function; rng = Random.GLOBAL_RNG)::Bool
+    randombranch(tableau::Tableau) = rand(rng, Int)
+    sat(φ, chooseleaf, randombranch)
 end
 
 function sat(φ::Formula; rng = Random.GLOBAL_RNG)::Bool
     randombranch(tableau::Tableau) = rand(rng, Int)
-    sat(φ, randombranch)
+    sat(φ, roundrobin, randombranch)
 end
 
 ############################################################################################
