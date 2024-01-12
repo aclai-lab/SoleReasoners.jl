@@ -1,4 +1,4 @@
-# Reasoners
+# SoleReasoners.jl
 
 This package provides algorithms for reasoning, namely including a sat solver based on analytic tableau technique.
 
