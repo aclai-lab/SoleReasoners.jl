@@ -1,4 +1,4 @@
-module Reasoners
+module SoleReasoners
 
 export Tableau, φ, literals, naivechooseleaf, roundrobin, sat, sat2, dimacstosole
 
@@ -396,8 +396,8 @@ function sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)::Bool
                     end
                 end
             else
-                tokentype = typeof(token(φroot))
-                if tokentype === NamedConnective{:¬}
+                tok = token(φroot)
+                if tok isa NamedConnective{:¬}
                     # Negation case
                     φi = children(φroot)[1]
                     if φi isa Atom
@@ -423,26 +423,26 @@ function sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)::Bool
                             end
                         end
                     else
-                        tokentype = typeof(token(φi))
-                        if tokentype === NamedConnective{:¬}
+                        tok = token(φi)
+                        if tok isa NamedConnective{:¬}
                             for leaf ∈ leaves(root)
                                 t = Tableau(children(φi)[1], leaf)
                                 push!(metricheaps, t)
                             end
-                        elseif tokentype === NamedConnective{:∨}
+                        elseif tok isa NamedConnective{:∨}
                             t = leaf
                             for φj ∈ children(φi)
                                 t = Tableau(¬φj, t)
                             end
                             push!(metricheaps, t)
-                        elseif tokentype === NamedConnective{:∧}
+                        elseif tok isa NamedConnective{:∧}
                             for leaf ∈ leaves(root)
                                 for φj ∈ children(φi)
                                     t = Tableau(¬φj, leaf)
                                     push!(metricheaps, t)
                                 end
                             end
-                        elseif tokentype === NamedConnective{:→}
+                        elseif tok isa NamedConnective{:→}
                             φ1, φ2 = children(φroot)
                             φis = (φ1, ¬φ2)
                             t = leaf
@@ -450,19 +450,19 @@ function sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)::Bool
                                 t = Tableau(φi, t)
                             end
                             push!(metricheaps, t)
-                        elseif tokentype === Top
+                        elseif istop(tok)
                             # do nothing
-                        elseif tokentype === Bot
+                        elseif isbot(tok)
                             for l ∈ leaves(root)
                                 # Create fake child and don't push it to heap
                                 pushfather!(l, l)
                                 pushchildren!(l, l) # Use the node itself to not waste space
                             end
                         else
-                            error("Error: unrecognized NamedConnective ")
+                            error("Error: unrecognized token: ... ")
                         end
                     end
-                elseif tokentype === NamedConnective{:∨}
+                elseif tok isa NamedConnective{:∨}
                     # Disjunction case
                     for l ∈ leaves(root)
                         for φi ∈ children(φroot)
@@ -470,7 +470,7 @@ function sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)::Bool
                             push!(metricheaps, t)
                         end
                     end
-                elseif tokentype === NamedConnective{:∧}
+                elseif tok isa NamedConnective{:∧}
                     # Conjunction case
                     for l ∈ leaves(root)
                         t = l
@@ -479,7 +479,7 @@ function sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)::Bool
                         end
                         push!(metricheaps, t)
                     end
-                elseif tokentype === NamedConnective{:→}
+                elseif tok isa NamedConnective{:→}
                     # Implication case
                     φ1, φ2 = children(φroot)
                     φis = (¬φ1, φ2)
@@ -489,9 +489,9 @@ function sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)::Bool
                             push!(metricheaps, t)
                         end
                     end
-                elseif tokentype === Top
+                elseif istop(tok)
                     # do nothing
-                elseif tokentype === Bot
+                elseif isbot(tok)
                     for l ∈ leaves(root)
                         # Create fake child and don't push it to heap
                         pushfather!(l, l)
@@ -562,4 +562,4 @@ function dimacstosole(dimacscnf::String)::Formula
     return ∧(disjunctions...)
 end
 
-end # module Reasoners
+end # module SoleReasoners
