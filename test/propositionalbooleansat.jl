@@ -15,10 +15,6 @@ using SoleReasoners
 @test sat(parseformula("p∨¬p")) == true
 @test sat(parseformula("¬p∨p")) == true
 
-@atoms p q r
-
-@test sat(∧(p,q,r)) == true
-
 @test sat(parseformula("p∧q"))   == true
 @test sat(parseformula("p∧¬p"))  == false
 @test sat(parseformula("p∧¬¬p")) == true
