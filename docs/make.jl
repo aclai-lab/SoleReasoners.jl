@@ -15,7 +15,8 @@ makedocs(;
         assets = String[],
     ),
     pages = [
-        "Home" => "index.md"
+        "Home" => "index.md",
+        "Getting started" => "getting-started.md"
     ],
     # NOTE: warning
     warnonly = :true,
