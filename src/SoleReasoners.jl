@@ -123,6 +123,9 @@ function leaves(leavesset::Set{Tableau}, tableau::Tableau)::Set{Tableau}
     return leavesset
 end
 
+"""
+Getter for the leaves of a tableau.
+"""
 function leaves(tableau::Tableau)::Set{Tableau}
     leaves(Set{Tableau}(), tableau)
 end
@@ -313,6 +316,12 @@ function naivechooseleaf(metricheaps::Vector{MetricHeap})::Union{Tableau, Nothin
     end
 end
 
+"""
+Choose a leaf using the provided metric heaps.
+At this moment, it simply returns the leaf which compares the most as head of the heaps.
+
+To prevent starvation, use roundrobin instead.
+"""
 function naivechooseleaf(metricheaps::Vector{MetricHeap}, cycle::Int)
     naivechooseleaf(metricheaps)
 end
@@ -354,6 +363,10 @@ function push!(metricheaps::Set{MetricHeap}, tableau::Tableau)::Nothing
         push!(metricheap, tableau)
     end
 end
+
+"""
+Push leaf to each metric heap.
+"""
 function push!(metricheaps::Vector{MetricHeap}, tableau::Tableau)::Nothing
     for metricheap ∈ metricheaps
         push!(metricheap, tableau)
@@ -509,6 +522,10 @@ function sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)::Bool
     end
 end
 
+"""
+Given a formula, return true if an interpretation that satisfies the formula exists, false
+otherwise.
+"""
 function sat(φ::Formula, chooseleaf::Function, metrics::Function...)::Bool
     metricheaps = Vector{MetricHeap}()   # Heaps to be used for tableau selection
     for metric ∈ metrics
@@ -521,11 +538,19 @@ function sat(φ::Formula, chooseleaf::Function, metrics::Function...)::Bool
     sat(metricheaps, chooseleaf)
 end
 
+"""
+Given a formula, return true if an interpretation that satisfies the formula exists, false
+otherwise.
+"""
 function sat(φ::Formula, chooseleaf::Function; rng = Random.GLOBAL_RNG)::Bool
     randombranch(tableau::Tableau) = rand(rng, Int)
     sat(φ, chooseleaf, randombranch)
 end
 
+"""
+Given a formula, return true if an interpretation that satisfies the formula exists, false
+otherwise.
+"""
 function sat(φ::Formula; rng = Random.GLOBAL_RNG)::Bool
     randombranch(tableau::Tableau) = rand(rng, Int)
     sat(φ, roundrobin, randombranch)
