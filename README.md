@@ -1,6 +1,5 @@
 # SoleReasoners.jl
 
-[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://aclai-lab.github.io/SoleReasoners.jl/stable)
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://aclai-lab.github.io/SoleReasoners.jl/dev)
 [![Build Status](https://api.cirrus-ci.com/github/aclai-lab/SoleReasoners.jl.svg?branch=main)](https://cirrus-ci.com/github/aclai-lab/SoleReasoners.jl)
 [![codecov](https://codecov.io/gh/aclai-lab/SoleReasoners.jl/branch/main/graph/badge.svg?token=LT9IYIYNFI)](https://codecov.io/gh/aclai-lab/SoleReasoners.jl)
