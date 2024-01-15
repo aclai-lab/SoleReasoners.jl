@@ -58,17 +58,8 @@ struct Tableau
         return Tableau(φ, Ref(Set{Tableau}()), Ref(Set{Tableau}()), Ref(Set{Formula}()))
     end
 
-    function Tableau(φ::Formula, _::Nothing)::Tableau
-        return Tableau(φ)
-    end
-
     function Tableau(φ::Formula, father::Base.RefValue{Set{Tableau}})::Tableau
         return Tableau(φ, father, Ref(Set{Tableau}()), Ref(Set{Formula}()))
-    end
-
-    function Tableau(φ::Formula, father::Base.RefValue{Set{Tableau}},
-                     literals::Base.RefValue{Set{Formula}})::Tableau
-        returnTableau(φ, father, Ref(Set{Tableau}()), literals)
     end
 
     function Tableau(φ::Formula, father::Tableau)::Tableau
