@@ -1,6 +1,6 @@
 module SoleReasoners
 
-export Tableau, φ, literals, naivechooseleaf, roundrobin, sat, sat2, dimacstosole
+export Tableau, φ, literals, naivechooseleaf, roundrobin, sat, dimacstosole
 
 using DataStructures
 using StatsBase
@@ -385,7 +385,7 @@ function sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)::Bool
             return false
         else
             root = findroot(leaf)
-            φroot = φ(root)        
+            φroot = φ(root)
             if φroot isa Atom
                 # Atom case
                 if leaf === root
@@ -463,13 +463,11 @@ function sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)::Bool
                                 t = Tableau(φi, t)
                             end
                             push!(metricheaps, t)
-                        elseif istop(tok)
-                            # do nothing
-                        elseif isbot(tok)
-                            for l ∈ leaves(root)
-                                # Create fake child and don't push it to heap
-                                pushfather!(l, l)
-                                pushchildren!(l, l) # Use the node itself to not waste space
+                        elseif istop(tok) || isbot(tok)
+                            if leaf === root
+                                return true
+                            else
+                                push!(metricheaps, leaf)   # Push leaf back inside heap
                             end
                         else
                             error("Error: unrecognized token: ... ")
@@ -502,13 +500,11 @@ function sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)::Bool
                             push!(metricheaps, t)
                         end
                     end
-                elseif istop(tok)
-                    # do nothing
-                elseif isbot(tok)
-                    for l ∈ leaves(root)
-                        # Create fake child and don't push it to heap
-                        pushfather!(l, l)
-                        pushchildren!(l, l) # Use the node itself to not waste space
+                elseif istop(tok) || isbot(tok)
+                    if leaf === root
+                        return true
+                    else
+                        push!(metricheaps, leaf)   # Push leaf back inside heap
                     end
                 else
                     error("Error: unrecognized NamedConnective ")
