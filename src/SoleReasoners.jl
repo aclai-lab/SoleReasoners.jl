@@ -71,16 +71,22 @@ struct Tableau
 end
 
 """
+    φ(tableau::Tableau)::Formula = tableau.φ
+
 Getter for the formula of a tableau.
 """
 φ(tableau::Tableau)::Formula = tableau.φ
 
 """
+    fatherset(tableau::Tableau)::Set{Tableau} = tableau.father[]
+
 Getter for the set containing the father of a tableau.
 """
 fatherset(tableau::Tableau)::Set{Tableau} = tableau.father[]
 
 """
+    father(tableau::Tableau)::Union{Tableau, Nothing}
+
 Getter for the father of a tableau.
 """
 function father(tableau::Tableau)::Union{Tableau, Nothing}
@@ -88,16 +94,22 @@ function father(tableau::Tableau)::Union{Tableau, Nothing}
 end
 
 """
+    childrenset(tableau::Tableau)::Set{Tableau}
+
 Getter for the set containing the children of a tableau.
 """
 childrenset(tableau::Tableau)::Set{Tableau} = tableau.children[]
 
 """
+    literals(tableau::Tableau)::Set{Formula}
+
 Getter for the set containing the literals of a tableau.
 """
 literals(tableau::Tableau)::Set{Formula} = tableau.literals[]
 
 """
+    leaves(leavesset::Set{Tableau}, tableau::Tableau)::Set{Tableau}
+
 Getter for the leaves of a tableau.
 """
 function leaves(leavesset::Set{Tableau}, tableau::Tableau)::Set{Tableau}
@@ -113,6 +125,8 @@ function leaves(leavesset::Set{Tableau}, tableau::Tableau)::Set{Tableau}
 end
 
 """
+    leaves(tableau::Tableau)::Set{Tableau}
+
 Getter for the leaves of a tableau.
 """
 function leaves(tableau::Tableau)::Set{Tableau}
@@ -120,6 +134,8 @@ function leaves(tableau::Tableau)::Set{Tableau}
 end
 
 """
+    pushfather!(tableau::Tableau, newfather::Tableau)::Set{Tableau}
+
 Push new father to a tableau.
 """
 function pushfather!(tableau::Tableau, newfather::Tableau)::Set{Tableau}
@@ -127,11 +143,15 @@ function pushfather!(tableau::Tableau, newfather::Tableau)::Set{Tableau}
 end
 
 """
+    popfather!(tableau::Tableau)::Tableau
+
 Pop father of a tableau (the tableau becomes a root).
 """
 popfather!(tableau::Tableau)::Tableau = pop!(fatherset(tableau))
 
 """
+    pushchildren!(tableau::Tableau, children::Tableau...)::Set{Tableau}
+
 Push new children to a tableau.
 """
 function pushchildren!(tableau::Tableau, children::Tableau...)::Set{Tableau}
@@ -139,6 +159,8 @@ function pushchildren!(tableau::Tableau, children::Tableau...)::Set{Tableau}
 end
 
 """
+    pushliterals!(tableau::Tableau, newliterals::Formula...)::Set{Formula}
+
 Push new literals to a tableau.
 """
 function pushliterals!(tableau::Tableau, newliterals::Formula...)::Set{Formula}
@@ -146,6 +168,8 @@ function pushliterals!(tableau::Tableau, newliterals::Formula...)::Set{Formula}
 end
 
 """
+    findroot(tableau::Tableau)::Tableau
+
 Find root starting from the leaf (i.e., the expansion node relative to that leaf).
 """
 function findroot(tableau::Tableau)::Tableau
@@ -153,6 +177,8 @@ function findroot(tableau::Tableau)::Tableau
 end
 
 """
+    isleaf(tableau::Tableau)::Bool
+
 Return true if the tableau is still a leaf, false otherwise.
 """
 isleaf(tableau::Tableau)::Bool = isempty(childrenset(tableau)) ? true : false
@@ -184,11 +210,15 @@ struct MetricHeapNode
 end
 
 """
+    metricvalue(metricheapnode::MetricHeapNode)
+
 Getter for the metric value of a heap node.
 """
 metricvalue(metricheapnode::MetricHeapNode) = metricheapnode.metricvalue
 
 """
+    tableau(metricheapnode::MetricHeapNode)
+
 Getter for the tableau branch of a heap node.
 """
 tableau(metricheapnode::MetricHeapNode) = metricheapnode.tableau
@@ -198,12 +228,16 @@ tableau(metricheapnode::MetricHeapNode) = metricheapnode.tableau
 ############################################################################################
 
 """
+    struct MetricHeapOrdering <: Base.Order.Ordering end
+
 Definition of a new ordering for the heaps treating them as min heaps ordered on the
 metric value.
 """
 struct MetricHeapOrdering <: Base.Order.Ordering end
 
 """
+    lt(o::MetricHeapOrdering, a::MetricHeapNode, b::MetricHeapNode)::Bool
+
 Definition of the lt function for the new ordering.
 """
 function lt(o::MetricHeapOrdering, a::MetricHeapNode, b::MetricHeapNode)::Bool
@@ -240,16 +274,22 @@ struct MetricHeap
 end
 
 """
+    heap(metricheap::MetricHeap)::BinaryHeap{MetricHeapNode}
+
 Getter for the binary heap of a MetricHeap.
 """
 heap(metricheap::MetricHeap)::BinaryHeap{MetricHeapNode} = metricheap.heap
 
 """
+    metric(metricheap::MetricHeap)::Function
+
 Getter for the metric function of a MetricHeap.
 """
 metric(metricheap::MetricHeap)::Function = metricheap.metric
 
 """
+    push!(metricheap::MetricHeap, metricheapnode::MetricHeapNode)::BinaryHeap{MetricHeapNode}
+    
 Push new metricheapnode to a MetricHeap.
 """
 function push!(metricheap::MetricHeap,
@@ -258,6 +298,8 @@ function push!(metricheap::MetricHeap,
 end
 
 """
+    push!(metricheap::MetricHeap, tableau::Tableau)::BinaryHeap{MetricHeapNode}
+
 Push new tableau to a MetricHeap.
 """
 function push!(metricheap::MetricHeap, tableau::Tableau)::BinaryHeap{MetricHeapNode}
@@ -265,11 +307,15 @@ function push!(metricheap::MetricHeap, tableau::Tableau)::BinaryHeap{MetricHeapN
 end
 
 """
+    pop!(metricheap::MetricHeap)::Tableau
+
 Pop head of a MetricHeap and return the tableau associated with it.
 """
 pop!(metricheap::MetricHeap)::Tableau = tableau(pop!(heap(metricheap)))
 
 """
+    isempty(metricheap::MetricHeap)::Bool
+
 Returns true if the MetricHeap is empty, false otherwise.
 """
 isempty(metricheap::MetricHeap)::Bool = DataStructures.isempty(heap(metricheap))
@@ -279,6 +325,8 @@ isempty(metricheap::MetricHeap)::Bool = DataStructures.isempty(heap(metricheap))
 ############################################################################################
 
 """
+    naivechooseleaf(metricheaps::Vector{MetricHeap})::Union{Tableau, Nothing}
+
 Choose a leaf using the provided metric heaps.
 At this moment, it simply returns the leaf which compares the most as head of the heaps.
 
@@ -306,16 +354,20 @@ function naivechooseleaf(metricheaps::Vector{MetricHeap})::Union{Tableau, Nothin
 end
 
 """
+    naivechooseleaf(metricheaps::Vector{MetricHeap}, _::Int)
+
 Choose a leaf using the provided metric heaps.
 At this moment, it simply returns the leaf which compares the most as head of the heaps.
 
 To prevent starvation, use roundrobin instead.
 """
-function naivechooseleaf(metricheaps::Vector{MetricHeap}, cycle::Int)
+function naivechooseleaf(metricheaps::Vector{MetricHeap}, _::Int)
     naivechooseleaf(metricheaps)
 end
 
 """
+    roundrobin(metricheaps::Vector{MetricHeap}, cycle::Int)::Union{Tableau, Nothing}
+
 Choose a leaf using the provided metric heaps, alternating between them at each cycle.
 """
 function roundrobin(metricheaps::Vector{MetricHeap}, cycle::Int)::Union{Tableau, Nothing}
@@ -345,6 +397,8 @@ function roundrobin(metricheaps::Vector{MetricHeap}, cycle::Int)::Union{Tableau,
 end
 
 """
+    push!(metricheaps::Vector{MetricHeap}, tableau::Tableau)::Nothing
+
 Push leaf to each metric heap.
 """
 function push!(metricheaps::Vector{MetricHeap}, tableau::Tableau)::Nothing
@@ -354,6 +408,8 @@ function push!(metricheaps::Vector{MetricHeap}, tableau::Tableau)::Nothing
 end
 
 """
+    sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)::Bool
+
 Given a formula, return true if an interpretation that satisfies the formula exists, false
 otherwise.
 """
@@ -503,6 +559,8 @@ function sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)::Bool
 end
 
 """
+    sat(φ::Formula, chooseleaf::Function, metrics::Function...)::Bool
+
 Given a formula, return true if an interpretation that satisfies the formula exists, false
 otherwise.
 """
@@ -519,6 +577,8 @@ function sat(φ::Formula, chooseleaf::Function, metrics::Function...)::Bool
 end
 
 """
+    sat(φ::Formula, chooseleaf::Function; rng = Random.GLOBAL_RNG)::Bool
+
 Given a formula, return true if an interpretation that satisfies the formula exists, false
 otherwise.
 """
@@ -528,6 +588,8 @@ function sat(φ::Formula, chooseleaf::Function; rng = Random.GLOBAL_RNG)::Bool
 end
 
 """
+    sat(φ::Formula; rng = Random.GLOBAL_RNG)::Bool
+
 Given a formula, return true if an interpretation that satisfies the formula exists, false
 otherwise.
 """
@@ -541,6 +603,8 @@ end
 ############################################################################################
 
 """
+    dimacstosole(dimacscnf::String)::Formula
+
 Simple parsing from DIMACS CNF format to a SoleLogics Formula.
 
 `dimacscnf` is the path of the file containing the formula in DIMACS CNF format.
