@@ -14,6 +14,8 @@ export Tableau, φ, literals, naivechooseleaf, roundrobin, sat
 
 include("fuzzy.jl")
 
+export FuzzyTableau, SignedFormula, fuzzysat, expand!
+
 include("utils.jl")
 
 export dimacstosole
