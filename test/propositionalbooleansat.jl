@@ -16,7 +16,23 @@ using SoleReasoners
 @test sat(parseformula("⊥→⊤"))      == true
 @test sat(parseformula("⊤→⊥"))      == true
 @test sat(parseformula("⊤→⊤"))      == true
-@test sat(parseformula("⊤∧⊤∧⊤"))    == true
+
+@test sat(parseformula("¬(⊥)"))     == true
+@test sat(parseformula("¬(⊤)"))     == true
+@test sat(parseformula("¬(¬⊥)"))    == true
+@test sat(parseformula("¬(¬⊤)"))    == true
+@test sat(parseformula("¬(⊥∧⊥)"))   == true
+@test sat(parseformula("¬(⊥∧⊤)"))   == true
+@test sat(parseformula("¬(⊤∧⊥)"))   == true
+@test sat(parseformula("¬(⊤∧⊤)"))   == true
+@test sat(parseformula("¬(⊥∨⊥)"))   == true
+@test sat(parseformula("¬(⊥∨⊤)"))   == true
+@test sat(parseformula("¬(⊤∨⊥)"))   == true
+@test sat(parseformula("¬(⊤∨⊤)"))   == true
+@test sat(parseformula("¬(⊥→⊥)"))   == true
+@test sat(parseformula("¬(⊥→⊤)"))   == true
+@test sat(parseformula("¬(⊤→⊥)"))   == true
+@test sat(parseformula("¬(⊤→⊤)"))   == true
 
 @test sat(parseformula("p"))        == true
 @test sat(parseformula("¬p"))       == true
@@ -52,8 +68,8 @@ using SoleReasoners
 @test sat(parseformula("(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)")) == false
 @test sat(parseformula("(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)"), naivechooseleaf) == false
 
-@test sat(dimacstosole("benchmark/uf50-01.cnf")) == true
-@test sat(dimacstosole("benchmark/uf50-01.cnf"), naivechooseleaf) == true
+@test sat(dimacstosole("benchmark/sat/uf50-01.cnf")) == true
+@test sat(dimacstosole("benchmark/sat/uf50-01.cnf"), naivechooseleaf) == true
 
 @atoms p
 
