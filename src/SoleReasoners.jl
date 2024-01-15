@@ -12,6 +12,8 @@ include("core.jl")
 
 export Tableau, φ, literals, naivechooseleaf, roundrobin, sat
 
+include("fuzzy.jl")
+
 include("utils.jl")
 
 export dimacstosole
