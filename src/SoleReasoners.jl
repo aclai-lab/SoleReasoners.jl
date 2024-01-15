@@ -9,9 +9,7 @@ using Reexport
 
 @reexport using SoleLogics
 
-children(φ::Formula) = SoleLogics.children(φ)
-
-import Base.isempty, Base.push!, Base.pop!, Base.Order.lt
+import Base: isempty, push!, Base.pop!, Order.lt
 
 ############################################################################################
 #### Tableau ###############################################################################
@@ -349,15 +347,6 @@ end
 """
 Push leaf to each metric heap.
 """
-function push!(metricheaps::Set{MetricHeap}, tableau::Tableau)::Nothing
-    for metricheap ∈ metricheaps
-        push!(metricheap, tableau)
-    end
-end
-
-"""
-Push leaf to each metric heap.
-"""
 function push!(metricheaps::Vector{MetricHeap}, tableau::Tableau)::Nothing
     for metricheap ∈ metricheaps
         push!(metricheap, tableau)
@@ -434,11 +423,13 @@ function sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)::Bool
                                 push!(metricheaps, t)
                             end
                         elseif tok isa NamedConnective{:∨}
-                            t = leaf
-                            for φj ∈ children(φi)
-                                t = Tableau(¬φj, t)
+                            for l ∈ leaves(root)
+                                t = l
+                                for φj ∈ children(φi)
+                                    t = Tableau(¬φj, t)
+                                end
+                                push!(metricheaps, t)
                             end
-                            push!(metricheaps, t)
                         elseif tok isa NamedConnective{:∧}
                             for leaf ∈ leaves(root)
                                 for φj ∈ children(φi)
@@ -447,14 +438,16 @@ function sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)::Bool
                                 end
                             end
                         elseif tok isa NamedConnective{:→}
-                            φ1, φ2 = children(φroot)
+                            φ1, φ2 = children(φi)
                             φis = (φ1, ¬φ2)
-                            t = leaf
-                            for φi ∈ children(φis)
-                                t = Tableau(φi, t)
+                            for l ∈ leaves(root)
+                                t = l
+                                for φi ∈ children(φis)
+                                    t = Tableau(φi, t)
+                                end
+                                push!(metricheaps, t)
                             end
-                            push!(metricheaps, t)
-                        elseif istop(tok) || isbot(tok)
+                        elseif tok isa BooleanTruth
                             if leaf === root
                                 return true
                             else
@@ -491,7 +484,7 @@ function sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)::Bool
                             push!(metricheaps, t)
                         end
                     end
-                elseif istop(tok) || isbot(tok)
+                elseif tok isa BooleanTruth
                     if leaf === root
                         return true
                     else
@@ -551,6 +544,7 @@ end
 Simple parsing from DIMACS CNF format to a SoleLogics Formula.
 
 `dimacscnf` is the path of the file containing the formula in DIMACS CNF format.
+TODO: cnftodimacs
 """
 function dimacstosole(dimacscnf::String)::Formula
     disjunctions = Set{Formula}()
