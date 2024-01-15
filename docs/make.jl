@@ -16,7 +16,8 @@ makedocs(;
     ),
     pages = [
         "Home" => "index.md",
-        "Getting started" => "getting-started.md"
+        "Getting started" => "getting-started.md",
+        "Utils" => "utils.md"
     ],
     # NOTE: warning
     warnonly = :true,

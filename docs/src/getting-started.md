@@ -68,9 +68,3 @@ sat(φ::Formula, chooseleaf::Function, metrics::Function...)
 sat(φ::Formula, chooseleaf::Function; rng = Random.GLOBAL_RNG)
 sat(φ::Formula; rng = Random.GLOBAL_RNG)
 ```
-
-## Utils
-
-```@docs
-dimacstosole(dimacscnf::String)
-```
