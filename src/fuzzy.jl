@@ -30,9 +30,8 @@ struct FuzzyTableau
             signedformula,
             Ref(Set{FuzzyTableau}([father])),
             Ref(Set{FuzzyTableau}()),
-            false)
-        pushchildren!(father, ft
-    )
+            Ref(false))
+        pushchildren!(father, ft)
         return ft
     end
 
@@ -41,7 +40,7 @@ struct FuzzyTableau
             signedformula,
             Ref(Set{FuzzyTableau}()),
             Ref(Set{FuzzyTableau}()),
-            false
+            Ref(false)
         )
     end
 end
@@ -49,6 +48,7 @@ end
 signedformula(ft::FuzzyTableau) = ft.signedformula
 fatherset(ft::FuzzyTableau) = ft.father[]
 father(ft::FuzzyTableau) = isempty(fatherset(ft)) ? nothing : first(fatherset(ft))
+childrenset(ft::FuzzyTableau) = ft.children[]
 
 isexpanded(ft::FuzzyTableau) = ft.expanded[]
 
@@ -80,6 +80,10 @@ end
 
 function findleaves(ft::FuzzyTableau)
     findleaves(Set{FuzzyTableau}(), ft)
+end
+
+function pushchildren!(ft::FuzzyTableau, children::FuzzyTableau...)
+    push!(childrenset(ft), children...)
 end
 
 function fuzzysat(leaves::Set{FuzzyTableau}, h::HeytingAlgebra)
