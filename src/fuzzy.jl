@@ -194,7 +194,7 @@ function fuzzysat(leaves::Set{FuzzyTableau}, h::HeytingAlgebra)
                     # F(t → (A ∧ B)) case
                     for l ∈ findleaves(en)
                         for c ∈ children(x)
-                            ftᵢ = FuzzyTableau(SignedFormula(true, (a, c)), l)
+                            ftᵢ = FuzzyTableau(SignedFormula(false, (a, c)), l)
                             push!(leaves, ftᵢ)
                         end
                     end
@@ -215,6 +215,15 @@ function fuzzysat(leaves::Set{FuzzyTableau}, h::HeytingAlgebra)
                 if istop(a)
                     # T(X → ⊤) case
                     # ...
+                elseif token(x) isa NamedConnective{:∨}
+                    # T((A ∨ B) → t) case
+                    for l ∈ findleaves(en)
+                        ftᵢ = l
+                        for c ∈ children(x)
+                            ftᵢ = FuzzyTableau(SignedFormula(true, (c, a)), ftᵢ)
+                        end
+                        push!(leaves, ftᵢ)
+                    end
                 else
                     # T(X → a) case
                     uᵢ = first(minimalmembers(h, a))
@@ -227,6 +236,14 @@ function fuzzysat(leaves::Set{FuzzyTableau}, h::HeytingAlgebra)
                 if istop(a)
                     # F(⊤ → X) case
                     closebranch(leaf)
+                elseif token(x) isa NamedConnective{:∨}
+                    # F((A ∨ B) → t) case
+                    for l ∈ findleaves(en)
+                        for c ∈ children(x)
+                            ftᵢ = FuzzyTableau(SignedFormula(false, (c, a)), l)
+                            push!(leaves, ftᵢ)
+                        end
+                    end
                 else
                     # F(X → a) case
                     for l ∈ findleaves(en)
