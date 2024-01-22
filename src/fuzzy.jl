@@ -160,94 +160,118 @@ function fuzzysat(leaves::Set{FuzzyTableau}, h::HeytingAlgebra)
             else
                 continue
             end
-        elseif z isa Tuple{HeytingTruth, Formula} # a → X
-            a = z[1]
+        elseif z isa Tuple{HeytingTruth, Formula} # t → X
+            t = z[1]
             x = z[2]
             if findsimilar(en, h)
                 closebranch(en)
             elseif s
-                if isbot(a)
-                    # T(⊥ → X) case
-                    # ...
-                elseif token(x) isa NamedConnective{:∧}
+                if token(x) isa NamedConnective{:∧} && !isbot(t)
                     # T(t → (A ∧ B)) case
                     for l ∈ findleaves(en)
-                        ftᵢ = l
-                        for c ∈ children(x)
-                            ftᵢ = FuzzyTableau(SignedFormula(true, (a, c)), ftᵢ)
+                        (a, b) = children(x)
+                        fta = FuzzyTableau(SignedFormula(true, (t, a)), l)
+                        ftb = FuzzyTableau(SignedFormula(true, (t, b)), fta)
+                        push!(leaves, ftb)
+                    end
+                elseif token(x) isa NamedConnective{:→} && !isbot(t)
+                    # T(t → (A → B)) case
+                    (a, b) = children(x)
+                    lvs = lesservalues(h, t)
+                    if isbot(first(lvs))
+                        if length(lvs) > 1
+                            tᵢ = lvs[2]
+                        else
+                            continue
                         end
-                        push!(leaves, ftᵢ)
+                    else
+                        tᵢ = first(lvs)
+                    end
+                    for l ∈ findleaves(en)
+                        fta = FuzzyTableau(SignedFormula(false, (tᵢ, a)), l)
+                        push!(leaves, fta)
+                        ftb = FuzzyTableau(SignedFormula(true, (tᵢ, b)), l)
+                        push!(leaves, ftb)
                     end
                 else
-                    # T(a → X) case
-                    tᵢ = first(maximalmembers(h, a))
+                    # T(t → X) case
+                    tᵢ = first(maximalmembers(h, t))
                     for l ∈ findleaves(en)
                         ftᵢ = FuzzyTableau(SignedFormula(false, (x, tᵢ)), l)
                         push!(leaves, ftᵢ)
                     end
                 end
             else
-                if isbot(a)
+                if isbot(t)
                     # F(⊥ → X) case
                     closebranch(leaf)
                 elseif token(x) isa NamedConnective{:∧}
                     # F(t → (A ∧ B)) case
                     for l ∈ findleaves(en)
-                        for c ∈ children(x)
-                            ftᵢ = FuzzyTableau(SignedFormula(false, (a, c)), l)
-                            push!(leaves, ftᵢ)
-                        end
+                        (a, b) = children(x)
+                        fta = FuzzyTableau(SignedFormula(false, (t, a)), l)
+                        push!(leaves, fta)
+                        ftb = FuzzyTableau(SignedFormula(false, (t, b)), l)
+                        push!(leaves, ftb)
                     end
-                else
-                    # F(a → X) case
+                elseif token(x) isa NamedConnective{:→}
+                    # F(t → (A → B)) case
+                    (a, b) = children(x)
                     for l ∈ findleaves(en)
-                        for tᵢ ∈ maximalmembers(h, a)
+                        for tᵢ ∈ lesservalues(h, t)
+                            if !isbot(tᵢ)
+                                fta = FuzzyTableau(SignedFormula(true, (tᵢ, a)), l)
+                                ftb = FuzzyTableau(SignedFormula(false, (tᵢ, b)), fta)
+                                push!(leaves, ftb)
+                            end
+                        end
+                    end 
+                else
+                    # F(t → X) case
+                    for l ∈ findleaves(en)
+                        for tᵢ ∈ maximalmembers(h, t)
                             ftᵢ = FuzzyTableau(SignedFormula(true, (x, tᵢ)), l)
                             push!(leaves, ftᵢ)
                         end
                     end
                 end
             end
-        elseif z isa Tuple{Formula, HeytingTruth} # x → a
+        elseif z isa Tuple{Formula, HeytingTruth} # x → t
             x = z[1]
-            a = z[2]
+            t = z[2]
             if s
-                if istop(a)
-                    # T(X → ⊤) case
-                    # ...
-                elseif token(x) isa NamedConnective{:∨}
+                if token(x) isa NamedConnective{:∨} && !istop(t)
                     # T((A ∨ B) → t) case
                     for l ∈ findleaves(en)
-                        ftᵢ = l
-                        for c ∈ children(x)
-                            ftᵢ = FuzzyTableau(SignedFormula(true, (c, a)), ftᵢ)
-                        end
-                        push!(leaves, ftᵢ)
+                        fta = FuzzyTableau(SignedFormula(true, (a, t)), l)
+                        ftb = FuzzyTableau(SignedFormula(true, (b, t)), fta)
+                        push!(leaves, ftb)
                     end
                 else
-                    # T(X → a) case
-                    uᵢ = first(minimalmembers(h, a))
+                    # T(X → t) case
+                    uᵢ = first(minimalmembers(h, t))
                     for l ∈ findleaves(en)
                         ftᵢ = FuzzyTableau(SignedFormula(false, (uᵢ, x)), l)
                         push!(leaves, ftᵢ)
                     end
                 end
             else
-                if istop(a)
-                    # F(⊤ → X) case
+                if istop(t)
+                    # F(X → ⊤) case
                     closebranch(leaf)
                 elseif token(x) isa NamedConnective{:∨}
                     # F((A ∨ B) → t) case
+                    (a, b) = children(x)
                     for l ∈ findleaves(en)
-                        for c ∈ children(x)
-                            ftᵢ = FuzzyTableau(SignedFormula(false, (c, a)), l)
-                            push!(leaves, ftᵢ)
-                        end
+                        fta = FuzzyTableau(SignedFormula(false, (a, t)), l)
+                        push!(leaves, fta)
+                        ftb = FuzzyTableau(SignedFormula(false, (b, t)), l)
+                        push!(leaves, ftb)
                     end
                 else
-                    # F(X → a) case
+                    # F(X → t) case
                     for l ∈ findleaves(en)
-                        for uᵢ ∈ minimalmembers(h, a)
+                        for uᵢ ∈ minimalmembers(h, t)
                             ftᵢ = FuzzyTableau(SignedFormula(true, (uᵢ, x)), l)
                             push!(leaves, ftᵢ)
                         end
