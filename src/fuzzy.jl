@@ -151,9 +151,11 @@ function fuzzysat(leaves::Set{FuzzyTableau}, h::HeytingAlgebra)
         if z isa Tuple{HeytingTruth, HeytingTruth} # a → b
             a = z[1]
             b = z[2]
-            if s && !precedes(h, a, b) # T(a → b) where a ≰ b
+            if s && !precedes(h, a, b)
+                # T(a → b) where a ≰ b case
                 closebranch(en)
             elseif !s precedes(h, a, b) && a != HeytingTruth(⊥) && b != HeytingTruth(⊤)
+                # T(b → X) and F(a → X) where a ≤ b case
                 closebranch(en)
             else
                 continue
@@ -165,7 +167,17 @@ function fuzzysat(leaves::Set{FuzzyTableau}, h::HeytingAlgebra)
                 closebranch(en)
             elseif s
                 if isbot(a)
+                    # T(⊥ → X) case
                     # ...
+                elseif token(x) isa NamedConnective{:∧}
+                    # T(t → (A ∧ B)) case
+                    for l ∈ findleaves(en)
+                        ftᵢ = l
+                        for c ∈ children(x)
+                            ftᵢ = FuzzyTableau(SignedFormula(true, (a, c)), ftᵢ)
+                        end
+                        push!(leaves, ftᵢ)
+                    end
                 else
                     # T(a → X) case
                     tᵢ = first(maximalmembers(h, a))
@@ -178,6 +190,14 @@ function fuzzysat(leaves::Set{FuzzyTableau}, h::HeytingAlgebra)
                 if isbot(a)
                     # F(⊥ → X) case
                     closebranch(leaf)
+                elseif token(x) isa NamedConnective{:∧}
+                    # F(t → (A ∧ B)) case
+                    for l ∈ findleaves(en)
+                        for c ∈ children(x)
+                            ftᵢ = FuzzyTableau(SignedFormula(true, (a, c)), l)
+                            push!(leaves, ftᵢ)
+                        end
+                    end
                 else
                     # F(a → X) case
                     for l ∈ findleaves(en)
@@ -193,6 +213,7 @@ function fuzzysat(leaves::Set{FuzzyTableau}, h::HeytingAlgebra)
             a = z[2]
             if s
                 if istop(a)
+                    # T(X → ⊤) case
                     # ...
                 else
                     # T(X → a) case
