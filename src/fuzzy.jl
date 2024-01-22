@@ -143,7 +143,7 @@ function fuzzysat(leaves::Set{FuzzyTableau}, h::HeytingAlgebra)
         isempty(leaves) && return true
         leaf = pop!(leaves)
         en = findexpansionnode(leaf)
-        if isnothing(en) && continue
+        isnothing(en) && continue
         expand!(en)
         sz = signedformula(en)
         s = sign(sz)

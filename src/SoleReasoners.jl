@@ -14,7 +14,7 @@ export Tableau, φ, literals, naivechooseleaf, roundrobin, sat
 
 include("fuzzy.jl")
 
-export FuzzyTableau, SignedFormula, fuzzysat, expand!
+export FuzzyTableau, SignedFormula, fuzzysat
 
 include("utils.jl")
 
