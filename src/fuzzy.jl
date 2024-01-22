@@ -1,131 +1,218 @@
 """
-All formulas appearing in the t will be bounding implications, i.e.,
-a → A or A → a, where a is a propositional constant and asserting a ≤ A
+All formulas appearing in the tableau will be bounding implications, i.e.,
+a → A (or A → a), where a is a propositional constant and asserting a ≤ A (resp. A ≤ a)
 """
 struct SignedFormula
     sign::Bool
     formula::Union{Tuple{HeytingTruth, Formula}, Tuple{Formula, HeytingTruth}}
 end
 
-sign(signedformula::SignedFormula)::Bool = signedformula.sign
-formula(signedformula::SignedFormula)::Union{Tuple{HeytingTruth, Formula}, Tuple{Formula, HeytingTruth}} = signedformula.formula
+sign(signedformula::SignedFormula) = signedformula.sign
+formula(signedformula::SignedFormula) = signedformula.formula
 
 struct FuzzyTableau
     signedformula::SignedFormula
-    father::Base.RefValue{Set{FuzzyTableau}} # Note that this set contains at most one element
+    father::Base.RefValue{Set{FuzzyTableau}}
     children::Base.RefValue{Set{FuzzyTableau}}
-    heytingalgebra::HeytingAlgebra
     expanded::Base.RefValue{Bool}
-end
 
-signedformula(t::FuzzyTableau) = t.signedformula
-fatherset(t::FuzzyTableau)::Set{FuzzyTableau} = t.father[]
-father(t::FuzzyTableau)::Union{FuzzyTableau, Nothing} = isempty(fatherset(t)) ? nothing : first(fatherset(t))
-heytingalgebra(t::FuzzyTableau) = t.heytingalgebra
-expanded(t::FuzzyTableau) = t.expanded[]
+    function FuzzyTableau(
+        signedformula::SignedFormula,
+        father::Base.RefValue{Set{FuzzyTableau}},
+        children::Base.RefValue{Set{FuzzyTableau}},
+        expanded::Base.RefValue{Bool}
+    )
+        return new(signedformula, father, children, expanded)
+    end
 
-expand!(t::FuzzyTableau) = t.expanded[] = true
+    function FuzzyTableau(signedformula::SignedFormula, father::FuzzyTableau)
+        ft = FuzzyTableau(
+            signedformula,
+            Ref(Set{FuzzyTableau}([father])),
+            Ref(Set{FuzzyTableau}()),
+            false)
+        pushchildren!(father, ft
+    )
+        return ft
+    end
 
-isroot(t::FuzzyTableau) = isnothing(father(t))
-findroot(t::FuzzyTableau)::FuzzyTableau = isroot(t) ? t : findroot(father(t))
-
-function findexpansionnode(t::FuzzyTableau)::Union{FuzzyTableau, Nothing}
-    if expanded(t)
-        return nothing
-    else
-        if isroot(t)
-            return t
-        else
-            if expanded(father(t))
-                return t
-            else
-                findexpansionnode(father(t))
-            end
-        end
+    function FuzzyTableau(signedformula::SignedFormula)
+        return FuzzyTableau(
+            signedformula,
+            Ref(Set{FuzzyTableau}()),
+            Ref(Set{FuzzyTableau}()),
+            false
+        )
     end
 end
 
-"""
-Returns the similar signedformulas in the same branch, i.e.,
-given the formula T(b→X), it looks for formulas of the type F(a->X) in the same branch,
-so that they have different sign and same formula in the right-side of the implication
-"""
-function branchclosurecondition5(t::FuzzyTableau)
-    sf = signedformula(t)
-    s = sign(sf)
-    f = formula(sf)
-    x = f[2]
-    if s
-        b = f[1]
-        # look for F(a→X)
-        while(!isroot(t))
-            t = father(t)
-            sf2 = signedformula(t)
-            s2 = sign(sf2)
-            f2 = formula(sf2)
-            a = f2[1]
-            x2 = f2[2]
-            if x2 == x && !s2 && precedes(heytingalgebra(t), a, b)
-                return true
+signedformula(ft::FuzzyTableau) = ft.signedformula
+fatherset(ft::FuzzyTableau) = ft.father[]
+father(ft::FuzzyTableau) = isempty(fatherset(ft)) ? nothing : first(fatherset(ft))
+
+isexpanded(ft::FuzzyTableau) = ft.expanded[]
+
+expand!(ft::FuzzyTableau) = ft.expanded[] = true
+
+isroot(ft::FuzzyTableau) = isnothing(father(ft))
+findroot(ft::FuzzyTableau)::FuzzyTableau = isroot(ft) ? ft : findroot(father(ft))
+
+function findexpansionnode(ft::FuzzyTableau)
+    isexpanded(ft) && return nothing
+    if isroot(ft) || isexpanded(father(ft))
+        return ft
+    else
+        findexpansionnode(father(ft))
+    end
+end
+
+function findleaves(leavesset::Set{FuzzyTableau}, ft::FuzzyTableau)
+    children = childrenset(ft)
+    if isempty(children)
+        push!(leavesset, ft)
+    else
+        for child ∈ children
+            findleaves(leavesset, child)
+        end
+    end
+    return leavesset
+end
+
+function findleaves(ft::FuzzyTableau)
+    findleaves(Set{FuzzyTableau}(), ft)
+end
+
+function fuzzysat(leaves::Set{FuzzyTableau}, h::HeytingAlgebra)
+
+    function closebranch(branch::FuzzyTableau)
+        for l ∈ findleaves(branch)
+            expand!(l)
+        end
+    end
+
+
+    """
+    Given a FuzzyTableau containing a signed formula in the form T(b → X) or F(a → X),
+    return true if there is a tableau in the form F(a → X) (resp. T(b → X)) so that a ≤ b
+    in the given algebra in the same branch.
+    """
+    function findsimilar(ft::FuzzyTableau, h::HeytingAlgebra)
+        sz = signedformula(ft)
+        s = sign(sz)
+        z = formula(sz)
+        x = z[2]
+        if s
+            # T(b → X) case
+            b = z[1]
+            # look for F(a → X)
+            while(!isroot(ft))
+                ft = father(ft)
+                sz2 = signedformula(ft)
+                sign(sz2) && continue
+                z2 = formula(sz2)
+                a = z2[1]
+                z2[2] != x && continue
+                if precedes(h, a, b)
+                    return true
+                else
+                    continue
+                end
+            end
+        else
+            # F(a → X) case
+            a = z[1]
+            # look for T(b → X)
+            while(!isroot(ft))
+                ft = father(ft)
+                sz2 = signedformula(ft)
+                !sign(sz2) && continue
+                z2 = formula(sz2)
+                b = z2[1]
+                z2[2] != x && continue
+                if precedes(h, a, b)
+                    return true
+                else
+                    continue
+                end
+            end
+        end
+        return false
+    end
+
+    while(true)
+        isempty(leaves) && return true
+        leaf = pop!(leaves)
+        en = findexpansionnode(leaf)
+        if isnothing(en) && continue
+        expand!(en)
+        sz = signedformula(en)
+        s = sign(sz)
+        z = formula(sz)
+        if z isa Tuple{HeytingTruth, HeytingTruth} # a → b
+            a = z[1]
+            b = z[2]
+            if s && !precedes(h, a, b) # T(a → b) where a ≰ b
+                closebranch(en)
+            elseif !s precedes(h, a, b) && a != HeytingTruth(⊥) && b != HeytingTruth(⊤)
+                closebranch(en)
             else
                 continue
             end
-        end
-    else
-    end
-    return false
-end
-
-function fuzzysat(t::FuzzyTableau, leaves::Set{FuzzyTableau})
-    while(true)
-        if isempty(leaves)
-            return true
-        else
-            leaf = pop!(leaves)
-            en = findexpansionnode(leaf)
-            if isnothing(en)
-                return false
+        elseif z isa Tuple{HeytingTruth, Formula} # a → X
+            a = z[1]
+            x = z[2]
+            if findsimilar(en, h)
+                closebranch(en)
+            elseif s
+                if isbot(a)
+                    # ...
+                else
+                    # T(a → X) case
+                    tᵢ = first(maximalmembers(h, a))
+                    for l ∈ findleaves(en)
+                        ftᵢ = FuzzyTableau(SignedFormula(false, (x, tᵢ)), l)
+                        push!(leaves, ftᵢ)
+                    end
+                end
             else
-                expand!(en)
-                sf = signedformula(en)
-                x = formula(sf)
-                # Branch closure conditions
-                if x isa Tuple{HeytingTruth, HeytingTruth}
-                    a = x[1]
-                    b = x[2]
-                    s = sign(sf)
-                    h = heytingalgebra(t)
-                    if s && !precedes(h, a, b)
-                        # Close branch
-                        # Create fake child and don't push it to heaps
-                        pushfather!(leaf, leaf)
-                        pushchildren!(leaf, leaf) # Use the node itself to not waste space
-                    elseif !s && precedes(h, a, b) && a != HeytingTruth(⊥) && b != HeytingTruth(⊤)
-                        # Close branch
-                        # Create fake child and don't push it to heaps
-                        pushfather!(leaf, leaf)
-                        pushchildren!(leaf, leaf) # Use the node itself to not waste space
-                    else
-                        return false
+                if isbot(a)
+                    # F(⊥ → X) case
+                    closebranch(leaf)
+                else
+                    # F(a → X) case
+                    for l ∈ findleaves(en)
+                        for tᵢ ∈ maximalmembers(h, a)
+                            ftᵢ = FuzzyTableau(SignedFormula(true, (x, tᵢ)), l)
+                            push!(leaves, ftᵢ)
+                        end
                     end
-                elseif x isa Tuple{HeytingTruth, Formula}
-                    if !s && isbot(x[1])
-                        # Close branch
-                        # Create fake child and don't push it to heaps
-                        pushfather!(leaf, leaf)
-                        pushchildren!(leaf, leaf) # Use the node itself to not waste space
-                    elseif branchclosurecondition5(leaf)
-                        # Close branch
-                        # Create fake child and don't push it to heaps
-                        pushfather!(leaf, leaf)
-                        pushchildren!(leaf, leaf) # Use the node itself to not waste space
+                end
+            end
+        elseif z isa Tuple{Formula, HeytingTruth} # x → a
+            x = z[1]
+            a = z[2]
+            if s
+                if istop(a)
+                    # ...
+                else
+                    # T(X → a) case
+                    uᵢ = first(minimalmembers(h, a))
+                    for l ∈ findleaves(en)
+                        ftᵢ = FuzzyTableau(SignedFormula(false, (uᵢ, x)), l)
+                        push!(leaves, ftᵢ)
                     end
-                elseif x isa Tuple{Formula, HeytingTruth}
-                    if !s && istop(x[2])
-                        # Close branch
-                        # Create fake child and don't push it to heaps
-                        pushfather!(leaf, leaf)
-                        pushchildren!(leaf, leaf) # Use the node itself to not waste space
+                end
+            else
+                if istop(a)
+                    # F(⊤ → X) case
+                    closebranch(leaf)
+                else
+                    # F(X → a) case
+                    for l ∈ findleaves(en)
+                        for uᵢ ∈ minimalmembers(h, a)
+                            ftᵢ = FuzzyTableau(SignedFormula(true, (uᵢ, x)), l)
+                            push!(leaves, ftᵢ)
+                        end
                     end
                 end
             end
@@ -133,9 +220,9 @@ function fuzzysat(t::FuzzyTableau, leaves::Set{FuzzyTableau})
     end
 end
 
-function fuzzysat(x::Formula, h::HeytingAlgebra)
-    t = FuzzyTableau(SignedFormula(false, (HeytingTruth(⊤), x)), Ref(Set{FuzzyTableau}()), Ref(Set{FuzzyTableau}()), h, false)
+function fuzzysat(z::Formula, h::HeytingAlgebra)
+    ft = FuzzyTableau(SignedFormula(false, (HeytingTruth(⊤), z)))
     leaves = Set{FuzzyTableau}()
-    push!(leaves, t)
-    fuzzysat(t, leaves)
+    push!(leaves, ft)
+    fuzzysat(leaves, h)
 end
