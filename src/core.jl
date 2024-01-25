@@ -491,10 +491,18 @@ function sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)::Bool
                                 push!(metricheaps, t)
                             end
                         elseif tok isa BooleanTruth
-                            if leaf === root
-                                return true
-                            else
-                                push!(metricheaps, leaf)   # Push leaf back inside heap
+                            if istop(tok)
+                                for l ∈ leaves(root)
+                                    # Create fake child and don't push it to heap
+                                    pushfather!(l, l)
+                                    pushchildren!(l, l) # Use the node itself to not waste space
+                                end
+                            elseif isbot(tok)
+                                if leaf === root
+                                    return true
+                                else
+                                    push!(metricheaps, leaf)   # Push leaf back inside heap
+                                end
                             end
                         else
                             error("Error: unrecognized token: ... ")
@@ -528,10 +536,18 @@ function sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)::Bool
                         end
                     end
                 elseif tok isa BooleanTruth
-                    if leaf === root
-                        return true
-                    else
-                        push!(metricheaps, leaf)   # Push leaf back inside heap
+                    if istop(tok)
+                        if leaf === root
+                            return true
+                        else
+                            push!(metricheaps, leaf)   # Push leaf back inside heap
+                        end
+                    elseif isbot(tok)
+                        for l ∈ leaves(root)
+                            # Create fake child and don't push it to heap
+                            pushfather!(l, l)
+                            pushchildren!(l, l) # Use the node itself to not waste space
+                        end
                     end
                 else
                     error("Error: unrecognized NamedConnective ")
