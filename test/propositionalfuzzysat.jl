@@ -68,3 +68,6 @@ myalgebra = @heytingalgebra (α,) (⊥, α) (α, ⊤)
 
 @test fuzzysat(parseformula("(x∨y∨z)∧(x∨y∨(z→⊥))∧(x∨(y→⊥)∨z)∧(x∨(y→⊥)∨(z→⊥))∧((x→⊥)∨y∨z)∧((x→⊥)∨y∨(z→⊥))∧((x→⊥)∨(y→⊥)∨z)∧((x→⊥)∨(y→⊥)∨z)"), myalgebra) == true
 @test fuzzysat(parseformula("(x∨y∨z)∧(x∨y∨(z→⊥))∧(x∨(y→⊥)∨z)∧(x∨(y→⊥)∨(z→⊥))∧((x→⊥)∨y∨z)∧((x→⊥)∨y∨(z→⊥))∧((x→⊥)∨(y→⊥)∨z)∧((x→⊥)∨(y→⊥)∨(z→⊥))"), myalgebra) == false
+
+@test fuzzysat(booleantofuzzy(dimacstosole("benchmark/sat/uf50-01.cnf")), booleanalgebra) == true
+@test fuzzysat(booleantofuzzy(dimacstosole("benchmark/sat/uf50-01.cnf")), myalgebra) == true

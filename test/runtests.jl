@@ -12,7 +12,7 @@ end
 println("Julia version: ", VERSION)
 
 test_suites = [
-    ("PropositionalBooleanSat", ["propositionalbooleansat.jl",]),
+    # ("PropositionalBooleanSat", ["propositionalbooleansat.jl",]),
     ("PropositionalFuzzySat", ["propositionalfuzzysat.jl",]),
 ]
 

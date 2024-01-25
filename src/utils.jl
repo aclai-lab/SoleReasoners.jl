@@ -32,3 +32,18 @@ function dimacstosole(dimacscnf::String)::Formula
     end
     return ∧(disjunctions...)
 end
+
+"""
+Util function to convert a boolean formula to fuzzy format, i.e.,
+replacing each negation ¬X with the implication X → ⊥.
+"""
+function booleantofuzzy(φ::Formula)
+    if token(φ) isa Union{Atom, BooleanTruth}
+        return φ
+    elseif token(φ) isa NamedConnective{:¬}
+        return →(booleantofuzzy(children(φ)[1]),⊥)
+    else
+        (a, b) = children(φ)
+        return token(φ)(booleantofuzzy(a), booleantofuzzy(b))
+    end
+end

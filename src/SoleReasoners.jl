@@ -18,6 +18,6 @@ export FuzzyTableau, SignedFormula, fuzzysat, prove
 
 include("utils.jl")
 
-export dimacstosole
+export dimacstosole, booleantofuzzy
 
 end # module SoleReasoners
