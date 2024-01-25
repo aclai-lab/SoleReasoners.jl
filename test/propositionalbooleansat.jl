@@ -92,3 +92,24 @@ end
 @test_throws ErrorException(
     "Error: unrecognized NamedConnective "
 ) sat(parseformula("¬p ∧ q") ⊕ p)
+
+formulaheight(t::Tableau) = height(φ(t))
+nliterals(t::Tableau) = length(literals(t))
+
+@test sat(
+    parseformula(
+        "(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)"
+    ),
+    roundrobin,
+    formulaheight,
+    nliterals
+) == false
+
+@test sat(
+    parseformula(
+        "(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)"
+    ),
+    naivechooseleaf,
+    formulaheight,
+    nliterals
+) == false
