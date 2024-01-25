@@ -95,15 +95,6 @@ myalgebra = @heytingalgebra (α,) (⊥, α) (α, ⊤)
     myalgebra
 ) == false
 
-@test booleantofuzzy(
-        parseformula(
-            "(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)"
-        )
-    ) == parseformula(
-        "(x∨y∨z)∧(x∨y∨(z→⊥))∧(x∨(y→⊥)∨z)∧(x∨(y→⊥)∨(z→⊥))∧" *
-        "((x→⊥)∨y∨z)∧((x→⊥)∨y∨(z→⊥))∧((x→⊥)∨(y→⊥)∨z)∧((x→⊥)∨(y→⊥)∨(z→⊥))"
-    )
-
 @test fuzzysat(
     booleantofuzzy(dimacstosole("benchmark/sat/uf50-01.cnf")),
     booleanalgebra

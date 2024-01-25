@@ -65,8 +65,13 @@ using SoleReasoners
 
 @test sat(parseformula("p∧q"), naivechooseleaf) == true
 
-@test sat(parseformula("(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)")) == false
-@test sat(parseformula("(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)"), naivechooseleaf) == false
+@test sat(parseformula(
+    "(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)"
+)) == false
+
+@test sat(parseformula(
+    "(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)"
+), naivechooseleaf) == false
 
 @test sat(dimacstosole("benchmark/sat/uf50-01.cnf")) == true
 @test sat(dimacstosole("benchmark/sat/uf50-01.cnf"), naivechooseleaf) == true
@@ -84,4 +89,6 @@ function SoleLogics.collatetruth(::typeof(⊕), (t1, t2)::NTuple{2,BooleanTruth}
     return Base.xor(istop(t1), istop(t2)) ? TOP : BOT
 end
 
-@test_throws ErrorException("Error: unrecognized NamedConnective ") sat(parseformula("¬p ∧ q") ⊕ p)
+@test_throws ErrorException(
+    "Error: unrecognized NamedConnective "
+) sat(parseformula("¬p ∧ q") ⊕ p)

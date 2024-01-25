@@ -14,6 +14,7 @@ println("Julia version: ", VERSION)
 test_suites = [
     ("PropositionalBooleanSat", ["propositionalbooleansat.jl",]),
     ("PropositionalFuzzySat", ["propositionalfuzzysat.jl",]),
+    ("Utils", ["utils.jl"]),
 ]
 
 @testset "SoleReasoners.jl" begin

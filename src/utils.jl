@@ -11,10 +11,11 @@ Simple parsing from DIMACS CNF format to a SoleLogics Formula.
 
 TODO: cnftodimacs.
 """
-function dimacstosole(dimacscnf::String)::Formula
+function dimacstosole(dimacscnf::String)
     disjunctions = Set{Formula}()
     for line in readlines(dimacscnf)
-        if !startswith(line, "c") && !startswith(line, "p") && !startswith(line, "%") && !startswith(line, "0") && line != ""
+        if !startswith(line, "c") && !startswith(line, "p") &&
+           !startswith(line, "%") && !startswith(line, "0") && line != ""
             words = split(line)
             literals = Set{Formula}()
             for word ∈ words
