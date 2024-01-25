@@ -104,3 +104,96 @@ myalgebra = @heytingalgebra (α,) (⊥, α) (α, ⊤)
     booleantofuzzy(dimacstosole("benchmark/sat/uf50-01.cnf")),
     myalgebra
 ) == true
+
+@test alphasat(⊥, ⊥,       myalgebra) == true
+@test alphasat(⊥, α,       myalgebra) == true
+@test alphasat(⊥, ⊤,       myalgebra) == true
+@test alphasat(⊥, ∧(⊥, ⊥), myalgebra) == true
+@test alphasat(⊥, ∧(⊥, α), myalgebra) == true
+@test alphasat(⊥, ∧(⊥, ⊤), myalgebra) == true
+@test alphasat(⊥, ∧(α, ⊥), myalgebra) == true
+@test alphasat(⊥, ∧(α, α), myalgebra) == true
+@test alphasat(⊥, ∧(α, ⊤), myalgebra) == true
+@test alphasat(⊥, ∧(⊤, ⊥), myalgebra) == true
+@test alphasat(⊥, ∧(⊤, α), myalgebra) == true
+@test alphasat(⊥, ∧(⊤, ⊤), myalgebra) == true
+@test alphasat(⊥, ∨(⊥, ⊥), myalgebra) == true
+@test alphasat(⊥, ∨(⊥, α), myalgebra) == true
+@test alphasat(⊥, ∨(⊥, ⊤), myalgebra) == true
+@test alphasat(⊥, ∨(α, ⊥), myalgebra) == true
+@test alphasat(⊥, ∨(α, α), myalgebra) == true
+@test alphasat(⊥, ∨(α, ⊤), myalgebra) == true
+@test alphasat(⊥, ∨(⊤, ⊥), myalgebra) == true
+@test alphasat(⊥, ∨(⊤, α), myalgebra) == true
+@test alphasat(⊥, ∨(⊤, ⊤), myalgebra) == true
+@test alphasat(⊥, →(⊥, ⊥), myalgebra) == true
+@test alphasat(⊥, →(⊥, α), myalgebra) == true
+@test alphasat(⊥, →(⊥, ⊤), myalgebra) == true
+@test alphasat(⊥, →(α, ⊥), myalgebra) == true
+@test alphasat(⊥, →(α, α), myalgebra) == true
+@test alphasat(⊥, →(α, ⊤), myalgebra) == true
+@test alphasat(⊥, →(⊤, ⊥), myalgebra) == true
+@test alphasat(⊥, →(⊤, α), myalgebra) == true
+@test alphasat(⊥, →(⊤, ⊤), myalgebra) == true
+
+@test alphasat(α, ⊥,       myalgebra) == false
+@test alphasat(α, α,       myalgebra) == true
+@test alphasat(α, ⊤,       myalgebra) == true
+@test alphasat(α, ∧(⊥, ⊥), myalgebra) == false
+@test alphasat(α, ∧(⊥, α), myalgebra) == false
+@test alphasat(α, ∧(⊥, ⊤), myalgebra) == false
+@test alphasat(α, ∧(α, ⊥), myalgebra) == false
+@test alphasat(α, ∧(α, α), myalgebra) == true
+@test alphasat(α, ∧(α, ⊤), myalgebra) == true
+@test alphasat(α, ∧(⊤, ⊥), myalgebra) == false
+@test alphasat(α, ∧(⊤, α), myalgebra) == true
+@test alphasat(α, ∧(⊤, ⊤), myalgebra) == true
+@test alphasat(α, ∨(⊥, ⊥), myalgebra) == false
+@test alphasat(α, ∨(⊥, α), myalgebra) == true
+@test alphasat(α, ∨(⊥, ⊤), myalgebra) == true
+@test alphasat(α, ∨(α, ⊥), myalgebra) == true
+@test alphasat(α, ∨(α, α), myalgebra) == true
+@test alphasat(α, ∨(α, ⊤), myalgebra) == true
+@test alphasat(α, ∨(⊤, ⊥), myalgebra) == true
+@test alphasat(α, ∨(⊤, α), myalgebra) == true
+@test alphasat(α, ∨(⊤, ⊤), myalgebra) == true
+@test alphasat(α, →(⊥, ⊥), myalgebra) == true
+@test alphasat(α, →(⊥, α), myalgebra) == true
+@test alphasat(α, →(⊥, ⊤), myalgebra) == true
+@test alphasat(α, →(α, ⊥), myalgebra) == false
+@test alphasat(α, →(α, α), myalgebra) == true
+@test alphasat(α, →(α, ⊤), myalgebra) == true
+@test alphasat(α, →(⊤, ⊥), myalgebra) == false
+@test alphasat(α, →(⊤, α), myalgebra) == true
+@test alphasat(α, →(⊤, ⊤), myalgebra) == true
+
+@test alphasat(⊤, ⊥,       myalgebra) == false
+@test alphasat(⊤, α,       myalgebra) == false
+@test alphasat(⊤, ⊤,       myalgebra) == true
+@test alphasat(⊤, ∧(⊥, ⊥), myalgebra) == false
+@test alphasat(⊤, ∧(⊥, α), myalgebra) == false
+@test alphasat(⊤, ∧(⊥, ⊤), myalgebra) == false
+@test alphasat(⊤, ∧(α, ⊥), myalgebra) == false
+@test alphasat(⊤, ∧(α, α), myalgebra) == false
+@test alphasat(⊤, ∧(α, ⊤), myalgebra) == false
+@test alphasat(⊤, ∧(⊤, ⊥), myalgebra) == false
+@test alphasat(⊤, ∧(⊤, α), myalgebra) == false
+@test alphasat(⊤, ∧(⊤, ⊤), myalgebra) == true
+@test alphasat(⊤, ∨(⊥, ⊥), myalgebra) == false
+@test alphasat(⊤, ∨(⊥, α), myalgebra) == false
+@test alphasat(⊤, ∨(⊥, ⊤), myalgebra) == true
+@test alphasat(⊤, ∨(α, ⊥), myalgebra) == false
+@test alphasat(⊤, ∨(α, α), myalgebra) == false
+@test alphasat(⊤, ∨(α, ⊤), myalgebra) == true
+@test alphasat(⊤, ∨(⊤, ⊥), myalgebra) == true
+@test alphasat(⊤, ∨(⊤, α), myalgebra) == true
+@test alphasat(⊤, ∨(⊤, ⊤), myalgebra) == true
+@test alphasat(⊤, →(⊥, ⊥), myalgebra) == true
+@test alphasat(⊤, →(⊥, α), myalgebra) == true
+@test alphasat(⊤, →(⊥, ⊤), myalgebra) == true
+@test alphasat(⊤, →(α, ⊥), myalgebra) == true
+@test alphasat(⊤, →(α, α), myalgebra) == true
+@test alphasat(⊤, →(α, ⊤), myalgebra) == true
+@test alphasat(⊤, →(⊤, ⊥), myalgebra) == false
+@test alphasat(⊤, →(⊤, α), myalgebra) == false
+@test alphasat(⊤, →(⊤, ⊤), myalgebra) == true

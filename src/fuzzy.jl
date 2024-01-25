@@ -15,10 +15,6 @@ struct SignedFormula
     )
         return new(sign, boundingimplication)
     end
-
-    function SignedFormula(sign::Bool, formula::Formula)
-        return new(sign, (HeytingTruth(⊤), formula))
-    end
 end
 
 sign(signedformula::SignedFormula) = signedformula.sign
@@ -269,11 +265,7 @@ function fuzzysat(leaves::Set{FuzzyTableau}, h::HeytingAlgebra)
                     lvs = lesservalues(h, z[1])
                     push!(lvs, z[1])
                     if length(lvs) > 1
-                        if isbot(first(lvs))
-                            ti = lvs[2]
-                        else
-                            ti = first(lvs)
-                        end
+                        ti = last(lvs)
                         fta = FuzzyTableau(SignedFormula(false, (ti, a)), l)
                         push!(leaves, fta)
                         ftb = FuzzyTableau(SignedFormula(true, (ti, b)), l)
@@ -372,9 +364,17 @@ function fuzzysat(sz::SignedFormula, h::HeytingAlgebra)
 end
 
 function fuzzysat(z::Formula, h::HeytingAlgebra)
-    return fuzzysat(SignedFormula(true, z), h)
+    return fuzzysat(SignedFormula(true, (HeytingTruth(⊤), z)), h)
 end
 
 function prove(z::Formula, h::HeytingAlgebra)
-    return !fuzzysat(SignedFormula(false, z), h)
+    return !fuzzysat(SignedFormula(false, (HeytingTruth(⊤), z)), h)
+end
+
+function alphasat(α::HeytingTruth, z::Formula, h::HeytingAlgebra)
+    return fuzzysat(SignedFormula(true, (α, z)), h)
+end
+
+function alphasat(α::BooleanTruth, z::Formula, h::HeytingAlgebra)
+    return fuzzysat(SignedFormula(true, (HeytingTruth(α), z)), h)
 end
