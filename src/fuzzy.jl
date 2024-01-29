@@ -20,7 +20,7 @@ end
 sign(signedformula::SignedFormula) = signedformula.sign
 boundingimplication(signedformula::SignedFormula) = signedformula.boundingimplication
 
-struct FuzzyTableau
+struct FuzzyTableau <: AbstractTableau
     signedformula::SignedFormula
     father::Base.RefValue{Set{FuzzyTableau}}
     children::Base.RefValue{Set{FuzzyTableau}}

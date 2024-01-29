@@ -2,6 +2,8 @@
 #### Tableau ###############################################################################
 ############################################################################################
 
+abstract type AbstractTableau end
+
 """
     struct Tableau
         φ::Formula
@@ -27,7 +29,7 @@ can be divided in many tree-like structures, with each root representing an expa
 and each set of leaves representing the leaves (or branches) associated with that expansion
 node.
 """
-struct Tableau
+struct Tableau <: AbstractTableau
     φ::Formula
     father::Base.RefValue{Set{Tableau}} # Note that this set contains at most one element
     children::Base.RefValue{Set{Tableau}}
@@ -175,24 +177,24 @@ isleaf(tableau::Tableau)::Bool = isempty(childrenset(tableau)) ? true : false
 ############################################################################################
 
 """
-    struct MetricHeapNode
+    struct MetricHeapNode{T<:AbstractTableau}
         metricvalue::Int
-        tableau::Tableau
+        tableau::T
     end
 
 The atomic element of a MetricHeap, it contains a tableau branch and a value for the metric
 associated with the MetricHeap it is contained in.
 """
-struct MetricHeapNode
+struct MetricHeapNode{T<:AbstractTableau}
     metricvalue::Int
-    tableau::Tableau
+    tableau::T
 
-    function MetricHeapNode(metricvalue::Int, tableau::Tableau)::MetricHeapNode
-        return new(metricvalue, tableau)::MetricHeapNode
+    function MetricHeapNode(metricvalue::Int, tableau::T) where {T<:AbstractTableau}
+        return new{T}(metricvalue, tableau)
     end
 
-    function MetricHeapNode(metric::Function, tableau::Tableau)::MetricHeapNode
-        MetricHeapNode(metric(tableau), tableau)::MetricHeapNode
+    function MetricHeapNode(metric::Function, tableau::T) where {T<:AbstractTableau}
+        MetricHeapNode(metric(tableau), tableau)
     end
 end
 
@@ -275,30 +277,30 @@ Getter for the metric function of a MetricHeap.
 metric(metricheap::MetricHeap)::Function = metricheap.metric
 
 """
-    push!(metricheap::MetricHeap, metricheapnode::MetricHeapNode)::BinaryHeap{MetricHeapNode}
+    push!(metricheap::MetricHeap, metricheapnode::MetricHeapNode)
     
 Push new metricheapnode to a MetricHeap.
 """
 function push!(metricheap::MetricHeap,
-               metricheapnode::MetricHeapNode)::BinaryHeap{MetricHeapNode}
+               metricheapnode::MetricHeapNode)
     push!(heap(metricheap), metricheapnode)
 end
 
 """
-    push!(metricheap::MetricHeap, tableau::Tableau)::BinaryHeap{MetricHeapNode}
+    push!(metricheap::MetricHeap, tableau::T) where {T<:AbstractTableau}
 
 Push new tableau to a MetricHeap.
 """
-function push!(metricheap::MetricHeap, tableau::Tableau)::BinaryHeap{MetricHeapNode}
+function push!(metricheap::MetricHeap, tableau::T) where {T<:AbstractTableau}
     push!(metricheap, MetricHeapNode(metric(metricheap), tableau))
 end
 
 """
-    pop!(metricheap::MetricHeap)::Tableau
+    pop!(metricheap::MetricHeap)
 
 Pop head of a MetricHeap and return the tableau associated with it.
 """
-pop!(metricheap::MetricHeap)::Tableau = tableau(pop!(heap(metricheap)))
+pop!(metricheap::MetricHeap) = tableau(pop!(heap(metricheap)))
 
 """
     isempty(metricheap::MetricHeap)::Bool
@@ -312,15 +314,15 @@ isempty(metricheap::MetricHeap)::Bool = DataStructures.isempty(heap(metricheap))
 ############################################################################################
 
 """
-    naivechooseleaf(metricheaps::Vector{MetricHeap})::Union{Tableau, Nothing}
+    naivechooseleaf(metricheaps::Vector{MetricHeap})
 
 Choose a leaf using the provided metric heaps.
 At this moment, it simply returns the leaf which compares the most as head of the heaps.
 
 To prevent starvation, use roundrobin instead.
 """
-function naivechooseleaf(metricheaps::Vector{MetricHeap})::Union{Tableau, Nothing}
-    candidates = Vector{Tableau}()
+function naivechooseleaf(metricheaps::Vector{MetricHeap})
+    candidates = Vector{AbstractTableau}()
     for metricheap ∈ metricheaps
         while !isempty(metricheap)
             head = tableau(first(heap(metricheap)))
@@ -353,11 +355,11 @@ function naivechooseleaf(metricheaps::Vector{MetricHeap}, _::Int)
 end
 
 """
-    roundrobin(metricheaps::Vector{MetricHeap}, cycle::Int)::Union{Tableau, Nothing}
+    roundrobin(metricheaps::Vector{MetricHeap}, cycle::Int)
 
 Choose a leaf using the provided metric heaps, alternating between them at each cycle.
 """
-function roundrobin(metricheaps::Vector{MetricHeap}, cycle::Int)::Union{Tableau, Nothing}
+function roundrobin(metricheaps::Vector{MetricHeap}, cycle::Int)
     counter = 0
     leaf = nothing
     while counter != length(metricheaps)
@@ -384,11 +386,11 @@ function roundrobin(metricheaps::Vector{MetricHeap}, cycle::Int)::Union{Tableau,
 end
 
 """
-    push!(metricheaps::Vector{MetricHeap}, tableau::Tableau)::Nothing
+    push!(metricheaps::Vector{MetricHeap}, tableau::T) where {T<:AbstractTableau}
 
 Push leaf to each metric heap.
 """
-function push!(metricheaps::Vector{MetricHeap}, tableau::Tableau)::Nothing
+function push!(metricheaps::Vector{MetricHeap}, tableau::T) where {T<:AbstractTableau}
     for metricheap ∈ metricheaps
         push!(metricheap, tableau)
     end
