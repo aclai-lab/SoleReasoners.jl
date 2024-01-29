@@ -22,97 +22,97 @@ diamondalgebra = HeytingAlgebra(
     evaluate=true
 )
 
-@test fuzzysat(parseformula("⊥"),   booleanalgebra) == false
-@test fuzzysat(parseformula("⊤"),   booleanalgebra) == true
-@test fuzzysat(parseformula("⊥∧⊥"), booleanalgebra) == false
-@test fuzzysat(parseformula("⊥∧⊤"), booleanalgebra) == false
-@test fuzzysat(parseformula("⊤∧⊥"), booleanalgebra) == false
-@test fuzzysat(parseformula("⊤∧⊤"), booleanalgebra) == true
-@test fuzzysat(parseformula("⊥∨⊥"), booleanalgebra) == false
-@test fuzzysat(parseformula("⊥∨⊤"), booleanalgebra) == true
-@test fuzzysat(parseformula("⊤∨⊥"), booleanalgebra) == true
-@test fuzzysat(parseformula("⊤∨⊤"), booleanalgebra) == true
-@test fuzzysat(parseformula("⊥→⊥"), booleanalgebra) == true
-@test fuzzysat(parseformula("⊥→⊤"), booleanalgebra) == true
-@test fuzzysat(parseformula("⊤→⊥"), booleanalgebra) == false
-@test fuzzysat(parseformula("⊤→⊤"), booleanalgebra) == true
+@test sat(parseformula("⊥"),   booleanalgebra) == false
+@test sat(parseformula("⊤"),   booleanalgebra) == true
+@test sat(parseformula("⊥∧⊥"), booleanalgebra) == false
+@test sat(parseformula("⊥∧⊤"), booleanalgebra) == false
+@test sat(parseformula("⊤∧⊥"), booleanalgebra) == false
+@test sat(parseformula("⊤∧⊤"), booleanalgebra) == true
+@test sat(parseformula("⊥∨⊥"), booleanalgebra) == false
+@test sat(parseformula("⊥∨⊤"), booleanalgebra) == true
+@test sat(parseformula("⊤∨⊥"), booleanalgebra) == true
+@test sat(parseformula("⊤∨⊤"), booleanalgebra) == true
+@test sat(parseformula("⊥→⊥"), booleanalgebra) == true
+@test sat(parseformula("⊥→⊤"), booleanalgebra) == true
+@test sat(parseformula("⊤→⊥"), booleanalgebra) == false
+@test sat(parseformula("⊤→⊤"), booleanalgebra) == true
 
-@test fuzzysat(parseformula("⊥"),   threevaluedalgebra) == false
-@test fuzzysat(parseformula("⊤"),   threevaluedalgebra) == true
-@test fuzzysat(parseformula("⊥∧⊥"), threevaluedalgebra) == false
-@test fuzzysat(parseformula("⊥∧⊤"), threevaluedalgebra) == false
-@test fuzzysat(parseformula("⊤∧⊥"), threevaluedalgebra) == false
-@test fuzzysat(parseformula("⊤∧⊤"), threevaluedalgebra) == true
-@test fuzzysat(parseformula("⊥∨⊥"), threevaluedalgebra) == false
-@test fuzzysat(parseformula("⊥∨⊤"), threevaluedalgebra) == true
-@test fuzzysat(parseformula("⊤∨⊥"), threevaluedalgebra) == true
-@test fuzzysat(parseformula("⊤∨⊤"), threevaluedalgebra) == true
-@test fuzzysat(parseformula("⊥→⊥"), threevaluedalgebra) == true
-@test fuzzysat(parseformula("⊥→⊤"), threevaluedalgebra) == true
-@test fuzzysat(parseformula("⊤→⊥"), threevaluedalgebra) == false
-@test fuzzysat(parseformula("⊤→⊤"), threevaluedalgebra) == true
+@test sat(parseformula("⊥"),   threevaluedalgebra) == false
+@test sat(parseformula("⊤"),   threevaluedalgebra) == true
+@test sat(parseformula("⊥∧⊥"), threevaluedalgebra) == false
+@test sat(parseformula("⊥∧⊤"), threevaluedalgebra) == false
+@test sat(parseformula("⊤∧⊥"), threevaluedalgebra) == false
+@test sat(parseformula("⊤∧⊤"), threevaluedalgebra) == true
+@test sat(parseformula("⊥∨⊥"), threevaluedalgebra) == false
+@test sat(parseformula("⊥∨⊤"), threevaluedalgebra) == true
+@test sat(parseformula("⊤∨⊥"), threevaluedalgebra) == true
+@test sat(parseformula("⊤∨⊤"), threevaluedalgebra) == true
+@test sat(parseformula("⊥→⊥"), threevaluedalgebra) == true
+@test sat(parseformula("⊥→⊤"), threevaluedalgebra) == true
+@test sat(parseformula("⊤→⊥"), threevaluedalgebra) == false
+@test sat(parseformula("⊤→⊤"), threevaluedalgebra) == true
 
-@test fuzzysat(parseformula("⊥"),   diamondalgebra) == false
-@test fuzzysat(parseformula("⊤"),   diamondalgebra) == true
-@test fuzzysat(parseformula("⊥∧⊥"), diamondalgebra) == false
-@test fuzzysat(parseformula("⊥∧⊤"), diamondalgebra) == false
-@test fuzzysat(parseformula("⊤∧⊥"), diamondalgebra) == false
-@test fuzzysat(parseformula("⊤∧⊤"), diamondalgebra) == true
-@test fuzzysat(parseformula("⊥∨⊥"), diamondalgebra) == false
-@test fuzzysat(parseformula("⊥∨⊤"), diamondalgebra) == true
-@test fuzzysat(parseformula("⊤∨⊥"), diamondalgebra) == true
-@test fuzzysat(parseformula("⊤∨⊤"), diamondalgebra) == true
-@test fuzzysat(parseformula("⊥→⊥"), diamondalgebra) == true
-@test fuzzysat(parseformula("⊥→⊤"), diamondalgebra) == true
-@test fuzzysat(parseformula("⊤→⊥"), diamondalgebra) == false
-@test fuzzysat(parseformula("⊤→⊤"), diamondalgebra) == true
+@test sat(parseformula("⊥"),   diamondalgebra) == false
+@test sat(parseformula("⊤"),   diamondalgebra) == true
+@test sat(parseformula("⊥∧⊥"), diamondalgebra) == false
+@test sat(parseformula("⊥∧⊤"), diamondalgebra) == false
+@test sat(parseformula("⊤∧⊥"), diamondalgebra) == false
+@test sat(parseformula("⊤∧⊤"), diamondalgebra) == true
+@test sat(parseformula("⊥∨⊥"), diamondalgebra) == false
+@test sat(parseformula("⊥∨⊤"), diamondalgebra) == true
+@test sat(parseformula("⊤∨⊥"), diamondalgebra) == true
+@test sat(parseformula("⊤∨⊤"), diamondalgebra) == true
+@test sat(parseformula("⊥→⊥"), diamondalgebra) == true
+@test sat(parseformula("⊥→⊤"), diamondalgebra) == true
+@test sat(parseformula("⊤→⊥"), diamondalgebra) == false
+@test sat(parseformula("⊤→⊤"), diamondalgebra) == true
 
-@test fuzzysat(parseformula("p"), booleanalgebra) == true
-@test fuzzysat(parseformula("p→⊥"), booleanalgebra) == true
-@test fuzzysat(parseformula("p∧p"), booleanalgebra) == true
-@test fuzzysat(parseformula("p∧(p→⊥)"), booleanalgebra) == false
-@test fuzzysat(parseformula("(p→⊥)∧p"), booleanalgebra) == false
-@test fuzzysat(parseformula("(p→⊥)∧(p→⊥)"), booleanalgebra) == true
-@test fuzzysat(parseformula("p∨p"), booleanalgebra) == true
-@test fuzzysat(parseformula("p∨(p→⊥)"), booleanalgebra) == true
-@test fuzzysat(parseformula("(p→⊥)∨p"), booleanalgebra) == true
-@test fuzzysat(parseformula("(p→⊥)∨(p→⊥)"), booleanalgebra) == true
-@test fuzzysat(parseformula("p→p"), booleanalgebra) == true
-@test fuzzysat(parseformula("p→(p→⊥)"), booleanalgebra) == true
-@test fuzzysat(parseformula("(p→⊥)→p"), booleanalgebra) == true
-@test fuzzysat(parseformula("(p→⊥)→(p→⊥)"), booleanalgebra) == true
+@test sat(parseformula("p"), booleanalgebra) == true
+@test sat(parseformula("p→⊥"), booleanalgebra) == true
+@test sat(parseformula("p∧p"), booleanalgebra) == true
+@test sat(parseformula("p∧(p→⊥)"), booleanalgebra) == false
+@test sat(parseformula("(p→⊥)∧p"), booleanalgebra) == false
+@test sat(parseformula("(p→⊥)∧(p→⊥)"), booleanalgebra) == true
+@test sat(parseformula("p∨p"), booleanalgebra) == true
+@test sat(parseformula("p∨(p→⊥)"), booleanalgebra) == true
+@test sat(parseformula("(p→⊥)∨p"), booleanalgebra) == true
+@test sat(parseformula("(p→⊥)∨(p→⊥)"), booleanalgebra) == true
+@test sat(parseformula("p→p"), booleanalgebra) == true
+@test sat(parseformula("p→(p→⊥)"), booleanalgebra) == true
+@test sat(parseformula("(p→⊥)→p"), booleanalgebra) == true
+@test sat(parseformula("(p→⊥)→(p→⊥)"), booleanalgebra) == true
 
-@test fuzzysat(parseformula("p"), threevaluedalgebra) == true
-@test fuzzysat(parseformula("p→⊥"), threevaluedalgebra) == true
-@test fuzzysat(parseformula("p∧p"), threevaluedalgebra) == true
-@test fuzzysat(parseformula("p∧(p→⊥)"), threevaluedalgebra) == false
-@test fuzzysat(parseformula("(p→⊥)∧p"), threevaluedalgebra) == false
-@test fuzzysat(parseformula("(p→⊥)∧(p→⊥)"), threevaluedalgebra) == true
-@test fuzzysat(parseformula("p∨p"), threevaluedalgebra) == true
-@test fuzzysat(parseformula("p∨(p→⊥)"), threevaluedalgebra) == true
-@test fuzzysat(parseformula("(p→⊥)∨p"), threevaluedalgebra) == true
-@test fuzzysat(parseformula("(p→⊥)∨(p→⊥)"), threevaluedalgebra) == true
-@test fuzzysat(parseformula("p→p"), threevaluedalgebra) == true
-@test fuzzysat(parseformula("p→(p→⊥)"), threevaluedalgebra) == true
-@test fuzzysat(parseformula("(p→⊥)→p"), threevaluedalgebra) == true
-@test fuzzysat(parseformula("(p→⊥)→(p→⊥)"), threevaluedalgebra) == true
+@test sat(parseformula("p"), threevaluedalgebra) == true
+@test sat(parseformula("p→⊥"), threevaluedalgebra) == true
+@test sat(parseformula("p∧p"), threevaluedalgebra) == true
+@test sat(parseformula("p∧(p→⊥)"), threevaluedalgebra) == false
+@test sat(parseformula("(p→⊥)∧p"), threevaluedalgebra) == false
+@test sat(parseformula("(p→⊥)∧(p→⊥)"), threevaluedalgebra) == true
+@test sat(parseformula("p∨p"), threevaluedalgebra) == true
+@test sat(parseformula("p∨(p→⊥)"), threevaluedalgebra) == true
+@test sat(parseformula("(p→⊥)∨p"), threevaluedalgebra) == true
+@test sat(parseformula("(p→⊥)∨(p→⊥)"), threevaluedalgebra) == true
+@test sat(parseformula("p→p"), threevaluedalgebra) == true
+@test sat(parseformula("p→(p→⊥)"), threevaluedalgebra) == true
+@test sat(parseformula("(p→⊥)→p"), threevaluedalgebra) == true
+@test sat(parseformula("(p→⊥)→(p→⊥)"), threevaluedalgebra) == true
 
-@test fuzzysat(parseformula("p"), diamondalgebra) == true
-@test fuzzysat(parseformula("p→⊥"), diamondalgebra) == true
-@test fuzzysat(parseformula("p∧p"), diamondalgebra) == true
-@test fuzzysat(parseformula("p∧(p→⊥)"), diamondalgebra) == false
-@test fuzzysat(parseformula("(p→⊥)∧p"), diamondalgebra) == false
-@test fuzzysat(parseformula("(p→⊥)∧(p→⊥)"), diamondalgebra) == true
-@test fuzzysat(parseformula("p∨p"), diamondalgebra) == true
-@test fuzzysat(parseformula("p∨(p→⊥)"), diamondalgebra) == true
-@test fuzzysat(parseformula("(p→⊥)∨p"), diamondalgebra) == true
-@test fuzzysat(parseformula("(p→⊥)∨(p→⊥)"), diamondalgebra) == true
-@test fuzzysat(parseformula("p→p"), diamondalgebra) == true
-@test fuzzysat(parseformula("p→(p→⊥)"), diamondalgebra) == true
-@test fuzzysat(parseformula("(p→⊥)→p"), diamondalgebra) == true
-@test fuzzysat(parseformula("(p→⊥)→(p→⊥)"), diamondalgebra) == true
+@test sat(parseformula("p"), diamondalgebra) == true
+@test sat(parseformula("p→⊥"), diamondalgebra) == true
+@test sat(parseformula("p∧p"), diamondalgebra) == true
+@test sat(parseformula("p∧(p→⊥)"), diamondalgebra) == false
+@test sat(parseformula("(p→⊥)∧p"), diamondalgebra) == false
+@test sat(parseformula("(p→⊥)∧(p→⊥)"), diamondalgebra) == true
+@test sat(parseformula("p∨p"), diamondalgebra) == true
+@test sat(parseformula("p∨(p→⊥)"), diamondalgebra) == true
+@test sat(parseformula("(p→⊥)∨p"), diamondalgebra) == true
+@test sat(parseformula("(p→⊥)∨(p→⊥)"), diamondalgebra) == true
+@test sat(parseformula("p→p"), diamondalgebra) == true
+@test sat(parseformula("p→(p→⊥)"), diamondalgebra) == true
+@test sat(parseformula("(p→⊥)→p"), diamondalgebra) == true
+@test sat(parseformula("(p→⊥)→(p→⊥)"), diamondalgebra) == true
 
-@test fuzzysat(
+@test sat(
     parseformula(
         "(x∨y∨z)∧(x∨y∨(z→⊥))∧(x∨(y→⊥)∨z)∧(x∨(y→⊥)∨(z→⊥))∧" *
         "((x→⊥)∨y∨z)∧((x→⊥)∨y∨(z→⊥))∧((x→⊥)∨(y→⊥)∨z)∧((x→⊥)∨(y→⊥)∨z)"
@@ -120,7 +120,7 @@ diamondalgebra = HeytingAlgebra(
     booleanalgebra
 ) == true
 
-@test fuzzysat(
+@test sat(
     parseformula(
         "(x∨y∨z)∧(x∨y∨(z→⊥))∧(x∨(y→⊥)∨z)∧(x∨(y→⊥)∨(z→⊥))∧" *
         "((x→⊥)∨y∨z)∧((x→⊥)∨y∨(z→⊥))∧((x→⊥)∨(y→⊥)∨z)∧((x→⊥)∨(y→⊥)∨(z→⊥))"
@@ -128,7 +128,7 @@ diamondalgebra = HeytingAlgebra(
     booleanalgebra
 ) == false
 
-@test fuzzysat(
+@test sat(
     parseformula(
         "(x∨y∨z)∧(x∨y∨(z→⊥))∧(x∨(y→⊥)∨z)∧(x∨(y→⊥)∨(z→⊥))∧" *
         "((x→⊥)∨y∨z)∧((x→⊥)∨y∨(z→⊥))∧((x→⊥)∨(y→⊥)∨z)∧((x→⊥)∨(y→⊥)∨z)"
@@ -136,7 +136,7 @@ diamondalgebra = HeytingAlgebra(
     threevaluedalgebra
 ) == true
 
-@test fuzzysat(
+@test sat(
     parseformula(
         "(x∨y∨z)∧(x∨y∨(z→⊥))∧(x∨(y→⊥)∨z)∧(x∨(y→⊥)∨(z→⊥))∧" *
         "((x→⊥)∨y∨z)∧((x→⊥)∨y∨(z→⊥))∧((x→⊥)∨(y→⊥)∨z)∧((x→⊥)∨(y→⊥)∨(z→⊥))"
@@ -144,7 +144,7 @@ diamondalgebra = HeytingAlgebra(
     threevaluedalgebra
 ) == false
 
-@test fuzzysat(
+@test sat(
     parseformula(
         "(x∨y∨z)∧(x∨y∨(z→⊥))∧(x∨(y→⊥)∨z)∧(x∨(y→⊥)∨(z→⊥))∧" *
         "((x→⊥)∨y∨z)∧((x→⊥)∨y∨(z→⊥))∧((x→⊥)∨(y→⊥)∨z)∧((x→⊥)∨(y→⊥)∨z)"
@@ -152,7 +152,7 @@ diamondalgebra = HeytingAlgebra(
     diamondalgebra
 ) == true
 
-@test fuzzysat(
+@test sat(
     parseformula(
         "(x∨y∨z)∧(x∨y∨(z→⊥))∧(x∨(y→⊥)∨z)∧(x∨(y→⊥)∨(z→⊥))∧" *
         "((x→⊥)∨y∨z)∧((x→⊥)∨y∨(z→⊥))∧((x→⊥)∨(y→⊥)∨z)∧((x→⊥)∨(y→⊥)∨(z→⊥))"
@@ -160,32 +160,32 @@ diamondalgebra = HeytingAlgebra(
     diamondalgebra
 ) == false
 
-@test fuzzysat(
+@test sat(
     booleantofuzzy(dimacstosole("benchmark/sat/uf50-01.cnf")),
     booleanalgebra
 ) == true
 
-@test fuzzysat(
+@test sat(
     booleantofuzzy(dimacstosole("benchmark/sat/uf50-01.cnf")),
     threevaluedalgebra
 ) == true
 
-@test fuzzysat(
+@test sat(
     booleantofuzzy(dimacstosole("benchmark/sat/uf50-01.cnf")),
     diamondalgebra
 ) == true
 
-@test fuzzysat(
+@test sat(
     booleantofuzzy(dimacstosole("benchmark/sat/uf50-02.cnf")),
     booleanalgebra
 ) == true
 
-@test fuzzysat(
+@test sat(
     booleantofuzzy(dimacstosole("benchmark/sat/uf50-02.cnf")),
     threevaluedalgebra
 ) == true
 
-@test fuzzysat(
+@test sat(
     booleantofuzzy(dimacstosole("benchmark/sat/uf50-02.cnf")),
     diamondalgebra
 ) == true

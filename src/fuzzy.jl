@@ -20,6 +20,17 @@ end
 sign(signedformula::SignedFormula) = signedformula.sign
 boundingimplication(signedformula::SignedFormula) = signedformula.boundingimplication
 
+function SoleLogics.height(signedformula::SignedFormula)
+    formula = boundingimplication(signedformula)
+    if formula isa Tuple{HeytingTruth, Formula}
+        return height(formula[2]) + 1
+    elseif formula isa Tuple{Formula, HeytingTruth}
+        return height(formula[1]) + 1
+    else
+        return 1
+    end
+end
+
 struct FuzzyTableau <: AbstractTableau
     signedformula::SignedFormula
     father::Base.RefValue{Set{FuzzyTableau}}
@@ -168,7 +179,7 @@ function findsimilar(ft::FuzzyTableau, h::HeytingAlgebra)
     return false
 end
 
-function fuzzysat(leaves::Vector{MetricHeap}, chooseleaf::Function, h::HeytingAlgebra)
+function sat(leaves::Vector{MetricHeap}, chooseleaf::Function, h::HeytingAlgebra)
     cycle = 0
     while true
         leaf = chooseleaf(leaves, cycle)
@@ -355,7 +366,7 @@ function fuzzysat(leaves::Vector{MetricHeap}, chooseleaf::Function, h::HeytingAl
     end
 end
 
-function fuzzysat(sz::SignedFormula, h::HeytingAlgebra, chooseleaf::Function, metrics::Function...)
+function sat(sz::SignedFormula, h::HeytingAlgebra, chooseleaf::Function, metrics::Function...)
     metricheaps = Vector{MetricHeap}()   # Heaps to be used for tableau selection
     for metric ∈ metrics
         push!(metricheaps, MetricHeap(metric))
@@ -364,12 +375,16 @@ function fuzzysat(sz::SignedFormula, h::HeytingAlgebra, chooseleaf::Function, me
     for metricheap ∈ metricheaps
         push!(heap(metricheap), MetricHeapNode(metric(metricheap), root))
     end
-    fuzzysat(metricheaps, chooseleaf, h)
+    sat(metricheaps, chooseleaf, h)
 end
 
-function fuzzysat(z::Formula, h::HeytingAlgebra; rng = Random.GLOBAL_RNG)
+function sat(z::Formula, h::HeytingAlgebra, chooseleaf::Function, metrics::Function...)
+    return sat(SignedFormula(true, (HeytingTruth(⊤), z)), h, chooseleaf, metrics...)
+end
+
+function sat(z::Formula, h::HeytingAlgebra; rng = Random.GLOBAL_RNG)
     randombranch(tableau::FuzzyTableau) = rand(rng, Int)
-    return fuzzysat(SignedFormula(true, (HeytingTruth(⊤), z)), h, roundrobin, randombranch)
+    return sat(SignedFormula(true, (HeytingTruth(⊤), z)), h, roundrobin, randombranch)
 end
 
 function prove(z::Formula, h::HeytingAlgebra; rng = Random.GLOBAL_RNG)
@@ -379,10 +394,10 @@ end
 
 function alphasat(α::HeytingTruth, z::Formula, h::HeytingAlgebra; rng = Random.GLOBAL_RNG)
     randombranch(tableau::FuzzyTableau) = rand(rng, Int)
-    return fuzzysat(SignedFormula(true, (α, z)), h, roundrobin, randombranch)
+    return sat(SignedFormula(true, (α, z)), h, roundrobin, randombranch)
 end
 
 function alphasat(α::BooleanTruth, z::Formula, h::HeytingAlgebra; rng = Random.GLOBAL_RNG)
     randombranch(tableau::FuzzyTableau) = rand(rng, Int)
-    return fuzzysat(SignedFormula(true, (HeytingTruth(α), z)), h, roundrobin, randombranch)
+    return sat(SignedFormula(true, (HeytingTruth(α), z)), h, roundrobin, randombranch)
 end

@@ -10,11 +10,11 @@ using StatsBase
 
 include("core.jl")
 
-export Tableau, φ, literals, naivechooseleaf, roundrobin, sat
+export AbstractTableau, Tableau, φ, literals, naivechooseleaf, roundrobin, sat
 
 include("fuzzy.jl")
 
-export FuzzyTableau, SignedFormula, fuzzysat, prove, alphasat
+export FuzzyTableau, SignedFormula, signedformula, height, fuzzysat, prove, alphasat
 
 include("utils.jl")
 

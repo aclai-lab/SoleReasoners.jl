@@ -76,6 +76,9 @@ using SoleReasoners
 @test sat(dimacstosole("benchmark/sat/uf50-01.cnf")) == true
 @test sat(dimacstosole("benchmark/sat/uf50-01.cnf"), naivechooseleaf) == true
 
+@test sat(dimacstosole("benchmark/sat/uf50-02.cnf")) == true
+@test sat(dimacstosole("benchmark/sat/uf50-02.cnf"), naivechooseleaf) == true
+
 @atoms p
 
 # Define a new logical operator `⊕`
