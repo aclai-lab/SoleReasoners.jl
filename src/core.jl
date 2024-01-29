@@ -37,19 +37,19 @@ struct Tableau <: AbstractTableau
 
     function Tableau(φ::Formula, father::Base.RefValue{Set{Tableau}},
                      children::Base.RefValue{Set{Tableau}},
-                     literals::Base.RefValue{Set{Formula}})::Tableau
+                     literals::Base.RefValue{Set{Formula}})
         return new(φ, father, children, literals)
     end
 
-    function Tableau(φ::Formula)::Tableau
+    function Tableau(φ::Formula)
         return Tableau(φ, Ref(Set{Tableau}()), Ref(Set{Tableau}()), Ref(Set{Formula}()))
     end
 
-    function Tableau(φ::Formula, father::Base.RefValue{Set{Tableau}})::Tableau
+    function Tableau(φ::Formula, father::Base.RefValue{Set{Tableau}})
         return Tableau(φ, father, Ref(Set{Tableau}()), Ref(Set{Formula}()))
     end
 
-    function Tableau(φ::Formula, father::Tableau)::Tableau
+    function Tableau(φ::Formula, father::Tableau)
         tableau = Tableau(φ, Ref(Set{Tableau}([father])))
         pushchildren!(father, tableau)
         for atom in literals(father)
@@ -60,48 +60,48 @@ struct Tableau <: AbstractTableau
 end
 
 """
-    φ(tableau::Tableau)::Formula = tableau.φ
+    φ(tableau::Tableau) = tableau.φ
 
 Getter for the formula of a tableau.
 """
-φ(tableau::Tableau)::Formula = tableau.φ
+φ(tableau::Tableau) = tableau.φ
 
 """
-    fatherset(tableau::Tableau)::Set{Tableau} = tableau.father[]
+    fatherset(tableau::Tableau) = tableau.father[]
 
 Getter for the set containing the father of a tableau.
 """
-fatherset(tableau::Tableau)::Set{Tableau} = tableau.father[]
+fatherset(tableau::Tableau) = tableau.father[]
 
 """
-    father(tableau::Tableau)::Union{Tableau, Nothing}
+    father(tableau::Tableau)
 
 Getter for the father of a tableau.
 """
-function father(tableau::Tableau)::Union{Tableau, Nothing}
+function father(tableau::Tableau)
     return isempty(fatherset(tableau)) ? nothing : first(fatherset(tableau))
 end
 
 """
-    childrenset(tableau::Tableau)::Set{Tableau}
+    childrenset(tableau::Tableau)
 
 Getter for the set containing the children of a tableau.
 """
-childrenset(tableau::Tableau)::Set{Tableau} = tableau.children[]
+childrenset(tableau::Tableau) = tableau.children[]
 
 """
-    literals(tableau::Tableau)::Set{Formula}
+    literals(tableau::Tableau)
 
 Getter for the set containing the literals of a tableau.
 """
-literals(tableau::Tableau)::Set{Formula} = tableau.literals[]
+literals(tableau::Tableau) = tableau.literals[]
 
 """
-    leaves(leavesset::Set{Tableau}, tableau::Tableau)::Set{Tableau}
+    leaves(leavesset::Set{Tableau}, tableau::Tableau)
 
 Getter for the leaves of a tableau.
 """
-function leaves(leavesset::Set{Tableau}, tableau::Tableau)::Set{Tableau}
+function leaves(leavesset::Set{Tableau}, tableau::Tableau)
     children = childrenset(tableau)
     if isempty(children)
         push!(leavesset, tableau)
@@ -114,63 +114,63 @@ function leaves(leavesset::Set{Tableau}, tableau::Tableau)::Set{Tableau}
 end
 
 """
-    leaves(tableau::Tableau)::Set{Tableau}
+    leaves(tableau::Tableau)
 
 Getter for the leaves of a tableau.
 """
-function leaves(tableau::Tableau)::Set{Tableau}
+function leaves(tableau::Tableau)
     leaves(Set{Tableau}(), tableau)
 end
 
 """
-    pushfather!(tableau::Tableau, newfather::Tableau)::Set{Tableau}
+    pushfather!(tableau::Tableau, newfather::Tableau)
 
 Push new father to a tableau.
 """
-function pushfather!(tableau::Tableau, newfather::Tableau)::Set{Tableau}
+function pushfather!(tableau::Tableau, newfather::Tableau)
     push!(fatherset(tableau), newfather)
 end
 
 """
-    popfather!(tableau::Tableau)::Tableau
+    popfather!(tableau::Tableau)
 
 Pop father of a tableau (the tableau becomes a root).
 """
-popfather!(tableau::Tableau)::Tableau = pop!(fatherset(tableau))
+popfather!(tableau::Tableau) = pop!(fatherset(tableau))
 
 """
-    pushchildren!(tableau::Tableau, children::Tableau...)::Set{Tableau}
+    pushchildren!(tableau::Tableau, children::Tableau...)
 
 Push new children to a tableau.
 """
-function pushchildren!(tableau::Tableau, children::Tableau...)::Set{Tableau}
+function pushchildren!(tableau::Tableau, children::Tableau...)
     push!(childrenset(tableau), children...)
 end
 
 """
-    pushliterals!(tableau::Tableau, newliterals::Formula...)::Set{Formula}
+    pushliterals!(tableau::Tableau, newliterals::Formula...)
 
 Push new literals to a tableau.
 """
-function pushliterals!(tableau::Tableau, newliterals::Formula...)::Set{Formula}
+function pushliterals!(tableau::Tableau, newliterals::Formula...)
     push!(literals(tableau), newliterals...)
 end
 
 """
-    findroot(tableau::Tableau)::Tableau
+    findroot(tableau::Tableau)
 
 Find root starting from the leaf (i.e., the expansion node relative to that leaf).
 """
-function findroot(tableau::Tableau)::Tableau
+function findroot(tableau::Tableau)
     isnothing(father(tableau)) ? tableau : findroot(father(tableau))
 end
 
 """
-    isleaf(tableau::Tableau)::Bool
+    isleaf(tableau::Tableau)
 
 Return true if the tableau is still a leaf, false otherwise.
 """
-isleaf(tableau::Tableau)::Bool = isempty(childrenset(tableau)) ? true : false
+isleaf(tableau::Tableau) = isempty(childrenset(tableau)) ? true : false
 
 ############################################################################################
 #### MetricHeapNode ########################################################################
@@ -225,11 +225,11 @@ metric value.
 struct MetricHeapOrdering <: Base.Order.Ordering end
 
 """
-    lt(o::MetricHeapOrdering, a::MetricHeapNode, b::MetricHeapNode)::Bool
+    lt(o::MetricHeapOrdering, a::MetricHeapNode, b::MetricHeapNode)
 
 Definition of the lt function for the new ordering.
 """
-function lt(o::MetricHeapOrdering, a::MetricHeapNode, b::MetricHeapNode)::Bool
+function lt(o::MetricHeapOrdering, a::MetricHeapNode, b::MetricHeapNode)
     isless(metricvalue(a), metricvalue(b))
 end
 
@@ -252,29 +252,29 @@ struct MetricHeap
     heap::BinaryHeap{MetricHeapNode}
     metric::Function
 
-    function MetricHeap(heap::BinaryHeap{MetricHeapNode}, metric::Function)::MetricHeap
+    function MetricHeap(heap::BinaryHeap{MetricHeapNode}, metric::Function)
         return new(heap, metric)
     end
 
-    function MetricHeap(metric::Function)::MetricHeap
+    function MetricHeap(metric::Function)
         heap = BinaryHeap{MetricHeapNode}(MetricHeapOrdering())
-        return MetricHeap(heap, metric)::MetricHeap
+        return MetricHeap(heap, metric)
     end
 end
 
 """
-    heap(metricheap::MetricHeap)::BinaryHeap{MetricHeapNode}
+    heap(metricheap::MetricHeap)
 
 Getter for the binary heap of a MetricHeap.
 """
-heap(metricheap::MetricHeap)::BinaryHeap{MetricHeapNode} = metricheap.heap
+heap(metricheap::MetricHeap) = metricheap.heap
 
 """
-    metric(metricheap::MetricHeap)::Function
+    metric(metricheap::MetricHeap)
 
 Getter for the metric function of a MetricHeap.
 """
-metric(metricheap::MetricHeap)::Function = metricheap.metric
+metric(metricheap::MetricHeap) = metricheap.metric
 
 """
     push!(metricheap::MetricHeap, metricheapnode::MetricHeapNode)
@@ -303,11 +303,11 @@ Pop head of a MetricHeap and return the tableau associated with it.
 pop!(metricheap::MetricHeap) = tableau(pop!(heap(metricheap)))
 
 """
-    isempty(metricheap::MetricHeap)::Bool
+    isempty(metricheap::MetricHeap)
 
 Returns true if the MetricHeap is empty, false otherwise.
 """
-isempty(metricheap::MetricHeap)::Bool = DataStructures.isempty(heap(metricheap))
+isempty(metricheap::MetricHeap) = DataStructures.isempty(heap(metricheap))
 
 ############################################################################################
 #### SAT ###################################################################################
