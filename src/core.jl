@@ -397,12 +397,12 @@ function push!(metricheaps::Vector{MetricHeap}, tableau::T) where {T<:AbstractTa
 end
 
 """
-    sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)::Bool
+    sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)
 
 Given a formula, return true if an interpretation that satisfies the formula exists, false
 otherwise.
 """
-function sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)::Bool
+function sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)
     cycle = 0
     while true
         leaf = chooseleaf(metricheaps, cycle)
@@ -564,12 +564,12 @@ function sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)::Bool
 end
 
 """
-    sat(φ::Formula, chooseleaf::Function, metrics::Function...)::Bool
+    sat(φ::Formula, chooseleaf::Function, metrics::Function...)
 
 Given a formula, return true if an interpretation that satisfies the formula exists, false
 otherwise.
 """
-function sat(φ::Formula, chooseleaf::Function, metrics::Function...)::Bool
+function sat(φ::Formula, chooseleaf::Function, metrics::Function...)
     metricheaps = Vector{MetricHeap}()   # Heaps to be used for tableau selection
     for metric ∈ metrics
         push!(metricheaps, MetricHeap(metric))
@@ -582,23 +582,23 @@ function sat(φ::Formula, chooseleaf::Function, metrics::Function...)::Bool
 end
 
 """
-    sat(φ::Formula, chooseleaf::Function; rng = Random.GLOBAL_RNG)::Bool
+    sat(φ::Formula, chooseleaf::Function; rng = Random.GLOBAL_RNG)
 
 Given a formula, return true if an interpretation that satisfies the formula exists, false
 otherwise.
 """
-function sat(φ::Formula, chooseleaf::Function; rng = Random.GLOBAL_RNG)::Bool
+function sat(φ::Formula, chooseleaf::Function; rng = Random.GLOBAL_RNG)
     randombranch(tableau::Tableau) = rand(rng, Int)
     sat(φ, chooseleaf, randombranch)
 end
 
 """
-    sat(φ::Formula; rng = Random.GLOBAL_RNG)::Bool
+    sat(φ::Formula; rng = Random.GLOBAL_RNG)
 
 Given a formula, return true if an interpretation that satisfies the formula exists, false
 otherwise.
 """
-function sat(φ::Formula; rng = Random.GLOBAL_RNG)::Bool
+function sat(φ::Formula; rng = Random.GLOBAL_RNG)
     randombranch(tableau::Tableau) = rand(rng, Int)
     sat(φ, roundrobin, randombranch)
 end

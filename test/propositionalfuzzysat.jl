@@ -175,6 +175,21 @@ diamondalgebra = HeytingAlgebra(
     diamondalgebra
 ) == true
 
+@test fuzzysat(
+    booleantofuzzy(dimacstosole("benchmark/sat/uf50-02.cnf")),
+    booleanalgebra
+) == true
+
+@test fuzzysat(
+    booleantofuzzy(dimacstosole("benchmark/sat/uf50-02.cnf")),
+    threevaluedalgebra
+) == true
+
+@test fuzzysat(
+    booleantofuzzy(dimacstosole("benchmark/sat/uf50-02.cnf")),
+    diamondalgebra
+) == true
+
 @test alphasat(⊥, ⊥,       threevaluedalgebra) == true
 @test alphasat(⊥, α,       threevaluedalgebra) == true
 @test alphasat(⊥, ⊤,       threevaluedalgebra) == true

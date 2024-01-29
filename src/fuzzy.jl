@@ -168,12 +168,11 @@ function findsimilar(ft::FuzzyTableau, h::HeytingAlgebra)
     return false
 end
 
-function fuzzysat(leaves::Set{FuzzyTableau}, h::HeytingAlgebra)
-
+function fuzzysat(leaves::Vector{MetricHeap}, chooseleaf::Function, h::HeytingAlgebra)
+    cycle = 0
     while true
-        isempty(leaves) && return false # all branches are closed
-        leaf = pop!(leaves)
-        !isleaf(leaf) && continue
+        leaf = chooseleaf(leaves, cycle)
+        isnothing(leaf) && return false # all branches are closed
         en = findexpansionnode(leaf)
         isnothing(en) && return true    # found a satisfiable branch
         isclosed(en) && continue
@@ -356,25 +355,34 @@ function fuzzysat(leaves::Set{FuzzyTableau}, h::HeytingAlgebra)
     end
 end
 
-function fuzzysat(sz::SignedFormula, h::HeytingAlgebra)
-    ft = FuzzyTableau(sz)
-    leaves = Set{FuzzyTableau}()
-    push!(leaves, ft)
-    return fuzzysat(leaves, h)
+function fuzzysat(sz::SignedFormula, h::HeytingAlgebra, chooseleaf::Function, metrics::Function...)
+    metricheaps = Vector{MetricHeap}()   # Heaps to be used for tableau selection
+    for metric ∈ metrics
+        push!(metricheaps, MetricHeap(metric))
+    end
+    root = FuzzyTableau(sz)
+    for metricheap ∈ metricheaps
+        push!(heap(metricheap), MetricHeapNode(metric(metricheap), root))
+    end
+    fuzzysat(metricheaps, chooseleaf, h)
 end
 
-function fuzzysat(z::Formula, h::HeytingAlgebra)
-    return fuzzysat(SignedFormula(true, (HeytingTruth(⊤), z)), h)
+function fuzzysat(z::Formula, h::HeytingAlgebra; rng = Random.GLOBAL_RNG)
+    randombranch(tableau::FuzzyTableau) = rand(rng, Int)
+    return fuzzysat(SignedFormula(true, (HeytingTruth(⊤), z)), h, roundrobin, randombranch)
 end
 
-function prove(z::Formula, h::HeytingAlgebra)
-    return !fuzzysat(SignedFormula(false, (HeytingTruth(⊤), z)), h)
+function prove(z::Formula, h::HeytingAlgebra; rng = Random.GLOBAL_RNG)
+    randombranch(tableau::FuzzyTableau) = rand(rng, Int)
+    return !fuzzysat(SignedFormula(false, (HeytingTruth(⊤), z)), h, roundrobin, randombranch)
 end
 
-function alphasat(α::HeytingTruth, z::Formula, h::HeytingAlgebra)
-    return fuzzysat(SignedFormula(true, (α, z)), h)
+function alphasat(α::HeytingTruth, z::Formula, h::HeytingAlgebra; rng = Random.GLOBAL_RNG)
+    randombranch(tableau::FuzzyTableau) = rand(rng, Int)
+    return fuzzysat(SignedFormula(true, (α, z)), h, roundrobin, randombranch)
 end
 
-function alphasat(α::BooleanTruth, z::Formula, h::HeytingAlgebra)
-    return fuzzysat(SignedFormula(true, (HeytingTruth(α), z)), h)
+function alphasat(α::BooleanTruth, z::Formula, h::HeytingAlgebra; rng = Random.GLOBAL_RNG)
+    randombranch(tableau::FuzzyTableau) = rand(rng, Int)
+    return fuzzysat(SignedFormula(true, (HeytingTruth(α), z)), h, roundrobin, randombranch)
 end
