@@ -363,6 +363,7 @@ function sat(leaves::Vector{MetricHeap}, chooseleaf::Function, h::HeytingAlgebra
         else
             error("Something went wrong...")
         end
+        cycle += 1
     end
 end
 
