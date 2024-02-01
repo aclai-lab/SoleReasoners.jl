@@ -2,88 +2,66 @@
 #### Tableau ###############################################################################
 ############################################################################################
 
+"""
+    abstract type AbstractTableau end
+
+Abstract type for all tableaux structures.
+
+An [analytic tableau](https://en.wikipedia.org/wiki/Method_of_analytic_tableaux) is a tree
+structure computed for a logical formula having at each node a subformula of the original
+formula to be proved or refuted. It is used in many automated reasoning tasks, such as
+[automated theorem proving](https://en.wikipedia.org/wiki/Automated_theorem_proving) and the
+[satifiability problem](https://en.wikipedia.org/wiki/Boolean_satisfiability_problem).
+
+See also [`Tableau`](@ref), [`FuzzyTableau`](@ref).
+"""
 abstract type AbstractTableau end
 
 """
-    struct Tableau
-        φ::Formula
-        father::Base.RefValue{Set{Tableau}}
-        children::Base.RefValue{Set{Tableau}}
-        literals::Base.RefValue{Set{Formula}}
+    mutable struct Tableau <: AbstractTableau
+        const formula::Formula
+        const father::Union{Tableau, Nothing}
+        children::Set{Tableau}
+        expanded::Bool
+        closed::Bool
     end
-A recursive structure resembling a tree which contains a formula φ (which structure is
-defined in the SoleLogics package) and references to the father, the set of children and
-the set of literals (atoms and negation of atoms) found in the same branch.
-
-A tableau is a dynamic structure used to solve the satisfiability problem following the
-analytic tableau approach. At a specific instant in time, the root represents a possible
-expansion node of the tableau, while each path from a root to one of its leaves represents
-a branch, with literals in the leaves containing the literals (atoms and negation of atoms)
-encountered it the expanded nodes for that branch.
     
-This allows to delegate to the Julia garbage collector the deallocation of expanded nodes,
-while simplifying root (expansion node) search and branch management.
+A mutable structure representing a tableau as a tree structure, with each node containing
+a subformula of the original formula, the father and children in the tree structure, a flag
+saying if the node has already been expanded and a flag saying if the branch represented by
+the node has been closed.E ach path from a leaf to the root respresents a branch.
 
-Note that, while at initialization only there is only one root, the structure later on
-can be divided in many tree-like structures, with each root representing an expansion node
-and each set of leaves representing the leaves (or branches) associated with that expansion
-node.
+See also [`sat`](@ref), [`prove`](@ref).
 """
 mutable struct Tableau <: AbstractTableau
-    const φ::Formula
-    father::Union{Tableau, Nothing}
-    children::Set{Tableau}
-    literals::Set{Formula}
+    const formula::Formula
+    const father::Union{Tableau, Nothing}
+    children::Vector{Tableau}
     expanded::Bool
     closed::Bool
 
-    function Tableau(
-        φ::Formula,
-        _::Nothing,
-        children::Set{Tableau},
-        literals::Set{Formula},
-        expanded::Bool,
-        closed::Bool
-    )
-        return new(φ, nothing, children, literals, expanded, closed)
+    function Tableau(formula::Formula)
+        return new(formula, nothing, Vector{Tableau}(), false, false)
     end
 
-    function Tableau(
-        φ::Formula,
-        father::Tableau,
-        children::Set{Tableau},
-        literals::Set{Formula},
-        expanded::Bool,
-        closed::Bool
-    )
-        return new(φ, father, children, literals, expanded, closed)
-    end
-
-    function Tableau(φ::Formula)
-        return Tableau(φ, nothing, Set{Tableau}(), Set{Formula}(), false, false)
-    end
-
-    function Tableau(φ::Formula, father::Tableau)
-        tableau = Tableau(φ, father, Set{Tableau}(), Set{Formula}(), false, false)
+    function Tableau(formula::Formula, father::Tableau)
+        tableau = new(formula, father, Vector{Tableau}(), false, false)
         pushchildren!(father, tableau)
-        for atom in literals(father)
-            pushliterals!(tableau, atom)
-        end
         return tableau
     end
 end
 
 """
-    φ(tableau::Tableau) = tableau.φ
+    formula(tableau::Tableau) = tableau.formula
 
-Getter for the formula of a tableau.
+Return the formula of a tableau.
 """
-φ(tableau::Tableau) = tableau.φ
+formula(tableau::Tableau) = tableau.formula
 
 """
     father(tableau::Tableau)
 
-Getter for the father of a tableau.
+Return the father of a tableau.
 """
 function father(tableau::Tableau)
     return tableau.father
@@ -92,16 +70,9 @@ end
 """
     childrenset(tableau::Tableau)
 
-Getter for the set containing the children of a tableau.
+Return the set of children of a tableau.
 """
 childrenset(tableau::Tableau) = tableau.children
-
-"""
-    literals(tableau::Tableau)
-
-Getter for the set containing the literals of a tableau.
-"""
-literals(tableau::Tableau) = tableau.literals
 
 isexpanded(tableau::Tableau) = tableau.expanded
 isclosed(tableau::Tableau) = tableau.closed
@@ -148,46 +119,12 @@ function leaves(tableau::Tableau)
 end
 
 """
-    pushfather!(tableau::Tableau, newfather::Tableau)
-
-Push new father to a tableau.
-"""
-function pushfather!(tableau::Tableau, newfather::Tableau)
-    tableau.father = newfather
-end
-
-"""
-    popfather!(tableau::Tableau)
-
-Pop father of a tableau (the tableau becomes a root).
-"""
-popfather!(tableau::Tableau) = tableau.father = nothing
-
-"""
     pushchildren!(tableau::Tableau, children::Tableau...)
 
 Push new children to a tableau.
 """
 function pushchildren!(tableau::Tableau, children::Tableau...)
     push!(childrenset(tableau), children...)
-end
-
-"""
-    pushliterals!(tableau::Tableau, newliterals::Formula...)
-
-Push new literals to a tableau.
-"""
-function pushliterals!(tableau::Tableau, newliterals::Formula...)
-    push!(literals(tableau), newliterals...)
-end
-
-"""
-    findroot(tableau::Tableau)
-
-Find root starting from the leaf (i.e., the expansion node relative to that leaf).
-"""
-function findroot(tableau::Tableau)
-    isnothing(father(tableau)) ? tableau : findroot(father(tableau))
 end
 
 """
@@ -422,18 +359,18 @@ function push!(metricheaps::Vector{MetricHeap}, tableau::T) where {T<:AbstractTa
 end
 
 function findsimilar(t::Tableau)
-    x = φ(t)
+    x = formula(t)
     if x isa Atom
         while !isroot(t)
             t = father(t)
-            if φ(t) == ¬x
+            if formula(t) == ¬x
                 return true
             end
         end
     elseif token(x) isa NamedConnective{:¬}
         while !isroot(t)
             t = father(t)
-            if φ(t) == first(children(x))
+            if formula(t) == first(children(x))
                 return true
             end
         end
@@ -458,8 +395,8 @@ function sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)
         isnothing(en) && return true    # found a satisfiable branch
         isclosed(en) && continue
 
-        φroot = φ(en)
-        if φroot isa Atom
+        φ = formula(en)
+        if φ isa Atom
             # Atom case
             if findsimilar(en)
                 close!(en)
@@ -468,10 +405,10 @@ function sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)
                 push!(metricheaps, leaf)
             end
         else
-            tok = token(φroot)
+            tok = token(φ)
             if tok isa NamedConnective{:¬}
                 # Negation case
-                φi = children(φroot)[1]
+                φi = first(children(φ))
                 if φi isa Atom
                     # ¬φi where φi is an atom case
                     if findsimilar(en)
@@ -485,47 +422,40 @@ function sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)
                     if tok isa NamedConnective{:¬}
                         expand!(en)
                         for leaf ∈ leaves(en)
-                            t = Tableau(children(φi)[1], leaf)
+                            t = Tableau(first(children(φi)), leaf)
                             push!(metricheaps, t)
                         end
                     elseif tok isa NamedConnective{:∨}
                         expand!(en)
                         for l ∈ leaves(en)
-                            t = l
-                            for φj ∈ children(φi)
-                                t = Tableau(¬φj, t)
-                            end
-                            push!(metricheaps, t)
+                            (a, b) = children(φi)
+                            ta = Tableau(¬a, l)
+                            tb = Tableau(¬b, ta)
+                            push!(metricheaps, tb)
                         end
                     elseif tok isa NamedConnective{:∧}
                         expand!(en)
-                        for leaf ∈ leaves(en)
-                            for φj ∈ children(φi)
-                                t = Tableau(¬φj, leaf)
-                                push!(metricheaps, t)
-                            end
+                        for l ∈ leaves(en)
+                            (a, b) = children(φi)
+                            ta = Tableau(¬a, l)
+                            tb = Tableau(¬b, l)
+                            push!(metricheaps, ta)
+                            push!(metricheaps, tb)
                         end
                     elseif tok isa NamedConnective{:→}
                         expand!(en)
-                        φ1, φ2 = children(φi)
-                        φis = (φ1, ¬φ2)
+                        (a, b) = children(φi)
                         for l ∈ leaves(en)
-                            t = l
-                            for φi ∈ children(φis)
-                                t = Tableau(φi, t)
-                            end
-                            push!(metricheaps, t)
+                            ta = Tableau(a, l)
+                            tb = Tableau(¬b, ta)
+                            push!(metricheaps, tb)
                         end
                     elseif tok isa BooleanTruth
                         if istop(tok)
                             close!(en)
                         elseif isbot(tok)
-                            if leaf === en
-                                return true
-                            else
-                                expand!(en)
-                                push!(metricheaps, leaf)   # Push leaf back inside heap
-                            end
+                            expand!(en)
+                            push!(metricheaps, leaf)   # Push leaf back inside heap
                         end
                     else
                         error("Error: unrecognized token: ... ")
@@ -535,40 +465,35 @@ function sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)
                 # Disjunction case
                 expand!(en)
                 for l ∈ leaves(en)
-                    for φi ∈ children(φroot)
-                        t = Tableau(φi, l)
-                        push!(metricheaps, t)
-                    end
+                    (a, b) = children(φ)
+                    ta = Tableau(a, l)
+                    tb = Tableau(b, l)
+                    push!(metricheaps, ta)
+                    push!(metricheaps, tb)
                 end
             elseif tok isa NamedConnective{:∧}
                 expand!(en)
                 # Conjunction case
                 for l ∈ leaves(en)
-                    t = l
-                    for φi ∈ children(φroot)
-                        t = Tableau(φi, t)
-                    end
-                    push!(metricheaps, t)
+                    (a, b) = children(φ)
+                    ta = Tableau(a, l)
+                    tb = Tableau(b, ta)
+                    push!(metricheaps, tb)
                 end
             elseif tok isa NamedConnective{:→}
                 expand!(en)
                 # Implication case
-                φ1, φ2 = children(φroot)
-                φis = (¬φ1, φ2)
-                for leaf ∈ leaves(en)
-                    for φi ∈ φis
-                        t = Tableau(φi, leaf)
-                        push!(metricheaps, t)
-                    end
+                (a, b) = children(φ)
+                for l ∈ leaves(en)
+                    ta = Tableau(¬a, l)
+                    tb = Tableau(b, l)
+                    push!(metricheaps, ta)
+                    push!(metricheaps, tb)
                 end
             elseif tok isa BooleanTruth
                 if istop(tok)
-                    if leaf === en
-                        return true
-                    else
-                        expand!(en)
-                        push!(metricheaps, leaf)   # Push leaf back inside heap
-                    end
+                    expand!(en)
+                    push!(metricheaps, leaf)   # Push leaf back inside heap
                 elseif isbot(tok)
                     close!(en)
                 end
@@ -581,17 +506,17 @@ function sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)
 end
 
 """
-    sat(φ::Formula, chooseleaf::Function, metrics::Function...)
+    sat(formula::Formula, chooseleaf::Function, metrics::Function...)
 
 Given a formula, return true if an interpretation that satisfies the formula exists, false
 otherwise.
 """
-function sat(φ::Formula, chooseleaf::Function, metrics::Function...)
+function sat(formula::Formula, chooseleaf::Function, metrics::Function...)
     metricheaps = Vector{MetricHeap}()   # Heaps to be used for tableau selection
     for metric ∈ metrics
         push!(metricheaps, MetricHeap(metric))
     end
-    root = Tableau(φ)
+    root = Tableau(formula)
     for metricheap ∈ metricheaps
         push!(heap(metricheap), MetricHeapNode(metric(metricheap), root))
     end
@@ -599,23 +524,23 @@ function sat(φ::Formula, chooseleaf::Function, metrics::Function...)
 end
 
 """
-    sat(φ::Formula, chooseleaf::Function; rng = Random.GLOBAL_RNG)
+    sat(formula::Formula, chooseleaf::Function; rng = Random.GLOBAL_RNG)
 
 Given a formula, return true if an interpretation that satisfies the formula exists, false
 otherwise.
 """
-function sat(φ::Formula, chooseleaf::Function; rng = Random.GLOBAL_RNG)
+function sat(formula::Formula, chooseleaf::Function; rng = Random.GLOBAL_RNG)
     randombranch(tableau::Tableau) = rand(rng, Int)
-    sat(φ, chooseleaf, randombranch)
+    sat(formula, chooseleaf, randombranch)
 end
 
 """
-    sat(φ::Formula; rng = Random.GLOBAL_RNG)
+    sat(formula::Formula; rng = Random.GLOBAL_RNG)
 
 Given a formula, return true if an interpretation that satisfies the formula exists, false
 otherwise.
 """
-function sat(φ::Formula; rng = Random.GLOBAL_RNG)
+function sat(formula::Formula; rng = Random.GLOBAL_RNG)
     randombranch(tableau::Tableau) = rand(rng, Int)
-    sat(φ, roundrobin, randombranch)
+    sat(formula, roundrobin, randombranch)
 end

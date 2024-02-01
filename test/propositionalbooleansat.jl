@@ -69,15 +69,9 @@ using SoleReasoners
     "(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)"
 )) == false
 
-# @test sat(parseformula(
-#     "(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)"
-# ), naivechooseleaf) == false
-
 @test sat(dimacstosole("benchmark/sat/uf50-01.cnf")) == true
-# @test sat(dimacstosole("benchmark/sat/uf50-01.cnf"), naivechooseleaf) == true
 
 @test sat(dimacstosole("benchmark/sat/uf50-02.cnf")) == true
-# @test sat(dimacstosole("benchmark/sat/uf50-02.cnf"), naivechooseleaf) == true
 
 @atoms p
 
@@ -95,24 +89,3 @@ end
 @test_throws ErrorException(
     "Error: unrecognized NamedConnective "
 ) sat(parseformula("¬p ∧ q") ⊕ p)
-
-formulaheight(t::Tableau) = height(φ(t))
-nliterals(t::Tableau) = length(literals(t))
-
-@test sat(
-    parseformula(
-        "(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)"
-    ),
-    roundrobin,
-    formulaheight,
-    nliterals
-) == false
-
-# @test sat(
-#     parseformula(
-#         "(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)"
-#     ),
-#     naivechooseleaf,
-#     formulaheight,
-#     nliterals
-# ) == false
