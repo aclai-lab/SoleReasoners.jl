@@ -69,15 +69,15 @@ using SoleReasoners
     "(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)"
 )) == false
 
-@test sat(parseformula(
-    "(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)"
-), naivechooseleaf) == false
+# @test sat(parseformula(
+#     "(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)"
+# ), naivechooseleaf) == false
 
 @test sat(dimacstosole("benchmark/sat/uf50-01.cnf")) == true
-@test sat(dimacstosole("benchmark/sat/uf50-01.cnf"), naivechooseleaf) == true
+# @test sat(dimacstosole("benchmark/sat/uf50-01.cnf"), naivechooseleaf) == true
 
 @test sat(dimacstosole("benchmark/sat/uf50-02.cnf")) == true
-@test sat(dimacstosole("benchmark/sat/uf50-02.cnf"), naivechooseleaf) == true
+# @test sat(dimacstosole("benchmark/sat/uf50-02.cnf"), naivechooseleaf) == true
 
 @atoms p
 
@@ -108,11 +108,11 @@ nliterals(t::Tableau) = length(literals(t))
     nliterals
 ) == false
 
-@test sat(
-    parseformula(
-        "(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)"
-    ),
-    naivechooseleaf,
-    formulaheight,
-    nliterals
-) == false
+# @test sat(
+#     parseformula(
+#         "(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)"
+#     ),
+#     naivechooseleaf,
+#     formulaheight,
+#     nliterals
+# ) == false

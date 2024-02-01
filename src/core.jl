@@ -34,31 +34,37 @@ mutable struct Tableau <: AbstractTableau
     father::Union{Tableau, Nothing}
     children::Set{Tableau}
     literals::Set{Formula}
+    expanded::Bool
+    closed::Bool
 
     function Tableau(
         φ::Formula,
         _::Nothing,
         children::Set{Tableau},
-        literals::Set{Formula}
+        literals::Set{Formula},
+        expanded::Bool,
+        closed::Bool
     )
-        return new(φ, nothing, children, literals)
+        return new(φ, nothing, children, literals, expanded, closed)
     end
 
     function Tableau(
         φ::Formula,
         father::Tableau,
         children::Set{Tableau},
-        literals::Set{Formula}
+        literals::Set{Formula},
+        expanded::Bool,
+        closed::Bool
     )
-        return new(φ, father, children, literals)
+        return new(φ, father, children, literals, expanded, closed)
     end
 
     function Tableau(φ::Formula)
-        return Tableau(φ, nothing, Set{Tableau}(), Set{Formula}())
+        return Tableau(φ, nothing, Set{Tableau}(), Set{Formula}(), false, false)
     end
 
     function Tableau(φ::Formula, father::Tableau)
-        tableau = Tableau(φ, father, Set{Tableau}(), Set{Formula}())
+        tableau = Tableau(φ, father, Set{Tableau}(), Set{Formula}(), false, false)
         pushchildren!(father, tableau)
         for atom in literals(father)
             pushliterals!(tableau, atom)
@@ -96,6 +102,24 @@ childrenset(tableau::Tableau) = tableau.children
 Getter for the set containing the literals of a tableau.
 """
 literals(tableau::Tableau) = tableau.literals
+
+isexpanded(tableau::Tableau) = tableau.expanded
+isclosed(tableau::Tableau) = tableau.closed
+
+expand!(tableau::Tableau) = tableau.expanded = true
+close!(tableau::Tableau) = tableau.closed = true
+
+isroot(tableau::Tableau) = isnothing(father(tableau))
+
+function findexpansionnode(tableau::Tableau)
+    if isexpanded(tableau)
+        return nothing
+    elseif isroot(tableau) || isexpanded(father(tableau))
+        return tableau
+    else
+        findexpansionnode(father(tableau))
+    end
+end
 
 """
     leaves(leavesset::Set{Tableau}, tableau::Tableau)
@@ -397,6 +421,28 @@ function push!(metricheaps::Vector{MetricHeap}, tableau::T) where {T<:AbstractTa
     end
 end
 
+function findsimilar(t::Tableau)
+    x = φ(t)
+    if x isa Atom
+        while !isroot(t)
+            t = father(t)
+            if φ(t) == ¬x
+                return true
+            end
+        end
+    elseif token(x) isa NamedConnective{:¬}
+        while !isroot(t)
+            t = father(t)
+            if φ(t) == first(children(x))
+                return true
+            end
+        end
+    else
+        error("Something went wrong...")
+    end
+    return false
+end
+
 """
     sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)
 
@@ -407,157 +453,127 @@ function sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)
     cycle = 0
     while true
         leaf = chooseleaf(metricheaps, cycle)
-        if isnothing(leaf)
-            return false
+        isnothing(leaf) && return false # all branches are closed
+        en = findexpansionnode(leaf)
+        isnothing(en) && return true    # found a satisfiable branch
+        isclosed(en) && continue
+
+        φroot = φ(en)
+        if φroot isa Atom
+            # Atom case
+            if findsimilar(en)
+                close!(en)
+            else
+                expand!(en)
+                push!(metricheaps, leaf)
+            end
         else
-            root = findroot(leaf)
-            φroot = φ(root)
-            if φroot isa Atom
-                # Atom case
-                if leaf === root
-                    if ¬φroot ∉ literals(leaf)
-                        return true
+            tok = token(φroot)
+            if tok isa NamedConnective{:¬}
+                # Negation case
+                φi = children(φroot)[1]
+                if φi isa Atom
+                    # ¬φi where φi is an atom case
+                    if findsimilar(en)
+                        close!(en)
                     else
-                        # Create fake child and don't push it to heaps
-                        pushfather!(leaf, leaf)
-                        pushchildren!(leaf, leaf) # Use the node itself to not waste space
+                        expand!(en)
+                        push!(metricheaps, leaf)
                     end
                 else
-                    push!(metricheaps, leaf)   # Push leaf back inside heaps
-                    for l ∈ leaves(root)
-                        if ¬φroot ∉ literals(l)
-                            pushliterals!(l, φroot)
-                        else
-                            # Create fake child and don't push it to heaps
-                            pushfather!(l, l)
-                            pushchildren!(l, l) # Use the node itself to not waste space
+                    tok = token(φi)
+                    if tok isa NamedConnective{:¬}
+                        expand!(en)
+                        for leaf ∈ leaves(en)
+                            t = Tableau(children(φi)[1], leaf)
+                            push!(metricheaps, t)
                         end
-                    end
-                end
-            else
-                tok = token(φroot)
-                if tok isa NamedConnective{:¬}
-                    # Negation case
-                    φi = children(φroot)[1]
-                    if φi isa Atom
-                        # ¬φi where φi is an atom case
-                        if leaf === root
-                            if φi ∉ literals(leaf)
+                    elseif tok isa NamedConnective{:∨}
+                        expand!(en)
+                        for l ∈ leaves(en)
+                            t = l
+                            for φj ∈ children(φi)
+                                t = Tableau(¬φj, t)
+                            end
+                            push!(metricheaps, t)
+                        end
+                    elseif tok isa NamedConnective{:∧}
+                        expand!(en)
+                        for leaf ∈ leaves(en)
+                            for φj ∈ children(φi)
+                                t = Tableau(¬φj, leaf)
+                                push!(metricheaps, t)
+                            end
+                        end
+                    elseif tok isa NamedConnective{:→}
+                        expand!(en)
+                        φ1, φ2 = children(φi)
+                        φis = (φ1, ¬φ2)
+                        for l ∈ leaves(en)
+                            t = l
+                            for φi ∈ children(φis)
+                                t = Tableau(φi, t)
+                            end
+                            push!(metricheaps, t)
+                        end
+                    elseif tok isa BooleanTruth
+                        if istop(tok)
+                            close!(en)
+                        elseif isbot(tok)
+                            if leaf === en
                                 return true
                             else
-                                # Create fake child and don't push it to heap
-                                pushfather!(leaf, leaf)
-                                pushchildren!(leaf, leaf) # Use the node itself to not waste space
-                            end
-                        else
-                            push!(metricheaps, leaf)   # Push leaf back inside heap
-                            for l ∈ leaves(root)
-                                if φi ∉ literals(l)
-                                    pushliterals!(l, φroot)
-                                else
-                                    # Create fake child and don't push it to heap
-                                    pushfather!(l, l)
-                                    pushchildren!(l, l) # Use the node itself to not waste space
-                                end
+                                expand!(en)
+                                push!(metricheaps, leaf)   # Push leaf back inside heap
                             end
                         end
                     else
-                        tok = token(φi)
-                        if tok isa NamedConnective{:¬}
-                            for leaf ∈ leaves(root)
-                                t = Tableau(children(φi)[1], leaf)
-                                push!(metricheaps, t)
-                            end
-                        elseif tok isa NamedConnective{:∨}
-                            for l ∈ leaves(root)
-                                t = l
-                                for φj ∈ children(φi)
-                                    t = Tableau(¬φj, t)
-                                end
-                                push!(metricheaps, t)
-                            end
-                        elseif tok isa NamedConnective{:∧}
-                            for leaf ∈ leaves(root)
-                                for φj ∈ children(φi)
-                                    t = Tableau(¬φj, leaf)
-                                    push!(metricheaps, t)
-                                end
-                            end
-                        elseif tok isa NamedConnective{:→}
-                            φ1, φ2 = children(φi)
-                            φis = (φ1, ¬φ2)
-                            for l ∈ leaves(root)
-                                t = l
-                                for φi ∈ children(φis)
-                                    t = Tableau(φi, t)
-                                end
-                                push!(metricheaps, t)
-                            end
-                        elseif tok isa BooleanTruth
-                            if istop(tok)
-                                for l ∈ leaves(root)
-                                    # Create fake child and don't push it to heap
-                                    pushfather!(l, l)
-                                    pushchildren!(l, l) # Use the node itself to not waste space
-                                end
-                            elseif isbot(tok)
-                                if leaf === root
-                                    return true
-                                else
-                                    push!(metricheaps, leaf)   # Push leaf back inside heap
-                                end
-                            end
-                        else
-                            error("Error: unrecognized token: ... ")
-                        end
+                        error("Error: unrecognized token: ... ")
                     end
-                elseif tok isa NamedConnective{:∨}
-                    # Disjunction case
-                    for l ∈ leaves(root)
-                        for φi ∈ children(φroot)
-                            t = Tableau(φi, l)
-                            push!(metricheaps, t)
-                        end
-                    end
-                elseif tok isa NamedConnective{:∧}
-                    # Conjunction case
-                    for l ∈ leaves(root)
-                        t = l
-                        for φi ∈ children(φroot)
-                            t = Tableau(φi, t)
-                        end
+                end
+            elseif tok isa NamedConnective{:∨}
+                # Disjunction case
+                expand!(en)
+                for l ∈ leaves(en)
+                    for φi ∈ children(φroot)
+                        t = Tableau(φi, l)
                         push!(metricheaps, t)
                     end
-                elseif tok isa NamedConnective{:→}
-                    # Implication case
-                    φ1, φ2 = children(φroot)
-                    φis = (¬φ1, φ2)
-                    for leaf ∈ leaves(root)
-                        for φi ∈ φis
-                            t = Tableau(φi, leaf)
-                            push!(metricheaps, t)
-                        end
-                    end
-                elseif tok isa BooleanTruth
-                    if istop(tok)
-                        if leaf === root
-                            return true
-                        else
-                            push!(metricheaps, leaf)   # Push leaf back inside heap
-                        end
-                    elseif isbot(tok)
-                        for l ∈ leaves(root)
-                            # Create fake child and don't push it to heap
-                            pushfather!(l, l)
-                            pushchildren!(l, l) # Use the node itself to not waste space
-                        end
-                    end
-                else
-                    error("Error: unrecognized NamedConnective ")
                 end
-            end
-            for child ∈ childrenset(root)
-                popfather!(child)
+            elseif tok isa NamedConnective{:∧}
+                expand!(en)
+                # Conjunction case
+                for l ∈ leaves(en)
+                    t = l
+                    for φi ∈ children(φroot)
+                        t = Tableau(φi, t)
+                    end
+                    push!(metricheaps, t)
+                end
+            elseif tok isa NamedConnective{:→}
+                expand!(en)
+                # Implication case
+                φ1, φ2 = children(φroot)
+                φis = (¬φ1, φ2)
+                for leaf ∈ leaves(en)
+                    for φi ∈ φis
+                        t = Tableau(φi, leaf)
+                        push!(metricheaps, t)
+                    end
+                end
+            elseif tok isa BooleanTruth
+                if istop(tok)
+                    if leaf === en
+                        return true
+                    else
+                        expand!(en)
+                        push!(metricheaps, leaf)   # Push leaf back inside heap
+                    end
+                elseif isbot(tok)
+                    close!(en)
+                end
+            else
+                error("Error: unrecognized NamedConnective ")
             end
         end
         cycle += 1
