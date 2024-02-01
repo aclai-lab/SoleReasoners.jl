@@ -4,14 +4,25 @@ a → A (or A → a), where a is a propositional constant and asserting a ≤ A 
 """
 struct SignedFormula
     sign::Bool
-    boundingimplication::Union{Tuple{HeytingTruth, Formula}, Tuple{Formula, HeytingTruth}}
+    boundingimplication::Union{Tuple{HeytingTruth, Formula}, Tuple{Formula, HeytingTruth}, Tuple{HeytingTruth, HeytingTruth}}
     
     function SignedFormula(
         sign::Bool,
-        boundingimplication::Union{
-            Tuple{HeytingTruth, Formula},
-            Tuple{Formula, HeytingTruth}
-        }
+        boundingimplication::Tuple{HeytingTruth, Formula}
+    )
+        return new(sign, boundingimplication)
+    end
+
+    function SignedFormula(
+        sign::Bool,
+        boundingimplication::Tuple{Formula, HeytingTruth}
+    )
+        return new(sign, boundingimplication)
+    end
+
+    function SignedFormula(
+        sign::Bool,
+        boundingimplication::Tuple{HeytingTruth, HeytingTruth}
     )
         return new(sign, boundingimplication)
     end
@@ -31,30 +42,40 @@ function SoleLogics.height(signedformula::SignedFormula)
     end
 end
 
-struct FuzzyTableau <: AbstractTableau
-    signedformula::SignedFormula
-    father::Base.RefValue{Set{FuzzyTableau}}
-    children::Base.RefValue{Set{FuzzyTableau}}
-    expanded::Base.RefValue{Bool}
-    closed::Base.RefValue{Bool}
+mutable struct FuzzyTableau <: AbstractTableau
+    const signedformula::SignedFormula
+    const father::Union{FuzzyTableau, Nothing}
+    children::Set{FuzzyTableau}
+    expanded::Bool
+    closed::Bool
 
     function FuzzyTableau(
         signedformula::SignedFormula,
-        father::Base.RefValue{Set{FuzzyTableau}},
-        children::Base.RefValue{Set{FuzzyTableau}},
-        expanded::Base.RefValue{Bool},
-        closed::Base.RefValue{Bool}
+        father::FuzzyTableau,
+        children::Set{FuzzyTableau},
+        expanded::Bool,
+        closed::Bool
     )
         return new(signedformula, father, children, expanded, closed)
+    end
+
+    function FuzzyTableau(
+        signedformula::SignedFormula,
+        _::Nothing,
+        children::Set{FuzzyTableau},
+        expanded::Bool,
+        closed::Bool
+    )
+        return new(signedformula, nothing, children, expanded, closed)
     end
 
     function FuzzyTableau(signedformula::SignedFormula, father::FuzzyTableau)
         ft = FuzzyTableau(
             signedformula,
-            Ref(Set{FuzzyTableau}([father])),
-            Ref(Set{FuzzyTableau}()),
-            Ref(false),
-            Ref(false)
+            father,
+            Set{FuzzyTableau}(),
+            false,
+            false
         )
         pushchildren!(father, ft)
         return ft
@@ -63,24 +84,23 @@ struct FuzzyTableau <: AbstractTableau
     function FuzzyTableau(signedformula::SignedFormula)
         return FuzzyTableau(
             signedformula,
-            Ref(Set{FuzzyTableau}()),
-            Ref(Set{FuzzyTableau}()),
-            Ref(false),
-            Ref(false)
+            nothing,
+            Set{FuzzyTableau}(),
+            false,
+            false
         )
     end
 end
 
 signedformula(ft::FuzzyTableau) = ft.signedformula
-fatherset(ft::FuzzyTableau) = ft.father[]
-father(ft::FuzzyTableau) = isempty(fatherset(ft)) ? nothing : first(fatherset(ft))
-childrenset(ft::FuzzyTableau) = ft.children[]
+father(ft::FuzzyTableau) = ft.father
+childrenset(ft::FuzzyTableau) = ft.children
 
-isexpanded(ft::FuzzyTableau) = ft.expanded[]
-isclosed(ft::FuzzyTableau) = ft.expanded[]
+isexpanded(ft::FuzzyTableau) = ft.expanded
+isclosed(ft::FuzzyTableau) = ft.expanded
 
-expand!(ft::FuzzyTableau) = ft.expanded[] = true
-close!(ft::FuzzyTableau) = ft.closed[] = true
+expand!(ft::FuzzyTableau) = ft.expanded = true
+close!(ft::FuzzyTableau) = ft.closed = true
 
 isroot(ft::FuzzyTableau) = isnothing(father(ft))
 

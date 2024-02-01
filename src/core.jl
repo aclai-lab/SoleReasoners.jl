@@ -29,28 +29,36 @@ can be divided in many tree-like structures, with each root representing an expa
 and each set of leaves representing the leaves (or branches) associated with that expansion
 node.
 """
-struct Tableau <: AbstractTableau
-    φ::Formula
-    father::Base.RefValue{Set{Tableau}} # Note that this set contains at most one element
-    children::Base.RefValue{Set{Tableau}}
-    literals::Base.RefValue{Set{Formula}}
+mutable struct Tableau <: AbstractTableau
+    const φ::Formula
+    father::Union{Tableau, Nothing}
+    children::Set{Tableau}
+    literals::Set{Formula}
 
-    function Tableau(φ::Formula, father::Base.RefValue{Set{Tableau}},
-                     children::Base.RefValue{Set{Tableau}},
-                     literals::Base.RefValue{Set{Formula}})
+    function Tableau(
+        φ::Formula,
+        _::Nothing,
+        children::Set{Tableau},
+        literals::Set{Formula}
+    )
+        return new(φ, nothing, children, literals)
+    end
+
+    function Tableau(
+        φ::Formula,
+        father::Tableau,
+        children::Set{Tableau},
+        literals::Set{Formula}
+    )
         return new(φ, father, children, literals)
     end
 
     function Tableau(φ::Formula)
-        return Tableau(φ, Ref(Set{Tableau}()), Ref(Set{Tableau}()), Ref(Set{Formula}()))
-    end
-
-    function Tableau(φ::Formula, father::Base.RefValue{Set{Tableau}})
-        return Tableau(φ, father, Ref(Set{Tableau}()), Ref(Set{Formula}()))
+        return Tableau(φ, nothing, Set{Tableau}(), Set{Formula}())
     end
 
     function Tableau(φ::Formula, father::Tableau)
-        tableau = Tableau(φ, Ref(Set{Tableau}([father])))
+        tableau = Tableau(φ, father, Set{Tableau}(), Set{Formula}())
         pushchildren!(father, tableau)
         for atom in literals(father)
             pushliterals!(tableau, atom)
@@ -67,19 +75,12 @@ Getter for the formula of a tableau.
 φ(tableau::Tableau) = tableau.φ
 
 """
-    fatherset(tableau::Tableau) = tableau.father[]
-
-Getter for the set containing the father of a tableau.
-"""
-fatherset(tableau::Tableau) = tableau.father[]
-
-"""
     father(tableau::Tableau)
 
 Getter for the father of a tableau.
 """
 function father(tableau::Tableau)
-    return isempty(fatherset(tableau)) ? nothing : first(fatherset(tableau))
+    return tableau.father
 end
 
 """
@@ -87,14 +88,14 @@ end
 
 Getter for the set containing the children of a tableau.
 """
-childrenset(tableau::Tableau) = tableau.children[]
+childrenset(tableau::Tableau) = tableau.children
 
 """
     literals(tableau::Tableau)
 
 Getter for the set containing the literals of a tableau.
 """
-literals(tableau::Tableau) = tableau.literals[]
+literals(tableau::Tableau) = tableau.literals
 
 """
     leaves(leavesset::Set{Tableau}, tableau::Tableau)
@@ -128,7 +129,7 @@ end
 Push new father to a tableau.
 """
 function pushfather!(tableau::Tableau, newfather::Tableau)
-    push!(fatherset(tableau), newfather)
+    tableau.father = newfather
 end
 
 """
@@ -136,7 +137,7 @@ end
 
 Pop father of a tableau (the tableau becomes a root).
 """
-popfather!(tableau::Tableau) = pop!(fatherset(tableau))
+popfather!(tableau::Tableau) = tableau.father = nothing
 
 """
     pushchildren!(tableau::Tableau, children::Tableau...)
