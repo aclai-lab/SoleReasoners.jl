@@ -202,6 +202,7 @@ end
 function sat(leaves::Vector{MetricHeap}, chooseleaf::Function, h::HeytingAlgebra)
     cycle = 0
     while true
+        cycle%1e5==0 && getfreemem() < gettotmem()*5e-2 && error("Too much memory being used, exiting")
         leaf = chooseleaf(leaves, cycle)
         isnothing(leaf) && return false # all branches are closed
         en = findexpansionnode(leaf)

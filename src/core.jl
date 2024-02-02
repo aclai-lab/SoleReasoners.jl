@@ -1,5 +1,5 @@
 ############################################################################################
-#### Tableau ###############################################################################
+#### AbstractTableau #######################################################################
 ############################################################################################
 
 """
@@ -17,6 +17,10 @@ See also [`Tableau`](@ref), [`FuzzyTableau`](@ref).
 """
 abstract type AbstractTableau end
 
+############################################################################################
+#### Tableau ###############################################################################
+############################################################################################
+
 """
     mutable struct Tableau <: AbstractTableau
         const formula::Formula
@@ -29,7 +33,7 @@ abstract type AbstractTableau end
 A mutable structure representing a tableau as a tree structure, with each node containing
 a subformula of the original formula, the father and children in the tree structure, a flag
 saying if the node has already been expanded and a flag saying if the branch represented by
-the node has been closed.E ach path from a leaf to the root respresents a branch.
+the node has been closed. Each path from a leaf to the root respresents a branch.
 
 See also [`sat`](@ref), [`prove`](@ref).
 """
@@ -46,7 +50,7 @@ mutable struct Tableau <: AbstractTableau
 
     function Tableau(formula::Formula, father::Tableau)
         tableau = new(formula, father, Vector{Tableau}(), false, false)
-        pushchildren!(father, tableau)
+        pushchild!(father, tableau)
         return tableau
     end
 end
@@ -68,15 +72,29 @@ function father(tableau::Tableau)
 end
 
 """
-    childrenset(tableau::Tableau)
+    children(tableau::Tableau)
 
-Return the set of children of a tableau.
+Return the children of a tableau.
 """
-childrenset(tableau::Tableau) = tableau.children
+children(tableau::Tableau) = tableau.children
 
+"""
+    isexpanded(tableau::Tableau)
+
+Return true if the tableau has been expanded, false otherwise.
+"""
 isexpanded(tableau::Tableau) = tableau.expanded
+
+"""
+    isclosed(tableau::Tableau)
+
+Return true if the tableau has been closed, false otherwise.
+"""
 isclosed(tableau::Tableau) = tableau.closed
 
+"""
+
+"""
 expand!(tableau::Tableau) = tableau.expanded = true
 close!(tableau::Tableau) = tableau.closed = true
 
@@ -98,11 +116,10 @@ end
 Getter for the leaves of a tableau.
 """
 function leaves(leavesset::Set{Tableau}, tableau::Tableau)
-    children = childrenset(tableau)
-    if isempty(children)
+    if isempty(children(tableau))
         push!(leavesset, tableau)
     else
-        for child ∈ children
+        for child ∈ children(tableau)
             leaves(leavesset, child)
         end
     end
@@ -119,12 +136,12 @@ function leaves(tableau::Tableau)
 end
 
 """
-    pushchildren!(tableau::Tableau, children::Tableau...)
+    pushchild!(tableau::Tableau, newchild::Tableau...)
 
-Push new children to a tableau.
+Push new child to a tableau.
 """
-function pushchildren!(tableau::Tableau, children::Tableau...)
-    push!(childrenset(tableau), children...)
+function pushchild!(tableau::Tableau, newchild::Tableau)
+    push!(children(tableau), newchild)
 end
 
 """
@@ -132,7 +149,7 @@ end
 
 Return true if the tableau is still a leaf, false otherwise.
 """
-isleaf(tableau::Tableau) = isempty(childrenset(tableau)) ? true : false
+isleaf(tableau::Tableau) = isempty(children(tableau)) ? true : false
 
 ############################################################################################
 #### MetricHeapNode ########################################################################
@@ -358,6 +375,8 @@ function push!(metricheaps::Vector{MetricHeap}, tableau::T) where {T<:AbstractTa
     end
 end
 
+children(formula::Formula) = SoleLogics.children(formula)
+
 function findsimilar(t::Tableau)
     x = formula(t)
     if x isa Atom
@@ -389,6 +408,7 @@ otherwise.
 function sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)
     cycle = 0
     while true
+        cycle%1e5==0 && getfreemem() < gettotmem()*5e-2 && error("Too much memory being used, exiting")
         leaf = chooseleaf(metricheaps, cycle)
         isnothing(leaf) && return false # all branches are closed
         en = findexpansionnode(leaf)

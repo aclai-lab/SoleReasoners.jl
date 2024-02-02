@@ -48,3 +48,19 @@ function booleantofuzzy(φ::Formula)
         return token(φ)(booleantofuzzy(a), booleantofuzzy(b))
     end
 end
+
+function getmemuse()
+    f = open( "/proc/self/stat" )
+    s = read( f, String )
+    vsize = parse( Int64, split( s )[23] )
+    mb = Int( ceil( vsize / ( 1024 * 1024 ) ) )
+    return mb
+end
+
+function gettotmem()
+    return Int( ceil( Sys.total_memory() / ( 1024 * 1024 ) ) )
+end
+
+function getfreemem()
+    return Int( ceil( Sys.free_memory() / ( 1024 * 1024 ) ) )
+end
