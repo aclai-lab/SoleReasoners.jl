@@ -199,6 +199,8 @@ function findsimilar(ft::FuzzyTableau, h::HeytingAlgebra)
     return false
 end
 
+using SoleLogics: lesservalues, maximalmembers, minimalmembers
+
 function sat(leaves::Vector{MetricHeap}, chooseleaf::Function, h::HeytingAlgebra)
     cycle = 0
     while true
