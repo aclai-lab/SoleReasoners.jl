@@ -408,7 +408,7 @@ otherwise.
 function sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)
     cycle = 0
     while true
-        cycle%1e5==0 && getfreemem() < gettotmem()*5e-2 && error("Too much memory being used, exiting")
+        cycle%1e5==0 && getfreemem() < gettotmem()*2e-1 && error("Too much memory being used, exiting")
         leaf = chooseleaf(metricheaps, cycle)
         isnothing(leaf) && return false # all branches are closed
         en = findexpansionnode(leaf)
