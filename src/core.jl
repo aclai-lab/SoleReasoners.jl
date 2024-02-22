@@ -172,7 +172,7 @@ struct MetricHeapNode{T<:AbstractTableau}
         return new{T}(metricvalue, tableau)
     end
 
-    function MetricHeapNode(metric::Function, tableau::T) where {T<:AbstractTableau}
+    function MetricHeapNode(metric::F, tableau::T) where {F<:Function, T<:AbstractTableau}
         MetricHeapNode(metric(tableau), tableau)
     end
 end
@@ -227,15 +227,15 @@ some information about a tableau branch, therefore containing in each node a tab
 and the relative value for the metric, and which is ordered as a min heap over this
 metric value.
 """
-struct MetricHeap
+struct MetricHeap{F<:Function}
     heap::BinaryHeap{MetricHeapNode}
-    metric::Function
+    metric::F
 
-    function MetricHeap(heap::BinaryHeap{MetricHeapNode}, metric::Function)
-        return new(heap, metric)
+    function MetricHeap(heap::BinaryHeap{MetricHeapNode}, metric::F) where {F<:Function}
+        return new{F}(heap, metric)
     end
 
-    function MetricHeap(metric::Function)
+    function MetricHeap(metric::F) where {F<:Function}
         heap = BinaryHeap{MetricHeapNode}(MetricHeapOrdering())
         return MetricHeap(heap, metric)
     end
@@ -405,7 +405,7 @@ end
 Given a formula, return true if an interpretation that satisfies the formula exists, false
 otherwise.
 """
-function sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)
+function sat(metricheaps::Vector{MetricHeap}, chooseleaf::F) where {F<:Function}
     cycle = 0
     while true
         cycle%1e5==0 && getfreemem() < gettotmem()*2e-1 && error("Too much memory being used, exiting")
@@ -530,8 +530,10 @@ end
 
 Given a formula, return true if an interpretation that satisfies the formula exists, false
 otherwise.
+
+TODO: Fix metrics type for perfomance
 """
-function sat(formula::Formula, chooseleaf::Function, metrics::Function...)
+function sat(formula::Formula, chooseleaf::F, metrics::Function...) where {F<:Function}
     metricheaps = Vector{MetricHeap}()   # Heaps to be used for tableau selection
     for metric ∈ metrics
         push!(metricheaps, MetricHeap(metric))
@@ -549,7 +551,7 @@ end
 Given a formula, return true if an interpretation that satisfies the formula exists, false
 otherwise.
 """
-function sat(formula::Formula, chooseleaf::Function; rng = Random.GLOBAL_RNG)
+function sat(formula::Formula, chooseleaf::F; rng = Random.GLOBAL_RNG) where {F<:Function}
     randombranch(tableau::Tableau) = rand(rng, Int)
     sat(formula, chooseleaf, randombranch)
 end
