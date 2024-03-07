@@ -10,11 +10,13 @@ using StatsBase
 
 include("core.jl")
 
-export AbstractTableau, Tableau, φ, literals, naivechooseleaf, roundrobin, sat
+export Tableau, naivechooseleaf, roundrobin, sat
 
-include("fuzzy.jl")
+using SoleLogics.ManyValuedLogics
 
-export FuzzyTableau, SignedFormula, signedformula, height, fuzzysat, prove, alphasat
+include("many-valued-tableau.jl")
+
+# export FuzzyTableau, SignedFormula, signedformula, height, fuzzysat, prove, alphasat
 
 include("utils.jl")
 
