@@ -13,6 +13,7 @@ println("Julia version: ", VERSION)
 
 test_suites = [
     ("PropositionalBooleanSat", ["propositionalbooleansat.jl",]),
+    ("PropositionalHeytingAlgebraSat", ["propositionalheytingalgebrasat.jl",]),
     ("Utils", ["utils.jl"]),
 ]
 
