@@ -177,10 +177,11 @@ end
     """
 function findsimilar(
     ft::ManyValuedTableau,
-    h::FiniteHeytingAlgebra{T,D}
+    h::A
 ) where {
     T<:Truth,
-    D<:AbstractVector{T}
+    D<:AbstractVector{T},
+    A<:FiniteAlgebra{T,D}
 }
     sz = ft.signedformula
     s = sz.sign
@@ -211,7 +212,15 @@ end
 
 using SoleLogics.ManyValuedLogics: lesservalues, maximalmembers, minimalmembers
 
-function sat(leaves::Vector{MetricHeap}, chooseleaf::Function, h::FiniteHeytingAlgebra{T,D}) where {T<:Truth, D<:AbstractVector{T}}
+function sat(
+    leaves::Vector{MetricHeap},
+    chooseleaf::Function,
+    h::A
+) where {
+    T<:Truth,
+    D<:AbstractVector{T},
+    A<:FiniteAlgebra{T,D}
+}
     cycle = 0
     while true
         cycle%1e5==0 && getfreemem() < gettotmem()*2e-1 && error("Too much memory being used, exiting")
@@ -255,7 +264,7 @@ function sat(leaves::Vector{MetricHeap}, chooseleaf::Function, h::FiniteHeytingA
             elseif findsimilar(en, h)
                 # T(b→X) and F(a→X) where a ≤ b case
                 close!(en)
-            # Conjunction Rules
+            # Weak conjunction Rules
             elseif s && token(z[2]) isa NamedConnective{:∧} && !isbot(z[1])
                 # T(t→(A∧B)) case
                 expand!(en)
@@ -275,34 +284,74 @@ function sat(leaves::Vector{MetricHeap}, chooseleaf::Function, h::FiniteHeytingA
                     ftb = ManyValuedTableau(SignedFormula(false, (z[1], b)), l)
                     push!(leaves, ftb)
                 end
+            # Strong conjunction Rules
+            elseif s && token(z[2]) isa NamedConnective{:⋅} && !isbot(z[1])
+                # T(t→(A⋅B)) case
+                expand!(en)
+                (a, b) = children(z[2])
+                for l ∈ findleaves(en)
+                    for ti ∈ getdomain(h)
+                        for si ∈ getdomain(h)
+                            if precedeq(h, z[1], h.monoid(ti, si))
+                                fta = ManyValuedTableau(SignedFormula(true, (ti, a)), l)
+                                ftb = ManyValuedTableau(SignedFormula(true, (si, b)), fta)
+                                push!(leaves, ftb)
+                            end
+                        end
+                    end
+                end
+            elseif !s && token(z[2]) isa NamedConnective{:⋅} && !isbot(z[1])
+                # F(t→(A⋅B)) case
+                expand!(en)
+                println("Specify F⋅ case")
+            # Implication Rules - Heyting case
+            # elseif !s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
+            #     # F(t→(A→B)) case
+            #     expand!(en)
+            #     (a, b) = children(z[2])
+            #     for l ∈ findleaves(en)
+            #         lvs = lesservalues(h, z[1])
+            #         push!(lvs, z[1])
+            #         for ti ∈ lvs
+            #             isbot(ti) && continue
+            #             fta = ManyValuedTableau(SignedFormula(true, (ti, a)), l)
+            #             ftb = ManyValuedTableau(SignedFormula(false, (ti, b)), fta)
+            #             push!(leaves, ftb)
+            #         end                    
+            #     end
+            # elseif s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
+            #     # T(t→(A→B)) case
+            #     expand!(en)
+            #     (a, b) = children(z[2])
+            #     for l ∈ findleaves(en)
+            #         lvs = lesservalues(h, z[1])
+            #         push!(lvs, z[1])
+            #         if length(lvs) > 1
+            #             ti = last(lvs)
+            #             fta = ManyValuedTableau(SignedFormula(false, (ti, a)), l)
+            #             push!(leaves, fta)
+            #             ftb = ManyValuedTableau(SignedFormula(true, (ti, b)), l)
+            #             push!(leaves, ftb) 
+            #         end
+            #     end
             # Implication Rules
             elseif !s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
                 # F(t→(A→B)) case
                 expand!(en)
-                (a, b) = children(z[2])
-                for l ∈ findleaves(en)
-                    lvs = lesservalues(h, z[1])
-                    push!(lvs, z[1])
-                    for ti ∈ lvs
-                        isbot(ti) && continue
-                        fta = ManyValuedTableau(SignedFormula(true, (ti, a)), l)
-                        ftb = ManyValuedTableau(SignedFormula(false, (ti, b)), fta)
-                        push!(leaves, ftb)
-                    end                    
-                end
+                println("Specify F→ case")
             elseif s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
                 # T(t→(A→B)) case
                 expand!(en)
                 (a, b) = children(z[2])
                 for l ∈ findleaves(en)
-                    lvs = lesservalues(h, z[1])
-                    push!(lvs, z[1])
-                    if length(lvs) > 1
-                        ti = last(lvs)
-                        fta = ManyValuedTableau(SignedFormula(false, (ti, a)), l)
-                        push!(leaves, fta)
-                        ftb = ManyValuedTableau(SignedFormula(true, (ti, b)), l)
-                        push!(leaves, ftb) 
+                    for ti ∈ getdomain(h)
+                        for si ∈ getdomain(h)
+                            if precedeq(h, z[1], h.implication(ti, si))
+                                fta = ManyValuedTableau(SignedFormula(true, (a, ti)), l)
+                                ftb = ManyValuedTableau(SignedFormula(true, (si, b)), fta)
+                                push!(leaves, ftb)
+                            end
+                        end
                     end
                 end
             # Atom case
@@ -369,7 +418,7 @@ function sat(leaves::Vector{MetricHeap}, chooseleaf::Function, h::FiniteHeytingA
                         push!(leaves, fti)
                     end
                 end
-            elseif s && istop(z[2])
+            elseif s && !istop(z[2])
                 # T(a→X) case
                 expand!(en)
                 for l ∈ findleaves(en)
@@ -392,12 +441,13 @@ end
 
 function sat(
     sz::SignedFormula{T1},
-    h::FiniteHeytingAlgebra{T,D},
+    h::A,
     chooseleaf::Function,
     metrics::Function...
 ) where {
     T<:Truth,
     D<:AbstractVector{T},
+    A<:FiniteAlgebra{T,D},
     T1<:Truth
 }
     if !isa(sz, SignedFormula{T}) sz = convert(SignedFormula{T}, sz)::SignedFormula{T} end
@@ -414,23 +464,25 @@ end
 
 function sat(
     z::Formula,
-    h::FiniteHeytingAlgebra{T,D},
+    h::A,
     chooseleaf::Function,
     metrics::Function...
 ) where {
     T<:Truth,
-    D<:AbstractVector{T}
+    D<:AbstractVector{T},
+    A<:FiniteAlgebra{T,D}
 }
     return sat(SignedFormula(true, (⊤, z)), h, chooseleaf, metrics...)
 end
 
 function sat(
     z::Formula,
-    h::FiniteHeytingAlgebra{T,D};
+    h::A;
     rng = Random.GLOBAL_RNG
 ) where {
     T<:Truth,
-    D<:AbstractVector{T}
+    D<:AbstractVector{T},
+    A<:FiniteAlgebra{T,D}
 }
     randombranch(_::ManyValuedTableau{T}) where {T<:Truth} = rand(rng, Int)
     return sat(SignedFormula(true, (⊤, z)), h, roundrobin, randombranch)
@@ -438,38 +490,28 @@ end
 
 function prove(
     z::Formula,
-    h::FiniteHeytingAlgebra{T,D};
+    h::A;
     rng = Random.GLOBAL_RNG
 ) where {
     T<:Truth,
-    D<:AbstractVector{T}
+    D<:AbstractVector{T},
+    A<:FiniteAlgebra{T,D}
 }
     randombranch(_::ManyValuedTableau) = rand(rng, Int)
     return !fuzzysat(SignedFormula(false, (⊤, z)), h, roundrobin, randombranch)
 end
 
 function alphasat(
-    α::T,
+    α::T1,
     z::Formula,
-    h::FiniteHeytingAlgebra{T,D};
+    a::A;
     rng = Random.GLOBAL_RNG
 ) where {
     T<:Truth,
-    D<:AbstractVector{T}
+    D<:AbstractVector{T},
+    A<:FiniteAlgebra{T,D},
+    T1<:Truth
 }
     randombranch(_::ManyValuedTableau) = rand(rng, Int)
-    return sat(SignedFormula(true, (α, z)), h, roundrobin, randombranch)
-end
-
-function alphasat(
-    α::BooleanTruth,
-    z::Formula,
-    h::FiniteHeytingAlgebra{T,D};
-    rng = Random.GLOBAL_RNG
-) where {
-    T<:Truth,
-    D<:AbstractVector{T}
-}
-    randombranch(_::ManyValuedTableau) = rand(rng, Int)
-    return sat(SignedFormula(true, (α, z)), h, roundrobin, randombranch)
+    return sat(SignedFormula(true, (α, z)), a, roundrobin, randombranch)
 end
