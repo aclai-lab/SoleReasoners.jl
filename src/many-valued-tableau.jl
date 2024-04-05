@@ -14,24 +14,17 @@ struct SignedFormula{T<:Truth}
     }
         return new{T}(sign, boundingimplication)
     end
+end
 
-    # function SignedFormula(
-    #     sign::Bool,
-    #     boundingimplication::Tuple{Formula, T}
-    # ) where {
-    #     T<:Truth
-    # }
-    #     return new{T}(sign, boundingimplication)
-    # end
-
-    # function SignedFormula(
-    #     sign::Bool,
-    #     boundingimplication::Tuple{T, T}
-    # ) where {
-    #     T<:Truth
-    # }
-    #     return new{T}(sign, boundingimplication)
-    # end
+function Base.show(io::IO, sz::SignedFormula)
+    print(
+        io,
+        "$(string(sz.sign))("*
+        "( $(syntaxstring(sz.boundingimplication[1])) )"*
+        " ⪯ "*
+        "( $(syntaxstring(sz.boundingimplication[2])) )"*
+        ")"
+    )
 end
 
 function Base.convert(
@@ -67,7 +60,10 @@ function Base.convert(
             (convert(T1, sz.boundingimplication[1]), sz.boundingimplication[2])
         )
     else
-        error("Cannot convert object of type $(typeof(sz)) to a value of type SignedFormula{$T2}")
+        error(
+            "Cannot convert object of type $(typeof(sz)) to a value of type "*
+            "SignedFormula{$T2}"
+        )
     end
 end
 
@@ -192,7 +188,7 @@ function findsimilar(
             ft = ft.father
             sy = ft.signedformula
             y = sy.boundingimplication
-            if !sy.sign && z[2] == y[2] && precedeq(h, y[1], z[1])
+            if y[1] isa Truth && !sy.sign && z[2] == y[2] && precedeq(h, y[1], z[1])
                 return true
             end
         end
@@ -202,7 +198,7 @@ function findsimilar(
             ft = ft.father
             sy = ft.signedformula
             y = sy.boundingimplication
-            if sy.sign && z[2] == y[2] && precedeq(h, z[1], y[1])
+            if y[1] isa Truth && sy.sign && z[2] == y[2] && precedeq(h, z[1], y[1])
                 return true
             end
         end
@@ -210,29 +206,256 @@ function findsimilar(
     return false
 end
 
-using SoleLogics.ManyValuedLogics: lesservalues, maximalmembers, minimalmembers
-
 function sat(
     leaves::Vector{MetricHeap},
     chooseleaf::Function,
-    h::A
+    h::FiniteFLewAlgebra{T,D}
 ) where {
     T<:Truth,
-    D<:AbstractVector{T},
-    A<:FiniteAlgebra{T,D}
+    D<:AbstractVector{T}
 }
     cycle = 0
     while true
-        cycle%1e5==0 && getfreemem() < gettotmem()*2e-1 && error("Too much memory being used, exiting")
+
+        # if using too much memory, kill execution to avoid crashes
+        if cycle%1e3==0 && getfreemem() < gettotmem()*2e-1
+            error("Too much memory being used, exiting")
+        end
+
         leaf = chooseleaf(leaves, cycle)
         isnothing(leaf) && return false # all branches are closed
         en = findexpansionnode(leaf)
         isnothing(en) && return true    # found a satisfiable branch
         isclosed(en) && continue
         sz = en.signedformula
-        if !isa(sz, SignedFormula{T}) sz = convert(SignedFormula{T}, sz)::SignedFormula{T} end
+        if !isa(sz, SignedFormula{T})
+            sz = convert(SignedFormula{T}, sz)::SignedFormula{T}
+        end
         s = sz.sign
         z = sz.boundingimplication
+
+        if z isa Tuple{Truth, Truth}
+            # Branch Closure Conditions
+            if s && !precedeq(h, z[1], z[2])
+                # T(a→b) where a≰b case
+                close!(en)
+            elseif !s && precedeq(h, z[1], z[2]) && !isbot(z[1]) && !isbot(z[2])
+                # F(a→b) where a≤b and a≠⊥ and b≠⊤ case
+                close!(en)
+            elseif !s && isbot(z[1])
+                # F(⊥→X) case
+                close!(en)
+            elseif !s && istop(z[2])
+                # F(X→⊤) case
+                close!(en)
+            elseif findsimilar(en, h)
+                # T(b→X) and F(a→X) where a ≤ b case
+                close!(en)
+            # Base case
+            else
+                # No condition matched, pushing leaf back into leaves
+                expand!(en)
+                push!(leaves, leaf)
+            end
+        elseif z isa Tuple{T, Formula}
+            # Branch Closure Conditions
+            if !s && isbot(z[1])
+                # F(⊥→X) case
+                close!(en)
+            elseif findsimilar(en, h)
+                # T(b→X) and F(a→X) where a ≤ b case
+                close!(en)
+            # Strong conjunction Rules
+            elseif s && token(z[2]) isa NamedConnective{:∧} && !isbot(z[1])
+                # T(t→(A∧B)) case
+                expand!(en)
+                (a, b) = children(z[2])
+                for l ∈ findleaves(en)
+                    for ti ∈ getdomain(h)
+                        for si ∈ getdomain(h)
+                            if precedeq(h, z[1], h.monoid(ti, si))
+                                fta = ManyValuedTableau(SignedFormula(true, (ti, a)), l)
+                                ftb = ManyValuedTableau(SignedFormula(true, (si, b)), fta)
+                                push!(leaves, ftb)
+                            end
+                        end
+                    end
+                end
+            elseif !s && token(z[2]) isa NamedConnective{:∧} && !isbot(z[1])
+                # F(t→(A∧B)) case
+                expand!(en)
+                (a, b) = children(z[2])
+                for l ∈ findleaves(en)
+                    for ti ∈ getdomain(h)
+                        for si ∈ getdomain(h)
+                            if !precedeq(h, z[1], h.monoid(ti, si))
+                                fta = ManyValuedTableau(SignedFormula(true, (a, ti)), l)
+                                ftb = ManyValuedTableau(SignedFormula(true, (b, si)), fta)
+                                push!(leaves, ftb)
+                            end
+                        end
+                    end
+                end
+            # Implication Rules
+            elseif !s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
+                # F(t→(A→B)) case
+                expand!(en)
+                (a, b) = children(z[2])
+                for l ∈ findleaves(en)
+                    for ti ∈ getdomain(h)
+                        for si ∈ getdomain(h)
+                            if !precedeq(h, z[1], h.implication(ti, si))
+                                fta = ManyValuedTableau(SignedFormula(true, (ti, a)), l)
+                                ftb = ManyValuedTableau(SignedFormula(true, (b, si)), fta)
+                                push!(leaves, ftb)
+                            end
+                        end
+                    end
+                end
+            elseif s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
+                # T(t→(A→B)) case
+                expand!(en)
+                (a, b) = children(z[2])
+                for l ∈ findleaves(en)
+                    for ti ∈ getdomain(h)
+                        for si ∈ getdomain(h)
+                            if precedeq(h, z[1], h.implication(ti, si))
+                                fta = ManyValuedTableau(SignedFormula(true, (a, ti)), l)
+                                ftb = ManyValuedTableau(SignedFormula(true, (si, b)), fta)
+                                push!(leaves, ftb)
+                            end
+                        end
+                    end
+                end
+            # Atom case
+            elseif z[2] isa Atom
+                # a→X where X isa Atom case
+                expand!(en)
+                push!(leaves, leaf)
+            # Reversal Rules
+            elseif !s && !isbot(z[1])
+                # F(a→X) case
+                expand!(en)
+                for l ∈ findleaves(en)
+                    for ti ∈ maximalmembers(h, z[1])
+                        fti = ManyValuedTableau(SignedFormula(true, (z[2], ti)), l)
+                        push!(leaves, fti)
+                    end
+                end
+            elseif s && !isbot(z[1])
+                # T(a→X) case
+                expand!(en)
+                for l ∈ findleaves(en)
+                    fti = l
+                    for ti in maximalmembers(h, z[1])
+                        fti = ManyValuedTableau(SignedFormula(false, (z[2], ti)), fti)
+                    end
+                    push!(leaves, fti)
+                end
+            # Base case
+            else
+                # No condition matched, pushing leaf back into leaves
+                expand!(en)
+                push!(leaves, leaf)
+            end
+        elseif z isa Tuple{Formula, T}
+            # Branch Closure Conditions
+            if !s && istop(z[2])
+                # F(X→⊤) case
+                close!(en)
+            # Strong disjunction rules
+            elseif s && token(z[1]) isa NamedConnective{:∨} && !istop(z[2])
+                # T((A∨B)→t) case
+                expand!(en)
+                (a, b) = children(z[1])
+                for l ∈ findleaves(en)
+                    for ti ∈ getdomain(h)
+                        for si ∈ getdomain(h)
+                            if precedeq(h, h.join(ti, si), z[2])
+                                fta = ManyValuedTableau(SignedFormula(true, (a, ti)), l)
+                                ftb = ManyValuedTableau(SignedFormula(true, (b, si)), fta)
+                                push!(leaves, ftb)
+                            end
+                        end
+                    end
+                end
+            elseif !s && token(z[1]) isa NamedConnective{:∨} && !istop(z[2])
+                # F((A∨B)→t) case
+                expand!(en)
+                (a, b) = children(z[1])
+                for l ∈ findleaves(en)
+                    for ti ∈ getdomain(h)
+                        for si ∈ getdomain(h)
+                            if !precedeq(h, h.join(ti, si), z[2])
+                                fta = ManyValuedTableau(SignedFormula(true, (ti, a)), l)
+                                ftb = ManyValuedTableau(SignedFormula(true, (si, b)), fta)
+                                push!(leaves, ftb)
+                            end
+                        end
+                    end
+                end
+            # Reversal Rules
+            elseif !s && !istop(z[2])
+                # F(X→a) case
+                expand!(en)
+                for l ∈ findleaves(en)
+                    for ui ∈ minimalmembers(h, z[2])
+                        fti = ManyValuedTableau(SignedFormula(true, (ui, z[1])), l)
+                        push!(leaves, fti)
+                    end
+                end
+            elseif s && !istop(z[2])
+                # T(a→X) case
+                expand!(en)
+                for l ∈ findleaves(en)
+                    fui = l
+                    for ui in minimalmembers(h, z[2])
+                        fui = ManyValuedTableau(SignedFormula(false, (ui, z[1])), fui)
+                    end
+                    push!(leaves, fui)
+                end
+            # Base case
+            else
+                # No condition matched, pushing leaf back into leaves
+                expand!(en)
+                push!(leaves, leaf)
+            end
+        else
+            error("Something went wrong with tuple $(z) of type $(typeof(z))")
+        end
+        cycle += 1
+    end
+end
+
+
+function sat(
+    leaves::Vector{MetricHeap},
+    chooseleaf::Function,
+    h::FiniteHeytingAlgebra{T,D}
+) where {
+    T<:Truth,
+    D<:AbstractVector{T}
+}
+    cycle = 0
+    while true
+
+        # if using too much memory, kill execution to avoid crashes
+        if cycle%1e3==0 && getfreemem() < gettotmem()*2e-1
+            error("Too much memory being used, exiting")
+        end
+
+        leaf = chooseleaf(leaves, cycle)
+        isnothing(leaf) && return false # all branches are closed
+        en = findexpansionnode(leaf)
+        isnothing(en) && return true    # found a satisfiable branch
+        isclosed(en) && continue
+        sz = en.signedformula
+        if !isa(sz, SignedFormula{T})
+            sz = convert(SignedFormula{T}, sz)::SignedFormula{T}
+        end
+        s = sz.sign
+        z = sz.boundingimplication
+
         if z isa Tuple{Truth, Truth}
             # Branch Closure Conditions
             if s && !precedeq(h, z[1], z[2])
@@ -284,76 +507,36 @@ function sat(
                     ftb = ManyValuedTableau(SignedFormula(false, (z[1], b)), l)
                     push!(leaves, ftb)
                 end
-            # Strong conjunction Rules
-            elseif s && token(z[2]) isa NamedConnective{:⋅} && !isbot(z[1])
-                # T(t→(A⋅B)) case
-                expand!(en)
-                (a, b) = children(z[2])
-                for l ∈ findleaves(en)
-                    for ti ∈ getdomain(h)
-                        for si ∈ getdomain(h)
-                            if precedeq(h, z[1], h.monoid(ti, si))
-                                fta = ManyValuedTableau(SignedFormula(true, (ti, a)), l)
-                                ftb = ManyValuedTableau(SignedFormula(true, (si, b)), fta)
-                                push!(leaves, ftb)
-                            end
-                        end
-                    end
-                end
-            elseif !s && token(z[2]) isa NamedConnective{:⋅} && !isbot(z[1])
-                # F(t→(A⋅B)) case
-                expand!(en)
-                println("Specify F⋅ case")
-            # Implication Rules - Heyting case
-            # elseif !s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
-            #     # F(t→(A→B)) case
-            #     expand!(en)
-            #     (a, b) = children(z[2])
-            #     for l ∈ findleaves(en)
-            #         lvs = lesservalues(h, z[1])
-            #         push!(lvs, z[1])
-            #         for ti ∈ lvs
-            #             isbot(ti) && continue
-            #             fta = ManyValuedTableau(SignedFormula(true, (ti, a)), l)
-            #             ftb = ManyValuedTableau(SignedFormula(false, (ti, b)), fta)
-            #             push!(leaves, ftb)
-            #         end                    
-            #     end
-            # elseif s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
-            #     # T(t→(A→B)) case
-            #     expand!(en)
-            #     (a, b) = children(z[2])
-            #     for l ∈ findleaves(en)
-            #         lvs = lesservalues(h, z[1])
-            #         push!(lvs, z[1])
-            #         if length(lvs) > 1
-            #             ti = last(lvs)
-            #             fta = ManyValuedTableau(SignedFormula(false, (ti, a)), l)
-            #             push!(leaves, fta)
-            #             ftb = ManyValuedTableau(SignedFormula(true, (ti, b)), l)
-            #             push!(leaves, ftb) 
-            #         end
-            #     end
             # Implication Rules
-            elseif !s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
-                # F(t→(A→B)) case
-                expand!(en)
-                println("Specify F→ case")
-            elseif s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
-                # T(t→(A→B)) case
-                expand!(en)
-                (a, b) = children(z[2])
-                for l ∈ findleaves(en)
-                    for ti ∈ getdomain(h)
-                        for si ∈ getdomain(h)
-                            if precedeq(h, z[1], h.implication(ti, si))
-                                fta = ManyValuedTableau(SignedFormula(true, (a, ti)), l)
-                                ftb = ManyValuedTableau(SignedFormula(true, (si, b)), fta)
-                                push!(leaves, ftb)
-                            end
-                        end
-                    end
+        elseif !s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
+            # F(t→(A→B)) case
+            expand!(en)
+            (a, b) = children(z[2])
+            for l ∈ findleaves(en)
+                lvs = lesservalues(h, z[1])
+                push!(lvs, z[1])
+                for ti ∈ lvs
+                    isbot(ti) && continue
+                    fta = ManyValuedTableau(SignedFormula(true, (ti, a)), l)
+                    ftb = ManyValuedTableau(SignedFormula(false, (ti, b)), fta)
+                    push!(leaves, ftb)
+                end                    
+            end
+        elseif s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
+            # T(t→(A→B)) case
+            expand!(en)
+            (a, b) = children(z[2])
+            for l ∈ findleaves(en)
+                lvs = lesservalues(h, z[1])
+                push!(lvs, z[1])
+                if length(lvs) > 1
+                    ti = last(lvs)
+                    fta = ManyValuedTableau(SignedFormula(false, (ti, a)), l)
+                    push!(leaves, fta)
+                    ftb = ManyValuedTableau(SignedFormula(true, (ti, b)), l)
+                    push!(leaves, ftb) 
                 end
+            end
             # Atom case
             elseif z[2] isa Atom
                 # a→X where X isa Atom case
@@ -373,8 +556,10 @@ function sat(
                 # T(a→X) case
                 expand!(en)
                 for l ∈ findleaves(en)
-                    ti = first(maximalmembers(h, z[1]))
-                    fti = ManyValuedTableau(SignedFormula(false, (z[2], ti)), l)
+                    fti = l
+                    for ti in maximalmembers(h, z[1])
+                        fti = ManyValuedTableau(SignedFormula(false, (z[2], ti)), fti)
+                    end
                     push!(leaves, fti)
                 end
             # Base case
@@ -388,7 +573,7 @@ function sat(
             if !s && istop(z[2])
                 # F(X→⊤) case
                 close!(en)
-            # Disjunction Rules
+            # Weak disjunction Rules
             elseif s && token(z[1]) isa NamedConnective{:∨} && !istop(z[2])
                 # T((A∨B)→t) case
                 expand!(en)
@@ -422,9 +607,11 @@ function sat(
                 # T(a→X) case
                 expand!(en)
                 for l ∈ findleaves(en)
-                    ui = first(minimalmembers(h, z[2]))
-                    fti = ManyValuedTableau(SignedFormula(false, (ui, z[1])), l)
-                    push!(leaves, fti)
+                    fui = l
+                    for ui in minimalmembers(h, z[2])
+                        fui = ManyValuedTableau(SignedFormula(false, (ui, z[1])), fui)
+                    end
+                    push!(leaves, fui)
                 end
             # Base case
             else
@@ -498,7 +685,7 @@ function prove(
     A<:FiniteAlgebra{T,D}
 }
     randombranch(_::ManyValuedTableau) = rand(rng, Int)
-    return !fuzzysat(SignedFormula(false, (⊤, z)), h, roundrobin, randombranch)
+    return !sat(SignedFormula(false, (⊤, z)), h, roundrobin, randombranch)
 end
 
 function alphasat(
@@ -514,4 +701,19 @@ function alphasat(
 }
     randombranch(_::ManyValuedTableau) = rand(rng, Int)
     return sat(SignedFormula(true, (α, z)), a, roundrobin, randombranch)
+end
+
+function alphaprove(
+    α::T1,
+    z::Formula,
+    a::A;
+    rng = Random.GLOBAL_RNG
+) where {
+    T<:Truth,
+    D<:AbstractVector{T},
+    A<:FiniteAlgebra{T,D},
+    T1<:Truth
+}
+    randombranch(_::ManyValuedTableau) = rand(rng, Int)
+    return !sat(SignedFormula(false, (α, z)), a, roundrobin, randombranch)
 end

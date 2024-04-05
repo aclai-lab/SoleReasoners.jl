@@ -8,17 +8,19 @@ using StatsBase
 
 @reexport using SoleLogics
 
+top = SoleLogics.top
+
 include("core.jl")
 
 export naivechooseleaf, roundrobin, sat
 
 using SoleLogics.ManyValuedLogics
-using SoleLogics.ManyValuedLogics: FiniteAlgebra
+using SoleLogics.ManyValuedLogics: FiniteTruth, FiniteAlgebra
 using SoleLogics.ManyValuedLogics: lesservalues, maximalmembers, minimalmembers
 
 include("many-valued-tableau.jl")
 
-export alphasat
+export alphasat, prove, alphaprove
 
 include("utils.jl")
 

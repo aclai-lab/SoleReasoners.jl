@@ -1,5 +1,3 @@
-using SoleReasoners
-
 @test sat(parseformula("⊥"))        == false
 @test sat(parseformula("⊤"))        == true
 @test sat(parseformula("¬⊥"))       == true
