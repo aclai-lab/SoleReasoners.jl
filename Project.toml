@@ -15,7 +15,7 @@ StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 Graphs = "1.8"
 Reexport = "1"
 StatsBase = "0.30 - 0.34"
-SoleLogics = "0.7"
+SoleLogics = "0.8"
 DataStructures = "0.18"
 
 [extras]
