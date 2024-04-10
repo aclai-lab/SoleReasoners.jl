@@ -503,7 +503,8 @@ end
 function sat(
     leaves::Vector{MetricHeap},
     chooseleaf::Function,
-    h::FiniteHeytingAlgebra{T,D}
+    h::FiniteHeytingAlgebra{T,D};
+    oldrule::Bool = false
 ) where {
     T<:Truth,
     D<:AbstractVector{T}
@@ -579,38 +580,65 @@ function sat(
                     ftb = ManyValuedTableau(SignedFormula(false, (z[1], b)), l)
                     push!(leaves, ftb)
                 end
-            # Implication Rules
-        elseif !s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
-            # F(t→(A→B)) case
-            expand!(en)
-            (a, b) = children(z[2])
-            for l ∈ findleaves(en)
+            # Implication rules
+            elseif !s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
+                # F(t→(A→B)) case
+                expand!(en)
+                (a, b) = children(z[2])
                 lvs = lesservalues(h, z[1])
                 push!(lvs, z[1])
-                for ti ∈ lvs
-                    isbot(ti) && continue
-                    fta = ManyValuedTableau(SignedFormula(true, (ti, a)), l)
-                    ftb = ManyValuedTableau(SignedFormula(false, (ti, b)), fta)
-                    push!(leaves, ftb)
-                end                    
-            end
-        elseif s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
-            # T(t→(A→B)) case
-            expand!(en)
-            (a, b) = children(z[2])
-            lvs = lesservalues(h, z[1])
-            push!(lvs, z[1])
-            for ti in lvs
-                if !isbot(ti)
-                    for l ∈ findleaves(en)
-                        ManyValuedTableau(SignedFormula(false, (ti, a)), l)
-                        ManyValuedTableau(SignedFormula(true, (ti, b)), l)
+                for l ∈ findleaves(en)
+                    for ti ∈ lvs
+                        isbot(ti) && continue
+                        fta = ManyValuedTableau(SignedFormula(true, (ti, a)), l)
+                        ftb = ManyValuedTableau(SignedFormula(false, (ti, b)), fta)
+                        push!(leaves, ftb)
+                    end                    
+                end
+            elseif oldrule && s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
+                # (OLD) T(t→(A→B)) case
+                expand!(en)
+                (a, b) = children(z[2])
+                lvs = lesservalues(h, z[1])
+                push!(lvs, z[1])
+                for ti in lvs
+                    if !isbot(ti)
+                        for l ∈ findleaves(en)
+                            ManyValuedTableau(SignedFormula(false, (ti, a)), l)
+                            ManyValuedTableau(SignedFormula(true, (ti, b)), l)
+                        end
                     end
                 end
-            end
-            for l ∈ findleaves(en)
-                push!(leaves, l)
-            end
+                for l ∈ findleaves(en)
+                    push!(leaves, l)
+                end
+            elseif s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
+                # (NEW) T(t→(A→B)) case
+                expand!(en)
+                (a, b) = children(z[2])
+                # Search for support tuples
+                pairs = Set{NTuple{2,T}}()
+                for ti ∈ getdomain(h)
+                    for si ∈ getdomain(h)
+                        if precedeq(h, z[1], h.implication(ti, si))
+                            push!(pairs, (ti, si))
+                        end
+                    end
+                end
+                for p in pairs
+                    for q in pairs
+                        if precedeq(h, p[1], q[1]) && precedeq(h, q[2], p[2]) && p != q
+                            delete!(pairs, p)
+                        end
+                    end
+                end
+                for l ∈ findleaves(en)
+                    for pair in pairs
+                        fta = ManyValuedTableau(SignedFormula(true, (a, pair[1])), l)
+                        ftb = ManyValuedTableau(SignedFormula(true, (pair[2], b)), fta)
+                        push!(leaves, ftb)
+                    end
+                end
             # Atom case
             elseif z[2] isa Atom
                 # a→X where X isa Atom case
@@ -704,7 +732,8 @@ function sat(
     sz::SignedFormula{T1},
     h::A,
     chooseleaf::Function,
-    metrics::Function...
+    metrics::Function...;
+    kwargs...
 ) where {
     T<:Truth,
     D<:AbstractVector{T},
@@ -720,53 +749,57 @@ function sat(
     for metricheap ∈ metricheaps
         push!(heap(metricheap), MetricHeapNode(metric(metricheap), root))
     end
-    sat(metricheaps, chooseleaf, h)
+    sat(metricheaps, chooseleaf, h; kwargs...)
 end
 
 function sat(
     z::Formula,
     h::A,
     chooseleaf::Function,
-    metrics::Function...
+    metrics::Function...;
+    kwargs...
 ) where {
     T<:Truth,
     D<:AbstractVector{T},
     A<:FiniteAlgebra{T,D}
 }
-    return sat(SignedFormula(true, (⊤, z)), h, chooseleaf, metrics...)
+    return sat(SignedFormula(true, (⊤, z)), h, chooseleaf, metrics...; kwargs...)
 end
 
 function sat(
     z::Formula,
     h::A;
-    rng = Random.GLOBAL_RNG
+    rng = Random.GLOBAL_RNG,
+    kwargs...
 ) where {
     T<:Truth,
     D<:AbstractVector{T},
     A<:FiniteAlgebra{T,D}
 }
     randombranch(_::ManyValuedTableau{T}) where {T<:Truth} = rand(rng, Int)
-    return sat(SignedFormula(true, (⊤, z)), h, roundrobin, randombranch)
+    return sat(SignedFormula(true, (⊤, z)), h, roundrobin, randombranch; kwargs...)
 end
 
 function prove(
     z::Formula,
     h::A;
-    rng = Random.GLOBAL_RNG
+    rng = Random.GLOBAL_RNG,
+    kwargs...
 ) where {
     T<:Truth,
     D<:AbstractVector{T},
     A<:FiniteAlgebra{T,D}
 }
     randombranch(_::ManyValuedTableau) = rand(rng, Int)
-    return !sat(SignedFormula(false, (⊤, z)), h, roundrobin, randombranch)
+    return !sat(SignedFormula(false, (⊤, z)), h, roundrobin, randombranch; kwargs...)
 end
 
 function alphasat(
     α::T1,
     z::Formula,
     a::A;
-    rng = Random.GLOBAL_RNG
+    rng = Random.GLOBAL_RNG,
+    kwargs...
 ) where {
     T<:Truth,
     D<:AbstractVector{T},
@@ -774,14 +807,15 @@ function alphasat(
     T1<:Truth
 }
     randombranch(_::ManyValuedTableau) = rand(rng, Int)
-    return sat(SignedFormula(true, (α, z)), a, roundrobin, randombranch)
+    return sat(SignedFormula(true, (α, z)), a, roundrobin, randombranch; kwargs...)
 end
 
 function alphaprove(
     α::T1,
     z::Formula,
     a::A;
-    rng = Random.GLOBAL_RNG
+    rng = Random.GLOBAL_RNG,
+    kwargs...
 ) where {
     T<:Truth,
     D<:AbstractVector{T},
@@ -789,5 +823,5 @@ function alphaprove(
     T1<:Truth
 }
     randombranch(_::ManyValuedTableau) = rand(rng, Int)
-    return !sat(SignedFormula(false, (α, z)), a, roundrobin, randombranch)
+    return !sat(SignedFormula(false, (α, z)), a, roundrobin, randombranch; kwargs...)
 end

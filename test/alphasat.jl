@@ -1198,3 +1198,43 @@ include("algebras/h4.jl")
 # @test alphasat(⊤, booleantofuzzy(parseformula(
 #     "(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)"
 # )), H4) == false
+
+############################################################################################
+#### H9 ####################################################################################
+############################################################################################
+
+include("algebras/h9.jl")
+
+BASE_MANY_VALUED_CONNECTIVES = [∨, ∧, →]
+BaseManyValuedConnectives = Union{typeof.(BASE_MANY_VALUED_CONNECTIVES)...}
+
+############################################################################################
+#### FLew and Heyting rules compatibility ##################################################
+############################################################################################
+
+for i ∈ d9
+    for j ∈ d9
+        @test alphasat(
+            i,
+            j,
+            FiniteHeytingAlgebra(H9)
+        ) == alphasat(
+            i,
+            j,
+            H9
+        )
+        for k ∈ d9
+            for o ∈ BASE_MANY_VALUED_CONNECTIVES
+                @test alphasat(
+                    k,
+                    o(i, j),
+                    FiniteHeytingAlgebra(H9)
+                ) == alphasat(
+                    k,
+                    o(i, j),
+                    H9
+                ) 
+            end
+        end
+    end
+end

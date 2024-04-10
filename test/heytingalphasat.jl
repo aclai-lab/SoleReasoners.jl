@@ -1,4 +1,3 @@
-
 ############################################################################################
 #### H4 ####################################################################################
 ############################################################################################
@@ -393,3 +392,45 @@ include("algebras/h4.jl")
 @test alphasat(α, →(parseformula("q"), parseformula("p")), FiniteHeytingAlgebra(H4)) == true
 @test alphasat(β, →(parseformula("q"), parseformula("p")), FiniteHeytingAlgebra(H4)) == true
 @test alphasat(⊤, →(parseformula("q"), parseformula("p")), FiniteHeytingAlgebra(H4)) == true
+
+############################################################################################
+#### H9 ####################################################################################
+############################################################################################
+
+include("algebras/h9.jl")
+
+BASE_MANY_VALUED_CONNECTIVES = [∨, ∧, →]
+BaseManyValuedConnectives = Union{typeof.(BASE_MANY_VALUED_CONNECTIVES)...}
+
+############################################################################################
+#### Old and new rules compatibility #######################################################
+############################################################################################
+
+for i ∈ d9
+    for j ∈ d9
+        @test alphasat(
+            i,
+            j,
+            FiniteHeytingAlgebra(H9)
+        ) == alphasat(
+            i,
+            j,
+            FiniteHeytingAlgebra(H9),
+            oldrule=true
+        )
+        for k ∈ d9
+            for o ∈ BASE_MANY_VALUED_CONNECTIVES
+                @test alphasat(
+                    k,
+                    o(i, j),
+                    FiniteHeytingAlgebra(H9)
+                ) == alphasat(
+                    k,
+                    o(i, j),
+                    FiniteHeytingAlgebra(H9),
+                    oldrule=true
+                ) 
+            end
+        end
+    end
+end
