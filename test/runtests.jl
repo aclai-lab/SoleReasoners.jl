@@ -15,6 +15,8 @@ println("Julia version: ", VERSION)
 
 test_suites = [
     ("Sat", ["sat.jl",]),
+    ("HeytingAlphaSat", ["heytingalphasat.jl",]),
+    ("HeytingAlphaProve", ["heytingalphaprove.jl",]),
     ("AlphaSat", ["alphasat.jl",]),
     ("AlphaProve", ["alphaprove.jl",]),
     ("Utils", ["utils.jl"]),

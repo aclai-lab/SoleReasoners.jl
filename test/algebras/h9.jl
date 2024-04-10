@@ -38,4 +38,4 @@ meet = BinaryOperation(d9, meettable)
 
 monoid = CommutativeMonoid(meet, ⊤)
 
-ffa9 = FiniteFLewAlgebra(join, meet, monoid, ⊥, ⊤)
+H9 = FiniteFLewAlgebra(join, meet, monoid, ⊥, ⊤)

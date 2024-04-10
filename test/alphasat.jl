@@ -1,4 +1,3 @@
-
 ############################################################################################
 #### G4 ####################################################################################
 ############################################################################################
@@ -1183,3 +1182,19 @@ include("algebras/h4.jl")
 @test alphasat(α, →(parseformula("q"), parseformula("p")), H4) == true
 @test alphasat(β, →(parseformula("q"), parseformula("p")), H4) == true
 @test alphasat(⊤, →(parseformula("q"), parseformula("p")), H4) == true
+
+############################################################################################
+#### More difficult formulas ###############################################################
+############################################################################################
+
+@test alphasat(⊤, booleantofuzzy(parseformula(
+    "(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)"
+)), G4) == false
+
+@test alphasat(⊤, booleantofuzzy(parseformula(
+    "(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)"
+)), Ł4) == false
+
+# @test alphasat(⊤, booleantofuzzy(parseformula(
+#     "(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)"
+# )), H4) == false

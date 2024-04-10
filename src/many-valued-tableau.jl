@@ -218,7 +218,7 @@ function sat(
     while true
 
         # if using too much memory, kill execution to avoid crashes
-        if cycle%1e3==0 && getfreemem() < gettotmem()*2e-1
+        if cycle%10==0 && getfreemem() < gettotmem()*5e-2
             error("Too much memory being used, exiting")
         end
 
@@ -270,30 +270,54 @@ function sat(
                 # T(t→(A∧B)) case
                 expand!(en)
                 (a, b) = children(z[2])
-                for l ∈ findleaves(en)
-                    for ti ∈ getdomain(h)
-                        for si ∈ getdomain(h)
-                            if precedeq(h, z[1], h.monoid(ti, si))
-                                fta = ManyValuedTableau(SignedFormula(true, (ti, a)), l)
-                                ftb = ManyValuedTableau(SignedFormula(true, (si, b)), fta)
-                                push!(leaves, ftb)
-                            end
+                # Search for support tuples
+                pairs = Set{NTuple{2,T}}()
+                for ti ∈ getdomain(h)
+                    for si ∈ getdomain(h)
+                        if precedeq(h, z[1], h.monoid(ti, si))
+                            push!(pairs, (ti, si))
                         end
+                    end
+                end
+                for p in pairs
+                    for q in pairs
+                        if precedeq(h, q[1], p[1]) && precedeq(h, q[2], p[2]) && p != q
+                            delete!(pairs, p)
+                        end
+                    end
+                end
+                for l ∈ findleaves(en)
+                    for pair in pairs
+                        fta = ManyValuedTableau(SignedFormula(true, (pair[1], a)), l)
+                        ftb = ManyValuedTableau(SignedFormula(true, (pair[2], b)), fta)
+                        push!(leaves, ftb)
                     end
                 end
             elseif !s && token(z[2]) isa NamedConnective{:∧} && !isbot(z[1])
                 # F(t→(A∧B)) case
                 expand!(en)
                 (a, b) = children(z[2])
-                for l ∈ findleaves(en)
-                    for ti ∈ getdomain(h)
-                        for si ∈ getdomain(h)
-                            if !precedeq(h, z[1], h.monoid(ti, si))
-                                fta = ManyValuedTableau(SignedFormula(true, (a, ti)), l)
-                                ftb = ManyValuedTableau(SignedFormula(true, (b, si)), fta)
-                                push!(leaves, ftb)
-                            end
+                # Search for support tuples
+                pairs = Set{NTuple{2,T}}()
+                for ti ∈ getdomain(h)
+                    for si ∈ getdomain(h)
+                        if !precedeq(h, z[1], h.monoid(ti, si))
+                            push!(pairs, (ti, si))
                         end
+                    end
+                end
+                for p in pairs
+                    for q in pairs
+                        if precedeq(h, p[1], q[1]) && precedeq(h, p[2], q[2]) && p != q
+                            delete!(pairs, p)
+                        end
+                    end
+                end
+                for l ∈ findleaves(en)
+                    for pair in pairs
+                        fta = ManyValuedTableau(SignedFormula(true, (a, pair[1])), l)
+                        ftb = ManyValuedTableau(SignedFormula(true, (b, pair[2])), fta)
+                        push!(leaves, ftb)
                     end
                 end
             # Implication Rules
@@ -301,30 +325,54 @@ function sat(
                 # F(t→(A→B)) case
                 expand!(en)
                 (a, b) = children(z[2])
-                for l ∈ findleaves(en)
-                    for ti ∈ getdomain(h)
-                        for si ∈ getdomain(h)
-                            if !precedeq(h, z[1], h.implication(ti, si))
-                                fta = ManyValuedTableau(SignedFormula(true, (ti, a)), l)
-                                ftb = ManyValuedTableau(SignedFormula(true, (b, si)), fta)
-                                push!(leaves, ftb)
-                            end
+                # Search for support tuples
+                pairs = Set{NTuple{2,T}}()
+                for ti ∈ getdomain(h)
+                    for si ∈ getdomain(h)
+                        if !precedeq(h, z[1], h.implication(ti, si))
+                            push!(pairs, (ti, si))
                         end
+                    end
+                end
+                for p in pairs
+                    for q in pairs
+                        if precedeq(h, q[1], p[1]) && precedeq(h, p[2], q[2]) && p != q
+                            delete!(pairs, p)
+                        end
+                    end
+                end
+                for l ∈ findleaves(en)
+                    for pair in pairs
+                        fta = ManyValuedTableau(SignedFormula(true, (pair[1], a)), l)
+                        ftb = ManyValuedTableau(SignedFormula(true, (b, pair[2])), fta)
+                        push!(leaves, ftb)
                     end
                 end
             elseif s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
                 # T(t→(A→B)) case
                 expand!(en)
                 (a, b) = children(z[2])
-                for l ∈ findleaves(en)
-                    for ti ∈ getdomain(h)
-                        for si ∈ getdomain(h)
-                            if precedeq(h, z[1], h.implication(ti, si))
-                                fta = ManyValuedTableau(SignedFormula(true, (a, ti)), l)
-                                ftb = ManyValuedTableau(SignedFormula(true, (si, b)), fta)
-                                push!(leaves, ftb)
-                            end
+                # Search for support tuples
+                pairs = Set{NTuple{2,T}}()
+                for ti ∈ getdomain(h)
+                    for si ∈ getdomain(h)
+                        if precedeq(h, z[1], h.implication(ti, si))
+                            push!(pairs, (ti, si))
                         end
+                    end
+                end
+                for p in pairs
+                    for q in pairs
+                        if precedeq(h, p[1], q[1]) && precedeq(h, q[2], p[2]) && p != q
+                            delete!(pairs, p)
+                        end
+                    end
+                end
+                for l ∈ findleaves(en)
+                    for pair in pairs
+                        fta = ManyValuedTableau(SignedFormula(true, (a, pair[1])), l)
+                        ftb = ManyValuedTableau(SignedFormula(true, (pair[2], b)), fta)
+                        push!(leaves, ftb)
                     end
                 end
             # Atom case
@@ -368,30 +416,54 @@ function sat(
                 # T((A∨B)→t) case
                 expand!(en)
                 (a, b) = children(z[1])
-                for l ∈ findleaves(en)
-                    for ti ∈ getdomain(h)
-                        for si ∈ getdomain(h)
-                            if precedeq(h, h.join(ti, si), z[2])
-                                fta = ManyValuedTableau(SignedFormula(true, (a, ti)), l)
-                                ftb = ManyValuedTableau(SignedFormula(true, (b, si)), fta)
-                                push!(leaves, ftb)
-                            end
+                # Search for support tuples
+                pairs = Set{NTuple{2,T}}()
+                for ti ∈ getdomain(h)
+                    for si ∈ getdomain(h)
+                        if precedeq(h, h.join(ti, si), z[2])
+                            push!(pairs, (ti, si))
                         end
+                    end
+                end
+                for p in pairs
+                    for q in pairs
+                        if precedeq(h, p[1], q[1]) && precedeq(h, p[2], q[2]) && p != q
+                            delete!(pairs, p)
+                        end
+                    end
+                end
+                for l ∈ findleaves(en)
+                    for pair in pairs
+                        fta = ManyValuedTableau(SignedFormula(true, (a, pair[1])), l)
+                        ftb = ManyValuedTableau(SignedFormula(true, (b, pair[2])), fta)
+                        push!(leaves, ftb)
                     end
                 end
             elseif !s && token(z[1]) isa NamedConnective{:∨} && !istop(z[2])
                 # F((A∨B)→t) case
                 expand!(en)
                 (a, b) = children(z[1])
-                for l ∈ findleaves(en)
-                    for ti ∈ getdomain(h)
-                        for si ∈ getdomain(h)
-                            if !precedeq(h, h.join(ti, si), z[2])
-                                fta = ManyValuedTableau(SignedFormula(true, (ti, a)), l)
-                                ftb = ManyValuedTableau(SignedFormula(true, (si, b)), fta)
-                                push!(leaves, ftb)
-                            end
+                # Search for support tuples
+                pairs = Set{NTuple{2,T}}()
+                for ti ∈ getdomain(h)
+                    for si ∈ getdomain(h)
+                        if !precedeq(h, h.join(ti, si), z[2])
+                            push!(pairs, (ti, si))
                         end
+                    end
+                end
+                for p in pairs
+                    for q in pairs
+                        if precedeq(h, q[1], p[1]) && precedeq(h, q[2], p[2]) && p != q
+                            delete!(pairs, p)
+                        end
+                    end
+                end
+                for l ∈ findleaves(en)
+                    for pair in pairs
+                        fta = ManyValuedTableau(SignedFormula(true, (pair[1], a)), l)
+                        ftb = ManyValuedTableau(SignedFormula(true, (pair[2], b)), fta)
+                        push!(leaves, ftb)
                     end
                 end
             # Reversal Rules
@@ -440,7 +512,7 @@ function sat(
     while true
 
         # if using too much memory, kill execution to avoid crashes
-        if cycle%1e3==0 && getfreemem() < gettotmem()*2e-1
+        if cycle%10==0 && getfreemem() < gettotmem()*5e-2
             error("Too much memory being used, exiting")
         end
 
@@ -526,16 +598,18 @@ function sat(
             # T(t→(A→B)) case
             expand!(en)
             (a, b) = children(z[2])
-            for l ∈ findleaves(en)
-                lvs = lesservalues(h, z[1])
-                push!(lvs, z[1])
-                if length(lvs) > 1
-                    ti = last(lvs)
-                    fta = ManyValuedTableau(SignedFormula(false, (ti, a)), l)
-                    push!(leaves, fta)
-                    ftb = ManyValuedTableau(SignedFormula(true, (ti, b)), l)
-                    push!(leaves, ftb) 
+            lvs = lesservalues(h, z[1])
+            push!(lvs, z[1])
+            for ti in lvs
+                if !isbot(ti)
+                    for l ∈ findleaves(en)
+                        ManyValuedTableau(SignedFormula(false, (ti, a)), l)
+                        ManyValuedTableau(SignedFormula(true, (ti, b)), l)
+                    end
                 end
+            end
+            for l ∈ findleaves(en)
+                push!(leaves, l)
             end
             # Atom case
             elseif z[2] isa Atom
