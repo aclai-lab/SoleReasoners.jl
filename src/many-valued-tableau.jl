@@ -303,12 +303,33 @@ function sat(
                         end
                     end
                 end
+                newleaves = false
                 for l ∈ findleaves(en)
                     for pair in pairs
-                        fta = ManyValuedTableau(SignedFormula(true, (pair[1], a)), l)
-                        ftb = ManyValuedTableau(SignedFormula(true, (pair[2], b)), fta)
-                        push!(leaves, ftb)
+                        newleaf = false
+                        sy = SignedFormula(true, (pair[1], a))
+                        if !findformula(l, sy)
+                            newleaf = true
+                            fta = ManyValuedTableau(sy, l)
+                        end
+                        sy = SignedFormula(true, (pair[2], b))
+                        if newleaf
+                            newleaves = true
+                            if !findformula(fta, sy)
+                                ftb = ManyValuedTableau(sy, fta)
+                                push!(leaves, ftb)
+                            else
+                                push!(leaves, fta)
+                            end
+                        elseif !findformula(l, sy)
+                            newleaves = true
+                            ftb = ManyValuedTableau(sy, l)
+                            push!(leaves, ftb)
+                        end     
                     end
+                end
+                if !newleaves
+                    push!(leaves, leaf)
                 end
             elseif !s && token(z[2]) isa NamedConnective{:∧} && !isbot(z[1])
                 # F(t→(A∧B)) case
@@ -330,12 +351,33 @@ function sat(
                         end
                     end
                 end
+                newleaves = false
                 for l ∈ findleaves(en)
                     for pair in pairs
-                        fta = ManyValuedTableau(SignedFormula(true, (a, pair[1])), l)
-                        ftb = ManyValuedTableau(SignedFormula(true, (b, pair[2])), fta)
-                        push!(leaves, ftb)
+                        newleaf = false
+                        sy = SignedFormula(true, (a, pair[1]))
+                        if !findformula(l, sy)
+                            newleaf = true
+                            fta = ManyValuedTableau(sy, l)
+                        end
+                        sy = SignedFormula(true, (b, pair[2]))
+                        if newleaf
+                            newleaves = true
+                            if !findformula(fta, sy)
+                                ftb = ManyValuedTableau(sy, fta)
+                                push!(leaves, ftb)
+                            else
+                                push!(leaves, fta)
+                            end
+                        elseif !findformula(l, sy)
+                            newleaves = true
+                            ftb = ManyValuedTableau(sy, l)
+                            push!(leaves, ftb)
+                        end     
                     end
+                end
+                if !newleaves
+                    push!(leaves, leaf)
                 end
             # Implication Rules
             elseif !s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
@@ -358,12 +400,33 @@ function sat(
                         end
                     end
                 end
+                newleaves = false
                 for l ∈ findleaves(en)
                     for pair in pairs
-                        fta = ManyValuedTableau(SignedFormula(true, (pair[1], a)), l)
-                        ftb = ManyValuedTableau(SignedFormula(true, (b, pair[2])), fta)
-                        push!(leaves, ftb)
+                        newleaf = false
+                        sy = SignedFormula(true, (pair[1], a))
+                        if !findformula(l, sy)
+                            newleaf = true
+                            fta = ManyValuedTableau(sy, l)
+                        end
+                        sy = SignedFormula(true, (b, pair[2]))
+                        if newleaf
+                            newleaves = true
+                            if !findformula(fta, sy)
+                                ftb = ManyValuedTableau(sy, fta)
+                                push!(leaves, ftb)
+                            else
+                                push!(leaves, fta)
+                            end
+                        elseif !findformula(l, sy)
+                            newleaves = true
+                            ftb = ManyValuedTableau(sy, l)
+                            push!(leaves, ftb)
+                        end     
                     end
+                end
+                if !newleaves
+                    push!(leaves, leaf)
                 end
             elseif s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
                 # T(t→(A→B)) case
@@ -385,12 +448,33 @@ function sat(
                         end
                     end
                 end
+                newleaves = false
                 for l ∈ findleaves(en)
                     for pair in pairs
-                        fta = ManyValuedTableau(SignedFormula(true, (a, pair[1])), l)
-                        ftb = ManyValuedTableau(SignedFormula(true, (pair[2], b)), fta)
-                        push!(leaves, ftb)
+                        newleaf = false
+                        sy = SignedFormula(true, (a, pair[1]))
+                        if !findformula(l, sy)
+                            newleaf = true
+                            fta = ManyValuedTableau(sy, l)
+                        end
+                        sy = SignedFormula(true, (pair[2], b))
+                        if newleaf
+                            newleaves = true
+                            if !findformula(fta, sy)
+                                ftb = ManyValuedTableau(sy, fta)
+                                push!(leaves, ftb)
+                            else
+                                push!(leaves, fta)
+                            end
+                        elseif !findformula(l, sy)
+                            newleaves = true
+                            ftb = ManyValuedTableau(sy, l)
+                            push!(leaves, ftb)
+                        end     
                     end
+                end
+                if !newleaves
+                    push!(leaves, leaf)
                 end
             # Atom case
             elseif z[2] isa Atom
@@ -469,12 +553,33 @@ function sat(
                         end
                     end
                 end
+                newleaves = false
                 for l ∈ findleaves(en)
                     for pair in pairs
-                        fta = ManyValuedTableau(SignedFormula(true, (a, pair[1])), l)
-                        ftb = ManyValuedTableau(SignedFormula(true, (b, pair[2])), fta)
-                        push!(leaves, ftb)
+                        newleaf = false
+                        sy = SignedFormula(true, (a, pair[1]))
+                        if !findformula(l, sy)
+                            newleaf = true
+                            fta = ManyValuedTableau(sy, l)
+                        end
+                        sy = SignedFormula(true, (b, pair[2]))
+                        if newleaf
+                            newleaves = true
+                            if !findformula(fta, sy)
+                                ftb = ManyValuedTableau(sy, fta)
+                                push!(leaves, ftb)
+                            else
+                                push!(leaves, fta)
+                            end
+                        elseif !findformula(l, sy)
+                            newleaves = true
+                            ftb = ManyValuedTableau(sy, l)
+                            push!(leaves, ftb)
+                        end     
                     end
+                end
+                if !newleaves
+                    push!(leaves, leaf)
                 end
             elseif !s && token(z[1]) isa NamedConnective{:∨} && !istop(z[2])
                 # F((A∨B)→t) case
@@ -496,12 +601,33 @@ function sat(
                         end
                     end
                 end
+                newleaves = false
                 for l ∈ findleaves(en)
                     for pair in pairs
-                        fta = ManyValuedTableau(SignedFormula(true, (pair[1], a)), l)
-                        ftb = ManyValuedTableau(SignedFormula(true, (pair[2], b)), fta)
-                        push!(leaves, ftb)
+                        newleaf = false
+                        sy = SignedFormula(true, (pair[1], a))
+                        if !findformula(l, sy)
+                            newleaf = true
+                            fta = ManyValuedTableau(sy, l)
+                        end
+                        sy = SignedFormula(true, (pair[2], b))
+                        if newleaf
+                            newleaves = true
+                            if !findformula(fta, sy)
+                                ftb = ManyValuedTableau(sy, fta)
+                                push!(leaves, ftb)
+                            else
+                                push!(leaves, fta)
+                            end
+                        elseif !findformula(l, sy)
+                            newleaves = true
+                            ftb = ManyValuedTableau(sy, l)
+                            push!(leaves, ftb)
+                        end     
                     end
+                end
+                if !newleaves
+                    push!(leaves, leaf)
                 end
             # Reversal Rules
             elseif !s && !istop(z[2])
@@ -856,6 +982,7 @@ function alphasat(
     z::Formula,
     a::A;
     rng = Random.GLOBAL_RNG,
+    verbose=false,
     kwargs...
 ) where {
     T<:Truth,
@@ -863,6 +990,12 @@ function alphasat(
     A<:FiniteAlgebra{T,D},
     T1<:Truth
 }
+    if verbose
+        println("Solving alphasat for: " * syntaxstring(α) * " ⪯ " * syntaxstring(z))
+        println("Height: " * string(height(z)))
+        println("Tokens: " * string(ntokens(z)))
+        println()
+    end
     randombranch(_::ManyValuedTableau) = rand(rng, Int)
     return sat(SignedFormula(true, (α, z)), a, roundrobin, randombranch; kwargs...)
 end

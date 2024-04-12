@@ -5,23 +5,24 @@ using SoleLogics.ManyValuedLogics
 using SoleReasoners
 using Test
 
-# include("algebras/g3.jl")
-# println(sat(parseformula("p∧(p→⊥)"), G3))
-
 const BASE_MANY_VALUED_CONNECTIVES = [∨, ∧, →]
 const BaseManyValuedConnectives = Union{typeof.(BASE_MANY_VALUED_CONNECTIVES)...}
 
 myalphabet = Atom.(["p", "q"])
 
+height = 7
+
+println("Alphasat on formulas of height up to " * string(height) * "\n")
+
 ############################################################################################
 #### G4 ####################################################################################
 ############################################################################################
 
-include("algebras/g4.jl")
-myoperators4 = []
-append!(myoperators4, BASE_MANY_VALUED_CONNECTIVES)
-append!(myoperators4, d4)
-opweights4 = [10, 10, 10, 1, 1, 1, 1]
+# include("algebras/g4.jl")
+# myoperators4 = []
+# append!(myoperators4, BASE_MANY_VALUED_CONNECTIVES)
+# append!(myoperators4, d4)
+# opweights4 = [10, 10, 10, 1, 1, 1, 1]
 
 # for i ∈ 1:50
 #     @test alphasat(
@@ -35,14 +36,14 @@ opweights4 = [10, 10, 10, 1, 1, 1, 1]
 #     )
 # end
 
-rng = MersenneTwister(1234)
-display(
-    @benchmark alphasat(
-        rand(rng, d4),
-        randformula(rng, 6, myalphabet, myoperators4, opweights=opweights4),
-        G4
-    )
-)
+# rng = MersenneTwister(1234)
+# display(
+#     @benchmark alphasat(
+#         rand(rng, d4),
+#         randformula(rng, height, myalphabet, myoperators4, opweights=opweights4),   # 7
+#         G4
+#     )
+# )
 
 # rng = MersenneTwister(1234)
 # display(
@@ -93,11 +94,11 @@ display(
 #### H9 ####################################################################################
 ############################################################################################
 
-# include("algebras/h9.jl")
-# myoperators9 = []
-# append!(myoperators9, BASE_MANY_VALUED_CONNECTIVES)
-# append!(myoperators9, d9)
-# opweights9 = [10, 10, 10, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+include("algebras/h9.jl")
+myoperators9 = []
+append!(myoperators9, BASE_MANY_VALUED_CONNECTIVES)
+append!(myoperators9, d9)
+opweights9 = [10, 10, 10, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
 # for i ∈ 1:50
 #     @test alphasat(
@@ -111,14 +112,15 @@ display(
 #     )
 # end
 
-# rng = MersenneTwister(1234)
-# display(
-#     @benchmark alphasat(
-#         rand(rng, d9),
-#         randformula(rng, 6, myalphabet, myoperators9, opweights=opweights9),
-#         H9
-#     )
-# )
+rng = MersenneTwister(1234)
+display(
+    @benchmark alphasat(
+        rand(rng, d9),
+        randformula(rng, height, myalphabet, myoperators9, opweights=opweights9),   # 6
+        H9,
+        verbose=true
+    )
+)
 
 # rng = MersenneTwister(1234)
 # display(
