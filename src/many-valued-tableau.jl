@@ -167,10 +167,10 @@ function pushchildren!(ft::ManyValuedTableau, children::ManyValuedTableau...)
 end
 
 """
-    Given a ManyValuedTableau containing a signed formula in the form T(b → X) or F(a → X),
-    return true if there is a tableau in the form F(a → X) (resp. T(b → X)) so that a ≤ b
-    in the given algebra in the same branch.
-    """
+Given a ManyValuedTableau containing a signed formula in the form T(b → X) or F(a → X),
+return true if there is a tableau in the form F(a → X) (resp. T(b → X)) so that a ≤ b
+in the given algebra in the same branch.
+"""
 function findsimilar(
     ft::ManyValuedTableau,
     h::A
@@ -206,6 +206,21 @@ function findsimilar(
     return false
 end
 
+"""
+Given a ManyValuedTableau containing a signed formula, return true if there is already a
+tableau in the same form in the same branch.
+"""
+function findformula(ft::ManyValuedTableau, sz::SignedFormula)
+    while !isroot(ft)
+        ft = ft.father
+        sy = ft.signedformula
+        if sz == sy
+            return true
+        end
+    end
+    return false
+end
+
 function sat(
     leaves::Vector{MetricHeap},
     chooseleaf::Function,
@@ -233,6 +248,8 @@ function sat(
         end
         s = sz.sign
         z = sz.boundingimplication
+
+        # println("T: " * string(cycle) * "\tlabel: " * string(s) * "\tformula: " * string(z))
 
         if z isa Tuple{Truth, Truth}
             # Branch Closure Conditions
@@ -384,21 +401,41 @@ function sat(
             elseif !s && !isbot(z[1])
                 # F(a→X) case
                 expand!(en)
+                newleaves = false
                 for l ∈ findleaves(en)
                     for ti ∈ maximalmembers(h, z[1])
-                        fti = ManyValuedTableau(SignedFormula(true, (z[2], ti)), l)
-                        push!(leaves, fti)
+                        sy = SignedFormula(true, (z[2], ti))
+                        if !findformula(en, sy)
+                            newleaves = true
+                            fti = ManyValuedTableau(sy, l)
+                            push!(leaves, fti)
+                        end
                     end
+                end
+                if newleaves == false
+                    push!(leaves, leaf)
                 end
             elseif s && !isbot(z[1])
                 # T(a→X) case
                 expand!(en)
+                newleaves = false
                 for l ∈ findleaves(en)
+                    newleaf = false
                     fti = l
                     for ti in maximalmembers(h, z[1])
-                        fti = ManyValuedTableau(SignedFormula(false, (z[2], ti)), fti)
+                        sy = SignedFormula(false, (z[2], ti))
+                        if !findformula(en, sy)
+                            newleaf = true
+                            fti = ManyValuedTableau(sy, fti)
+                        end
                     end
-                    push!(leaves, fti)
+                    if newleaf == true
+                        newleaves = true
+                        push!(leaves, fti)
+                    end
+                end
+                if newleaves == false
+                    push!(leaves, leaf)
                 end
             # Base case
             else
@@ -470,21 +507,41 @@ function sat(
             elseif !s && !istop(z[2])
                 # F(X→a) case
                 expand!(en)
+                newleaves = false
                 for l ∈ findleaves(en)
                     for ui ∈ minimalmembers(h, z[2])
-                        fti = ManyValuedTableau(SignedFormula(true, (ui, z[1])), l)
-                        push!(leaves, fti)
+                        sy = SignedFormula(true, (ui, z[1]))
+                        if !findformula(en, sy)
+                            newleaves = true
+                            fti = ManyValuedTableau(sy, l)
+                            push!(leaves, fti)
+                        end
                     end
                 end
+                if newleaves == false
+                    push!(leaves, leaf)
+                end
             elseif s && !istop(z[2])
-                # T(a→X) case
+                # T(X→A) case
                 expand!(en)
+                newleaves = false
                 for l ∈ findleaves(en)
+                    newleaf = false
                     fui = l
                     for ui in minimalmembers(h, z[2])
-                        fui = ManyValuedTableau(SignedFormula(false, (ui, z[1])), fui)
+                        sy = SignedFormula(false, (ui, z[1]))
+                        if !findformula(en, sy)
+                            newleaf = true
+                            fui = ManyValuedTableau(sy, fui)
+                        end
                     end
-                    push!(leaves, fui)
+                    if newleaf == true
+                        newleaves = true
+                        push!(leaves, fui)
+                    end
+                end
+                if newleaves == false
+                    push!(leaves, leaf)
                 end
             # Base case
             else
