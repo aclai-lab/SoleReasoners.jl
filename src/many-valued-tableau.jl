@@ -127,10 +127,33 @@ mutable struct ManyValuedTableau{T<:Truth} <: AbstractTableau
 end
 
 isexpanded(ft::ManyValuedTableau) = ft.expanded
-isclosed(ft::ManyValuedTableau) = ft.expanded
+isclosed(ft::ManyValuedTableau) = ft.closed
 
 expand!(ft::ManyValuedTableau) = ft.expanded = true
-close!(ft::ManyValuedTableau) = ft.closed = true
+
+function close!(ft::ManyValuedTableau)
+    ft.closed = true
+    while !isempty(ft.children)
+        c = pop!(ft.children)
+        close!(c)
+    end
+end
+
+function cleanheap!(metricheap::MetricHeap)
+    elements = extract_all!(metricheap.heap)
+    deleteat!(elements, findall(x->!isleaf(x.tableau), elements))
+    deleteat!(elements, findall(x->isclosed(x.tableau), elements))
+    for e in elements
+        push!(metricheap, e)
+    end
+end
+
+
+function cleanheaps!(metricheaps::Vector{MetricHeap})
+    for mh in metricheaps
+        cleanheap!(mh)
+    end
+end
 
 isroot(ft::ManyValuedTableau) = isnothing(ft.father)
 
@@ -224,14 +247,25 @@ end
 function sat(
     leaves::Vector{MetricHeap},
     chooseleaf::Function,
-    h::FiniteFLewAlgebra{T,D}
+    h::FiniteFLewAlgebra{T,D};
+    verbose::Bool=false,
+    kwargs...
 ) where {
     T<:Truth,
     D<:AbstractVector{T}
 }
-    cycle = 0
+    cycle = 1
     while true
 
+        if cycle%1e3==0
+            cleanheaps!(leaves)
+        end
+
+        # if using too much memory, try to free memory calling full GC sweep
+        if cycle%10==0 && getfreemem() < gettotmem()*5e-2
+            verbose && println("Calling Garbage Collector")
+            GC.gc()
+        end
         # if using too much memory, kill execution to avoid crashes
         if cycle%10==0 && getfreemem() < gettotmem()*5e-2
             error("Too much memory being used, exiting")
@@ -248,8 +282,6 @@ function sat(
         end
         s = sz.sign
         z = sz.boundingimplication
-
-        # println("T: " * string(cycle) * "\tlabel: " * string(s) * "\tformula: " * string(z))
 
         if z isa Tuple{Truth, Truth}
             # Branch Closure Conditions
@@ -687,7 +719,9 @@ function sat(
     leaves::Vector{MetricHeap},
     chooseleaf::Function,
     h::FiniteHeytingAlgebra{T,D};
-    oldrule::Bool = false
+    oldrule::Bool = false,
+    verbose::Bool=false,
+    kwargs...
 ) where {
     T<:Truth,
     D<:AbstractVector{T}
@@ -916,6 +950,7 @@ function sat(
     h::A,
     chooseleaf::Function,
     metrics::Function...;
+    verbose::Bool=false,
     kwargs...
 ) where {
     T<:Truth,
@@ -932,7 +967,7 @@ function sat(
     for metricheap ∈ metricheaps
         push!(heap(metricheap), MetricHeapNode(metric(metricheap), root))
     end
-    sat(metricheaps, chooseleaf, h; kwargs...)
+    sat(metricheaps, chooseleaf, h; verbose, kwargs...)
 end
 
 function sat(
@@ -940,19 +975,21 @@ function sat(
     h::A,
     chooseleaf::Function,
     metrics::Function...;
+    verbose::Bool=false,
     kwargs...
 ) where {
     T<:Truth,
     D<:AbstractVector{T},
     A<:FiniteAlgebra{T,D}
 }
-    return sat(SignedFormula(true, (⊤, z)), h, chooseleaf, metrics...; kwargs...)
+    return sat(SignedFormula(true, (⊤, z)), h, chooseleaf, metrics...; verbose, kwargs...)
 end
 
 function sat(
     z::Formula,
     h::A;
     rng = Random.GLOBAL_RNG,
+    verbose::Bool=false,
     kwargs...
 ) where {
     T<:Truth,
@@ -960,13 +997,14 @@ function sat(
     A<:FiniteAlgebra{T,D}
 }
     randombranch(_::ManyValuedTableau{T}) where {T<:Truth} = rand(rng, Int)
-    return sat(SignedFormula(true, (⊤, z)), h, roundrobin, randombranch; kwargs...)
+    return sat(SignedFormula(true, (⊤, z)), h, roundrobin, randombranch; verbose, kwargs...)
 end
 
 function prove(
     z::Formula,
     h::A;
     rng = Random.GLOBAL_RNG,
+    verbose::Bool=false,
     kwargs...
 ) where {
     T<:Truth,
@@ -982,7 +1020,7 @@ function alphasat(
     z::Formula,
     a::A;
     rng = Random.GLOBAL_RNG,
-    verbose=false,
+    verbose::Bool=false,
     kwargs...
 ) where {
     T<:Truth,
@@ -997,7 +1035,7 @@ function alphasat(
         println()
     end
     randombranch(_::ManyValuedTableau) = rand(rng, Int)
-    return sat(SignedFormula(true, (α, z)), a, roundrobin, randombranch; kwargs...)
+    return sat(SignedFormula(true, (α, z)), a, roundrobin, randombranch; verbose, kwargs...)
 end
 
 function alphaprove(
@@ -1005,6 +1043,7 @@ function alphaprove(
     z::Formula,
     a::A;
     rng = Random.GLOBAL_RNG,
+    verbose::Bool=false,
     kwargs...
 ) where {
     T<:Truth,
@@ -1013,5 +1052,5 @@ function alphaprove(
     T1<:Truth
 }
     randombranch(_::ManyValuedTableau) = rand(rng, Int)
-    return !sat(SignedFormula(false, (α, z)), a, roundrobin, randombranch; kwargs...)
+    return !sat(SignedFormula(false, (α, z)), a, roundrobin, randombranch; verbose, kwargs...)
 end

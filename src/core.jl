@@ -260,8 +260,7 @@ metric(metricheap::MetricHeap) = metricheap.metric
     
 Push new metricheapnode to a MetricHeap.
 """
-function push!(metricheap::MetricHeap,
-               metricheapnode::MetricHeapNode)
+function push!(metricheap::MetricHeap, metricheapnode::MetricHeapNode)
     push!(heap(metricheap), metricheapnode)
 end
 
