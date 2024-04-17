@@ -227,17 +227,31 @@ some information about a tableau branch, therefore containing in each node a tab
 and the relative value for the metric, and which is ordered as a min heap over this
 metric value.
 """
-struct MetricHeap{F<:Function}
+mutable struct MetricHeap{F<:Function}
+    const metric::F
     heap::BinaryHeap{MetricHeapNode}
-    metric::F
 
-    function MetricHeap(heap::BinaryHeap{MetricHeapNode}, metric::F) where {F<:Function}
-        return new{F}(heap, metric)
+    function MetricHeap(metric::F, heap::BinaryHeap{MetricHeapNode}) where {F<:Function}
+        return new{F}(metric, heap)
     end
 
     function MetricHeap(metric::F) where {F<:Function}
         heap = BinaryHeap{MetricHeapNode}(MetricHeapOrdering())
-        return MetricHeap(heap, metric)
+        return MetricHeap(metric, heap)
+    end
+end
+
+function cleanheap!(metricheap::MetricHeap)
+    elements = extract_all!(metricheap.heap)
+    deleteat!(elements, findall(x->!isleaf(x.tableau), elements))
+    deleteat!(elements, findall(x->isclosed(x.tableau), elements))
+    metricheap.heap = BinaryHeap{MetricHeapNode}(MetricHeapOrdering(), elements)
+end
+
+
+function cleanheaps!(metricheaps::Vector{MetricHeap})
+    for mh in metricheaps
+        cleanheap!(mh)
     end
 end
 
