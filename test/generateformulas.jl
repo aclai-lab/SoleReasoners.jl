@@ -1,3 +1,4 @@
+# Generate all the formulas used in the experiments
 using BenchmarkTools
 using Random
 using SoleLogics
