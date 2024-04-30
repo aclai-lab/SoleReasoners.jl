@@ -1,0 +1,5000 @@
+(q ∧ p ∧ (r ∨ r)) ∨ ((r ∨ r) ∧ δ)
+(p ∨ q) ∧ (q → r) ∧ (q → q) ∧ p ∧ q
+⊤ → δ → q ∨ r
+(r ∧ p → α) ∧ ⊥
+((q → r) ∨ q ∨ p) ∧ γ
+(q ∧ p → r ∨ r) → p ∨ p → r ∨ r
+q ∨ q ∨ p ∨ p → ⊥
+(q ∧ r ∧ (p ∨ q)) ∨ q ∨ q ∨ (r ∧ p)
+⊥ ∧ (q → q) ∧ q ∧ r ∧ (r → r)
+δ ∨ (p ∧ p ∧ δ)
+⊤ ∧ (p ∨ r → p → p)
+(p ∨ r) ∧ (q → p) ∧ q ∧ p ∧ r ∧ q
+(r ∧ q → q ∨ r) → p ∧ p ∧ p ∧ p
+(r ∧ q ∧ p ∧ q) ∨ δ
+(p → r) ∨ (p → p) → α
+⊤ ∧ r ∧ r ∧ (q ∨ p)
+((p ∨ r) ∧ p ∧ q) ∨ ((r → r) → r ∨ r)
+(r ∨ r ∨ (p ∧ p)) ∧ γ
+(p ∧ p ∧ (r → r)) ∨ ⊥ ∨ ⊥
+⊥ ∨ r ∨ p → γ ∧ r ∧ r
+(q ∧ r → q ∧ p) ∨ γ
+(p ∧ q ∧ (r ∨ q)) ∨ ((q → q) → r ∧ q)
+β ∨ p ∨ q ∨ α
+α ∧ p ∧ r → (r → p) → p ∧ p
+(r ∨ p) ∧ p ∧ q → (r → p) ∧ q ∧ q
+δ ∧ β → (p → q) ∧ (q → r)
+((r → p) → ⊤) ∨ (p ∨ p → r ∧ q)
+(r → r) ∨ (p ∧ q) → (r → r) ∧ (q ∨ r)
+(r ∨ r ∨ r ∨ p) ∧ ⊥
+((p → r) ∨ (p ∧ p)) ∧ (r ∨ q → r → q)
+γ ∨ p ∨ q → γ
+(p ∨ r) ∧ (p ∨ q) ∧ δ
+(β → γ) ∨ (β ∧ (p → r))
+α → δ ∨ r ∨ p
+(q ∨ r) ∧ ⊥ ∧ (⊤ ∨ (r → p))
+α → p ∧ q ∧ α
+(β ∨ (p ∧ q)) ∧ (q ∨ p ∨ r ∨ r)
+(r ∧ r) ∨ (p → q) → (r → r) ∧ (p ∨ p)
+((p → r) → q ∨ p) ∨ ((r → p) → q → r)
+⊤ ∧ (r ∨ p) → p ∧ p → p ∨ r
+((r → q) → p ∨ p) ∧ (r ∨ p → p → p)
+((p → p) → p ∧ r) ∧ (q ∨ p ∨ δ)
+(q ∧ p) ∨ (q → r) ∨ (r → p) ∨ δ
+⊥ ∧ (r ∧ q → p ∧ r)
+(q → r) ∧ δ → (p → r) ∨ (q → q)
+(q → r) ∧ r ∧ q ∧ δ
+(p → q) ∧ q ∧ r ∧ (p ∨ r → q ∨ p)
+δ ∨ (q → q) ∨ q ∨ p
+(r ∨ q → q → p) ∨ β
+(α → p ∧ r) ∧ (δ ∨ (p ∧ q))
+(r → q) ∧ (r ∨ q) → (q → p) → q ∧ q
+r ∨ p ∨ ⊤ → q ∨ q → β
+(q ∧ r → q → q) ∧ ((p → q) → p ∨ r)
+(p ∨ r → ⊤) ∨ ⊥ ∨ r ∨ r
+(q ∨ q → p ∨ q) ∨ ⊥
+((r → p) → p ∧ q) ∨ ((p ∨ r) ∧ (r → p))
+(q → r) ∧ (r → q) ∧ ⊤
+(r ∨ p → r ∧ q) ∨ (r ∧ q ∧ (q → p))
+(q → q) ∧ ⊥ → p ∨ p ∨ (q → r)
+(p → r) ∧ γ ∧ ((q → r) → p ∨ p)
+γ ∧ ((p → q) ∨ α)
+(p ∨ q → ⊤) ∨ (r → r) ∨ (q ∧ q)
+(q → r) ∨ (q → q) ∨ β
+(r ∧ r → q ∧ q) ∧ (q ∧ p → β)
+(r ∧ r → r ∧ q) → r ∧ r → r → p
+(p ∧ r → q ∨ q) ∨ (q → q) ∨ ⊥
+γ → r ∧ q → p → q
+p ∧ p ∧ (p ∨ q) → γ
+(⊤ ∨ (r → q)) ∧ γ
+((r ∨ p) ∧ p ∧ q) ∨ (p → r) ∨ (q → q)
+(q ∧ p → q ∧ p) ∨ (δ ∧ β)
+(r → q) ∧ (r ∨ r) ∧ γ
+(r ∨ p) ∧ r ∧ p ∧ (⊤ → r ∨ r)
+(p ∧ p ∧ (q → r)) ∨ (p ∧ q ∧ (p ∨ r))
+(p ∨ q) ∧ (p ∨ r) ∧ (p ∨ q → r ∧ r)
+(q ∧ r ∧ q ∧ r) ∨ (p ∧ r ∧ β)
+β ∨ p ∨ r → (r ∨ q) ∧ p ∧ q
+(r → q) ∨ q ∨ p ∨ δ
+((q → r) → q ∨ r) ∨ ⊤
+(p → p) ∧ δ → α ∧ (r ∨ q)
+(α ∨ r ∨ q) ∧ (r ∧ p → r ∨ p)
+α → (q ∨ p) ∧ (q ∨ q)
+(γ → r ∧ r) ∧ ((q → r) → q → q)
+(q ∧ p → q → q) ∧ (r ∨ r → q ∧ q)
+(q → r) ∨ (r ∧ r) → q ∧ q → ⊤
+((p → p) ∧ r ∧ q) ∨ (q ∧ r → r ∧ r)
+q ∧ q ∧ (p ∨ q) ∧ ⊥
+(q → p) ∨ (r → p) → α ∨ (q ∧ p)
+(r ∨ p ∨ r ∨ q) ∧ (r ∨ q ∨ (q ∧ q))
+(q → q) ∨ (q → r) → (r → q) ∧ ⊥
+((q → p) → q → r) ∧ q ∧ r ∧ (q ∨ p)
+(r ∨ r ∨ γ) ∧ ((q ∧ p) ∨ (r ∧ r))
+(⊤ → β) ∧ ((p → r) ∨ r ∨ q)
+δ ∨ p ∨ q ∨ (p ∧ q)
+(r → q) ∨ δ ∨ ((r → p) ∧ (r → q))
+γ → r ∧ q → p ∧ q
+⊤ ∧ (p ∨ q) ∧ (r ∨ p)
+(p ∧ r → q ∧ r) ∨ ((p → q) ∧ (p → p))
+(q ∨ r → p ∨ r) ∧ p ∧ q ∧ p ∧ p
+(⊥ → α) ∨ ((r ∨ r) ∧ (p ∨ q))
+(β ∧ (r → p)) ∨ γ
+((r ∧ q) ∨ (r ∧ r)) ∧ δ
+(r ∧ p → r ∨ p) ∨ (q → r) ∨ (q ∧ p)
+⊤ ∨ ⊤ → (q → q) → r ∨ q
+(r ∧ r → q → p) ∨ ((p ∨ q) ∧ (q → q))
+(r → p) ∨ (r ∧ q) → r ∨ q ∨ (r ∧ r)
+((r ∨ p) ∧ β) ∨ q ∨ r ∨ (q ∧ p)
+(γ ∨ (q → p)) ∧ p ∧ r ∧ (q ∨ q)
+(α → p ∧ r) ∨ ((q → p) ∧ (q ∨ q))
+δ → γ ∧ (r ∨ q)
+(p ∧ q → p → p) → q ∧ q → q ∧ q
+(q ∧ p → p ∨ p) ∨ ⊥
+(q → q) ∧ (r ∨ p) ∧ δ
+β ∧ ((p → q) → r ∧ q)
+((r ∧ r) ∨ (p ∧ r)) ∧ ⊤
+q ∨ p ∨ (p ∧ p) ∨ (δ → r ∨ r)
+((r → q) → q ∨ p) ∧ (q ∨ p ∨ α)
+(⊤ ∨ p ∨ p) ∧ (r ∨ p → p → q)
+(r ∧ r → p ∨ p) → q ∨ r → q → q
+(q ∧ q ∧ p ∧ p) ∨ (r ∧ q) ∨ (r → p)
+(r ∧ r → r → r) ∨ (r ∨ r → p ∨ p)
+(p → r) ∨ (r ∧ p) ∨ ((q ∨ p) ∧ β)
+(p → q) ∨ γ ∨ r ∨ p ∨ (q ∧ q)
+(q ∨ p → p ∧ q) ∧ ((r → q) → r → r)
+(p → p) ∨ (r ∧ p) → (r ∨ r) ∧ (r → p)
+(q → p) ∧ p ∧ q ∧ (p ∧ p → p ∧ p)
+(p → r) ∧ (q → r) ∧ p ∧ q ∧ (p → r)
+⊤ ∧ ((q → p) → ⊤)
+(p ∧ q → r → p) ∨ (p → r) ∨ (q → r)
+((r → r) → r → p) ∧ δ
+(q ∧ p → q ∨ r) ∧ (q ∧ q → q → r)
+(p ∧ r) ∨ r ∨ r → p ∧ p → α
+q ∨ q ∨ (p → r) → (r ∨ p) ∧ (q → r)
+(p ∧ q → q ∧ r) ∧ α
+δ → α ∧ (p ∨ p)
+β ∧ (q → r) → (q → p) → q → r
+(p ∨ p ∨ δ) ∧ (p ∧ p → β)
+((r → q) → p ∧ q) ∨ (r → q) ∨ (p ∧ p)
+β ∧ (r ∨ r → p ∧ q)
+(q ∨ p → δ) ∨ ⊤
+⊤ ∨ r ∨ p ∨ r ∨ r
+((q → q) ∧ (q ∨ p)) ∨ (r → q) ∨ r ∨ r
+γ → r ∨ r ∨ (q ∧ q)
+((p → p) ∧ (p → p)) ∨ (r ∨ r → q ∨ p)
+((q → p) → p → p) ∨ δ
+((p → r) → p ∧ r) ∧ γ
+(q ∧ r → r ∧ q) ∧ p ∧ r ∧ β
+((p → p) ∧ (p ∨ r)) ∨ (⊤ → r ∨ r)
+((q → q) → q ∧ p) ∧ γ ∧ ⊤
+(p → q) ∨ r ∨ p ∨ ((q → p) → p → r)
+p ∧ r ∧ (p ∨ r) → (p → r) ∨ (p → r)
+(p → p) ∨ (p ∧ q) → α
+(γ → r ∨ p) → r ∨ p ∨ (q → p)
+⊥ → (r → q) ∨ (r ∧ r)
+(r ∨ p) ∧ (r → p) ∧ (p ∧ r → p ∨ p)
+β ∨ (r → q) ∨ ⊤
+(q ∧ q) ∨ (q → q) → γ → p ∧ q
+((q → r) → r → r) ∧ (β → p ∨ r)
+δ ∨ (p ∧ q) → q ∧ p ∧ (p ∨ p)
+(p ∨ r) ∧ (q ∨ p) ∧ (r ∧ p → r ∧ p)
+(r ∨ r) ∧ (q ∨ r) ∧ δ
+α ∨ (r ∧ p ∧ r ∧ r)
+r ∧ p ∧ δ → q ∧ r → q ∧ q
+(r → q) ∨ p ∨ q → (r ∧ p) ∨ (r → p)
+p ∧ p ∧ β → q ∨ p → r ∧ q
+(r ∨ r → δ) ∨ ⊥
+(p ∨ r → p → r) ∧ ((p → q) ∨ (r ∧ r))
+(⊥ → r ∧ p) → (p → r) ∨ r ∨ r
+((p → p) ∨ (q → r)) ∧ (p ∧ p → p ∨ p)
+(p ∨ r) ∧ r ∧ r → r ∧ p ∧ (r → p)
+(q ∨ q → q ∨ q) → α
+((r ∧ p) ∨ (q ∧ p)) ∧ β ∧ r ∧ r
+(q → q) ∧ p ∧ r ∧ ((r → r) ∨ γ)
+(q ∨ p → q → q) ∨ ((q → r) ∧ (r → r))
+(r → q) ∨ q ∨ r ∨ ((r → q) → β)
+p ∨ r ∨ r ∨ r ∨ (r ∧ q → r → p)
+((r → p) ∨ (r ∧ p)) ∧ p ∧ p ∧ (q ∨ p)
+(α → q → q) → p ∧ q ∧ α
+(δ ∧ (r ∨ r)) ∨ (⊤ → ⊥)
+(q ∧ q) ∨ r ∨ r ∨ ((r ∨ q) ∧ p ∧ r)
+(q ∨ q → q → q) ∧ ((r → q) ∨ γ)
+δ → (q → q) → p → p
+(r ∧ p → δ) → (r ∧ q) ∨ (q → q)
+β ∧ r ∧ r ∧ p ∧ p
+α ∧ (r ∨ q) → β
+(r ∨ q → r ∧ r) → (q ∧ r) ∨ (p ∧ r)
+(p ∧ r ∧ p ∧ p) ∨ ((q ∨ q) ∧ (p → q))
+((r → r) → q ∨ r) → p ∧ r → r ∨ q
+(q ∧ q) ∨ (p → r) → α → p ∨ r
+δ ∨ (p → q) ∨ (r → r)
+((r → q) ∧ (r → p)) ∨ ((p → r) → p ∨ p)
+q ∨ q ∨ (r ∧ r) ∨ (p ∧ r → α)
+((q → r) → q ∨ r) ∧ (p → q) ∧ (r ∨ q)
+(q ∧ q ∧ β) ∨ (p ∧ p) ∨ (r ∧ q)
+(r ∧ p → q → q) → r ∨ r → p → r
+(q → p) ∧ (r ∨ p) → (q → q) ∧ (p → p)
+(q ∨ q → q ∨ r) ∨ ((r ∨ q) ∧ (r → r))
+(r ∨ q → r → p) ∨ α
+(p ∨ q) ∧ (p → r) ∧ (γ → q → r)
+(r ∨ p → p → q) ∨ (q ∧ q → p ∨ r)
+(r ∧ p) ∨ (p ∧ p) ∨ (⊤ ∧ q ∧ p)
+p ∨ p ∨ β ∨ (q → r) ∨ r ∨ p
+(r ∨ r ∨ (r → p)) ∧ ((r → p) → p ∨ p)
+(r ∧ q ∧ (p → q)) ∨ (q ∧ p → γ)
+(p ∨ q → γ) ∨ ((q ∨ p) ∧ (p → p))
+⊤ ∨ (q ∧ q) ∨ (r → q)
+((r ∨ q) ∧ (q ∨ q)) ∨ (q → p) ∨ q ∨ p
+(p ∧ r → r ∧ q) ∧ β ∧ (r ∨ p)
+((q → p) ∧ r ∧ p) ∨ (r ∧ q → ⊤)
+(r ∨ r ∨ ⊤) ∧ (p ∨ q) ∧ q ∧ p
+(r ∨ q ∨ (q → p)) ∧ γ ∧ q ∧ r
+(r ∨ p ∨ p ∨ r) ∧ (p → q) ∧ (q ∨ r)
+r ∧ q ∧ (p ∨ p) ∧ (p ∨ p ∨ (r ∧ p))
+γ → (p → p) → r ∧ p
+p ∨ q ∨ (p → r) ∨ ((r → p) ∧ p ∧ q)
+(r ∧ p → r ∧ q) ∨ r ∨ r ∨ (r → p)
+(r ∨ p → p → r) ∨ (q ∧ r) ∨ (p → p)
+r ∨ r ∨ p ∨ q ∨ α
+γ ∨ (q ∧ p → q ∧ q)
+(q ∧ p) ∨ α ∨ (r ∧ p) ∨ (q ∧ r)
+p ∨ p ∨ (p → q) ∨ ((q → r) → r ∨ q)
+⊤ ∧ (q → r) ∧ (p → q) ∧ (p → r)
+((r → q) → r ∧ p) ∧ ((p ∧ q) ∨ (p ∧ q))
+((r → p) ∧ (p → r)) ∨ (p ∧ p) ∨ r ∨ p
+(q ∧ r) ∨ (p ∧ p) → (p → p) → p → q
+(γ → q ∨ q) ∨ (r ∨ q → ⊤)
+α ∨ r ∨ p ∨ (r → p)
+(p ∧ p → q → q) ∧ ((p → p) → ⊥)
+r ∧ p ∧ (p ∨ q) → α
+q ∨ q ∨ q ∨ q → δ ∨ ⊤
+((q → p) → q → p) ∨ γ
+(q → q) ∨ p ∨ p → α ∧ (r → p)
+⊥ ∨ q ∨ q → q ∨ r → q → p
+(r → r) ∧ (r → q) ∧ ⊤ ∧ (q ∨ q)
+(q ∧ p → p ∧ q) ∧ (β ∨ (q → q))
+(γ ∧ (r ∨ q)) ∨ ((r ∨ p) ∧ (p ∨ p))
+δ ∨ (q → r) → (q → q) ∧ (p → p)
+(p ∨ q) ∧ (q ∨ p) → α ∧ r ∧ p
+(r ∨ q) ∧ β ∧ (r → r) ∧ (p → r)
+(⊥ → p ∧ q) ∧ ((q → r) → q ∨ p)
+((r ∨ p) ∧ (r ∨ p)) ∨ (q ∧ q ∧ (r → p))
+(γ → q → r) → α
+(p ∧ r → q → q) → β
+β ∨ r ∨ r → p ∨ p → r → r
+(q ∨ q) ∧ p ∧ p ∧ ⊤
+(p → p) ∧ (q → p) ∧ β
+(q ∨ r ∨ r ∨ p) ∧ γ
+⊥ ∧ q ∧ r ∧ (γ ∨ (p → r))
+β → q ∧ r → p → q
+((r → p) → p → q) ∧ ((r → q) ∨ β)
+((r → r) → p → q) ∨ ((q → q) ∧ q ∧ q)
+α ∨ (q → r) ∨ (q ∧ p ∧ (q → q))
+β → r ∧ p ∧ β
+p ∧ q ∧ (p → r) ∧ (p ∨ q) ∧ q ∧ p
+((p ∨ q) ∧ (p → p)) ∨ γ ∨ α
+(p → r) ∧ (q → p) ∧ ⊤
+(p → p) ∨ (p → r) ∨ δ
+((r → p) → p → p) → δ
+(q ∨ p → r ∧ p) ∨ ((r ∨ p) ∧ q ∧ r)
+p ∨ q ∨ (p ∧ q) ∨ (p ∧ r) ∨ p ∨ p
+(r → r) ∨ p ∨ q → α ∨ (p ∧ q)
+((q ∧ q) ∨ p ∨ r) ∧ (r → q) ∧ γ
+(q → p) ∨ r ∨ p → (r → r) → p ∨ p
+(p ∨ r → r → r) ∨ ((r → p) ∧ p ∧ q)
+(p ∨ q ∨ (q ∧ r)) ∧ β
+(r → q) ∨ (p ∧ q) ∨ (q ∧ q) ∨ (p ∧ r)
+((r → r) → r → r) ∧ (p → r) ∧ (q ∨ q)
+((r → p) ∧ (p → q)) ∨ (p → p) ∨ q ∨ q
+((r → q) → r → r) → (q → q) ∧ (q → q)
+(p ∧ q) ∨ (q → p) → (p → p) ∧ r ∧ q
+(α ∧ (r ∨ q)) ∨ (q ∨ r → p → r)
+((p → q) → q → q) ∧ β ∧ q ∧ q
+(q ∧ q) ∨ (q → q) → (p → q) → q ∨ p
+(q ∨ p) ∧ (p → p) → δ
+δ ∨ (r ∧ q) → α ∧ (r ∨ r)
+α ∨ (p ∧ p) ∨ (r ∧ q)
+((q → q) → β) ∧ (r ∨ p ∨ (q ∧ r))
+(q ∨ p → q ∧ q) ∧ (p → r) ∧ (q → r)
+(p → r) ∨ (p ∧ p) ∨ ((r → r) → ⊥)
+q ∨ r ∨ β → (r ∨ p) ∧ (r ∨ q)
+((q → q) → q ∧ r) ∨ ⊥
+(q ∧ p ∧ (p → p)) ∨ ⊥
+(p ∨ p → ⊥) ∧ q ∧ r ∧ (q → r)
+(r ∧ q) ∨ p ∨ p ∨ (r ∨ r → γ)
+(r ∧ q) ∨ (q ∧ r) → ⊥
+((q ∧ p) ∨ r ∨ r) ∧ (q → p) ∧ (q ∨ q)
+q ∧ r ∧ (r ∨ r) ∧ ((r → p) ∨ (p ∧ p))
+(⊤ → q → r) ∨ γ
+((r → r) → p ∨ r) → β
+(p ∧ p) ∨ δ ∨ γ
+⊥ ∨ p ∨ q ∨ γ
+(r ∧ q → ⊥) ∨ δ
+β → r ∧ p → r ∧ q
+(r ∨ r → δ) → ⊤
+(r ∧ q) ∨ q ∨ p ∨ (p ∧ r → p → r)
+δ → q ∨ r → r → r
+α ∨ ((r → q) → p ∧ r)
+r ∨ r ∨ (p → q) → p ∨ q → r ∨ p
+(q → q) ∨ β ∨ γ
+r ∨ p ∨ (p → q) → p ∧ q → p ∧ r
+(γ → q ∨ r) ∨ (γ ∧ (r → q))
+(q → p) ∧ (p ∨ r) ∧ ⊥
+(q → q) ∧ (r → r) ∧ (q ∨ q → p → r)
+(r → r) ∧ p ∧ q ∧ α
+((q → q) ∧ ⊥) ∨ ((q → q) ∧ r ∧ p)
+⊥ ∧ r ∧ r ∧ (r ∨ p)
+((p ∧ p) ∨ (r → q)) ∧ ⊤
+r ∨ q ∨ q ∨ q → r ∧ q → r ∧ q
+(p → q) ∧ r ∧ r ∧ q ∧ q ∧ r ∧ r
+((r → q) → r → q) → (r ∧ r) ∨ (p ∧ p)
+(⊤ ∧ (r ∨ p)) ∨ (q ∧ r ∧ (r ∨ p))
+(β → q ∨ r) ∨ (r ∧ p → r → r)
+(r ∧ p → q → r) ∧ δ
+q ∨ p ∨ q ∨ r ∨ δ
+((r → p) → δ) ∨ ((r → q) → r ∧ q)
+(r ∨ p ∨ (q → r)) ∧ ((p → q) → q → q)
+β ∨ p ∨ r ∨ p ∨ p
+β → (q → q) ∧ (p → p)
+(q ∨ r ∨ β) ∧ δ ∧ r ∧ r
+⊥ ∨ ((r → r) → r ∧ p)
+p ∧ q ∧ (r ∨ p) → r ∧ q ∧ (p ∨ q)
+((q → p) → α) → β
+⊥ ∨ ((q → q) ∧ q ∧ q)
+(q ∨ q → r → r) → (p → p) → r → p
+(α → r ∧ q) ∨ δ
+⊤ ∨ (p ∧ p) → (p → q) ∨ p ∨ r
+((q → r) → p ∨ p) → β
+((r → p) → ⊤) ∧ ((p → p) ∨ q ∨ q)
+r ∧ q ∧ (q ∨ r) ∧ (r ∧ r → r ∧ p)
+(q ∧ q ∧ γ) ∨ (r ∧ q → q → q)
+((p ∨ r) ∧ (q ∨ r)) ∨ (q → r) ∨ (p → p)
+(p → p) ∧ (q ∨ r) ∧ (p ∨ q → p → p)
+((q → q) → r ∧ r) ∧ (q ∨ r ∨ (r → r))
+r ∧ r ∧ (r ∨ q) → (q → q) → α
+(⊤ ∧ (q → q)) ∨ ⊥
+(r → q) ∧ (r ∨ q) ∧ ⊥
+(p ∧ p → δ) ∧ (⊥ → p → q)
+(⊤ → q ∧ p) ∨ (r ∧ r → p ∨ p)
+(q ∨ r ∨ (r ∧ r)) ∧ (p ∨ p → r → r)
+(q → r) ∧ (r ∨ p) ∧ (r → p) ∧ p ∧ p
+α → p ∧ q ∧ (r → q)
+(q → p) ∨ (q → p) ∨ β
+q ∧ q ∧ α → r ∨ q ∨ q ∨ p
+(α → q ∨ r) ∧ (q ∧ r → q → r)
+(p ∧ q) ∨ ⊥ ∨ (q ∧ p) ∨ (r ∧ q)
+r ∨ r ∨ (r → r) → p ∨ p ∨ (r ∧ r)
+(r ∧ q ∧ (q ∨ q)) ∨ r ∨ r ∨ ⊥
+(p ∨ r) ∧ (r ∨ r) ∧ ((p ∧ r) ∨ (q → q))
+α → r ∨ r → q → r
+γ → q ∧ r ∧ p ∧ r
+((r → p) → r ∨ p) ∨ (p → q) ∨ r ∨ p
+(p ∧ p → q ∨ q) ∧ (q ∨ r) ∧ α
+(r ∧ q → r ∨ q) ∨ (p → r) ∨ (r ∧ q)
+((r → r) → q ∨ r) → (r → q) ∧ (r ∨ q)
+(q → q) ∨ (r → q) → p ∨ r ∨ β
+((q → q) ∨ (r ∧ q)) ∧ r ∧ q ∧ (q ∨ q)
+((p → q) ∨ α) ∧ ((p → p) ∨ (q → p))
+α ∨ q ∨ p ∨ ((q ∨ p) ∧ (p ∨ q))
+γ ∨ ((q ∨ r) ∧ (q ∨ p))
+(α → r ∨ q) ∨ (p ∧ p) ∨ δ
+(p ∧ p → p → r) ∧ ((r ∧ r) ∨ α)
+α ∨ ((r → p) ∧ (q → r))
+(q → p) ∧ (q → p) → (p → q) → γ
+((p → p) → r → r) ∨ ((r ∨ r) ∧ (p ∨ q))
+γ ∨ ((r → q) → q → q)
+(q ∧ r → p → p) ∨ ⊤
+(q ∧ p) ∨ (p ∧ q) → (r ∧ r) ∨ (r ∧ q)
+r ∨ p ∨ (r → p) → ⊤ ∧ (q → q)
+(r → p) ∧ (p ∨ q) ∧ r ∧ p ∧ (q ∨ p)
+(r ∧ p ∧ (r ∨ q)) ∨ (p ∧ r ∧ (p → p))
+(α → r ∧ p) ∧ ((q → q) ∨ p ∨ p)
+β ∨ (p ∧ p) → β
+r ∧ r ∧ (q → q) → p ∧ q → r ∨ r
+(p ∨ q) ∧ ⊥ → (q → q) ∧ r ∧ q
+(δ ∧ (r → p)) ∨ (δ ∧ ⊤)
+(q ∨ q → ⊤) → (r ∨ q) ∧ q ∧ p
+(p ∨ p → q ∧ q) → ⊥
+((q → p) ∧ (p → p)) ∨ (p ∨ q → r ∧ p)
+(q → r) ∨ (p ∧ r) → r ∧ q → q ∨ q
+(r ∧ q ∧ γ) ∨ q ∨ q ∨ (r ∧ r)
+(α → ⊥) → r ∧ r ∧ α
+q ∧ q ∧ (q → p) ∧ (⊤ → p → r)
+(r ∨ r) ∧ r ∧ p ∧ (p ∨ p → q ∨ r)
+(q → p) ∨ (p ∧ p) ∨ ((q → q) ∧ (q ∨ r))
+r ∧ p ∧ q ∧ r ∧ γ
+q ∧ p ∧ (q → r) ∧ ((q → r) → q → p)
+⊤ ∨ q ∨ p ∨ r ∨ r
+(q ∨ p → q ∨ p) → (q → r) ∧ (r → r)
+(p ∨ q ∨ β) ∧ (q ∧ p → p ∨ r)
+⊥ ∨ (p ∧ p) ∨ (r ∧ p)
+(q ∧ r → β) → ⊤ → δ
+(q ∨ r → r ∨ q) → p ∧ p → r ∨ q
+((q → p) ∧ (q ∨ p)) ∨ ((p → q) → α)
+⊥ ∧ (r ∨ q) ∧ (p → p) ∧ (p → r)
+(q ∧ r) ∨ (r → q) → δ ∧ α
+δ ∧ p ∧ r ∧ δ
+β ∨ ((p → q) → p ∧ q)
+(r → p) ∧ p ∧ r ∧ (⊤ ∨ (q ∧ p))
+((q → p) ∧ (r → p)) ∨ (δ ∧ (r → p))
+(r ∧ r) ∨ q ∨ p ∨ ((r → p) ∧ α)
+r ∧ q ∧ q ∧ p → (p → q) ∧ q ∧ q
+α ∧ (q ∨ p → p ∨ p)
+α ∧ (γ → r ∨ r)
+(r ∧ q → q ∨ q) → α ∨ q ∨ r
+(p ∨ r → q → r) → α ∧ (p ∨ r)
+(r ∨ p) ∧ (q ∨ r) ∧ (β → q ∨ r)
+q ∧ r ∧ (p ∨ p) ∧ γ
+(q ∧ r → α) → β → β
+(q ∨ q → q → r) ∧ β
+((q → r) → q ∧ p) → q ∨ q → γ
+(r → r) ∨ r ∨ r ∨ (p ∨ p → q ∨ q)
+(q → p) ∧ (q → q) → r ∧ q ∧ (q → q)
+((r → p) → p → q) ∨ (r → q) ∨ r ∨ q
+(q ∨ q) ∧ p ∧ r ∧ ((p → q) → r → p)
+δ ∧ (q → p) ∧ (p ∧ r → p → r)
+(p → r) ∨ (p ∧ q) ∨ δ
+(q ∧ p → r ∨ q) ∧ β
+((q ∧ r) ∨ γ) ∧ ((q → r) ∨ (r → p))
+⊥ ∧ ((p ∧ r) ∨ ⊥)
+γ ∨ r ∨ r ∨ δ
+γ ∧ (r ∨ q) ∧ ((p → q) → r → p)
+(q ∧ p ∧ β) ∨ ((p → q) → q ∨ r)
+δ ∨ p ∨ p ∨ q ∨ r ∨ (p ∧ r)
+(β ∧ (q ∨ r)) ∨ ((q → p) ∧ r ∧ r)
+((r → q) ∨ (p → r)) ∧ (q ∧ q → q ∨ q)
+(α → r ∧ p) ∨ ((r → q) ∧ (r ∨ r))
+p ∨ r ∨ q ∨ q ∨ (r ∧ q) ∨ r ∨ r
+(p ∨ r) ∧ p ∧ r ∧ (q ∨ r ∨ (p ∧ q))
+γ ∧ q ∧ p ∧ β ∧ (r → p)
+(p → p) ∨ (q ∧ q) ∨ ((p → r) ∧ α)
+(q ∧ r) ∨ ⊤ → (q → r) → q ∨ p
+((q → r) ∧ (q ∨ q)) ∨ p ∨ p ∨ q ∨ p
+(q ∨ p → r ∨ r) ∨ (r → r) ∨ (p → r)
+(r → r) ∧ q ∧ r → β ∨ (p ∧ r)
+⊤ ∨ ((q → p) ∧ (p ∨ r))
+(r → p) ∨ (p ∧ p) → γ ∨ (p → r)
+(r → p) ∧ (r → p) → (q ∨ r) ∧ (q ∨ r)
+(p ∨ p ∨ β) ∧ q ∧ r ∧ ⊤
+r ∧ r ∧ (q ∨ p) → (r → r) ∧ q ∧ p
+(p → r) ∧ (p ∨ p) ∧ ((q → q) ∨ (q ∧ r))
+(q → r) ∧ (r → p) → (q → p) ∧ (p → r)
+(p ∨ q ∨ p ∨ r) ∧ (⊥ → p ∧ p)
+(q ∧ r) ∨ (q ∧ q) → (p → p) ∨ (r ∧ r)
+δ ∨ ⊥ ∨ (p ∧ p)
+(q ∨ q) ∧ (p ∨ p) → α → q ∨ q
+(q → r) ∨ r ∨ p ∨ ((r → r) → p ∧ r)
+(r → r) ∧ (r → p) → β ∧ (p ∨ q)
+((r → r) ∨ α) ∧ δ
+(p ∧ p → p → p) → p ∧ p ∧ (q ∨ q)
+(q ∨ q ∨ δ) ∧ γ
+((r → q) → p ∧ r) ∧ ((q → q) → p ∨ q)
+((q → r) → q → p) ∧ (r ∨ r ∨ p ∨ q)
+p ∧ r ∧ q ∧ p → ⊥ ∧ (q ∨ p)
+r ∧ p ∧ α → p ∧ p ∧ (p → r)
+(q ∨ r ∨ (r ∧ q)) ∧ (β → q ∧ p)
+p ∧ r ∧ (q → q) → p ∨ p ∨ (r → r)
+(⊤ → p ∧ r) → α
+α → r ∧ p → r ∨ q
+(p ∧ r ∧ (p → p)) ∨ (p ∧ r → β)
+((p → p) → r ∨ r) → r ∧ q ∧ δ
+q ∨ r ∨ (r → r) → q ∨ r ∨ q ∨ p
+⊤ → q ∧ q ∧ γ
+δ → (r ∨ q) ∧ (q ∨ r)
+((r → p) ∨ (q → p)) ∧ (p ∨ q) ∧ (q ∨ q)
+((p → r) → α) → r ∧ p → p → q
+(q ∧ q → r ∧ p) ∨ ⊤
+(p → r) ∨ (p ∧ q) → (r → p) → p ∨ p
+⊥ → (q ∨ p) ∧ (r → q)
+(r ∨ q → p ∧ q) ∧ ((q → p) → ⊤)
+(q ∧ r ∧ (p ∨ q)) ∨ α ∨ α
+(p ∧ q) ∨ (p ∧ r) → ⊤
+(r ∨ q ∨ r ∨ p) ∧ (q ∨ p) ∧ δ
+(q ∨ p → p ∨ r) ∨ q ∨ q ∨ r ∨ r
+((q → q) → r ∨ q) ∨ (q ∧ q → q ∧ q)
+(r → q) ∧ q ∧ r ∧ (δ → q → p)
+(r ∨ r) ∧ p ∧ q ∧ (⊥ ∨ γ)
+(q ∧ r → q → p) ∨ (δ → p ∧ q)
+⊤ → p ∨ q ∨ (q → r)
+q ∧ q ∧ p ∧ q ∧ (q ∨ p ∨ (p ∧ q))
+q ∨ q ∨ (r → r) ∨ (p ∧ r) ∨ (p → q)
+(q → p) ∨ (q → p) ∨ ((r ∨ p) ∧ (r ∨ q))
+δ ∨ (p ∧ q ∧ (q ∨ p))
+r ∨ r ∨ (q ∧ p) → r ∧ q ∧ p ∧ p
+(γ ∨ r ∨ r) ∧ (δ ∨ (r ∧ p))
+(r ∨ r ∨ (r ∧ p)) ∧ β
+(p ∧ q) ∨ (r → q) ∨ ((q ∨ r) ∧ α)
+(p → p) ∧ q ∧ p ∧ (r ∧ r → r → r)
+(r ∨ r ∨ (p → p)) ∧ (p → p) ∧ (q ∨ p)
+(q ∧ p) ∨ q ∨ p ∨ (r → r) ∨ (q ∧ q)
+((r → q) ∧ (q ∨ r)) ∨ ((q ∨ r) ∧ r ∧ q)
+(q ∨ q → r ∧ r) → r ∧ p ∧ (p → q)
+⊥ ∨ (p ∧ r → ⊥)
+((q → q) ∧ (r ∨ p)) ∨ ((q ∨ p) ∧ (p → p))
+(β → δ) ∨ (q ∨ p → q ∨ p)
+α ∧ (r ∨ p) → p ∨ r ∨ p ∨ p
+γ ∧ ((p → q) → ⊤)
+q ∨ r ∨ (p ∧ r) ∨ ((r → r) → p ∧ p)
+((q → r) → p ∧ p) ∧ ((p → p) → r ∧ p)
+(q ∨ q) ∧ α ∧ δ
+(r ∧ p → ⊤) ∧ ((r ∧ q) ∨ p ∨ p)
+((r → r) → γ) ∧ ⊥ ∧ α
+p ∨ q ∨ (r → r) ∨ ((r → p) → q ∧ p)
+(r → q) ∨ γ → r ∨ p ∨ q ∨ q
+⊥ ∨ p ∨ q ∨ (⊥ ∧ r ∧ p)
+(p → r) ∧ (r → p) ∧ ((r ∧ r) ∨ (r ∧ p))
+(r ∧ q) ∨ (q → r) ∨ α
+(p → p) ∧ q ∧ r → r ∧ q ∧ γ
+(r ∨ p → p → r) → α
+(δ → δ) → (q → p) ∧ β
+β → p ∨ p ∨ (r ∧ p)
+p ∨ q ∨ (q ∧ q) → ⊥
+(q ∧ r → q → p) ∨ ((r → p) ∧ (q ∨ p))
+(p ∨ r → q ∨ q) ∨ β
+q ∨ q ∨ q ∨ r ∨ (p ∧ q ∧ (r ∨ q))
+((r → p) → q ∨ q) → γ → δ
+(q ∧ p) ∨ (p → p) → (p ∧ p) ∨ (q → q)
+(q → p) ∧ p ∧ q ∧ ((r ∧ q) ∨ (q → p))
+(q → q) ∨ q ∨ q → (r ∧ q) ∨ q ∨ p
+(r ∧ r) ∨ (q → q) ∨ α
+q ∧ q ∧ (r → q) → q ∨ p → q ∨ q
+(r ∨ p → q → p) ∧ ⊥ ∧ (q ∨ p)
+β ∨ ((r → r) ∧ (q → p))
+(r ∧ p → r → p) → (r → r) ∨ β
+(p ∨ r) ∧ p ∧ p ∧ (β ∨ (r ∧ r))
+⊥ ∨ (r ∧ p) → r ∧ p ∧ q ∧ q
+r ∨ q ∨ (r → q) ∨ ((p → q) → r ∧ q)
+(r ∨ p → ⊤) → (r ∨ p) ∧ (p ∨ p)
+(q ∨ r → p ∨ p) ∧ (q ∨ p ∨ δ)
+((p → r) → p ∨ r) ∧ p ∧ q ∧ (p → p)
+(q ∧ q) ∨ p ∨ q ∨ ((q ∨ p) ∧ (r ∨ q))
+(r ∧ q ∧ (p ∨ r)) ∨ (q → q) ∨ r ∨ r
+(β ∨ (p → r)) ∧ β ∧ (q ∨ q)
+(p ∧ q → p ∧ r) ∨ (q → q) ∨ δ
+((r → r) → p ∧ r) ∨ (r ∨ p → q → p)
+p ∨ r ∨ q ∨ q → (p → r) ∨ (r ∧ p)
+⊥ ∧ r ∧ p → (r → q) → p ∨ p
+(r ∧ r) ∨ (r → p) ∨ ((p → q) ∧ (q ∨ p))
+(p → r) ∧ (q ∨ q) ∧ (p ∨ q) ∧ (q → r)
+(γ ∧ (r ∨ r)) ∨ δ ∨ (q → p)
+(p ∧ r) ∨ p ∨ q → (p ∧ r) ∨ (q ∧ r)
+(δ → δ) → β ∨ (p ∧ p)
+((r → p) → p → r) → (p → q) ∧ γ
+β ∨ (p ∧ q) ∨ (r ∨ r → γ)
+((p → p) → r ∨ r) ∨ (p ∧ q) ∨ (p ∧ p)
+p ∧ p ∧ (r → p) ∧ (α → p ∧ r)
+(β ∧ (r → p)) ∨ (p ∧ p → q ∧ r)
+p ∧ p ∧ q ∧ q → (q → r) ∧ (q → q)
+(r → r) ∨ (p ∧ q) → (q → r) ∨ α
+((p → q) ∨ q ∨ q) ∧ γ ∧ (q ∨ p)
+(r ∧ q → p → q) ∨ ((r → q) → q → r)
+((q → q) → r ∧ p) → r ∨ r ∨ p ∨ q
+(q ∧ q → q ∧ r) ∨ (q ∧ q ∧ (r ∨ r))
+δ ∨ p ∨ r → (r → p) ∧ (r ∨ p)
+(p → r) ∨ (p → r) ∨ (q ∧ q ∧ γ)
+(r ∧ r → p → p) ∧ δ
+((p ∧ r) ∨ (p → p)) ∧ (p ∨ p → r ∨ q)
+p ∧ r ∧ ⊤ → (q → r) → r → q
+((q → r) ∨ ⊥) ∧ (q ∨ p) ∧ (r ∨ q)
+δ → q ∨ p → q ∧ q
+((r → q) ∧ (r ∨ q)) ∨ (r ∧ p ∧ α)
+((r ∨ q) ∧ γ) ∨ (α → q → p)
+(r ∧ r) ∨ (r → p) → (q → q) ∧ q ∧ q
+((p → q) ∨ (q ∧ r)) ∧ ((p ∧ r) ∨ (r ∧ r))
+(r ∨ r) ∧ ⊤ ∧ (p ∨ p) ∧ (p ∨ r)
+((p → r) ∧ γ) ∨ ((r → p) → r ∧ r)
+((p → p) → q ∨ p) ∧ δ
+(q ∨ q → r ∨ p) ∨ (q ∨ p → p → p)
+(r → r) ∨ (r → p) ∨ ((q → p) ∧ ⊥)
+r ∧ r ∧ ⊤ ∧ (r ∨ p ∨ q ∨ p)
+((q ∨ q) ∧ (r → r)) ∨ α ∨ (p → p)
+(q → q) ∨ q ∨ r → r ∨ q → p ∧ q
+(q ∨ p → p → p) ∨ (α → β)
+(q ∨ p) ∧ (p → p) ∧ p ∧ r ∧ δ
+(p ∧ p) ∨ q ∨ q → r ∧ q → p ∧ p
+r ∧ p ∧ ⊤ ∧ (γ ∨ (r ∧ p))
+((p ∨ p) ∧ p ∧ p) ∨ (r → q) ∨ (q ∧ q)
+p ∨ p ∨ (r ∧ r) ∨ p ∨ q ∨ δ
+⊤ ∧ ((q → r) → p ∨ r)
+α → (q → r) ∧ (r ∨ r)
+((q → p) → p ∨ q) → (q ∧ r) ∨ p ∨ p
+(p ∧ p) ∨ (r ∧ r) ∨ (p ∧ r ∧ (r → q))
+(p ∨ q) ∧ β ∧ (δ ∨ γ)
+γ → (r → q) → β
+(p ∧ r) ∨ (r ∧ p) → δ
+(q → r) ∨ (r ∧ q) ∨ ⊤
+(r ∧ r → r ∧ r) ∧ q ∧ p ∧ (q ∨ r)
+(γ → q ∧ q) → γ
+(γ → r ∨ r) → q ∨ p ∨ (r ∧ p)
+(r ∨ r → p ∨ q) → (p → p) → q ∨ r
+((p ∧ r) ∨ (r → q)) ∧ (q ∨ p ∨ ⊤)
+(q → r) ∧ (r → q) → ⊤
+((q ∨ q) ∧ p ∧ p) ∨ α
+p ∨ r ∨ β → γ
+(p ∨ p) ∧ (p → q) ∧ ((r → q) → δ)
+δ ∧ p ∧ p ∧ (β → p ∧ q)
+((q ∨ p) ∧ α) ∨ (p ∧ r ∧ δ)
+r ∧ p ∧ (p → p) → q ∨ p ∨ (q → p)
+r ∧ r ∧ r ∧ q → q ∨ r ∨ r ∨ q
+(p ∨ r ∨ p ∨ r) ∧ (r ∨ p ∨ (p ∧ p))
+α ∧ ((r ∧ q) ∨ (r ∧ q))
+q ∧ q ∧ (p → p) → γ
+⊤ ∨ (q ∨ r → q → q)
+β ∧ r ∧ q ∧ (p ∨ q) ∧ (q → p)
+(r → r) ∨ (r ∧ p) ∨ (r ∧ q ∧ β)
+⊥ → (q → p) ∧ β
+((p → p) ∧ (p → p)) ∨ (r ∧ r → q → p)
+((q → q) → ⊤) ∧ (r ∨ q → α)
+p ∧ r ∧ (q → r) ∧ (p ∧ r → γ)
+(q ∨ r → r → p) → δ
+(p ∧ r → q ∧ q) ∨ ((r ∨ q) ∧ (q ∨ p))
+(β ∨ ⊤) ∧ (r ∨ p) ∧ (r → p)
+((r → p) ∨ q ∨ p) ∧ ((q ∧ r) ∨ p ∨ r)
+(p ∨ p → r → r) → ⊤ ∧ (p → r)
+(q → r) ∧ (p ∨ q) → (r ∧ q) ∨ r ∨ q
+(q ∨ r ∨ α) ∧ ((r ∧ r) ∨ (p ∧ r))
+β ∧ (δ ∨ (q ∧ q))
+r ∧ p ∧ (r → r) → γ
+β ∧ (p → q) ∧ δ ∧ (p → q)
+α ∧ ((r ∧ r) ∨ (p ∧ p))
+α ∨ ⊥ ∨ ((r → p) → r ∨ r)
+((p ∨ r) ∧ (q ∨ p)) ∨ (p ∨ r → p → q)
+γ ∨ (r → q) → ⊥
+r ∧ r ∧ r ∧ p → p ∧ r ∧ r ∧ p
+⊥ → (r → q) ∧ (q → r)
+(r ∨ r) ∧ (p ∨ p) ∧ (δ → p ∨ r)
+p ∨ p ∨ (q → r) ∨ ((r → q) → r ∨ q)
+γ ∧ (γ ∨ (q → r))
+(p ∨ r → p → q) ∧ (p ∨ r) ∧ (q → q)
+(q → q) ∧ q ∧ q ∧ ((r → r) ∨ ⊤)
+(⊥ → β) → (q → q) ∧ (r ∨ q)
+α ∧ (q ∨ q → δ)
+((r → q) → r → p) → α
+γ ∨ (q ∧ q ∧ q ∧ p)
+(r ∨ p → p ∨ r) ∨ (q ∧ r → p ∧ p)
+α ∨ (q → q) → (p ∧ q) ∨ p ∨ r
+(q ∨ r) ∧ α → γ
+(q ∧ q → p → p) → α ∨ r ∨ p
+(p ∧ q ∧ (q ∨ r)) ∨ γ
+(δ ∧ β) ∨ (p ∧ p → p ∧ p)
+γ → (r ∧ q) ∨ (p ∧ q)
+(q → p) ∨ (p → r) ∨ (r ∧ p ∧ (p ∨ r))
+(r ∧ r → r → q) → (p ∧ p) ∨ (r ∧ q)
+r ∨ r ∨ r ∨ p → p ∧ q → q ∧ r
+(p → q) ∨ (p → r) ∨ (q ∨ q → q ∨ r)
+(p ∧ q) ∨ (p → r) → p ∧ p ∧ r ∧ p
+(p ∧ r) ∨ q ∨ q → p ∨ p ∨ (q ∧ q)
+(p ∨ r → r ∧ q) ∨ (β → ⊤)
+((r ∨ r) ∧ (p → q)) ∨ (p ∧ r → r ∧ q)
+γ ∨ (r ∧ q) ∨ (q ∧ p → r ∨ p)
+(α ∧ (q ∨ q)) ∨ ((r ∨ r) ∧ r ∧ p)
+(r → q) ∧ (r ∨ q) ∧ (p ∨ p → p ∨ r)
+(q ∧ r) ∨ (r → p) → (p → p) ∧ p ∧ r
+((r ∧ r) ∨ q ∨ q) ∧ (β ∨ q ∨ p)
+⊤ ∧ β ∧ r ∧ p ∧ (p → r)
+(r → q) ∧ (q ∨ q) → p ∧ p ∧ (p → q)
+⊤ → q ∨ p → r ∧ p
+(q → q) ∧ q ∧ r → q ∧ r ∧ (r → q)
+((p → p) → q ∧ p) ∨ (p ∨ r → p → q)
+(q → r) ∨ p ∨ r → r ∧ r → r ∧ q
+(p ∨ q ∨ (q → r)) ∧ β
+r ∨ q ∨ q ∨ q ∨ ⊥
+⊥ ∧ p ∧ r ∧ δ
+((p ∧ r) ∨ (p → r)) ∧ (p ∧ p → r ∨ q)
+p ∨ r ∨ (r ∧ p) → (q ∨ q) ∧ r ∧ r
+(q ∧ r) ∨ (r ∧ q) ∨ ⊤
+((r → q) ∧ (r → r)) ∨ ((p → p) → q ∨ r)
+(q → r) ∧ (q → q) → (q → r) → q ∨ q
+δ → (q → r) ∧ r ∧ q
+(r ∧ q ∧ (r → q)) ∨ r ∨ q ∨ (r → p)
+(p ∨ q) ∧ (p ∨ q) ∧ (p ∨ r → r ∧ p)
+α → p ∧ r → q ∨ p
+⊥ ∨ (q ∨ r → α)
+r ∨ q ∨ (r → q) → p ∧ q → r → q
+α ∨ q ∨ r → (q ∧ r) ∨ (p → p)
+(p ∨ q → p ∧ r) ∨ ⊥
+(α ∨ p ∨ q) ∧ (⊥ → p ∧ p)
+q ∧ p ∧ q ∧ r → (r ∨ q) ∧ (p → r)
+δ ∨ (β → q ∧ r)
+(⊥ ∧ (q → p)) ∨ (q ∧ p) ∨ (r ∧ q)
+(r → r) ∨ p ∨ r → r ∧ q → α
+r ∧ r ∧ (p ∨ p) ∧ ((p → q) → r ∧ r)
+α ∨ (p ∧ p → p ∧ q)
+(r ∧ r ∧ (r ∨ r)) ∨ δ
+(r ∨ r) ∧ γ ∧ (δ → p ∧ p)
+((r ∨ p) ∧ (p → r)) ∨ (r ∧ p) ∨ r ∨ r
+r ∧ r ∧ (p ∨ q) → (q → q) ∧ p ∧ r
+(p ∨ q → r ∨ r) → r ∧ r ∧ (r → p)
+((p → r) → p ∨ p) ∨ (r ∧ p → q → p)
+(q → r) ∨ (p ∧ q) ∨ ((q → q) ∧ (q → p))
+(p ∧ q) ∨ (r ∧ q) → (q → q) → q ∨ q
+⊤ ∧ (p ∨ r) ∧ (r → q)
+q ∨ r ∨ (r → p) ∨ (q ∧ p) ∨ q ∨ r
+(β → p ∧ r) → r ∧ q → ⊤
+(r ∨ q → q → q) ∨ ((p → q) → r ∨ p)
+δ ∧ r ∧ p ∧ p ∧ p
+(r ∨ p) ∧ (r → q) ∧ ⊥ ∧ α
+(r ∨ r → q ∧ q) → δ
+(p ∨ q → p ∨ q) ∨ r ∨ q ∨ (q ∧ p)
+(p ∧ p → q → r) ∨ β
+α ∨ (r → r) → β
+((q → p) → q ∨ r) ∧ (q ∨ q ∨ (p → r))
+(q ∧ q ∧ δ) ∨ β
+(r ∧ r ∧ (p → r)) ∨ (q ∧ p → γ)
+p ∨ r ∨ (p → p) ∨ q ∨ r ∨ q ∨ r
+r ∧ p ∧ γ ∧ γ
+((p → q) → p ∨ q) → ⊥
+((q → r) → p ∨ p) → (q → q) ∧ (p → r)
+(p ∧ q) ∨ q ∨ q ∨ ((q ∨ q) ∧ (r ∨ p))
+δ ∧ (α → q ∧ p)
+(r ∧ p ∧ (q ∨ p)) ∨ (r ∨ r → p → p)
+(q → r) ∨ (p ∧ r) → p ∨ q → ⊤
+⊤ → ⊥ → p ∨ q
+(p ∨ r → q ∨ r) → p ∧ r → q ∨ q
+((q → p) → p ∨ p) → δ
+(q ∨ q → r ∧ r) ∧ (r → r) ∧ (p → p)
+p ∧ r ∧ (p ∨ p) → (q → q) → p ∧ p
+r ∨ p ∨ (r ∧ q) ∨ ⊤
+((r → r) ∨ r ∨ p) ∧ γ
+(p ∨ q → q → q) ∧ (p ∨ p) ∧ p ∧ r
+(q ∧ q → r ∧ p) ∨ (q ∧ p → p ∨ r)
+p ∨ p ∨ r ∨ q ∨ q ∨ r ∨ (p ∧ r)
+((r → q) → β) ∨ α ∨ (p ∧ p)
+(q ∨ r) ∧ (q ∨ r) ∧ (r ∨ q → β)
+(r ∧ p → q → r) ∨ δ
+(q ∨ r → r ∧ p) ∨ ((q ∨ p) ∧ α)
+((p → q) ∧ (r → r)) ∨ δ
+(p ∨ p) ∧ α ∧ (r ∨ p ∨ (p → r))
+β ∧ (r ∨ q) ∧ (q ∨ r)
+(r ∨ r) ∧ (q ∨ q) → p ∨ q ∨ (p ∧ r)
+⊤ → (r → p) ∧ (r ∨ q)
+γ ∨ (r ∧ p) ∨ p ∨ r
+(q ∧ q) ∨ r ∨ r → p ∧ p ∧ ⊥
+p ∧ p ∧ (r → r) → q ∧ p → γ
+(q ∧ q) ∨ (r ∧ r) → ⊤ ∨ δ
+(p → r) ∨ (p ∧ q) ∨ ((q ∨ q) ∧ δ)
+⊥ → (p → q) ∨ r ∨ r
+(⊥ → q → q) ∨ ((q ∨ p) ∧ r ∧ p)
+⊤ ∨ (γ → p ∧ q)
+(r ∨ q → q ∨ r) ∧ ((q → r) → p → p)
+(p ∧ p → γ) → (p ∧ p) ∨ r ∨ p
+p ∨ r ∨ (p → q) → δ
+(p → r) ∧ (q ∨ r) → (p → p) ∨ α
+(δ → r ∨ q) ∧ (q ∨ p → r → r)
+(q ∨ q → α) ∨ ((p ∨ r) ∧ (q → r))
+((r ∨ p) ∧ (p → p)) ∨ δ
+q ∧ r ∧ (r ∨ r) ∧ γ
+(p ∧ p → p ∨ p) ∨ ((p → r) → α)
+α ∧ ((p → p) → r ∨ q)
+(p → q) ∧ (p → q) → ⊤ ∧ ⊤
+γ → r ∧ p ∧ (p ∨ q)
+(q ∨ q ∨ γ) ∧ (⊤ ∨ (p → q))
+α ∨ p ∨ p ∨ (r ∧ p → r ∨ q)
+γ → ⊥ → r → p
+(q → r) ∧ q ∧ q ∧ (q ∨ p ∨ (p ∧ p))
+r ∧ q ∧ (r → p) ∧ ((p → q) → p ∧ p)
+((r → r) → r ∧ r) ∧ (r ∨ p ∨ r ∨ r)
+((p → r) ∨ p ∨ q) ∧ ((r → q) → q ∧ r)
+⊤ ∧ (⊥ → r → p)
+(q ∧ p → q ∧ r) ∨ (r ∧ q) ∨ q ∨ r
+((p ∧ p) ∨ (r → r)) ∧ ((q ∧ r) ∨ γ)
+(r ∧ q ∧ γ) ∨ ((p → q) ∧ (r → p))
+q ∧ q ∧ (q ∨ p) → α
+(p ∨ r) ∧ (q → q) ∧ p ∧ r ∧ p ∧ p
+((r ∧ p) ∨ ⊥) ∧ q ∧ q ∧ (r → r)
+((r ∧ q) ∨ q ∨ p) ∧ ((r → p) ∨ (r → r))
+((r ∨ p) ∧ p ∧ r) ∨ ((q ∨ p) ∧ (q ∨ q))
+δ ∨ (q → p) → (p → r) → ⊤
+(δ ∨ (p → r)) ∧ q ∧ r ∧ (q → q)
+⊤ ∧ p ∧ q ∧ q ∧ p ∧ (r → r)
+(p ∨ p → p ∨ r) ∨ ((p → r) → p → q)
+(q ∧ q) ∨ (r → q) → β ∧ (r ∨ p)
+(⊥ ∨ α) ∧ (q ∨ q → α)
+(q ∨ p ∨ β) ∧ ⊤ ∧ α
+⊥ ∧ r ∧ p ∧ (p ∨ r ∨ β)
+⊤ ∨ (r → q) → r ∨ p ∨ (p ∧ r)
+(p ∨ r → p ∧ p) → (p ∨ q) ∧ ⊤
+(q ∧ p ∧ (r ∨ r)) ∨ (q ∧ r) ∨ (q → r)
+β ∨ γ → (r ∧ r) ∨ (r → q)
+(r ∧ q) ∨ β → q ∧ p → p ∧ r
+((p → q) ∨ (p → p)) ∧ (r ∧ q → β)
+(q ∨ r ∨ (r → r)) ∧ (r ∨ r → γ)
+(q → q) ∧ r ∧ r → (q → q) ∧ (q ∨ r)
+(p → p) ∨ γ → (r → q) ∧ (q → q)
+(p ∨ q → ⊤) → (q → r) → ⊥
+α → (q → q) → r → r
+q ∨ r ∨ (q ∧ q) ∨ ((q → p) → r ∨ r)
+((q → p) → p → q) ∧ (r → r) ∧ (q → q)
+p ∧ p ∧ r ∧ q ∧ γ
+(p ∧ q → r → q) → (q ∨ p) ∧ (r ∨ r)
+γ → (r → q) ∧ (r ∨ q)
+(p ∨ q) ∧ ⊤ → (r ∨ r) ∧ (r ∨ p)
+⊥ → α ∧ (p ∨ q)
+(p ∧ q) ∨ (r ∧ p) ∨ (q ∧ p → q ∧ r)
+(p ∨ q) ∧ r ∧ p ∧ β
+(p ∧ p) ∨ (q ∧ q) → q ∧ q ∧ (p ∨ p)
+α ∨ (q ∧ p) ∨ (q → r) ∨ ⊤
+(r ∧ q ∧ (q ∨ r)) ∨ ⊤
+((q → p) → p → q) ∨ (⊤ → ⊤)
+(p → p) ∨ (q ∧ r) ∨ α
+⊤ ∨ (p ∧ p ∧ (p → p))
+(p ∧ r ∧ r ∧ r) ∨ (r ∧ p) ∨ (r ∧ r)
+(q ∨ q ∨ (q ∧ r)) ∧ (⊤ ∨ δ)
+(p ∨ q → p ∧ p) ∨ ((p → q) ∧ ⊥)
+((p → r) ∧ (p ∨ r)) ∨ ((q ∨ q) ∧ p ∧ q)
+p ∧ q ∧ (q ∨ q) → (q ∨ r) ∧ (q ∨ p)
+δ ∨ (q ∧ p) → β
+(r ∨ r → q ∨ p) ∧ (r ∧ p → p ∧ p)
+⊥ → (p ∧ q) ∨ (q ∧ p)
+(β ∧ δ) ∨ (⊥ ∧ (r ∨ r))
+(q ∨ p ∨ (q ∧ p)) ∧ q ∧ p ∧ r ∧ q
+(p → p) ∧ r ∧ r → (q → r) ∨ (p → r)
+γ → r ∧ q ∧ ⊥
+⊤ ∧ (⊥ ∨ (q ∧ p))
+(r ∧ q ∧ (q ∨ p)) ∨ q ∨ r ∨ ⊥
+(p ∧ r) ∨ (q → r) → p ∧ q ∧ p ∧ p
+(q ∧ r ∧ r ∧ r) ∨ ((p ∨ q) ∧ (q → p))
+(p ∨ p → p ∧ q) → (r → q) ∨ (r → q)
+(α → p ∨ r) → r ∧ q → p ∨ q
+(q ∨ p → β) → (r ∨ q) ∧ p ∧ r
+(q ∧ q ∧ (p → r)) ∨ α ∨ (r → r)
+β → (r → q) ∨ γ
+(p ∧ q → δ) ∨ ⊤
+(q ∨ q → q → r) ∨ (p → p) ∨ (p → r)
+((p → r) → r ∧ r) ∧ β ∧ γ
+β ∧ (q ∨ q) ∧ ⊤ ∧ (r ∨ r)
+((p → r) → ⊥) ∨ q ∨ p ∨ r ∨ q
+(q ∧ p → r → p) ∨ α
+⊥ ∨ (r ∧ q) → q ∧ r ∧ q ∧ p
+((p → p) → p ∨ p) ∨ (r ∧ q ∧ ⊤)
+⊥ ∨ (q ∨ q → p ∧ p)
+δ → (q ∧ p) ∨ β
+((p → q) ∧ ⊤) ∨ ⊥
+⊤ → q ∨ r → γ
+(r ∨ p) ∧ δ ∧ δ
+(p → r) ∨ (q → p) ∨ (β ∧ (r ∨ r))
+(p ∨ q) ∧ p ∧ q → ⊥ ∧ (p → r)
+r ∨ q ∨ r ∨ q ∨ (p → p) ∨ (p → p)
+(δ ∧ (p ∨ p)) ∨ (γ ∧ (p ∨ q))
+(p ∧ r → p → p) → r ∧ q ∧ (p ∨ q)
+(r ∧ q) ∨ (r ∧ q) → q ∧ r ∧ (p ∨ q)
+q ∧ q ∧ (p ∨ r) → (p → r) ∧ p ∧ p
+(p ∨ p) ∧ δ ∧ (r → q) ∧ (r ∨ q)
+α ∨ (r ∧ q) ∨ ⊥
+(r ∨ q ∨ α) ∧ ((q → q) ∨ p ∨ p)
+(q ∧ p) ∨ r ∨ r → α → q ∨ r
+(p → p) ∧ (p ∨ r) ∧ ((q ∧ r) ∨ (p → q))
+(γ ∧ (q ∨ r)) ∨ (δ → r ∧ r)
+r ∨ p ∨ (q → r) → ⊥
+(r → r) ∨ (q ∧ r) → p ∨ q → r ∧ q
+⊥ ∧ ((p → p) → p ∨ r)
+(p ∨ p) ∧ (q → p) → δ
+(r ∨ q → p ∧ q) ∨ p ∨ p ∨ (p ∧ r)
+(r ∨ p ∨ (p → r)) ∧ (q ∨ r → p ∨ p)
+(⊥ → r → p) → r ∨ r ∨ β
+(r ∧ p → γ) ∧ (p → r) ∧ (p ∨ r)
+δ ∨ ((r → r) ∧ (r ∨ r))
+(r ∧ q) ∨ q ∨ p ∨ δ
+(q ∨ p → β) → (q → r) ∨ δ
+α ∧ (p ∨ q ∨ (q ∧ r))
+((p ∨ p) ∧ (q → p)) ∨ ((r → r) ∧ (q → r))
+(α → ⊥) ∨ r ∨ q ∨ β
+γ ∧ (δ → q ∨ p)
+q ∨ p ∨ (q ∧ q) → (r → r) ∨ (p ∧ p)
+γ ∧ (q ∨ p) ∧ (q → q)
+(q → p) ∧ (p → p) ∧ (p ∨ r → r → q)
+((p → q) → ⊤) ∧ γ
+((r ∨ q) ∧ q ∧ p) ∨ ((r → q) → p ∧ q)
+(q ∨ r → r → r) ∧ q ∧ p ∧ p ∧ q
+(δ ∧ (q → q)) ∨ q ∨ p ∨ q ∨ p
+(q ∧ r ∧ q ∧ p) ∨ ((r → p) ∧ ⊤)
+(q ∨ q → q ∨ q) ∨ (δ → r → r)
+(α → ⊥) → (p ∧ r) ∨ (q ∧ q)
+(p ∨ r → q ∧ p) ∨ (p → p) ∨ r ∨ p
+⊥ ∨ (r ∨ r → r ∨ p)
+⊤ ∧ (q → r) → (p → p) ∨ (r → p)
+((q → q) → q ∨ p) → ⊤
+β → γ ∨ (q ∧ r)
+((p → p) → q → p) ∧ q ∧ p ∧ ⊤
+(β ∨ (p ∧ q)) ∧ ((r ∧ q) ∨ (q → q))
+(r ∧ p) ∨ (q ∧ p) ∨ ((q → r) → p ∨ p)
+(γ → ⊤) ∧ ((r → p) ∨ (q → q))
+(p ∧ q) ∨ (p ∧ q) → β
+((r → p) ∨ (r ∧ p)) ∧ ((p → q) → β)
+(δ ∧ (q → q)) ∨ (p → r) ∨ (p → p)
+(q ∨ p → r → p) ∨ δ
+(β → δ) ∧ (r ∨ p) ∧ (r → q)
+((p ∨ q) ∧ r ∧ p) ∨ q ∨ q ∨ β
+(p ∨ q ∨ δ) ∧ ((p → q) → q ∧ r)
+(r ∨ r → r → p) ∨ ⊥
+(p ∨ q) ∧ q ∧ r ∧ γ
+(r ∨ q → p → r) → (q → q) ∧ β
+((r ∨ q) ∧ (p ∨ q)) ∨ (p ∧ q) ∨ p ∨ q
+(α → q ∨ p) ∨ (α → q ∨ p)
+q ∧ q ∧ ⊤ ∧ ((r ∧ p) ∨ (r ∧ p))
+(q ∧ r) ∨ δ → (r → q) ∧ (r ∨ p)
+(r ∧ p) ∨ (p → q) → γ
+α → r ∧ p ∧ β
+(⊥ ∨ (p ∧ p)) ∧ γ ∧ ⊥
+((r → r) → r ∧ p) → (q → r) → q ∨ q
+γ → (q → r) ∧ (p ∨ r)
+(α → r → p) ∨ r ∨ p ∨ p ∨ q
+q ∨ q ∨ (p ∧ p) ∨ p ∨ r ∨ (p ∧ p)
+(δ → q ∧ p) ∨ ⊤ ∨ (p → r)
+(p ∨ q ∨ (r ∧ p)) ∧ (r → q) ∧ (p → r)
+(p ∧ q → q → q) ∨ (q ∧ p) ∨ (p ∧ r)
+r ∧ r ∧ (p → r) ∧ ((p ∧ r) ∨ (q → q))
+(r → p) ∨ (r → r) ∨ (r ∧ r) ∨ (q ∧ r)
+(r ∨ q → p → r) ∧ ((p → q) ∨ (r ∧ p))
+α ∧ r ∧ q → γ → p ∨ r
+(q → r) ∨ (q ∧ p) ∨ ((p → q) ∧ (p → p))
+(β ∧ (p → r)) ∨ γ
+(p ∨ r → r → p) → (q → p) → p ∧ q
+(p → r) ∨ (p ∧ q) ∨ ((q ∨ q) ∧ γ)
+((p ∨ q) ∧ (r → p)) ∨ (α ∧ (r ∨ p))
+(q → q) ∨ (q ∧ q) ∨ (q ∨ q → γ)
+(p → q) ∨ β ∨ (r ∧ p ∧ (p → p))
+p ∨ p ∨ (q ∧ p) ∨ (p ∨ p → γ)
+⊥ ∧ (p → p) → (p → r) ∨ (r → p)
+((r → q) ∨ (r ∧ q)) ∧ (q ∨ r) ∧ (p → p)
+(p ∨ p ∨ r ∨ r) ∧ q ∧ q ∧ (r ∨ p)
+(r → r) ∨ (r → q) ∨ γ
+(q → p) ∨ β → p ∨ r ∨ (p → p)
+(p → q) ∧ p ∧ p → p ∨ q → r ∧ p
+(γ → r ∧ q) → α
+r ∧ r ∧ α → (r → q) ∧ p ∧ q
+α ∧ p ∧ q ∧ ((p ∧ p) ∨ (q ∧ r))
+β ∨ ((r ∨ p) ∧ (r → r))
+(p ∨ p → q ∨ r) ∧ (⊥ ∨ (q ∧ r))
+(q ∧ r) ∨ (q ∧ r) ∨ β
+(q ∧ q → q ∧ r) → α ∨ q ∨ q
+((q → p) → δ) → r ∧ r ∧ (r → q)
+(p ∨ p ∨ q ∨ q) ∧ δ
+(r ∨ q ∨ (p → q)) ∧ ⊤ ∧ (r → p)
+p ∨ q ∨ r ∨ q → (r → r) ∨ q ∨ r
+p ∨ r ∨ γ ∨ ((r → p) → q → q)
+((p ∨ p) ∧ q ∧ p) ∨ ((p ∨ r) ∧ (p ∨ p))
+q ∧ r ∧ (r ∨ p) ∧ (q → r) ∧ (r ∨ p)
+p ∨ p ∨ β ∨ ((q → r) → δ)
+(r → r) ∨ (p → q) → ⊤ → ⊥
+(r ∨ q) ∧ ⊤ → (r → p) ∨ (q ∧ q)
+(p ∧ p → p ∧ q) ∨ (r → p) ∨ r ∨ p
+q ∧ p ∧ (p ∨ p) → ⊥
+(q → q) ∨ (p ∧ p) → ⊥
+⊤ ∧ (δ → p ∨ p)
+(α → γ) ∨ ⊥ ∨ (p → p)
+(r ∧ q → q → p) ∨ α
+q ∨ r ∨ (r ∧ q) → r ∨ r ∨ (q → q)
+r ∨ p ∨ (r → r) ∨ ⊤ ∨ (p ∧ q)
+(r ∨ p) ∧ q ∧ q → (r → q) → q ∧ p
+p ∨ p ∨ q ∨ p ∨ (β ∧ (r → q))
+((r ∨ p) ∧ (r ∨ r)) ∨ γ ∨ (p → q)
+δ ∧ (p ∨ q ∨ (p → p))
+(r ∨ q → ⊤) → (q → p) ∨ r ∨ r
+(r ∨ r) ∧ q ∧ r → r ∧ q → q ∨ q
+(q → r) ∨ q ∨ r → (r → p) ∨ ⊥
+(⊥ ∨ q ∨ r) ∧ (q ∨ p → r → p)
+γ ∨ ((q → p) → q ∧ r)
+δ → q ∧ r ∧ (r → p)
+((r → q) ∨ q ∨ q) ∧ ((r → r) ∨ p ∨ q)
+(p ∨ p → δ) ∧ q ∧ r ∧ α
+(r ∧ q) ∨ (p ∧ p) → (p → r) → p ∧ p
+(p ∧ p ∧ (r ∨ q)) ∨ p ∨ r ∨ (r ∧ q)
+(r ∧ q → r → q) ∧ γ ∧ δ
+((q → r) ∨ (q → q)) ∧ (p ∨ p) ∧ r ∧ q
+⊤ ∨ (q ∧ q) ∨ (r ∧ r → q ∨ q)
+(q ∨ q ∨ (q ∧ p)) ∧ ((q ∧ r) ∨ (r ∧ p))
+(r ∨ p → α) ∨ r ∨ p ∨ (q ∧ q)
+(r ∨ q) ∧ p ∧ q → (r → q) → r ∨ p
+(r ∧ r → q → p) → α
+r ∨ r ∨ q ∨ r ∨ (p ∧ q) ∨ q ∨ p
+q ∨ q ∨ (q → r) → α
+q ∨ p ∨ (p ∧ r) → q ∧ r → ⊤
+(δ → q → r) ∧ (q → r) ∧ (q ∨ p)
+γ ∨ (r ∧ r ∧ r ∧ r)
+(q → q) ∨ p ∨ r → (p ∧ q) ∨ (q → p)
+γ → δ ∨ (q ∧ q)
+((p ∧ q) ∨ (p → p)) ∧ r ∧ q ∧ β
+α ∧ p ∧ r → r ∨ r ∨ (q → q)
+(γ → p ∨ r) → β
+q ∨ q ∨ (q ∧ q) ∨ (q ∧ r → p ∨ r)
+((p → r) ∨ p ∨ r) ∧ ((p ∧ p) ∨ r ∨ r)
+(r ∧ r → p ∧ q) ∨ ((p ∨ p) ∧ α)
+γ → (q → q) ∧ (q → q)
+((q → r) → r ∧ r) → ⊥ → r ∨ p
+((p ∧ q) ∨ (p ∧ p)) ∧ ((q → p) → q ∧ p)
+(p ∧ p) ∨ (r → p) → (r → r) → δ
+(p ∨ q ∨ (r → q)) ∧ (α → q → q)
+((p ∨ r) ∧ q ∧ r) ∨ p ∨ q ∨ (p ∧ q)
+(r → p) ∨ r ∨ r ∨ (δ ∧ (r ∨ q))
+(p ∧ q ∧ (p → r)) ∨ ((q ∨ p) ∧ q ∧ q)
+(r → p) ∧ p ∧ r ∧ γ
+δ ∧ r ∧ q → q ∨ q ∨ (p ∧ r)
+p ∨ p ∨ (q → r) ∨ γ
+(r ∨ r → p ∧ p) ∨ ⊤
+q ∧ r ∧ (q → q) → p ∨ q → p ∨ p
+(r ∧ p) ∨ (p → q) → q ∨ r ∨ r ∨ p
+(p ∨ q → q → q) → ⊥ ∨ p ∨ r
+(r ∧ r → q ∧ q) → (p ∨ r) ∧ (r → q)
+(r ∨ r) ∧ ⊥ ∧ (q ∧ r → β)
+(⊥ → q → r) ∨ (p → p) ∨ (r ∧ p)
+(⊤ ∧ p ∧ q) ∨ (r ∧ r → r → q)
+(r ∧ r → r ∧ p) → α → ⊤
+(r → r) ∧ (q ∨ r) ∧ (r ∨ q → r ∨ r)
+((r → q) → p ∨ r) ∧ ((p ∧ r) ∨ (p → q))
+(p ∧ p → p ∧ q) ∨ (q ∨ r → p → q)
+(p ∧ r) ∨ (p → r) ∨ γ
+(q → p) ∧ (q ∨ p) ∧ (r ∨ r) ∧ (q → r)
+γ → (p ∨ r) ∧ p ∧ p
+(p → r) ∨ (p ∧ q) → (q ∨ q) ∧ (q → r)
+(q ∨ q) ∧ r ∧ q → (p → p) ∧ γ
+(γ ∨ (p ∧ q)) ∧ α
+α ∧ (p → q) ∧ γ
+(q ∨ q ∨ (p → q)) ∧ (p ∧ r → r ∧ r)
+β → (r ∧ q) ∨ p ∨ r
+(p ∨ q → p ∨ q) → ⊤
+(r → p) ∧ (r → r) → (r → q) ∨ (p → r)
+(p ∨ p) ∧ ⊥ ∧ (q ∨ p ∨ r ∨ p)
+(p ∨ q → q ∧ q) → q ∧ q ∧ (r → r)
+(q → q) ∨ p ∨ q ∨ (p → r) ∨ p ∨ q
+α ∨ ((q ∨ r) ∧ q ∧ p)
+⊥ ∧ (δ ∨ (p ∧ p))
+β ∧ ((q ∧ p) ∨ (q → r))
+(⊤ ∨ ⊥) ∧ (⊥ ∨ (r ∧ p))
+(r ∧ q → p → q) ∨ (p ∧ r → q ∧ q)
+(q ∨ p) ∧ (p → q) → p ∧ r ∧ (r → q)
+⊥ ∧ ((q → p) ∨ q ∨ r)
+α → (r → p) ∨ (r → p)
+((r → r) → p → p) ∧ (r ∨ r → p ∧ r)
+((r → p) ∨ α) ∧ r ∧ q ∧ α
+(r → p) ∨ γ ∨ r ∨ r ∨ (r → r)
+((p → r) ∧ (p ∨ r)) ∨ ((p → q) → p ∨ q)
+⊥ ∨ p ∨ q ∨ q ∨ r ∨ p ∨ r
+(q ∧ q → p ∧ p) ∨ q ∨ q ∨ (q ∧ q)
+(q ∨ p → q ∨ p) ∨ ((r → p) ∧ (r ∨ p))
+β ∨ (r → r) ∨ (γ → α)
+((q ∧ q) ∨ (q ∧ p)) ∧ (p ∧ r → p ∧ q)
+(q ∨ q ∨ (q ∧ r)) ∧ (q ∨ q → p → r)
+((r → q) ∨ p ∨ r) ∧ (p ∧ r → r ∨ p)
+(⊥ ∧ (r → p)) ∨ (r ∧ r → p → q)
+((q ∨ p) ∧ α) ∨ (p ∧ q → r ∨ r)
+(r → p) ∧ (p ∨ r) ∧ ⊤
+((q ∨ r) ∧ p ∧ q) ∨ (r ∨ p → q ∧ r)
+(⊥ ∧ (q → r)) ∨ ⊤
+(p ∨ r) ∧ r ∧ p → ⊤ ∨ (r → p)
+(r ∨ r) ∧ p ∧ r → (q ∧ q) ∨ r ∨ q
+(p ∨ q → β) ∧ (q ∨ r ∨ (p ∧ p))
+(r ∨ p) ∧ (p → r) ∧ ⊤
+((p → q) ∧ α) ∨ γ
+(p → r) ∧ (q ∨ p) → (r ∨ p) ∧ r ∧ p
+⊤ ∨ (p ∧ q ∧ ⊤)
+⊥ ∧ (p → q) → (r ∨ q) ∧ r ∧ p
+p ∧ p ∧ r ∧ p → r ∧ q ∧ q ∧ p
+((r → p) → r → p) ∨ (q ∧ q → q → q)
+(β → p → r) → q ∧ r ∧ (r → q)
+((r ∧ r) ∨ (r ∧ q)) ∧ (q ∨ p ∨ (p → q))
+(p ∧ r → β) → (r → p) ∧ r ∧ r
+((r → p) ∧ r ∧ p) ∨ ((q → p) → p → q)
+p ∨ q ∨ q ∨ q ∨ ⊤
+((p → p) → q ∧ r) ∨ (r ∧ r ∧ ⊥)
+(q ∧ r) ∨ (q → q) → q ∧ r ∧ γ
+⊥ ∨ γ ∨ (r ∧ q → r ∨ q)
+⊥ ∧ (p → p) ∧ p ∧ r ∧ (r ∨ r)
+(γ ∧ r ∧ r) ∨ ((p ∨ p) ∧ (q ∨ r))
+q ∨ r ∨ (q → p) → (p → p) ∧ (q → p)
+((r → p) → p ∨ q) ∨ ⊥ ∨ (p → p)
+(q ∧ q → p ∨ r) → (p → r) ∨ q ∨ q
+((p → q) → p ∧ q) → (q → p) ∨ p ∨ q
+γ → (p ∨ p) ∧ p ∧ r
+(p ∨ q → r → r) → (p ∧ q) ∨ (p ∧ q)
+(α ∨ ⊤) ∧ (r ∧ r → q → r)
+δ ∧ ((p ∧ q) ∨ (q ∧ p))
+(r ∧ p → γ) ∨ q ∨ q ∨ δ
+β ∨ (p ∧ q) ∨ (p → r)
+(β → q ∧ p) ∧ (r ∨ q → q → q)
+⊤ ∨ (q ∧ r) ∨ p ∨ p
+q ∨ p ∨ (p → p) ∨ ((q → r) ∧ p ∧ p)
+α ∨ (r ∧ q ∧ δ)
+((q → q) → r → q) ∨ (q → r) ∨ ⊤
+(r → r) ∧ r ∧ r → (r → r) ∨ δ
+((p → p) ∧ q ∧ r) ∨ ⊤ ∨ (q ∧ q)
+⊤ ∧ ((q → p) ∨ (r → p))
+(r ∨ q) ∧ (p → q) → p ∧ r → q ∧ q
+(p ∨ r ∨ (q ∧ r)) ∧ (r → r) ∧ γ
+(q → q) ∨ γ → p ∧ p → p → r
+((p → p) → p ∧ p) ∨ α
+((p → p) ∧ (r → q)) ∨ β ∨ (q → r)
+((r ∨ q) ∧ (r ∨ r)) ∨ (q ∧ p ∧ p ∧ p)
+(q → q) ∨ (p → r) → q ∧ q ∧ (p ∨ r)
+⊥ ∨ (p ∧ q ∧ (p ∨ p))
+(q → p) ∧ ⊤ ∧ ⊥
+p ∨ q ∨ ⊤ ∨ α
+(q ∨ r → r → r) → (q → r) ∧ (q → p)
+(p ∨ q → p ∧ q) ∧ (r ∨ q) ∧ (q ∨ q)
+(r ∧ p → ⊥) ∧ ((r ∧ q) ∨ (p ∧ r))
+(p → q) ∧ (p ∨ q) ∧ p ∧ q ∧ (q ∨ p)
+((p → p) → q ∨ r) ∧ q ∧ q ∧ r ∧ q
+(q ∧ p) ∨ (p ∧ q) ∨ ⊥
+(q ∨ q) ∧ β ∧ ((r ∧ q) ∨ (p ∧ r))
+(r ∨ r) ∧ (q ∨ r) ∧ ⊤ ∧ q ∧ q
+((p ∧ r) ∨ (q → p)) ∧ (r ∧ p → r ∨ p)
+r ∧ p ∧ p ∧ p → (r → p) ∨ β
+(q ∧ r → p → q) ∧ ((r → p) → q → q)
+((q ∨ p) ∧ (p → r)) ∨ ((p → q) → r → p)
+((p ∨ q) ∧ r ∧ p) ∨ (p ∨ r → r ∧ r)
+((q → r) → p ∧ r) ∧ ((q → r) ∨ r ∨ q)
+((p → r) ∨ (p → p)) ∧ (r ∨ q ∨ (q ∧ r))
+((p ∧ p) ∨ q ∨ q) ∧ (r ∨ p ∨ (r ∧ p))
+r ∨ r ∨ r ∨ r → p ∨ r → r ∧ p
+δ ∧ γ ∧ q ∧ q
+(q ∧ p ∧ r ∧ r) ∨ (q ∨ p → r ∧ q)
+((r → r) → p → r) → q ∧ p ∧ q ∧ r
+(q ∧ q → r ∧ r) ∧ (r ∨ p ∨ p ∨ q)
+((p ∨ r) ∧ (r ∨ q)) ∨ ((p → r) ∧ (p → r))
+γ ∨ (q ∨ p → r ∨ r)
+⊥ ∧ ⊤ ∧ (r → q)
+(δ → r ∨ r) ∨ ⊤
+(q ∧ r → r → q) ∨ (r ∨ p → r ∨ r)
+((q ∧ r) ∨ (p ∧ p)) ∧ β
+(p ∨ p) ∧ γ ∧ ((r → q) → ⊥)
+γ ∨ (p ∧ r) → α
+β ∨ (q ∧ r) → (p → r) → γ
+(r ∨ p → r ∧ r) ∨ (q ∧ q → q ∧ r)
+β ∧ (p ∨ p) ∧ (q ∨ p)
+r ∧ p ∧ δ → γ
+(q ∨ q) ∧ q ∧ p → (r ∨ p) ∧ (q → q)
+⊥ ∨ β ∨ (p → p) ∨ (r → q)
+(p ∨ q ∨ (p → r)) ∧ ⊤
+(p ∨ p ∨ (q → r)) ∧ β
+(q ∨ r) ∧ (r ∨ q) → α → p → p
+r ∨ p ∨ (q → p) ∨ (β → q ∨ p)
+(β → q → r) ∧ δ
+(q ∨ r → α) → p ∨ p ∨ α
+q ∨ p ∨ (p ∧ q) ∨ δ
+(r ∧ r ∧ (q ∨ p)) ∨ β ∨ β
+(q ∨ p → r → q) ∨ (p ∧ q) ∨ q ∨ p
+(q ∨ p → ⊤) ∨ α
+(r → p) ∨ (r ∧ p) ∨ (r → r) ∨ (r → q)
+((q ∨ r) ∧ p ∧ r) ∨ (q ∨ r → p → p)
+p ∨ r ∨ (q ∧ q) ∨ (⊥ → q ∧ p)
+(r ∧ q → p ∨ r) ∨ p ∨ p ∨ (r ∧ q)
+((p → p) ∧ (r → q)) ∨ α
+(p ∧ q) ∨ β ∨ p ∨ r ∨ β
+((q → q) ∨ r ∨ q) ∧ ((r → p) ∨ (p → q))
+q ∨ p ∨ (q → r) ∨ α
+((r → p) ∨ (r ∧ q)) ∧ β ∧ β
+(p ∨ p) ∧ (q → q) ∧ p ∧ p ∧ (p ∨ q)
+q ∨ q ∨ β → (r ∧ q) ∨ r ∨ r
+(q ∧ p → p ∧ q) ∨ (q ∧ q ∧ β)
+(p ∧ r → p ∨ r) ∨ r ∨ p ∨ ⊤
+δ ∧ r ∧ q → (p → r) ∧ (r → q)
+((p → p) → p → q) → (r → r) ∧ α
+(r → p) ∨ (p ∧ p) → (q ∨ p) ∧ γ
+(r ∨ p) ∧ (p ∨ p) → γ
+(p ∧ p) ∨ p ∨ p ∨ α ∨ r ∨ r
+(p ∨ q → ⊥) → (r ∨ r) ∧ (q → q)
+⊥ ∧ (q ∨ r) ∧ (r → q)
+(q ∧ r ∧ q ∧ q) ∨ (r ∧ p) ∨ (q ∧ p)
+r ∧ q ∧ (p → q) ∧ γ
+γ ∧ (q ∨ q) → p ∧ q → r ∨ r
+(p ∨ q → r → r) ∨ ((r ∨ q) ∧ (q ∨ p))
+δ → (q ∧ q) ∨ q ∨ r
+((p ∧ p) ∨ (q → q)) ∧ (δ ∨ (q ∧ p))
+(p → r) ∧ r ∧ r → (p ∧ q) ∨ (r → q)
+(p ∨ p → p → q) ∧ (q ∧ r → q → r)
+(r ∨ p) ∧ r ∧ q → δ
+(p → q) ∨ (q → r) ∨ ((q → r) → r → r)
+(r → p) ∧ (r → p) → (q → p) → q ∧ r
+γ ∨ (r → p) ∨ (q ∧ q ∧ (r ∨ p))
+(q ∧ p → r ∧ q) ∨ (p ∧ p → r → q)
+(q ∨ q → p → q) ∨ (β → p ∨ q)
+(q ∧ r) ∨ p ∨ q → α
+(r → r) ∧ α → q ∧ q ∧ (p ∨ r)
+γ ∨ ((r → p) ∧ (p ∨ p))
+(q ∧ p) ∨ γ → (r → q) ∨ (q ∧ r)
+(p ∧ q) ∨ α ∨ (p ∧ p → r → q)
+p ∧ r ∧ r ∧ q ∧ p ∧ r ∧ ⊥
+((p ∨ p) ∧ (r → p)) ∨ ((r ∨ q) ∧ (q ∨ q))
+(q ∧ q) ∨ (q ∧ q) → δ ∧ (p ∨ q)
+(β → q → q) ∨ (p ∧ q) ∨ p ∨ r
+δ ∨ r ∨ p → r ∨ q → p → p
+γ → p ∧ p → q → p
+(r ∨ p) ∧ ⊥ ∧ (p ∨ p → r ∧ r)
+(q ∧ p) ∨ (p ∧ r) ∨ δ
+(γ → q ∧ p) ∧ ⊤ ∧ β
+(β → p → r) ∨ (r → p) ∨ p ∨ q
+((r → r) ∨ q ∨ q) ∧ ((p ∧ q) ∨ r ∨ q)
+(q ∨ p) ∧ p ∧ p → p ∧ q → q → r
+((p ∧ r) ∨ (q → r)) ∧ α
+((q ∧ r) ∨ α) ∧ (r ∨ q → q ∧ q)
+(q ∨ r) ∧ p ∧ p → r ∧ r → p → r
+(p ∧ q) ∨ (r → p) → r ∨ q → r → r
+(q → q) ∧ r ∧ r → (q → q) → p → q
+((p ∨ q) ∧ r ∧ q) ∨ (p ∨ r → p ∨ q)
+((p → q) ∨ (q ∧ r)) ∧ (p ∧ r → q ∧ p)
+(⊥ → q ∨ r) ∧ (γ → p ∧ q)
+(p ∧ r → q ∨ p) ∧ (r → r) ∧ (p → p)
+(q ∧ p → β) ∧ (p ∨ q ∨ p ∨ p)
+(δ ∧ γ) ∨ (q → q) ∨ p ∨ p
+⊥ → (p ∧ q) ∨ q ∨ p
+(r ∧ q → q ∧ r) ∧ (q → q) ∧ ⊥
+(r ∨ p) ∧ β ∧ (q ∨ p ∨ p ∨ r)
+(p ∧ r ∧ p ∧ q) ∨ p ∨ r ∨ β
+(p ∨ r → p → q) ∧ ((p ∧ p) ∨ (r ∧ q))
+(⊥ → q → q) → (r ∧ r) ∨ p ∨ q
+⊤ ∧ (q ∨ r) ∧ (p → q) ∧ q ∧ r
+(p ∧ q) ∨ (p ∧ p) → ⊥
+β ∨ r ∨ p ∨ (r ∧ p)
+⊥ ∧ (r → p) ∧ (r → q) ∧ (p ∨ r)
+⊤ ∨ ((p ∨ q) ∧ (q ∨ r))
+((q → r) → δ) ∨ (q ∧ p) ∨ ⊤
+(p → p) ∨ (r → r) ∨ β
+((r → p) → r → q) ∨ (δ → p ∧ p)
+(β ∧ q ∧ q) ∨ (γ → r ∨ p)
+(p → p) ∨ ⊥ ∨ (r ∧ r ∧ δ)
+⊤ ∨ (p ∧ p) ∨ (q ∧ p)
+(q → p) ∧ r ∧ q → (r ∧ p) ∨ p ∨ r
+(q ∨ p ∨ (q ∧ q)) ∧ β ∧ p ∧ r
+(p → p) ∨ γ ∨ ((q → r) → p ∧ q)
+⊤ ∧ γ ∧ (r ∨ r → δ)
+r ∨ q ∨ (p → p) → (p ∨ q) ∧ δ
+(q ∨ r) ∧ q ∧ q → (r → p) ∨ (q ∧ p)
+r ∨ r ∨ (q ∧ p) → q ∨ p ∨ r ∨ q
+((p ∨ p) ∧ p ∧ q) ∨ δ
+δ ∨ (δ ∧ (p → p))
+⊤ ∧ (r → r) ∧ (δ ∨ (q → p))
+γ ∨ ((q ∨ p) ∧ (r → r))
+(r ∨ q → p ∨ r) ∨ ((r → r) → q ∧ p)
+β → δ → p ∨ p
+(p → q) ∧ (q → q) ∧ (α ∨ (p → r))
+r ∨ p ∨ (q → p) → (p ∧ p) ∨ q ∨ r
+δ ∨ (q → p) ∨ (r ∧ p) ∨ (r → r)
+(r ∨ p → r → r) ∧ (r ∨ r) ∧ ⊤
+(q ∨ r ∨ (p → q)) ∧ γ
+((r → r) ∨ (p → p)) ∧ ((q → r) ∨ (r ∧ q))
+α → (r ∧ q) ∨ p ∨ q
+(r ∧ q → q ∧ r) ∧ α ∧ (q → p)
+(q ∨ p) ∧ ⊥ → r ∧ q → α
+((r → r) ∧ (q → p)) ∨ (γ → q ∨ q)
+(r ∧ q ∧ β) ∨ r ∨ p ∨ α
+(r ∨ p → α) → p ∨ r → q ∨ q
+⊤ ∨ (p ∨ r → q → r)
+(q → r) ∨ (q ∧ q) ∨ (r ∧ p) ∨ r ∨ p
+(q ∨ p) ∧ (p → r) ∧ (p ∨ r) ∧ r ∧ q
+γ ∧ (r ∨ r ∨ q ∨ q)
+((p → q) ∧ δ) ∨ γ
+(r → q) ∨ q ∨ r → q ∧ q → p ∨ r
+(r → q) ∧ (q → p) → (r → r) ∧ (q ∨ p)
+δ ∧ p ∧ q ∧ (p ∨ r)
+(p ∨ r → p → r) ∨ ((r → p) ∧ (q → r))
+((r → r) → r → q) ∧ (r ∧ p → r ∨ p)
+(p → p) ∧ β ∧ (p ∨ q ∨ (r → p))
+(⊥ → q ∧ q) ∧ (⊤ ∨ (p → r))
+⊤ ∨ q ∨ p → q ∧ r → p ∨ q
+q ∧ r ∧ (q → p) → p ∧ q → p ∧ q
+q ∨ r ∨ (q ∧ p) ∨ γ ∨ r ∨ r
+(q ∧ q → p → r) ∧ ((r ∧ p) ∨ (q ∧ p))
+γ ∨ ((r ∨ p) ∧ (q ∨ p))
+(p ∨ r → q ∨ q) ∨ (β → r ∧ p)
+(q ∧ p ∧ ⊥) ∨ ⊤
+(q ∨ q → p → r) → δ
+((p → r) → q ∨ p) → (q ∨ p) ∧ (p ∨ q)
+((q → q) → p ∨ r) → (r → r) ∨ p ∨ r
+((p → q) → q ∨ q) ∧ (p ∨ q → p → p)
+(p ∨ p → p ∧ p) → (q → q) ∨ r ∨ p
+(r ∨ r) ∧ (q → q) → r ∨ r → q → r
+(γ → r → r) ∧ (r ∧ q → p → r)
+(α ∧ (q ∨ q)) ∨ δ ∨ (r ∧ p)
+(α → q → p) ∨ (q ∧ p) ∨ (r ∧ r)
+(γ ∨ (q → r)) ∧ p ∧ r ∧ α
+(p ∨ q ∨ (q ∧ q)) ∧ q ∧ r ∧ r ∧ q
+((r ∧ r) ∨ (q → r)) ∧ ((r → p) → q ∧ q)
+⊤ ∧ ((r ∧ q) ∨ (q ∧ p))
+((q → r) ∨ (p → p)) ∧ r ∧ q ∧ (q → r)
+δ ∧ (q ∨ p → p → q)
+((q → q) ∧ (q → p)) ∨ (β → q ∧ q)
+⊤ → p ∧ q → q → p
+β ∧ (p ∨ r → r ∧ q)
+(r ∨ q → p ∨ q) ∧ (r → p) ∧ (q ∨ p)
+(q ∨ r → δ) ∨ (p → p) ∨ γ
+(r ∧ p → r ∧ r) → (r ∧ p) ∨ p ∨ p
+(p → p) ∨ ⊥ ∨ (q → p) ∨ δ
+⊤ → q ∧ q → r ∨ r
+(p ∧ q) ∨ r ∨ r → (r → r) ∨ (p ∧ r)
+(r → r) ∨ r ∨ p ∨ (r ∧ p ∧ (p ∨ p))
+(⊤ → q ∧ q) → (p ∨ q) ∧ (p ∨ r)
+(p ∧ p → p → q) ∧ β
+(r ∨ r → q → p) ∨ ((p → q) ∧ q ∧ p)
+((p ∧ q) ∨ (r ∧ p)) ∧ ((r → r) ∨ (q ∧ r))
+p ∧ r ∧ (r → p) → q ∧ p → r → q
+r ∧ r ∧ p ∧ p ∧ (β → r ∨ r)
+((q ∧ p) ∨ p ∨ p) ∧ r ∧ r ∧ (p ∨ q)
+((p → p) → q → r) → (q → r) ∨ (p ∧ r)
+((p → p) ∨ r ∨ p) ∧ ((q → q) → r → p)
+(r → r) ∧ p ∧ q → γ ∧ (r ∨ r)
+(q → r) ∨ ⊥ → (q ∧ p) ∨ (p → p)
+(p ∨ p → r ∨ p) → q ∧ q ∧ β
+(⊥ → r → p) ∨ ⊥
+(p ∨ r ∨ (p → r)) ∧ γ
+⊤ ∧ (r → p) → q ∧ q ∧ p ∧ p
+(q ∧ r ∧ ⊤) ∨ ((q → r) ∧ p ∧ p)
+⊥ → r ∧ p → r → r
+r ∨ r ∨ p ∨ r ∨ (γ → p → q)
+(β → q ∧ q) ∧ (q ∨ p) ∧ (q → r)
+⊥ ∨ ((r → r) ∧ (r → r))
+(p → p) ∨ ⊤ ∨ ((r ∨ r) ∧ r ∧ q)
+(r ∧ q → β) → (q ∧ r) ∨ r ∨ r
+((r ∨ q) ∧ q ∧ p) ∨ α ∨ (r → p)
+((r → p) → r ∨ r) ∧ ((q ∧ r) ∨ (p → p))
+(α ∧ (r ∨ q)) ∨ ((q → q) → r ∧ r)
+((r ∧ p) ∨ r ∨ q) ∧ (r ∨ r ∨ (r ∧ p))
+(q ∧ q → r → r) ∨ γ
+α ∨ (r ∧ p) ∨ ((r → q) → δ)
+γ ∨ (q → r) ∨ ⊥ ∨ (r ∧ q)
+(q ∨ p → q ∨ p) ∨ (p ∨ p → r ∨ p)
+(q ∧ p → p ∧ p) → α ∨ (q → p)
+r ∨ p ∨ γ ∨ (p ∨ p → q ∧ q)
+(p → p) ∨ (q → q) → ⊤
+(q → p) ∨ p ∨ q → q ∧ r ∧ ⊤
+((q → p) → p ∧ q) → γ
+γ ∧ ((r ∧ q) ∨ γ)
+β ∨ δ ∨ (q → p)
+(p ∧ r → r ∨ p) ∧ ((p → p) → q → p)
+(r ∨ p → q ∧ q) ∧ (r ∨ r ∨ γ)
+(r → r) ∧ (q → p) → (r → p) ∨ (p ∧ p)
+⊤ ∨ α → (q → p) ∨ β
+(p ∨ r) ∧ (p → r) ∧ (⊥ ∨ r ∨ r)
+r ∧ q ∧ (q → r) ∧ (β ∨ q ∨ r)
+((q → r) → p ∧ p) ∧ (q ∨ r) ∧ (q ∨ p)
+(p ∧ q → p → p) → (p → p) ∧ q ∧ r
+(⊤ → r → r) ∨ ((q → p) ∧ (r → p))
+(r → p) ∨ (p ∧ r) → (p → p) → p → q
+q ∨ q ∨ (r → r) → p ∧ p ∧ (r ∨ r)
+(p ∨ r) ∧ ⊤ → (q ∧ p) ∨ r ∨ q
+α ∧ p ∧ p → r ∧ q → p ∧ q
+(q → r) ∨ (r ∧ p) → (q ∧ r) ∨ p ∨ q
+(q → q) ∨ (q ∧ p) → γ
+((r ∨ r) ∧ (r → p)) ∨ ((r → r) → ⊥)
+(r → q) ∨ β ∨ (q ∧ r ∧ δ)
+(γ → q → p) ∧ γ
+(q ∨ q) ∧ (p → r) → r ∨ q ∨ (p → r)
+p ∧ q ∧ δ → (q → q) → r ∧ r
+(p ∨ p) ∧ (p ∨ p) ∧ r ∧ r ∧ p ∧ q
+⊥ ∨ (δ → p → q)
+((q → p) → r → q) → r ∧ q ∧ β
+(p → p) ∨ (q ∧ p) → δ ∧ δ
+(q ∧ q → q ∨ r) ∧ (r ∧ r → r ∨ p)
+(r ∧ r) ∨ (p → r) ∨ δ
+(p ∧ r) ∨ r ∨ p ∨ (r ∧ r → r ∧ q)
+(p ∧ q → p → q) ∧ ((q ∧ q) ∨ (q ∧ p))
+q ∧ r ∧ (r ∨ p) ∧ p ∧ r ∧ (p → r)
+((p → r) ∨ q ∨ q) ∧ (q → r) ∧ q ∧ r
+δ → (q → r) → q ∨ p
+((p → r) → r ∨ r) ∧ ((q ∧ p) ∨ (q → r))
+⊥ ∨ (r ∧ r) → α ∧ (q ∨ r)
+(q ∧ p → β) → p ∧ q → p → q
+(⊤ ∧ p ∧ q) ∨ (p → q) ∨ α
+((q → p) ∧ (r ∨ r)) ∨ (p → q) ∨ (q → q)
+(p ∧ q → q → q) → (p ∨ r) ∧ r ∧ r
+((p ∨ p) ∧ p ∧ q) ∨ (q ∧ r ∧ p ∧ p)
+((q → p) ∧ p ∧ p) ∨ ((r ∨ p) ∧ (r → r))
+(r → r) ∨ (p ∧ q) → ⊥ ∨ ⊤
+r ∨ q ∨ (q → r) ∨ δ ∨ (p → q)
+α ∨ ((r → r) → β)
+((q ∨ p) ∧ (q → r)) ∨ (r ∨ q → q ∧ q)
+((q → q) ∧ (p ∨ q)) ∨ (r ∧ q → q → p)
+(r → p) ∧ (r → q) → β
+((r ∧ r) ∨ (q → q)) ∧ (r ∧ r → δ)
+r ∧ r ∧ (q → r) ∧ ((q → q) ∨ (r → p))
+(q ∨ q ∨ p ∨ q) ∧ γ
+⊤ → (q → q) → q ∧ q
+(p ∧ p ∧ (p ∨ q)) ∨ (r → r) ∨ ⊤
+(r → r) ∨ q ∨ r ∨ ⊤
+((q → p) ∧ δ) ∨ β
+(q → p) ∨ (q → r) → (p ∧ r) ∨ p ∨ q
+((r ∨ r) ∧ (p → r)) ∨ ⊤ ∨ (q → q)
+q ∧ r ∧ δ → (q → p) ∧ p ∧ p
+(r ∧ p) ∨ (q → r) ∨ (r ∨ q → r ∧ r)
+(r ∧ p → q ∧ q) ∨ (δ ∧ (q → r))
+(p ∨ q → p ∨ p) ∧ ((p → q) ∨ p ∨ q)
+(⊥ → q → q) → (r → r) ∧ (p → p)
+((q ∨ r) ∧ (r → p)) ∨ (p ∧ p) ∨ (r → p)
+((q → q) → q ∨ q) ∨ (α ∧ r ∧ q)
+p ∨ p ∨ q ∨ q → β
+⊤ → q ∨ p → q → p
+(r ∧ q → q ∧ p) ∧ α
+(q ∧ p) ∨ (r → p) → β ∨ (q → r)
+r ∨ q ∨ α → ⊥ ∨ (q ∧ q)
+((r ∨ r) ∧ (r ∨ p)) ∨ ((q → p) → r ∧ p)
+(p → p) ∨ (r → r) ∨ q ∨ p ∨ r ∨ r
+(q ∨ p → p → q) ∧ ⊤
+(q → r) ∨ r ∨ p → (q ∨ q) ∧ (r → q)
+(β ∨ (q ∧ r)) ∧ ((q ∧ q) ∨ γ)
+(q ∨ q → q → q) → r ∨ r → γ
+((r → p) → p → r) ∧ (r ∨ r) ∧ (p → r)
+(r ∨ p → q → r) → (p ∨ q) ∧ (r → q)
+γ ∧ ⊤ ∧ β ∧ (r → r)
+δ ∨ (p → p) ∨ α
+((p → q) ∨ β) ∧ ((q → r) → p ∧ p)
+⊤ ∨ (q → r) ∨ (β → q → q)
+(q ∧ q → p ∨ p) ∨ (r ∧ p) ∨ (r ∧ p)
+(γ ∨ p ∨ p) ∧ (q ∨ r) ∧ r ∧ p
+(q → p) ∨ p ∨ p ∨ (δ → β)
+((r → p) → q ∧ q) ∧ β
+q ∧ r ∧ (p ∨ q) ∧ (⊥ → p ∨ p)
+⊤ ∧ (r → q) ∧ (r ∨ p)
+((p → r) → p ∨ q) → ⊥
+(p ∧ p) ∨ r ∨ p ∨ (q → p) ∨ r ∨ p
+α ∧ ((q → p) → q ∧ q)
+((r ∨ q) ∧ (r → p)) ∨ (r → r) ∨ (p → r)
+(q → r) ∨ (q → r) ∨ ((p ∨ q) ∧ (p → q))
+γ ∧ ((q → p) ∨ (r ∧ p))
+(q → r) ∧ (q → r) → α ∨ (p → r)
+((q → r) ∧ (r ∨ r)) ∨ q ∨ p ∨ δ
+(δ → p ∨ p) ∨ δ ∨ (q ∧ r)
+(q ∧ q → p ∨ q) → γ
+(q ∨ p → r ∧ p) → (q → p) → r ∧ r
+⊤ ∨ (r → r) ∨ α
+q ∧ r ∧ β ∧ ((q → p) ∨ β)
+α ∨ (q ∧ r) ∨ (q ∧ p) ∨ β
+(r ∧ p) ∨ ⊥ → (q → q) → p → r
+α → (p → p) ∧ (p ∨ r)
+p ∧ r ∧ (q → q) ∧ γ
+((p ∧ q) ∨ (r → q)) ∧ ⊥ ∧ (q ∨ r)
+(p → p) ∨ p ∨ q → (r → r) ∧ (r → r)
+⊤ ∨ ((q → q) ∧ γ)
+γ ∨ ((p → q) → r → p)
+β → ⊤ ∨ (q → r)
+(q ∨ q) ∧ (r ∨ r) ∧ γ ∧ ⊥
+p ∨ p ∨ (r ∧ r) ∨ (q ∧ r ∧ (r ∨ q))
+((q → p) → q → r) ∧ q ∧ p ∧ (r → q)
+((r → p) → q → r) → (r → r) ∧ (q → p)
+⊥ → δ → q → r
+q ∨ r ∨ (p → p) ∨ p ∨ p ∨ (r ∧ p)
+⊤ ∨ (q → p) → p ∨ p ∨ (r → q)
+((q ∧ r) ∨ (q ∧ q)) ∧ ((r → p) → q → r)
+((r ∨ p) ∧ p ∧ q) ∨ ⊥
+(q ∧ q ∧ q ∧ r) ∨ (β → α)
+(q ∧ q → p ∧ r) ∨ γ ∨ (q ∧ q)
+((p → q) ∨ β) ∧ (r ∨ p → β)
+(r → p) ∧ δ → p ∨ r ∨ (r → p)
+(p ∨ r → p → q) ∨ ((q → p) ∧ (q → p))
+(p ∧ r ∧ p ∧ q) ∨ δ
+β ∨ (p ∨ p → p ∨ q)
+γ ∧ (p → q) ∧ ((p → r) → α)
+((p → q) → r ∨ r) ∨ γ ∨ q ∨ q
+r ∨ r ∨ (r ∧ q) → (r → p) ∧ (q ∨ r)
+((p → q) → r ∧ r) ∨ ((r → p) → p ∧ p)
+(p ∧ p → q ∧ p) → γ
+⊥ ∨ p ∨ r ∨ ((r → q) ∧ α)
+(γ → β) ∨ (α → r ∨ r)
+(r ∨ q ∨ (p → r)) ∧ (q ∨ r) ∧ q ∧ p
+(r ∧ r ∧ (r → q)) ∨ (r ∨ p → p ∧ r)
+((q → p) ∨ (r → q)) ∧ β ∧ (r ∨ q)
+(p ∧ p → q ∧ p) ∨ ⊥
+((r → q) → p ∨ p) → (p → q) ∧ (p → r)
+r ∧ q ∧ p ∧ q ∧ q ∧ q ∧ q ∧ r
+(r ∨ q → ⊤) ∧ ((r ∧ p) ∨ q ∨ p)
+((p → r) ∧ ⊤) ∨ (⊤ ∧ (r ∨ p))
+(p → p) ∨ (q → r) → γ → p ∧ r
+((q → q) ∧ (p ∨ q)) ∨ (⊥ → q ∧ q)
+((q ∨ p) ∧ p ∧ r) ∨ β
+(p ∧ r → r ∧ r) ∧ ((r → q) ∨ ⊥)
+α ∧ α ∧ (r ∨ p)
+⊥ → p ∧ p → r ∧ q
+(q ∧ q → p → q) ∧ ((p → r) → q ∧ p)
+β ∧ (q → r) ∧ (q → q)
+α ∧ (q → q) → (q → q) ∧ (p ∨ r)
+(β → q ∨ r) → α ∨ (p ∧ p)
+(q → q) ∨ (q ∧ r) ∨ α
+(q ∧ r → p ∧ p) → (q ∧ r) ∨ (r → r)
+((q ∨ q) ∧ r ∧ q) ∨ ((r ∨ q) ∧ q ∧ q)
+⊤ ∧ (q ∨ p → r ∨ p)
+(q ∧ q → r ∧ p) ∨ (r ∧ r → q → p)
+((r → p) ∨ γ) ∧ γ
+(q → r) ∨ p ∨ r ∨ β
+δ ∧ (p ∨ q) ∧ r ∧ r
+(p → q) ∨ (q ∧ p) → (p → r) ∧ (p ∨ q)
+β ∨ (r → q) ∨ ((p ∨ r) ∧ (p ∨ p))
+((q → p) → p ∧ r) → (p ∧ p) ∨ ⊥
+δ → δ → r ∧ q
+(p ∨ q ∨ (p → p)) ∧ ((r ∧ p) ∨ α)
+((q ∧ p) ∨ (r → r)) ∧ α
+(p ∨ p) ∧ β ∧ (p ∨ q ∨ r ∨ q)
+r ∧ q ∧ (p ∨ p) → β → q ∧ p
+q ∧ q ∧ (r → r) ∧ (r → p) ∧ (q → r)
+(r ∧ p ∧ γ) ∨ α
+((r ∨ p) ∧ (p → p)) ∨ (q ∧ q) ∨ (q → q)
+r ∨ p ∨ (r ∧ r) ∨ (q ∨ r → q ∨ r)
+(β → r → q) ∧ (r → p) ∧ (r → r)
+γ → (p ∨ p) ∧ (p ∨ q)
+(r → p) ∨ ⊥ ∨ (γ ∧ β)
+p ∨ r ∨ α → β ∧ (q → q)
+((p ∨ p) ∧ (r → r)) ∨ (r ∨ p → r ∧ r)
+δ → r ∧ r ∧ (p ∨ q)
+(r ∧ r) ∨ δ ∨ (α ∧ (q → p))
+q ∧ p ∧ (r ∨ q) ∧ ((q ∧ q) ∨ q ∨ r)
+⊤ → δ ∨ q ∨ r
+((r → q) ∨ p ∨ r) ∧ ((p → q) ∨ (q ∧ q))
+⊤ ∧ r ∧ q ∧ (q ∨ p)
+⊤ ∨ (r → p) ∨ (β ∧ r ∧ p)
+((q → r) → p ∨ p) ∨ ((q ∨ q) ∧ (p → r))
+β ∨ (r ∧ q) → q ∨ r ∨ p ∨ q
+⊤ ∨ (p → r) ∨ (q ∨ r → r → p)
+(r → p) ∨ (q ∧ p) → β
+(r ∧ p) ∨ (q ∧ q) → (q → r) → q ∨ q
+((q ∨ q) ∧ (r → q)) ∨ ((q → p) ∧ (q → r))
+((q → r) → p → p) ∧ γ ∧ (p → q)
+β ∨ (p ∨ r → q ∨ q)
+(q ∧ r) ∨ (r ∧ r) → (r → p) ∧ (q → r)
+⊤ ∨ (r ∧ q ∧ (p → p))
+(q ∨ r → q ∧ r) ∧ (p ∨ q ∨ (p ∧ q))
+(q ∨ q) ∧ (p → q) ∧ (p ∨ q ∨ q ∨ r)
+⊥ ∧ (r ∨ p → p → p)
+q ∧ r ∧ (r ∨ q) ∧ (q → q) ∧ ⊥
+γ ∧ (r ∨ p) ∧ (r → r)
+q ∧ p ∧ (p ∨ p) → r ∧ r → p ∨ p
+((q → p) → q → r) ∧ ((r → r) → δ)
+p ∧ p ∧ (r ∨ p) ∧ (p ∧ p → p → p)
+(q ∨ r → r ∨ r) → r ∨ q → p ∧ q
+(r ∧ q → q ∨ r) ∧ ((q → r) → ⊥)
+(p ∧ r ∧ q ∧ r) ∨ (r → r) ∨ β
+(q ∧ p → p ∨ q) → p ∨ r → q ∧ q
+δ → (p → p) → q → r
+(α → r ∧ r) ∨ (⊥ → p ∧ q)
+(p ∧ q → q → r) ∨ β
+(q → q) ∨ (q → r) ∨ p ∨ p ∨ p ∨ p
+(p ∨ p ∨ ⊥) ∧ (p → q) ∧ α
+⊥ ∨ p ∨ p → α
+(δ → p ∨ r) → (q → p) ∨ (q ∧ p)
+((p → q) → r ∨ p) ∨ (q → p) ∨ r ∨ p
+⊤ → β ∨ q ∨ r
+(⊤ ∨ (q → p)) ∧ q ∧ q ∧ (r ∨ q)
+(q → q) ∨ q ∨ p ∨ γ
+δ ∧ (r → r) ∧ (p ∨ r)
+p ∧ r ∧ (r ∨ p) → q ∧ r → q ∨ r
+(q ∧ r → q ∧ p) → p ∧ q → r ∧ q
+(p ∧ p) ∨ ⊤ ∨ ((q → r) ∧ (p ∨ p))
+q ∨ r ∨ (p ∧ q) ∨ (p → r) ∨ r ∨ r
+((q → r) → p ∨ r) ∧ δ
+(q → r) ∧ α ∧ (q ∨ r ∨ (q ∧ q))
+((p ∧ r) ∨ p ∨ q) ∧ (α → q ∧ q)
+δ ∧ (r ∧ r → q ∧ p)
+(q ∧ q → p ∧ p) → (p ∧ q) ∨ β
+⊤ ∧ (r ∨ p) → q ∧ q → q ∧ q
+(r ∧ r → r → p) → δ ∨ δ
+((p → q) → p ∨ q) ∧ ((r → p) → q ∧ r)
+(r ∧ r → ⊤) ∧ ((r ∧ r) ∨ (r ∧ p))
+(q ∧ p ∧ (q ∨ q)) ∨ β
+δ ∧ ((r → r) → β)
+(p → p) ∨ r ∨ q ∨ (p ∧ p) ∨ (r ∧ p)
+r ∨ r ∨ r ∨ r ∨ α
+(p ∨ r → r ∨ q) → δ → p ∨ q
+(q ∨ r ∨ (p → q)) ∧ ((p ∧ p) ∨ p ∨ q)
+(r ∨ r → β) ∨ (p ∧ q → p ∨ r)
+q ∨ p ∨ p ∨ q → β
+⊤ ∨ (q ∧ q) → r ∧ p → p → q
+(q ∧ r) ∨ β ∨ ((p → p) → q → p)
+α ∨ (q ∧ r) → β → p → r
+((p ∧ q) ∨ (q → q)) ∧ (β → r ∨ q)
+(r ∧ p → α) → r ∧ r ∧ (r → r)
+((p ∧ q) ∨ ⊥) ∧ ((p → p) → ⊤)
+((q → q) → β) ∧ ⊥
+(q → r) ∧ δ → δ
+((q ∨ q) ∧ q ∧ p) ∨ (p ∧ r) ∨ p ∨ p
+q ∧ q ∧ r ∧ p ∧ (δ → r → p)
+(p ∧ p → α) ∧ ⊥
+β ∧ ((p → p) ∨ (q → r))
+(β → γ) ∨ (r ∨ r → r ∧ p)
+γ ∨ (q → p) ∨ p ∨ p
+(γ → r ∨ p) → (r → r) → r ∨ q
+β ∧ r ∧ q ∧ (r ∨ q ∨ p ∨ r)
+((r ∧ r) ∨ (p → p)) ∧ (p ∨ p → p ∨ r)
+(q ∨ p) ∧ (p ∨ q) ∧ γ
+(p → r) ∧ (q → q) → (p → q) ∨ (r ∧ q)
+((q → r) ∧ (r ∨ q)) ∨ ((p ∨ r) ∧ (r → q))
+(q ∧ r → r ∧ p) ∧ ((r → q) → r → r)
+((q → p) → q → p) ∧ (r ∧ p → r → p)
+(p ∧ r → p → q) → p ∧ r → r → p
+q ∧ q ∧ (q → r) → p ∨ r → ⊥
+p ∨ r ∨ (q ∧ p) → (p ∧ r) ∨ δ
+(q ∧ r → p ∨ r) → p ∧ r → α
+(p → r) ∧ (q → r) → γ ∨ (r → q)
+q ∨ q ∨ δ → r ∧ q ∧ (p → p)
+(⊤ → q ∨ q) ∨ r ∨ q ∨ (q → r)
+(q ∧ p → α) ∧ β
+(r ∧ q → p ∨ r) → ⊥ → r → p
+(r ∧ r) ∨ q ∨ q ∨ α
+α → p ∨ r → r ∨ p
+(q → q) ∨ p ∨ r ∨ (p ∧ r ∧ (p ∨ q))
+⊥ → (q → r) ∧ (q → p)
+α ∧ ((p → q) ∨ (p ∧ r))
+δ ∧ (r ∨ r) ∧ δ
+((r ∨ p) ∧ (p ∨ r)) ∨ (β → p ∧ p)
+(p → r) ∧ (r ∨ q) ∧ α
+(q ∨ q) ∧ (p → r) ∧ α
+q ∧ r ∧ (p ∨ r) ∧ ((q → r) → α)
+⊤ ∨ α ∨ ((r → r) → r ∧ q)
+((r → p) → r ∧ p) ∨ ((q → p) → ⊥)
+((r ∧ q) ∨ (r ∧ r)) ∧ (r ∨ q ∨ (p → r))
+r ∧ r ∧ α → (q ∧ r) ∨ (r ∧ p)
+(α → β) ∨ ((r → q) ∧ (p ∨ r))
+((p → r) ∧ q ∧ r) ∨ (⊥ ∧ α)
+α ∨ ((q ∨ p) ∧ (r → r))
+((q ∧ r) ∨ (p → r)) ∧ (p ∨ q) ∧ r ∧ p
+(r ∧ q → r ∧ r) ∧ ⊤
+(p ∨ q ∨ p ∨ r) ∧ r ∧ p ∧ (q ∨ q)
+(p ∨ r → q ∧ q) → q ∧ r ∧ (r → q)
+(r → q) ∧ (p → r) → q ∧ p → ⊤
+((q → r) → ⊥) ∧ r ∧ r ∧ (p → r)
+((q → q) → p → r) ∨ (α → p ∨ r)
+(p ∧ r ∧ (q → p)) ∨ ((r → r) → r ∨ q)
+(r → q) ∨ (p → p) ∨ δ ∨ p ∨ p
+((p → r) ∨ β) ∧ ((p → r) ∨ p ∨ p)
+((p ∨ p) ∧ (p → p)) ∨ (q ∧ p → r → q)
+((q ∧ p) ∨ ⊤) ∧ ⊤ ∧ (r → p)
+(q ∧ p) ∨ (q ∧ p) ∨ (⊥ → q ∧ r)
+(p ∧ p) ∨ p ∨ r ∨ (r ∧ r) ∨ q ∨ q
+r ∨ r ∨ (q ∧ q) → (q → q) → r ∨ r
+(q → r) ∨ (p ∧ p) ∨ ((p → q) ∧ p ∧ p)
+((r → q) → q ∧ p) → ⊤ → q → q
+((q → q) ∧ q ∧ r) ∨ ((q → r) → q → r)
+(p ∨ p ∨ (q ∧ p)) ∧ (r ∨ r ∨ r ∨ p)
+(r ∧ p ∧ (p → q)) ∨ (⊥ → δ)
+(q → q) ∨ (p → q) → (r → p) ∨ q ∨ q
+(δ → r ∨ r) ∨ r ∨ q ∨ (q ∧ p)
+((p ∧ p) ∨ q ∨ r) ∧ (r ∨ r → α)
+β → q ∨ r ∨ (q ∧ r)
+(⊤ ∨ β) ∧ ((q → r) ∨ β)
+((r → r) → q → r) ∧ ((q ∧ q) ∨ (q ∧ q))
+((q → r) → q ∨ q) ∧ (r ∨ r) ∧ r ∧ p
+⊤ ∨ (q ∧ r) → (r ∧ q) ∨ r ∨ q
+α ∧ (q ∨ p ∨ (q ∧ r))
+(p → q) ∨ p ∨ r → q ∨ q ∨ (r ∧ p)
+((q → q) ∨ δ) ∧ (q ∨ r → q ∨ r)
+γ ∧ (p ∨ r) ∧ α ∧ q ∧ r
+(r ∨ q → r → r) → (p → q) → β
+β ∧ (q ∨ p ∨ (p → q))
+(q ∧ p) ∨ (p ∧ q) → ⊤ ∧ (p → q)
+(q ∨ r → r ∨ p) ∧ ((p → q) ∨ ⊥)
+((q → p) → q → r) ∨ (r ∧ r) ∨ δ
+(p ∨ r) ∧ (r → q) → r ∨ r → r ∨ q
+(r ∧ p) ∨ (r ∧ q) → r ∧ q → q → p
+(p ∨ p) ∧ r ∧ q ∧ (q → r) ∧ p ∧ q
+δ ∨ (p ∨ p → r ∧ p)
+(q ∧ q → p → p) ∨ ((p → r) → p → q)
+β ∧ ((q → p) ∨ (q → p))
+(r ∧ p → r ∨ q) ∨ (q ∧ q ∧ ⊤)
+(p ∨ q → r ∧ r) → r ∨ q ∨ q ∨ r
+(q → r) ∧ (q ∨ p) → q ∧ r ∧ q ∧ q
+(r ∨ p → q ∧ r) ∧ (r ∧ q → q ∨ q)
+((q ∧ r) ∨ (p → r)) ∧ ((q → r) ∨ (p → q))
+(q → q) ∧ (p ∨ p) ∧ (q → r) ∧ (q ∨ p)
+(p ∨ p → r ∨ p) → r ∨ r → β
+α ∧ (δ → r ∨ r)
+((r → r) ∧ (p ∨ q)) ∨ (p ∧ r) ∨ (q ∧ p)
+(δ → q ∨ r) → r ∧ r ∧ r ∧ p
+((q → r) → p ∨ p) ∨ β
+β ∨ p ∨ p ∨ ⊥ ∨ (p ∧ p)
+(r ∧ r → q ∧ p) → r ∨ r ∨ (p → p)
+(q ∨ p) ∧ (q ∨ r) → (r ∧ q) ∨ (p ∧ q)
+(γ → q ∧ r) → q ∨ p ∨ (r → r)
+(p ∧ q → q ∨ r) → (p → p) ∨ (q ∧ p)
+((q → p) → r ∨ q) ∨ (q ∧ r ∧ (p ∨ r))
+δ ∧ (r ∨ p → p ∧ p)
+(r ∨ p ∨ δ) ∧ (p ∨ r ∨ p ∨ p)
+(r → r) ∧ r ∧ p ∧ r ∧ r ∧ (r ∨ q)
+(γ → r → q) → r ∨ r → q ∨ p
+(p ∨ p) ∧ (r ∨ q) → ⊤
+(q ∨ p) ∧ (p → p) ∧ (q ∧ r → p → q)
+(q → p) ∧ (p → q) ∧ ((p → p) ∨ (p → r))
+p ∨ p ∨ q ∨ q → (q → q) ∨ (q → p)
+(r ∨ q) ∧ (p → q) ∧ (r ∨ q) ∧ ⊤
+(β → r → q) ∨ ((q ∨ r) ∧ r ∧ q)
+(r ∧ p) ∨ (p → p) → (q ∨ r) ∧ r ∧ p
+((r ∧ q) ∨ p ∨ q) ∧ (q → p) ∧ q ∧ r
+(β → r → q) → r ∨ p → r → r
+q ∧ r ∧ q ∧ r ∧ ⊤
+β ∨ q ∨ p ∨ ⊥
+(β ∨ (q ∧ r)) ∧ (q → q) ∧ p ∧ q
+(r → p) ∨ (r ∧ r) → (p → q) ∨ (r → p)
+(r ∧ r ∧ ⊥) ∨ γ
+γ ∨ (q ∨ q → r → p)
+(p → p) ∨ (r → p) → p ∧ q ∧ (r → r)
+p ∨ r ∨ (q → r) ∨ (q → p) ∨ (r → r)
+(δ → γ) ∨ (p ∨ r → q ∧ p)
+((r → q) → q ∨ q) ∧ ((q → q) → p → r)
+α ∧ ⊤ ∧ (q ∨ r)
+γ ∨ (q ∧ r) ∨ ((p → r) → p ∧ r)
+(q ∧ q → p ∨ r) ∧ ⊥
+(q ∧ q → p ∧ r) → (p ∧ q) ∨ (q ∧ q)
+(r → q) ∧ (q ∨ r) → (p → r) ∧ (r ∨ p)
+((p → r) ∧ (r → p)) ∨ ⊥
+β ∨ (α ∧ q ∧ p)
+(q → p) ∧ (r → p) → (p ∧ q) ∨ ⊥
+α ∧ (γ → q ∧ p)
+(q → q) ∧ (p → p) → (p → r) ∧ δ
+(q ∧ r → q ∨ q) ∧ (q ∨ q → q → p)
+(p ∨ r → r ∧ p) → p ∨ q → α
+(p ∨ p → r ∨ r) → r ∨ q → q ∧ q
+((q ∧ p) ∨ ⊥) ∧ (r → r) ∧ (r ∨ q)
+((r → r) → r ∨ r) ∨ ((q → r) → r ∧ q)
+(r ∨ r) ∧ (r ∨ p) → (r → p) ∨ (p → p)
+((p ∧ p) ∨ p ∨ q) ∧ (⊥ → q ∨ r)
+(q ∧ p → δ) ∨ ((p ∨ r) ∧ p ∧ p)
+(p ∨ p → r → p) ∧ (q ∨ p ∨ ⊥)
+p ∨ p ∨ (r ∧ r) → ⊥
+(p → r) ∧ ⊥ → ⊤
+((q → r) → r ∧ r) ∧ (r ∨ p → p ∧ r)
+(q → q) ∧ β ∧ ((p → q) → q ∧ q)
+(r → p) ∨ γ ∨ (r ∧ q ∧ (r → q))
+⊥ ∧ ((q ∧ q) ∨ (q ∧ p))
+γ ∧ ((q ∧ q) ∨ (p ∧ q))
+((r → q) → p → q) ∨ α
+⊤ ∧ (r → q) → (p → q) ∨ (q ∧ r)
+((r → q) ∧ (q → q)) ∨ α
+δ ∨ ((p → r) → r ∧ q)
+((p → q) ∧ p ∧ p) ∨ ((p ∨ p) ∧ ⊤)
+α ∧ r ∧ q ∧ (γ → r ∧ q)
+((q ∨ q) ∧ (p ∨ q)) ∨ p ∨ q ∨ (q ∧ r)
+((p ∧ r) ∨ p ∨ q) ∧ (q ∨ r → q → r)
+(p ∨ q) ∧ δ → p ∨ q → q ∧ r
+(q → p) ∧ (q → p) ∧ r ∧ r ∧ (p → q)
+⊤ ∨ (p ∨ p → r → r)
+(⊤ → q → r) ∨ (p ∧ r) ∨ (p ∧ p)
+((r → r) → p → r) → r ∧ q → q ∨ q
+((p → p) → p ∧ r) → r ∧ p → r ∨ q
+(q → p) ∨ (r → p) ∨ (α → q ∨ q)
+((q → r) ∨ (r ∧ r)) ∧ (r ∨ q → r ∨ r)
+⊥ → r ∧ p → ⊥
+q ∧ q ∧ (p → p) → β
+β ∨ (r ∧ r ∧ q ∧ r)
+(r ∨ q ∨ (q → q)) ∧ (q ∨ q → q ∨ p)
+⊥ ∨ ((p → p) ∧ (p → p))
+(p ∨ q → p ∨ p) ∧ β
+α ∨ (p ∨ q → p ∧ q)
+(⊤ → q ∧ q) ∧ ((q → r) → γ)
+⊥ ∧ (q → q) → (p ∧ p) ∨ α
+(r → p) ∧ q ∧ q ∧ (q ∨ r ∨ q ∨ r)
+(p ∨ r → p ∨ p) ∧ δ ∧ ⊥
+(p ∨ p → r ∧ p) ∧ (p → q) ∧ (q ∨ q)
+(q ∨ q ∨ (q ∧ p)) ∧ δ
+⊤ ∧ ((p → p) ∨ (p → q))
+(r ∨ r → α) → α ∧ (r → q)
+q ∨ r ∨ (q ∧ q) → r ∧ p ∧ (q ∨ r)
+((p ∨ p) ∧ (q → r)) ∨ (r ∧ r → q → r)
+((p → q) → ⊤) ∧ ((r → p) ∨ (p → q))
+((p ∨ q) ∧ (q ∨ r)) ∨ ((q ∨ r) ∧ (p ∨ r))
+α → (r → r) ∧ (p ∨ r)
+((r → r) ∨ r ∨ p) ∧ ((q ∧ r) ∨ (q ∧ p))
+((r → q) ∨ q ∨ q) ∧ (q ∧ q → r ∧ p)
+(p ∧ r → p → q) ∧ ((q → p) → p ∧ q)
+(q ∧ q → β) → (r ∨ r) ∧ p ∧ q
+(r → q) ∧ q ∧ r ∧ (γ ∨ p ∨ p)
+(q ∨ r) ∧ (p → q) → (q → q) ∧ (p ∨ p)
+(q ∨ r → r → q) ∧ (p ∧ r → r ∨ r)
+⊥ ∧ ((r ∧ r) ∨ (q ∧ r))
+(q ∨ p → p → p) ∨ (γ ∧ (r ∨ p))
+(r ∨ r → r ∨ p) → p ∧ q ∧ (p → r)
+(q ∧ r → q ∨ q) ∧ p ∧ p ∧ (p ∨ r)
+p ∨ q ∨ (p → r) → γ ∨ (r ∧ r)
+(q → p) ∧ (p → r) → (q → r) → r ∧ p
+(p ∧ p → p ∧ q) → (r → q) → p → p
+δ ∨ (p ∧ q) ∨ (r → r)
+(p ∨ q) ∧ (p ∨ r) ∧ (γ ∨ (r → r))
+(p ∧ q) ∨ p ∨ p ∨ ((q ∨ r) ∧ (r ∨ r))
+(q ∨ r → p ∧ q) → (q → p) → q ∧ p
+((p → r) → q ∨ p) → p ∨ q → p ∧ q
+((p ∨ p) ∧ α) ∨ (β ∧ q ∧ p)
+⊤ ∨ (q ∧ q) ∨ γ
+(r ∨ q) ∧ (p ∨ q) → p ∧ r ∧ (r → q)
+(p → p) ∨ (r ∧ p) → (q → r) → p ∨ p
+α ∧ r ∧ p ∧ (r ∨ r)
+((r → q) → p ∧ q) → α
+(p ∧ r) ∨ ⊥ ∨ γ
+((p ∧ r) ∨ p ∨ q) ∧ (β ∨ p ∨ p)
+p ∨ p ∨ r ∨ r → γ
+β ∨ (p ∨ q → q ∧ q)
+δ ∨ ((q ∨ q) ∧ p ∧ q)
+(q → p) ∧ (r ∨ r) ∧ (r ∧ q → q ∧ p)
+q ∨ p ∨ (r ∧ q) → (r → p) ∧ (q ∨ q)
+β → (p ∧ r) ∨ p ∨ p
+δ ∨ (β ∧ p ∧ p)
+(p ∨ r ∨ q ∨ q) ∧ (q ∨ q) ∧ (q ∨ p)
+(q → r) ∨ ⊤ ∨ ((p → r) → q ∧ q)
+((r → q) → p ∧ r) ∧ δ
+(r → q) ∨ (r ∧ q) ∨ β
+((q → p) → q ∧ r) ∧ (p → r) ∧ (r → r)
+(q ∧ q → α) → (q ∧ r) ∨ p ∨ p
+(q ∨ r ∨ r ∨ r) ∧ (q ∨ q ∨ q ∨ r)
+δ ∧ (p ∧ p → r ∨ p)
+⊤ ∨ ((p → r) → q → q)
+(p → p) ∧ ⊤ ∧ (p ∨ q → r → p)
+((r ∧ p) ∨ p ∨ r) ∧ (r ∨ p → ⊤)
+((r → q) → p ∧ p) ∧ (q → q) ∧ q ∧ p
+((p → r) ∧ δ) ∨ (p ∧ p) ∨ (q ∧ p)
+(q ∨ p) ∧ γ → δ ∨ (r ∧ p)
+α ∨ r ∨ p ∨ p ∨ p
+r ∧ p ∧ r ∧ p → γ ∨ q ∨ p
+((p → q) → q ∨ p) ∨ (r ∨ r → α)
+(q ∨ p) ∧ (p → q) ∧ (p ∧ p → q → r)
+p ∧ r ∧ (p → r) → (r ∨ r) ∧ (q → p)
+((r → p) → p → q) ∨ ((p → q) → q ∨ q)
+(p ∧ p) ∨ (q ∧ q) → (p → r) → α
+q ∧ r ∧ q ∧ p → p ∧ p ∧ δ
+(γ → r ∨ q) ∨ (α ∧ r ∧ q)
+α ∧ (β ∨ r ∨ q)
+(p → p) ∨ q ∨ q ∨ (r ∨ r → r → q)
+((p ∧ r) ∨ (q → p)) ∧ (δ → r ∨ p)
+((p → p) → r ∧ p) → (r → p) → q → r
+β → (p → p) ∨ (q → r)
+q ∧ q ∧ (p ∨ p) ∧ (p ∨ p ∨ q ∨ p)
+(q ∨ p → q ∧ q) → (r ∧ p) ∨ ⊤
+r ∨ q ∨ (r → p) ∨ δ
+(q → q) ∨ r ∨ r → (p ∨ q) ∧ (r → q)
+((q ∧ q) ∨ p ∨ p) ∧ (p ∨ q) ∧ (q → r)
+((q → r) → p ∨ p) ∧ ((q → q) → r ∨ q)
+(β ∨ (q → q)) ∧ (⊥ ∨ (r → p))
+((p ∨ r) ∧ β) ∨ ((r ∨ q) ∧ (p ∨ r))
+(r ∨ p) ∧ q ∧ p ∧ (r ∨ p → q ∧ p)
+(q ∧ q) ∨ (r ∧ q) ∨ (q → r) ∨ (q → q)
+(r ∧ q) ∨ (r → q) → (r ∧ r) ∨ (r ∧ r)
+(γ → γ) → (q ∨ q) ∧ ⊥
+⊤ ∧ (r → p) → (r ∧ r) ∨ (q → q)
+((q ∧ r) ∨ (q → r)) ∧ ⊤
+(p ∧ r → p → q) ∨ (r ∧ p → p ∨ p)
+(p ∧ q → p ∨ q) → (r → r) → q ∧ r
+(α → r → p) ∧ (p ∨ p ∨ (r → q))
+δ ∨ (q ∧ p → q ∧ q)
+(r ∧ q → ⊤) ∨ (p ∧ q ∧ ⊤)
+((p ∨ q) ∧ p ∧ q) ∨ γ
+(q ∧ q → α) → (r → p) → r ∨ q
+((r ∨ r) ∧ (q ∨ p)) ∨ ((r → q) → β)
+((q → p) ∧ (q ∨ p)) ∨ δ
+q ∨ q ∨ r ∨ q → (p → p) → p ∨ r
+(p ∧ r) ∨ (q ∧ p) ∨ (γ ∧ (q → r))
+γ ∨ (p → p) ∨ (r → r)
+γ → r ∨ p → q ∨ p
+(q ∧ r → p ∧ r) → ⊥ ∨ q ∨ p
+((p → p) → γ) ∧ (p ∧ r → p ∨ q)
+((q ∨ q) ∧ (p ∨ r)) ∨ ((r → q) ∧ (p → r))
+(⊤ → q ∧ r) ∧ ⊤
+p ∨ q ∨ ⊤ → (q → p) ∧ q ∧ r
+δ ∨ (r ∨ q → r ∨ p)
+(r ∧ r) ∨ β → ⊤ ∨ (p → r)
+(p ∨ q) ∧ (p → r) ∧ (p ∨ q ∨ p ∨ r)
+(p ∧ q → r ∧ r) ∨ ((q → q) → q → p)
+((q ∧ r) ∨ (r → r)) ∧ (p ∨ r → q → r)
+(⊤ ∧ r ∧ r) ∨ (q ∧ q) ∨ (q ∧ r)
+((r ∨ q) ∧ (p → r)) ∨ ⊥ ∨ q ∨ r
+⊥ ∧ ((q → r) ∨ δ)
+p ∧ q ∧ (r ∨ p) → (q ∧ r) ∨ (r → p)
+(⊤ → q → q) ∧ ((q → p) → q ∨ q)
+((q ∨ r) ∧ (q ∨ r)) ∨ (q ∧ r) ∨ q ∨ r
+(β → p ∨ p) ∨ (α → q ∨ r)
+(r ∨ q → r ∧ r) ∧ ⊥
+(p ∨ q) ∧ r ∧ p ∧ (p ∨ p → α)
+((p → q) → r ∨ q) ∧ α
+q ∧ r ∧ q ∧ p ∧ δ ∧ (r → q)
+⊤ → r ∧ q ∧ p ∧ p
+(r ∧ q → p → q) → ⊥
+((r → q) → p ∧ r) ∨ ((r → q) ∧ (r → q))
+⊥ ∨ r ∨ q ∨ (p → r)
+β ∨ (p ∧ p) → ⊥ ∧ (p ∨ r)
+α ∨ (r → q) ∨ p ∨ p
+(⊥ ∧ (q → q)) ∨ (r → q) ∨ (p ∧ r)
+(r ∨ r ∨ δ) ∧ ((q ∧ p) ∨ (q ∧ q))
+q ∧ r ∧ ⊥ ∧ (r → r) ∧ q ∧ p
+p ∧ q ∧ p ∧ p ∧ (r ∨ r → α)
+(q ∧ p) ∨ q ∨ r ∨ ((p → p) ∧ p ∧ q)
+((q → r) ∧ (r ∨ p)) ∨ ((p → r) → q ∧ p)
+(r ∨ q) ∧ (r → r) → r ∨ p → r → r
+δ ∧ γ ∧ r ∧ p
+(⊤ ∧ (q → q)) ∨ (q ∧ p) ∨ r ∨ p
+(q ∧ r ∧ r ∧ r) ∨ ((p ∨ q) ∧ r ∧ r)
+((q → q) → q ∨ q) → (q → r) ∧ p ∧ r
+δ ∨ (p ∧ r) ∨ q ∨ r ∨ (q → q)
+((q → p) → q ∨ q) ∨ (r ∧ p) ∨ (r ∧ q)
+((q → p) → p → r) ∧ γ
+(p ∧ q ∧ q ∧ q) ∨ r ∨ q ∨ β
+((q → r) → γ) → (r ∧ q) ∨ (r → r)
+(p → p) ∧ ⊤ ∧ p ∧ r ∧ p ∧ p
+p ∨ p ∨ (q → q) ∨ (p ∧ p → q ∨ q)
+(r ∧ p) ∨ (q → r) ∨ (p ∧ p ∧ (q → p))
+((r ∧ r) ∨ (q → p)) ∧ (q ∧ p → q ∨ q)
+(r ∨ q ∨ r ∨ p) ∧ (q ∧ q → r ∧ q)
+(q ∨ r) ∧ r ∧ p ∧ (q ∧ p → q → p)
+(q → r) ∨ (q → r) ∨ (p ∧ p → q ∧ q)
+β ∧ p ∧ p ∧ (p → r) ∧ r ∧ r
+(q → q) ∧ (q → q) ∧ (p ∨ q ∨ (r → r))
+(p ∨ p → r → q) ∨ (p → p) ∨ δ
+δ ∨ ((r ∨ r) ∧ (p ∨ q))
+(δ → p → r) ∨ (p → p) ∨ β
+(r → r) ∨ δ ∨ δ
+⊤ → (q ∧ q) ∨ (p ∧ q)
+((r ∨ r) ∧ (q ∨ r)) ∨ (p ∧ q → q → q)
+β ∧ ((r → r) ∨ r ∨ q)
+⊥ ∨ ((p → p) ∧ (p ∨ q))
+⊥ → (r ∨ q) ∧ γ
+p ∧ p ∧ (p → p) → β
+α ∨ (p ∧ q) ∨ ((r ∨ p) ∧ (p → p))
+(q ∧ p) ∨ ⊤ ∨ (⊤ ∧ q ∧ q)
+((q → r) ∨ (q ∧ r)) ∧ ((r → r) ∨ (q → r))
+((p → p) → q → r) ∧ (q ∨ r) ∧ (r ∨ p)
+(q ∧ q → p ∧ r) → (p ∨ q) ∧ (q → p)
+(⊤ → β) ∨ (p ∨ q → r ∨ q)
+(q → p) ∧ δ → (r → q) ∨ ⊤
+((p → r) → p ∧ p) ∧ ((q → q) ∨ (p ∧ r))
+q ∨ q ∨ ⊥ ∨ δ
+((p → q) ∧ q ∧ q) ∨ ((r → r) → p ∨ p)
+δ → (p → q) ∨ (q ∧ p)
+((r → r) → q ∧ r) ∨ ⊥
+p ∨ p ∨ p ∨ q ∨ γ
+⊥ → (q ∨ p) ∧ (p → q)
+β → r ∧ r → r ∧ r
+(q → p) ∧ (p → r) ∧ ⊥ ∧ (p ∨ q)
+(r ∨ q → r → r) ∨ (q ∧ r) ∨ q ∨ q
+((p → p) ∨ (q ∧ r)) ∧ ⊥
+(q ∨ p → p ∨ q) → r ∨ r ∨ (q ∧ r)
+(⊤ ∧ (r → p)) ∨ δ
+(p ∨ q → δ) → α ∨ p ∨ q
+(r ∧ r → p → r) ∨ (q ∧ q ∧ β)
+(p ∧ p → r ∨ r) ∧ (p → p) ∧ q ∧ p
+(r ∧ q) ∨ γ ∨ (r ∧ r) ∨ (r ∧ r)
+(p ∨ q → ⊤) ∧ ((q → r) → r ∨ q)
+(⊤ → q ∨ q) → (q → r) → q ∧ q
+(p ∨ r → r ∧ p) ∧ (q ∨ r) ∧ γ
+β ∧ (r ∨ p ∨ α)
+((r ∨ p) ∧ (p → p)) ∨ (r ∧ p ∧ (r ∨ q))
+((p → p) ∨ α) ∧ (r → r) ∧ r ∧ r
+(q ∨ q) ∧ γ ∧ α
+(p ∧ r → p ∧ q) → (p ∨ p) ∧ p ∧ p
+α ∨ α ∨ (q ∧ q ∧ (p → r))
+((p → r) → p ∧ p) → (r → q) ∧ p ∧ p
+r ∧ r ∧ (r ∨ p) ∧ (r → q) ∧ (q → q)
+(δ ∧ (p ∨ q)) ∨ α
+(r ∨ p) ∧ (r → r) ∧ (q ∧ r → δ)
+((r → p) → p ∨ p) ∨ α
+δ ∧ (q ∨ q → α)
+(p ∧ q) ∨ (p ∧ q) ∨ (q ∨ r → ⊥)
+(q ∧ p) ∨ (p → p) → (r → q) ∨ (r → r)
+((p → r) → q → p) → ⊥ ∨ (p ∧ q)
+⊥ ∧ (p ∨ r ∨ p ∨ p)
+(q ∨ q → r ∧ r) → β
+α → (p → q) → p ∧ r
+α ∨ ((r ∨ q) ∧ (p ∨ r))
+(p → r) ∧ α ∧ (q ∨ r → r → p)
+(r → p) ∨ r ∨ p ∨ ((p → p) → p → q)
+(r ∨ p → r → p) ∧ (q ∧ r → q ∧ q)
+p ∧ q ∧ ⊥ → (r ∧ q) ∨ (r → p)
+q ∧ p ∧ β ∧ γ
+((q → q) → q → p) → q ∨ r ∨ p ∨ p
+(r ∧ r → r ∧ q) → r ∧ p ∧ (r ∨ p)
+((r → r) → ⊥) → (r → p) ∧ (q → r)
+(r ∨ p) ∧ (q ∨ r) ∧ (p ∨ q → ⊥)
+p ∨ r ∨ (p → r) ∨ α
+(q ∧ p → p ∨ q) → α
+(p → p) ∨ (q ∧ r) ∨ (p ∧ p → p ∧ q)
+γ ∧ β → r ∨ r → p ∨ q
+((p ∨ p) ∧ (p ∨ r)) ∨ ((q → q) ∧ (p ∨ q))
+(γ → q ∨ p) ∧ q ∧ r ∧ (p ∨ q)
+((q → q) → q ∨ r) ∧ ((p → p) → r ∨ p)
+(p → r) ∨ (p ∧ q) ∨ (p ∨ q → p ∧ p)
+(p ∧ q ∧ γ) ∨ ⊤
+(q ∧ p → p ∧ r) → β
+(q ∨ p) ∧ β ∧ ⊥
+q ∧ q ∧ p ∧ p → (p → q) ∧ β
+(q ∧ p → q ∧ r) ∨ (p ∧ q ∧ (q ∨ p))
+(r ∨ p → ⊥) ∧ (r ∨ r → r ∧ q)
+⊤ ∧ (α → r ∧ r)
+(r ∧ q) ∨ (p ∧ q) ∨ (p ∧ p ∧ q ∧ r)
+(q → q) ∨ (p → q) ∨ α
+⊥ ∨ (p → r) ∨ α
+⊥ ∧ ((p → q) ∨ δ)
+r ∧ r ∧ α ∧ (q ∨ r) ∧ (p ∨ p)
+α ∧ (q → r) ∧ α
+⊤ ∨ (p ∧ q ∧ p ∧ q)
+((p → r) → q ∨ q) ∧ (r ∨ r → p ∨ p)
+p ∨ r ∨ q ∨ p ∨ (p ∨ r → r ∧ r)
+(⊤ ∧ q ∧ r) ∨ (p ∧ q) ∨ (r → q)
+⊤ → p ∧ r → β
+(p → q) ∨ (r → q) → p ∧ p → r ∨ q
+(β ∧ p ∧ r) ∨ ((q ∨ r) ∧ (p ∨ q))
+(q → r) ∧ (p ∨ p) ∧ ((r ∧ r) ∨ p ∨ p)
+((q ∧ p) ∨ (q ∧ r)) ∧ ((r → q) ∨ γ)
+(p ∧ r → r ∧ p) ∨ ((r → q) → q ∨ p)
+((p → q) → q → p) → (p → q) ∨ (p → q)
+α ∨ (p ∧ r ∧ (r ∨ p))
+((q ∧ q) ∨ γ) ∧ ((r ∧ p) ∨ (r → p))
+((p ∧ r) ∨ q ∨ p) ∧ (q ∨ p → q ∨ q)
+α ∧ (r ∨ r) ∧ (q ∨ r) ∧ p ∧ r
+r ∨ p ∨ (p ∧ r) → r ∧ r ∧ r ∧ p
+(r → r) ∧ r ∧ q → ⊥
+(p → r) ∧ (r → q) → β
+((r → q) ∧ ⊥) ∨ (r ∧ p) ∨ r ∨ p
+(p → q) ∨ (r → r) ∨ ((q ∨ q) ∧ r ∧ r)
+(p ∨ q → γ) ∨ (p ∧ r → β)
+(q ∧ r → q ∨ q) → ⊥
+(q ∧ q → ⊤) ∧ r ∧ q ∧ (r ∨ q)
+(p ∨ q) ∧ (q ∨ q) → (r ∧ q) ∨ (r ∧ q)
+p ∨ p ∨ q ∨ q ∨ ((r ∨ p) ∧ r ∧ p)
+((p ∧ r) ∨ (q → p)) ∧ p ∧ p ∧ ⊥
+⊥ ∧ (p → p) ∧ (p ∧ p → q → r)
+((q → p) ∧ p ∧ r) ∨ ((q ∨ p) ∧ (r → q))
+((q → q) ∨ (q ∧ r)) ∧ p ∧ r ∧ δ
+(r ∧ q) ∨ (r ∧ q) → (q → p) ∨ (r ∧ p)
+(p ∨ r) ∧ (q ∨ r) → (q → p) ∧ (q ∨ r)
+(q ∨ q) ∧ (q → r) ∧ (r ∨ p ∨ p ∨ r)
+((r → r) → γ) ∨ (p ∧ p → q ∧ r)
+(p ∧ r ∧ (q → p)) ∨ (p → p) ∨ q ∨ p
+γ ∧ ((r → p) ∨ q ∨ p)
+r ∨ r ∨ (q ∧ p) ∨ ((r → p) ∧ r ∧ r)
+γ → r ∧ p → p → q
+((p → r) → q → q) → p ∧ p ∧ (q ∨ p)
+p ∨ q ∨ (r ∧ q) → (r ∨ r) ∧ (q → p)
+(p ∧ r → p ∨ p) ∨ (q ∨ r → p ∨ p)
+(β ∧ p ∧ p) ∨ ⊤
+α ∧ (p → p) ∧ q ∧ p
+(p ∧ r → p → q) ∨ (⊥ → p ∧ q)
+r ∧ q ∧ (r → p) ∧ α
+(r → r) ∧ (r → q) ∧ ((p → p) ∨ (r → q))
+(p → p) ∨ q ∨ q ∨ δ
+(r ∨ p → β) ∧ (p ∧ r → q ∧ p)
+γ ∧ (p ∧ r → r ∨ p)
+(p ∧ q) ∨ (q ∧ p) → p ∧ q ∧ p ∧ q
+(p ∧ p ∧ (q ∨ q)) ∨ (r ∨ q → r ∧ q)
+(r ∨ r → p ∧ q) ∨ ((q ∨ r) ∧ r ∧ q)
+((r ∨ p) ∧ r ∧ r) ∨ (q ∧ p) ∨ γ
+(⊥ ∧ q ∧ p) ∨ ((p ∨ q) ∧ (p ∨ r))
+(β ∧ p ∧ p) ∨ ((r ∨ q) ∧ p ∧ p)
+(p → p) ∨ (p ∧ q) ∨ ((p ∨ p) ∧ r ∧ p)
+(r ∧ p → r ∨ q) → p ∨ r ∨ p ∨ p
+((p → r) ∨ p ∨ q) ∧ γ
+γ → (r → q) ∨ β
+((p ∧ q) ∨ ⊤) ∧ (p ∨ p ∨ (r ∧ q))
+(p ∨ p → r → p) → r ∨ r → p → p
+(⊥ ∧ (p → r)) ∨ ((r → q) ∧ q ∧ q)
+β ∧ α ∧ p ∧ p ∧ β
+(q ∨ p) ∧ ⊤ ∧ ⊤ ∧ δ
+((r → q) → r ∨ q) ∧ ((q ∧ r) ∨ p ∨ p)
+p ∨ p ∨ (r → q) ∨ (p ∨ r → p ∧ q)
+δ ∨ p ∨ p ∨ (r ∧ r)
+((p ∧ q) ∨ p ∨ p) ∧ (r → r) ∧ ⊤
+(q ∧ q ∧ (r ∨ q)) ∨ (γ → q → q)
+(q ∧ r) ∨ (q → p) ∨ ((r ∨ q) ∧ (r → p))
+(p ∧ p → q ∧ q) ∨ (p ∨ q → r ∨ q)
+(δ → p ∨ p) → γ → q ∧ q
+(r ∨ q) ∧ q ∧ r → p ∨ r → r ∨ q
+(p ∧ r → α) ∨ δ ∨ β
+((q → p) → r ∧ r) → p ∧ q ∧ q ∧ r
+(α → α) ∨ ((p ∨ p) ∧ δ)
+(p ∨ r ∨ (p ∧ q)) ∧ (r ∨ q ∨ (p → r))
+(q ∨ r ∨ p ∨ r) ∧ (q ∨ q ∨ ⊤)
+((r → q) → p → r) ∨ (q ∧ q) ∨ (r ∧ p)
+(r → q) ∨ (q ∧ p) ∨ ⊤
+(q ∨ r → r → r) ∨ ⊤
+(r ∨ r) ∧ ⊤ → (r → r) → r ∨ p
+⊤ ∨ ((q ∨ r) ∧ (q → p))
+((r → r) → q ∨ r) ∨ ((q ∨ r) ∧ (q → q))
+(q ∨ q → p → r) → (r ∧ p) ∨ (q → q)
+(p ∨ r) ∧ (r → q) → r ∨ r → p ∧ q
+(q ∨ q) ∧ q ∧ r ∧ (p ∨ p → r ∨ q)
+(r → p) ∨ (r ∧ r) ∨ (q ∧ q ∧ p ∧ p)
+(β → p → q) → (q ∨ q) ∧ (r ∨ p)
+(r ∧ r → r ∨ r) ∨ ((q → p) → α)
+((p ∧ q) ∨ (q → q)) ∧ (⊤ ∨ r ∨ p)
+(r → p) ∨ r ∨ r ∨ δ
+(r ∨ r) ∧ p ∧ p → (q → p) → q ∨ p
+(p ∨ q ∨ (r ∧ p)) ∧ α ∧ r ∧ r
+(p ∧ p ∧ (r → r)) ∨ (α ∧ α)
+(p ∧ r) ∨ (q → q) ∨ (r ∧ r ∧ ⊥)
+(r ∨ p) ∧ (r ∨ q) → (r → r) → ⊤
+β ∨ ((p ∨ r) ∧ (q → q))
+(⊤ → r ∨ r) ∨ ((r → q) → r ∨ p)
+p ∧ p ∧ (p ∨ q) ∧ (r → r) ∧ α
+r ∧ q ∧ (q ∨ q) → δ ∨ (r → r)
+(q ∧ p) ∨ (r → q) ∨ ((p → p) → q → r)
+(p ∨ p → r ∨ q) → p ∧ r ∧ (p ∨ q)
+r ∨ q ∨ ⊥ ∨ q ∨ r ∨ (r → q)
+(p ∨ r → q → r) ∨ ((q → q) ∧ (q ∨ q))
+δ ∨ (p ∧ q ∧ q ∧ r)
+(q ∧ q → q → q) → α
+γ ∨ ((q ∨ q) ∧ r ∧ r)
+⊤ ∧ (p ∨ r) ∧ (p ∧ q → p ∨ p)
+((r → q) ∨ (p ∧ r)) ∧ (p ∨ q) ∧ (q ∨ p)
+⊥ ∨ (q ∧ r → r → p)
+⊥ → (p ∨ q) ∧ α
+(p ∨ q) ∧ q ∧ p → p ∨ q → q → p
+(p ∧ p → r → r) ∧ ((q ∧ r) ∨ (r ∧ q))
+(⊥ → r → q) → (p → p) ∧ (q → r)
+(β → p → q) ∨ (⊥ → γ)
+q ∧ r ∧ ⊤ → q ∨ r → ⊥
+(r ∧ p) ∨ p ∨ r → β ∨ (p → p)
+((r ∨ r) ∧ (r → r)) ∨ (p → q) ∨ (p ∧ p)
+(δ → q ∧ p) ∧ α
+β ∧ (α ∨ r ∨ q)
+q ∧ p ∧ (p → r) ∧ p ∧ r ∧ ⊤
+(r → r) ∧ (r → p) ∧ (r ∧ q → q ∧ q)
+(δ → α) ∨ (q ∨ p → α)
+δ ∧ (r ∨ p → r → p)
+δ ∧ (q ∧ q → r → r)
+(r ∨ q) ∧ (p → q) → p ∧ r → r ∨ r
+((r → q) → p → q) → r ∧ r ∧ (q → p)
+p ∧ q ∧ p ∧ q ∧ ⊥
+(r ∧ q → p ∨ q) ∨ q ∨ q ∨ (q → r)
+(q ∧ q → r → q) → q ∧ q → r → p
+(p ∧ r → r ∨ r) → γ → r → q
+(α → r ∨ q) ∨ (p ∨ r → r ∧ p)
+(p ∧ q → p → p) → ⊥
+(p → r) ∨ r ∨ p → q ∨ r ∨ (r ∧ p)
+(r ∧ q ∧ q ∧ r) ∨ (δ → q ∨ p)
+α → (r ∧ p) ∨ (q → q)
+(r ∧ p) ∨ (p → p) ∨ (p → r) ∨ (r → p)
+(q ∧ p ∧ (q ∨ p)) ∨ (p ∧ p → p → r)
+α ∨ (r → r) → (q → r) → r ∨ p
+(α ∧ (p → p)) ∨ ((q ∨ r) ∧ p ∧ p)
+(p ∨ q → p ∧ r) ∧ q ∧ p ∧ β
+⊤ ∨ α ∨ (q ∧ q ∧ (q ∨ r))
+⊥ ∨ (p ∧ p) → q ∨ p → r → q
+(r ∨ r → q → p) ∨ (r → q) ∨ (p → r)
+((r → r) ∧ α) ∨ ((r → p) ∧ (q → r))
+(r ∧ q ∧ p ∧ q) ∨ β
+((r → r) ∧ (q ∨ r)) ∨ (r ∧ r ∧ δ)
+(q ∨ q → p ∧ r) ∨ (p → r) ∨ q ∨ r
+(δ → δ) → (p ∧ p) ∨ r ∨ q
+(r ∨ q → p ∧ p) ∧ r ∧ p ∧ ⊥
+⊥ ∧ (r ∨ r) ∧ (⊤ ∨ γ)
+p ∧ p ∧ (r → q) ∧ (δ ∨ (q → q))
+(q ∧ p) ∨ ⊥ → β ∨ (p → q)
+q ∧ p ∧ (p ∨ p) → γ
+(q ∧ p) ∨ ⊥ → ⊤
+(p ∧ q ∧ (p ∨ p)) ∨ (q ∧ q) ∨ δ
+r ∨ r ∨ r ∨ q → (r ∨ p) ∧ (r ∨ r)
+(q ∧ r) ∨ p ∨ p → δ
+(r ∨ p ∨ r ∨ p) ∧ (δ → r ∧ r)
+r ∨ r ∨ (p → r) ∨ γ
+q ∨ q ∨ (q → q) → r ∧ q → q ∨ q
+((q → q) ∨ q ∨ p) ∧ (⊤ → β)
+((p → r) → r ∧ r) → p ∧ r ∧ ⊥
+r ∧ p ∧ (r → r) → p ∧ q → α
+(r ∨ q → q ∧ p) → (p → p) ∨ (p → q)
+γ → (p → r) ∧ (r ∨ p)
+((p → p) → q ∨ r) ∧ ((q → p) ∨ (p → q))
+q ∧ q ∧ q ∧ q ∧ ⊤
+β ∨ (p ∨ q → q ∧ r)
+((r → q) ∨ (r → q)) ∧ (γ → ⊤)
+β ∨ q ∨ r ∨ (q ∧ q)
+(⊥ ∨ r ∨ p) ∧ (r ∧ r → ⊥)
+(p → p) ∨ (r → p) ∨ ⊥ ∨ r ∨ r
+p ∧ p ∧ ⊤ → (r → q) → r ∨ r
+(α → r → r) ∧ γ
+(p ∧ p → r ∨ r) → ⊤ ∧ (p → r)
+(q ∨ r → δ) ∨ (⊤ → q ∨ q)
+(r ∨ q ∨ (p → p)) ∧ ((q → q) → q ∧ r)
+(p → p) ∧ β → (r ∧ r) ∨ (q ∧ q)
+(r ∧ q) ∨ (r → r) ∨ (q → q) ∨ (q ∧ r)
+(p ∧ r) ∨ (p → q) → q ∧ q ∧ γ
+⊤ → (r ∨ q) ∧ ⊥
+((q → q) ∧ ⊤) ∨ ((q → p) → r ∧ p)
+(p → r) ∧ (r ∨ q) ∧ ((r → r) ∨ (p → p))
+q ∧ r ∧ r ∧ p ∧ (q ∨ p ∨ (r ∧ q))
+γ ∧ p ∧ q ∧ r ∧ q ∧ δ
+(p → r) ∨ r ∨ r → δ
+(q ∧ q) ∨ (q → p) → (p → q) → ⊤
+α → q ∨ q → r ∧ r
+(p → p) ∧ p ∧ p ∧ ⊥
+(r ∧ r → δ) → (r ∧ r) ∨ q ∨ r
+(q ∨ q) ∧ (p → p) ∧ ⊥
+(r ∨ q → r ∨ q) → (q ∨ p) ∧ (q → q)
+q ∧ r ∧ (q ∨ r) ∧ (p → p) ∧ (q ∨ r)
+β ∨ (⊥ → r ∨ r)
+((p → p) ∨ q ∨ p) ∧ (α → δ)
+(q ∧ q → p → q) ∨ ((r ∨ r) ∧ r ∧ q)
+β ∧ (q ∧ r → p ∧ p)
+α ∧ (q ∨ q) ∧ q ∧ p
+(⊤ → p → q) ∨ (r ∧ r → p ∧ q)
+(q ∧ p → q ∧ p) ∨ ⊥
+(p ∧ p ∧ p ∧ r) ∨ (q ∨ q → q → r)
+β ∨ r ∨ q ∨ (p ∧ q)
+((p → r) → ⊥) ∨ ((q → p) ∧ (r → p))
+γ ∧ q ∧ q ∧ β
+p ∨ p ∨ (r ∧ q) → r ∧ q → r ∨ r
+(r ∨ r → q → r) → q ∧ r → q ∧ q
+((r ∧ r) ∨ (p → r)) ∧ ((r → q) ∨ (r → q))
+q ∧ q ∧ (q ∨ p) → p ∨ q ∨ (q ∧ p)
+(r ∧ p → p ∨ p) ∨ (δ ∧ (r → q))
+(r → p) ∨ (r → q) → γ → p ∧ r
+(q ∨ q ∨ (q → p)) ∧ α
+⊥ ∨ r ∨ r ∨ p ∨ q
+δ ∨ (q ∧ r → p ∧ r)
+⊤ ∨ ((p → q) → δ)
+((r → r) → γ) ∨ p ∨ p ∨ (p ∧ p)
+(q ∧ q ∧ q ∧ q) ∨ ((q ∨ p) ∧ α)
+p ∨ q ∨ (p ∧ q) → ⊥
+(q → r) ∧ p ∧ q ∧ r ∧ q ∧ (p ∨ r)
+β → (r ∧ q) ∨ p ∨ q
+((q → r) → ⊥) ∧ α
+((q ∧ q) ∨ (p → r)) ∧ (q ∨ r → ⊤)
+(p ∨ r) ∧ (r → r) ∧ (q → q) ∧ ⊤
+r ∨ r ∨ (p ∧ p) ∨ ((p ∨ r) ∧ (p → p))
+p ∧ r ∧ (q ∨ q) ∧ (q → r) ∧ δ
+p ∧ r ∧ α ∧ (q ∨ r ∨ ⊤)
+(r ∧ q → r → q) ∧ (q ∨ q ∨ (q ∧ p))
+p ∧ p ∧ (p → p) → q ∧ r → p ∨ r
+(α → r → p) ∨ (r ∧ r ∧ (p → r))
+r ∧ p ∧ (p → r) ∧ ((p → r) → q → p)
+(q ∨ q → γ) ∨ ((r → p) → p → r)
+((r → q) → q ∧ q) ∨ (q ∧ p) ∨ (q ∧ r)
+(p ∧ p) ∨ (p → p) ∨ (q ∨ p → γ)
+α ∧ ((p ∧ r) ∨ r ∨ q)
+(p ∧ q) ∨ (q ∧ p) → (r ∨ r) ∧ ⊥
+(β → p → q) ∧ p ∧ p ∧ (r → q)
+(r ∨ p → ⊥) → (q → p) ∧ (p → r)
+(p → r) ∧ (q ∨ q) ∧ (q → q) ∧ (p ∨ r)
+r ∨ r ∨ β ∨ β
+(q → p) ∨ (q → q) ∨ p ∨ r ∨ δ
+α ∧ (p → r) ∧ (q ∨ p)
+((r ∧ p) ∨ α) ∧ ((q → p) → q ∧ p)
+((r → q) ∨ (p ∧ r)) ∧ (p ∨ p ∨ (q ∧ p))
+((p ∨ p) ∧ β) ∨ ((q → r) → p → p)
+β ∨ (r ∧ r) → p ∨ r → α
+(p ∧ p → q → p) → (p → p) → q → q
+(r ∨ r) ∧ (p ∨ r) → p ∧ q → q ∨ q
+(q → q) ∨ (q ∧ r) → β ∧ (p ∨ q)
+((p → p) → q → r) → (p ∧ p) ∨ (q ∧ p)
+(p ∨ p → p ∨ p) → ⊥
+γ ∨ (p ∧ p → q → p)
+((r → q) → p ∧ q) → α ∧ (q → q)
+((r → q) → ⊤) → (p → q) ∨ ⊥
+(q ∧ r) ∨ p ∨ r ∨ (p ∧ q ∧ (r → r))
+(r ∧ p ∧ ⊥) ∨ (q ∧ p → ⊤)
+((r ∧ r) ∨ q ∨ p) ∧ ((r ∧ p) ∨ (q → q))
+(q ∨ r ∨ (p ∧ r)) ∧ ⊥
+⊤ ∧ (r ∨ r) ∧ ⊥
+(⊤ → p ∨ r) → (q → q) → α
+((r → p) → p ∨ p) ∧ ⊥
+(⊥ ∧ q ∧ q) ∨ (q ∨ r → q ∧ q)
+(q ∧ p) ∨ (q → r) → α
+(q ∧ r) ∨ (r ∧ q) → α
+((p ∨ q) ∧ (q ∨ q)) ∨ ⊥
+(r ∧ p) ∨ ⊤ ∨ ((r → r) ∧ p ∧ p)
+(p ∨ r) ∧ p ∧ q ∧ ((p → p) → r → p)
+((q ∧ r) ∨ (p → r)) ∧ γ
+((q → r) → r → r) → r ∧ q ∧ (q ∨ q)
+⊤ ∨ (r → r) ∨ ((p → q) → p ∧ p)
+((r → p) → q → r) ∧ ⊤
+(γ → γ) ∨ (r ∧ q → p ∨ q)
+((q → r) → q → q) ∨ δ
+((q → p) → ⊤) → r ∧ q → r ∨ q
+α ∧ q ∧ p → r ∨ p ∨ p ∨ r
+(r ∨ q → q → p) ∧ δ
+(⊥ → p ∧ p) → (q ∨ r) ∧ (r → q)
+((q → q) → p → q) ∧ (p ∨ p ∨ (p → q))
+q ∨ r ∨ (r → r) ∨ (q ∧ q) ∨ (q ∧ r)
+((q → q) ∧ ⊤) ∨ (q ∧ r) ∨ (p ∧ r)
+(q ∧ p → p → p) ∨ ((r → p) → q ∧ r)
+(p → r) ∨ γ → ⊥
+β → r ∨ r ∨ q ∨ r
+⊥ ∨ (p ∧ r → r ∧ p)
+(r ∨ r) ∧ ⊥ → γ
+(q ∨ r ∨ (p ∧ r)) ∧ ((p → q) ∨ q ∨ q)
+q ∨ r ∨ γ ∨ ((p → q) ∧ ⊥)
+(r ∧ p) ∨ p ∨ r → (p → r) ∧ q ∧ r
+(p ∨ p) ∧ β → p ∨ p → p → r
+(q → p) ∨ (q → q) → α
+((q → q) → p ∧ r) ∧ (α → p ∧ p)
+(p ∧ r → r ∨ q) ∨ (p ∧ q) ∨ (q → q)
+(q ∧ p) ∨ r ∨ r → q ∨ r → r ∧ r
+q ∧ r ∧ p ∧ r → (q → r) ∧ β
+p ∨ p ∨ p ∨ p ∨ (q → r) ∨ (q ∧ p)
+(δ → r ∧ r) ∨ (q ∨ q → α)
+(p ∨ p → p → q) → ⊥
+(q ∨ q → r ∨ p) ∧ p ∧ p ∧ (q ∨ p)
+γ ∧ ((p → r) ∨ q ∨ p)
+γ ∨ (r ∨ q → p → r)
+r ∧ q ∧ (r ∨ r) → q ∧ p ∧ ⊥
+(p ∧ q → r ∧ p) → (r ∨ p) ∧ (p → r)
+(p → r) ∧ (q → q) ∧ (γ ∨ (r ∧ r))
+q ∧ p ∧ (p ∨ r) → (q → q) ∧ q ∧ q
+⊤ → r ∧ q → q → r
+r ∨ r ∨ p ∨ p ∨ (r ∧ p → q → p)
+(q ∧ r) ∨ δ → (q → p) ∧ (p → q)
+(⊤ → ⊤) ∧ (q → p) ∧ (p → p)
+q ∧ r ∧ γ ∧ (q ∨ q) ∧ (r → r)
+(p ∨ p → p ∧ p) ∨ ((q → q) → p → p)
+⊥ → (p → q) ∨ r ∨ r
+p ∧ q ∧ (r ∨ q) ∧ (δ → r ∨ q)
+(r ∨ p) ∧ (p → q) ∧ (⊤ ∨ (r ∧ r))
+β ∨ ((r → r) ∧ (r → r))
+p ∧ p ∧ γ ∧ ((p → p) ∨ (r → p))
+p ∧ p ∧ (q → p) ∧ (q ∨ r ∨ (q → r))
+(r → r) ∧ q ∧ p → (q → p) ∨ (p → p)
+α ∧ (q ∨ q) → δ ∨ q ∨ r
+β → α ∨ (q → q)
+(r ∧ q) ∨ r ∨ p ∨ ⊤
+((r → q) ∧ (p ∨ q)) ∨ q ∨ q ∨ (p ∧ r)
+(r ∨ q → p → q) → δ
+(q ∧ q) ∨ r ∨ q → (r ∧ r) ∨ p ∨ q
+((p → p) → p ∧ p) ∧ β
+α ∧ ((q → p) ∨ (r → q))
+((r → p) ∨ (r → r)) ∧ (r ∨ q → r ∧ q)
+α ∨ q ∨ r → β → p ∨ p
+(q ∨ r → r ∧ r) → r ∧ r → q ∨ p
+(δ → p → r) ∨ ((q → q) → q → r)
+(β ∨ (q → r)) ∧ (r ∨ r) ∧ (r → r)
+(γ ∨ (r → q)) ∧ ((r → p) → β)
+((p → r) ∧ r ∧ q) ∨ (q ∧ r ∧ (r → q))
+((r ∧ q) ∨ (r → p)) ∧ ((r → r) ∨ p ∨ q)
+((p → r) → p → r) → α ∨ (r → q)
+(α → q ∧ q) ∨ (p ∨ p → p ∨ q)
+((p ∨ r) ∧ r ∧ q) ∨ (r ∧ q ∧ (r → p))
+(q ∧ r) ∨ (q ∧ p) → ⊤
+(q ∨ p) ∧ (q ∨ p) ∧ ((r → q) → γ)
+(r → r) ∨ (p → p) → ⊤ ∨ p ∨ r
+(r → q) ∧ (p → r) → (r ∨ p) ∧ p ∧ p
+(q ∧ q → p → p) ∧ (q ∨ q → p ∨ p)
+(p ∧ p → r → r) ∧ γ
+(r ∨ q → ⊤) ∧ q ∧ r ∧ ⊥
+(r ∨ p) ∧ (q ∨ p) → β
+((q ∨ q) ∧ r ∧ q) ∨ ((q ∨ r) ∧ (q → r))
+(r ∨ q → q ∨ q) → (r ∧ p) ∨ q ∨ p
+((p ∧ r) ∨ r ∨ r) ∧ p ∧ q ∧ (r → r)
+α ∧ q ∧ r ∧ (r ∨ p → p ∧ r)
+(p ∨ p → ⊥) ∧ (q ∨ q ∨ q ∨ r)
+((q → r) → q ∧ q) ∧ ((q → p) → ⊥)
+γ ∧ (q ∨ r) ∧ (γ → q ∧ q)
+(⊤ → α) → p ∧ r → r ∨ p
+r ∧ r ∧ (q ∨ q) → α
+((q ∧ r) ∨ (p → p)) ∧ ⊥ ∧ (q ∨ p)
+β ∧ ((p ∧ r) ∨ α)
+((r ∧ q) ∨ (p ∧ p)) ∧ ((r ∧ p) ∨ p ∨ q)
+(δ → q → q) ∧ (r ∨ p ∨ ⊥)
+(r ∧ r → q ∧ q) ∨ γ ∨ (r → r)
+(q ∧ p) ∨ (p ∧ r) ∨ (q ∧ q → p → p)
+r ∨ r ∨ p ∨ p → (p → q) ∨ q ∨ p
+p ∧ p ∧ r ∧ r → δ
+⊥ ∧ q ∧ q ∧ δ
+α → q ∧ r ∧ (r ∨ p)
+(r ∧ q ∧ q ∧ r) ∨ (⊥ → r ∧ q)
+(⊤ → p → p) ∧ δ
+((p → r) → p → p) ∨ ((p ∨ q) ∧ (q → r))
+(⊤ → p ∧ q) ∧ α
+(p ∧ r) ∨ p ∨ q → p ∧ q ∧ r ∧ p
+δ ∧ (p ∨ p ∨ (p → r))
+(q ∨ p → q → p) ∧ (q → q) ∧ q ∧ r
+(q ∧ r ∧ (p → r)) ∨ (q ∨ r → γ)
+p ∧ q ∧ (r → r) ∧ ((p → q) → r ∨ p)
+(r ∧ r → q → p) → γ
+(δ → q ∧ r) ∧ δ
+r ∧ r ∧ (p ∨ q) ∧ γ
+(p ∨ p ∨ β) ∧ (r ∨ p) ∧ (r ∨ r)
+γ → (p → p) ∨ (q ∧ p)
+(⊥ → q ∧ q) → q ∧ p → q ∨ r
+⊥ ∨ ((q ∨ q) ∧ p ∧ p)
+(p → r) ∧ (r → r) ∧ ((r ∧ p) ∨ β)
+β ∨ (⊥ ∧ p ∧ q)
+(p ∨ r) ∧ (q → r) → γ
+δ ∨ (r → p) ∨ (r ∧ r → p ∧ q)
+(q ∨ q → δ) ∨ (p ∧ p ∧ β)
+((p → q) ∧ (r → p)) ∨ q ∨ r ∨ p ∨ p
+(r ∧ r → r ∧ p) → p ∧ r → q ∧ p
+((p ∧ r) ∨ p ∨ r) ∧ (p ∨ r ∨ (q → q))
+((q → p) → p ∨ p) ∨ δ
+(r ∧ p → p → q) → γ ∨ (p ∧ q)
+q ∧ p ∧ ⊥ ∧ δ
+(r → q) ∧ (r → r) ∧ α
+(r → q) ∨ δ ∨ ((r → r) → q ∨ p)
+(p ∨ r → p ∧ q) ∨ (q ∧ q) ∨ ⊥
+(γ → r ∨ r) ∨ (r → q) ∨ p ∨ q
+(p → p) ∧ (p → q) → q ∧ p ∧ p ∧ q
+(p ∧ q) ∨ γ ∨ ((r ∨ r) ∧ ⊥)
+(p ∨ p → r → r) ∧ ((q ∧ p) ∨ (p ∧ p))
+((r ∧ q) ∨ (q ∧ q)) ∧ ((r → r) ∨ p ∨ q)
+(γ ∧ ⊤) ∨ (p ∧ r) ∨ (q → p)
+((p → r) ∨ q ∨ q) ∧ (r ∨ r ∨ (q → q))
+(p ∧ p) ∨ (p → q) ∨ (α ∧ (q ∨ q))
+((p → r) ∧ (r ∨ p)) ∨ ((q → r) → β)
+(⊤ → q ∨ p) ∨ (p → p) ∨ (r → r)
+γ → q ∨ r ∨ (r ∧ p)
+(δ ∧ γ) ∨ r ∨ q ∨ (r → q)
+β ∧ γ ∧ (r → p)
+β ∨ (p ∧ p) → (q → p) ∧ (p ∨ p)
+((q → r) → q → r) → ⊤
+r ∨ q ∨ ⊥ → ⊤ ∧ q ∧ p
+β ∧ (q ∨ q) ∧ (p ∨ r)
+(r ∧ q → q ∨ p) ∨ (r → q) ∨ ⊤
+r ∧ p ∧ α → (q ∧ p) ∨ (q → q)
+γ ∧ ((p ∧ r) ∨ δ)
+α ∧ ((r → p) → γ)
+((q → q) ∧ (q → p)) ∨ (p ∨ p → ⊥)
+⊤ ∨ ((q ∨ p) ∧ r ∧ p)
+((q ∨ r) ∧ (q ∨ r)) ∨ p ∨ r ∨ (q ∧ p)
+q ∧ q ∧ (p ∨ p) → p ∨ q ∨ p ∨ q
+(p ∨ p) ∧ (p ∨ q) ∧ (r ∨ q ∨ (p ∧ p))
+((r → q) ∨ p ∨ q) ∧ (p ∨ p) ∧ (q → p)
+p ∨ p ∨ γ ∨ (α → r ∧ p)
+q ∧ r ∧ (p ∨ r) ∧ (q ∨ r ∨ r ∨ r)
+((r → r) → p ∧ q) ∧ ((r → q) → r ∧ p)
+(p → q) ∨ r ∨ q → (q → r) ∧ (p → p)
+(β → ⊤) ∨ p ∨ q ∨ q ∨ r
+α ∨ q ∨ p → α → r ∧ p
+((p ∧ r) ∨ α) ∧ ⊤
+δ ∧ (r → q) → (q → q) ∨ q ∨ p
+((r → p) ∧ r ∧ r) ∨ (p ∧ p) ∨ (q → p)
+(q ∧ p) ∨ (p ∧ p) → (q → r) → r → p
+q ∨ p ∨ (q ∧ p) → r ∧ p ∧ r ∧ r
+(p ∧ r → r ∨ q) ∨ ((p ∨ r) ∧ p ∧ q)
+(δ → q ∨ r) → r ∨ r ∨ r ∨ p
+((r → r) ∧ (q ∨ p)) ∨ ((q ∨ q) ∧ (q ∨ r))
+γ → (p ∧ q) ∨ r ∨ q
+(δ → q ∧ q) ∨ (p ∨ r → r → q)
+((r ∨ p) ∧ α) ∨ γ
+((q ∧ r) ∨ (q → p)) ∧ (q → r) ∧ p ∧ q
+(p ∨ p → ⊥) ∨ (r ∧ q ∧ p ∧ r)
+(r ∨ p) ∧ (q → p) → ⊥
+(r ∧ r → r ∨ p) → ⊤ ∧ (r → p)
+p ∨ q ∨ (p ∧ p) → α ∨ p ∨ r
+((p → p) → p ∧ p) ∨ (r ∧ r → ⊤)
+(⊥ → p ∨ p) ∧ p ∧ r ∧ (p ∨ q)
+⊥ → (p ∧ r) ∨ (p → q)
+((q ∨ r) ∧ (r ∨ r)) ∨ β
+⊤ → r ∧ q ∧ q ∧ q
+(p ∧ q) ∨ (r → r) ∨ (β ∧ r ∧ q)
+((q ∨ p) ∧ δ) ∨ ((p ∨ r) ∧ r ∧ q)
+(r → r) ∧ α → (q → p) ∨ p ∨ r
+((r → r) → q ∧ q) → (p ∨ r) ∧ ⊤
+β ∨ (q → p) ∨ (q ∨ r → q ∧ p)
+((p → q) → q → r) ∧ ((p → p) ∨ (q ∧ p))
+(q ∧ p → q ∧ p) ∧ α
+γ ∧ q ∧ r → ⊥
+((q → q) → q ∨ r) ∨ ((q ∨ q) ∧ r ∧ p)
+β ∨ (r ∧ r) ∨ (r ∧ p)
+δ → (p → q) ∧ ⊥
+(p ∧ r) ∨ (p ∧ r) → (p ∨ r) ∧ (p → p)
+((r → q) ∨ (r → p)) ∧ (r → r) ∧ (r → r)
+((p → q) → q ∧ r) → (q → r) ∨ (q ∧ r)
+((q → p) → p ∧ q) ∧ ⊥
+(r → p) ∨ r ∨ r → (q → p) → p ∧ r
+(r ∨ q → q → q) → r ∨ p ∨ q ∨ q
+(p ∨ q ∨ γ) ∧ (q ∨ q → α)
+((q → q) ∧ r ∧ q) ∨ α ∨ δ
+(p → r) ∨ ⊤ ∨ (r ∧ r ∧ (p ∨ p))
+β ∧ (p ∨ q → p ∨ q)
+q ∨ p ∨ (r ∧ p) ∨ (p ∧ r → q → q)
+(q ∨ p → p ∧ p) ∧ (p ∨ q → r → p)
+(r ∨ r → p ∨ q) ∨ (r ∧ q) ∨ (p → q)
+(p ∨ q → p ∨ r) ∧ δ
+(α → r ∧ p) ∧ (γ ∨ (p → q))
+(p ∨ q → γ) ∧ γ
+((r → q) → ⊥) ∧ ((r ∧ q) ∨ p ∨ q)
+p ∧ p ∧ q ∧ r ∧ α ∧ (q → p)
+(r → q) ∨ (r ∧ p) ∨ ⊥
+((r ∨ p) ∧ (r ∨ r)) ∨ (p ∧ r ∧ p ∧ r)
+(q → p) ∨ δ → (p ∨ r) ∧ q ∧ r
+p ∧ p ∧ (r → q) → β
+r ∧ q ∧ (p → p) ∧ (r ∧ p → α)
+(r ∧ p ∧ β) ∨ (p ∨ q → r ∨ p)
+⊥ ∨ (q → q) → ⊥
+r ∨ r ∨ ⊥ → (q → q) ∧ q ∧ q
+⊥ ∧ q ∧ p ∧ (p ∨ r → q → r)
+((q → p) → p → q) → (q → r) ∨ (p ∧ p)
+⊥ ∧ δ ∧ p ∧ q
+(r → q) ∧ r ∧ r ∧ (q → q) ∧ (q ∨ q)
+(q ∨ q → p ∨ p) → (p → r) → q → r
+(γ ∧ (r → r)) ∨ (r ∧ p → r ∨ p)
+(q → p) ∧ (p → r) → (p ∨ r) ∧ (r ∨ r)
+β ∨ ((q ∨ p) ∧ (p → q))
+((r → r) ∨ (q → r)) ∧ (p ∨ r ∨ p ∨ q)
+p ∧ p ∧ p ∧ q → δ
+r ∧ r ∧ (p ∨ r) → p ∨ q ∨ (q ∧ q)
+(p ∧ p) ∨ β ∨ (q ∧ p → ⊤)
+(p ∧ q → r → q) ∧ ((p → p) → r → r)
+(r ∨ r) ∧ (q → r) → ⊤
+(β ∨ r ∨ q) ∧ γ
+β ∧ ((q ∧ p) ∨ (r → p))
+(q ∨ p) ∧ (p ∨ p) → p ∧ p → q ∨ r
+((q → r) ∧ q ∧ r) ∨ ⊤
+((q → p) → r ∧ r) ∨ ⊥
+(q ∧ r → r ∨ r) → (q ∨ p) ∧ (p → q)
+(q ∧ r → γ) ∨ α
+α ∧ (p → r) ∧ p ∧ p
+γ ∧ (r ∧ r → p ∨ q)
+(⊤ → q ∨ p) ∧ (q ∨ r) ∧ (p → q)
+(r ∨ p) ∧ (p → r) ∧ ((q → p) ∨ (p ∧ p))
+(q → r) ∨ (p → p) → ⊤
+(r → q) ∧ (r → r) ∧ ((q ∧ p) ∨ p ∨ q)
+r ∧ q ∧ (r ∨ r) ∧ ((p ∧ q) ∨ q ∨ p)
+(p ∧ p → q ∧ p) ∧ (γ → p → r)
+(r ∧ p) ∨ q ∨ p ∨ r ∨ r ∨ r ∨ q
+((p → q) → r ∨ r) ∧ β
+(r ∨ q → β) ∧ ⊥
+((p ∧ r) ∨ (r ∧ q)) ∧ (⊥ ∨ ⊥)
+(r ∧ r) ∨ (r ∧ q) ∨ (r ∧ q → p → r)
+((p → q) → α) → α ∧ ⊤
+β ∧ r ∧ r → (q ∧ r) ∨ (p ∧ q)
+(r → r) ∧ (p ∨ r) ∧ (q ∨ p → r ∨ r)
+p ∧ p ∧ (r ∨ p) ∧ (p ∨ r ∨ (r ∧ r))
+⊥ ∧ (r → p) ∧ ((p → p) → p ∧ q)
+(q → r) ∨ ⊤ ∨ q ∨ r ∨ r ∨ r
+γ ∧ (p ∨ p) ∧ ((q ∧ q) ∨ p ∨ r)
+(r → p) ∨ (p → q) → β
+((p ∧ q) ∨ (q → r)) ∧ ((q → q) ∨ (q → p))
+(q ∧ r → q ∨ q) ∧ ((r → q) ∨ (q → r))
+(p ∧ p → r → r) ∧ ((p → r) ∨ (q ∧ p))
+((p → p) → r ∧ q) ∨ ((p → p) → q ∨ r)
+(p ∧ p → β) ∧ β
+((q → r) → δ) ∨ α
+(p ∧ p ∧ (r ∨ p)) ∨ ((p → q) ∧ r ∧ q)
+(q ∧ p → p ∧ q) → ⊥
+(δ ∧ p ∧ p) ∨ ⊤ ∨ (q ∧ r)
+⊥ → (r → r) ∨ (r ∧ p)
+(q ∨ p → q ∧ r) → (p → r) ∧ (p ∨ r)
+α ∨ (q → q) ∨ ((r → q) → p ∨ p)
+((p → p) → q → p) → β
+(q ∨ r) ∧ (r → r) ∧ (r ∧ r → r ∨ q)
+((q ∨ r) ∧ (r ∨ r)) ∨ (⊥ ∧ (p → q))
+((r → p) → q ∧ q) ∨ (α → ⊥)
+(q ∨ p → r → r) ∧ r ∧ q ∧ p ∧ p
+(r ∧ r → r ∧ p) ∨ (r ∧ p ∧ (r ∨ r))
+(β ∧ (r → p)) ∨ ((p ∨ q) ∧ p ∧ q)
+(p → p) ∧ p ∧ q ∧ (p → p) ∧ (p ∨ q)
+⊥ → r ∨ r → p ∧ r
+(r ∧ r → r ∨ q) ∧ β ∧ (p ∨ p)
+q ∧ q ∧ p ∧ r ∧ (q ∨ p → q ∧ q)
+(r → p) ∨ (q ∧ p) ∨ ((p ∨ p) ∧ q ∧ p)
+(r ∧ q) ∨ α ∨ ((p → p) → q ∧ p)
+(p → p) ∨ δ → (r ∨ p) ∧ (p ∨ q)
+(⊤ ∧ (r → r)) ∨ δ
+α ∨ ((p → r) ∧ q ∧ r)
+(p ∧ q → γ) ∨ p ∨ q ∨ ⊤
+(r ∨ q → r ∧ p) → δ ∨ α
+⊤ ∧ (r ∨ q) ∧ ((r → p) → r ∨ r)
+(r ∨ q) ∧ p ∧ r ∧ (α ∨ δ)
+(r → p) ∨ (r ∧ q) ∨ (q → q) ∨ (p ∧ r)
+α ∨ (q ∨ p → p ∨ p)
+⊤ ∧ p ∧ r → (p ∧ p) ∨ ⊤
+α ∨ (p ∨ p → r ∨ p)
+r ∨ r ∨ (q → q) → ⊥
+(p ∧ r) ∨ (q ∧ q) ∨ ((q ∨ q) ∧ (q → r))
+(q → r) ∨ (p ∧ q) → γ
+⊤ ∧ (p → q) ∧ (q ∨ q)
+(q ∨ r → p ∧ r) → α ∧ (p → q)
+(p ∧ r) ∨ (q ∧ q) ∨ ((p → r) ∧ δ)
+⊤ ∧ (q ∨ q) ∧ (r ∧ q → p ∨ r)
+(r ∨ r → α) → (p ∨ r) ∧ (q → q)
+(q ∨ p) ∧ (r ∨ q) → (q ∨ p) ∧ (r → p)
+(p → q) ∧ q ∧ p ∧ ⊤
+⊤ ∨ ((q → q) → γ)
+(r ∨ p → q → p) → p ∨ p ∨ (r → r)
+⊥ ∧ ((r ∧ r) ∨ (r ∧ q))
+((q → p) → p ∨ r) ∧ (⊤ → q ∨ q)
+q ∨ q ∨ ⊥ → (p ∨ q) ∧ γ
+((r → p) → q ∧ p) ∨ r ∨ q ∨ (p ∧ q)
+(q ∧ q → p → r) ∨ β
+⊤ → p ∧ q ∧ α
+(α ∧ (q → r)) ∨ (q ∧ r) ∨ (q → q)
+(q → p) ∧ (q ∨ r) → (q → q) ∧ (p → r)
+(q → q) ∨ γ ∨ r ∨ r ∨ p ∨ p
+(β → q → q) → p ∧ q → r → r
+(p ∨ r ∨ p ∨ p) ∧ γ
+((q → q) → γ) → p ∧ q ∧ α
+q ∧ r ∧ (p → r) → (p → p) ∧ (q ∨ r)
+((r ∨ r) ∧ (p ∨ p)) ∨ ((p ∨ r) ∧ (r → p))
+(q ∧ q) ∨ r ∨ q ∨ ((p → q) ∧ (p → q))
+(r ∨ p → p → q) ∧ (r → q) ∧ (q ∨ p)
+(⊥ → α) ∨ (q ∧ q) ∨ r ∨ r
+p ∨ r ∨ ⊤ ∨ (q ∧ r) ∨ (p ∧ p)
+β → (r → p) ∨ (r ∧ q)
+((p → q) → p ∨ p) ∧ (⊤ ∨ (q → p))
+(r ∨ r → r ∨ r) ∧ (q ∨ r → q ∨ q)
+⊤ ∨ (γ → p ∧ p)
+(β → q ∨ q) ∨ p ∨ r ∨ r ∨ p
+α → (p → p) → p ∧ q
+(r ∨ q) ∧ (r ∨ q) → (p → q) → q → r
+δ ∨ (q ∧ r) ∨ (γ → ⊥)
+(q → r) ∨ γ → δ
+(q → r) ∧ p ∧ q ∧ (r ∨ q → r ∨ r)
+(q → p) ∧ ⊥ ∧ (p → q) ∧ α
+q ∨ q ∨ (r ∧ p) → (p ∨ r) ∧ (p ∨ r)
+(r ∧ q) ∨ (r ∧ p) ∨ (r ∧ q → r → p)
+(r ∨ r → r ∧ q) → (p → q) ∨ p ∨ p
+p ∨ r ∨ (q ∧ q) → q ∨ p ∨ (q ∧ p)
+(r ∧ p → γ) ∧ α
+γ ∨ ((q → q) ∧ ⊤)
+(δ → q ∨ r) → p ∧ p ∧ (q → r)
+((r ∧ p) ∨ ⊥) ∧ (p ∨ r) ∧ (r → r)
+r ∨ p ∨ (q ∧ r) ∨ (p ∧ q ∧ (q ∨ q))
+(p ∨ p ∨ (p → p)) ∧ ⊥ ∧ r ∧ q
+r ∨ q ∨ p ∨ q ∨ (p ∧ p) ∨ (q → r)
+⊤ → q ∨ r → q → q
+((p → q) → δ) ∧ (⊥ ∨ (r ∧ p))
+(p ∧ p → q ∨ p) → (q ∧ p) ∨ q ∨ p
+((r → r) → r → q) → (p → p) ∨ β
+((r → q) ∨ (q → p)) ∧ (q ∨ q → q ∧ q)
+(δ ∧ p ∧ r) ∨ ((p ∨ p) ∧ (q ∨ q))
+(p ∧ p ∧ (q → p)) ∨ ((r → q) → q ∧ r)
+(p ∨ r → r ∧ r) ∧ δ ∧ (q → p)
+δ ∧ (r ∧ r → r ∨ r)
+α ∨ r ∨ r ∨ (r ∧ r)
+(r → p) ∧ (q → q) ∧ ((p → q) ∨ q ∨ q)
+((p → p) → α) → (r ∧ r) ∨ q ∨ p
+δ ∧ ((r → p) → r ∨ p)
+(r ∨ q) ∧ (p ∨ p) → (r → r) → r ∧ p
+(p ∨ r) ∧ (q → q) → ⊥
+(p ∧ q → q ∨ q) ∧ (δ ∨ r ∨ p)
+α → δ → p ∨ r
+β ∨ r ∨ q → δ
+α → (r ∧ r) ∨ r ∨ r
+(q → q) ∧ (p → q) → (p ∨ r) ∧ (q → p)
+r ∨ r ∨ (q ∧ r) ∨ γ ∨ (p ∧ q)
+(β → ⊤) ∧ (r ∨ q) ∧ (p ∨ r)
+(δ ∨ p ∨ p) ∧ γ
+(q ∧ r → p ∨ r) → r ∨ r → r ∨ q
+(p ∧ q ∧ (r ∨ p)) ∨ ((r → r) ∧ (p ∨ r))
+(⊤ ∨ (p ∧ r)) ∧ (p ∨ q) ∧ (p ∨ p)
+(β ∨ (p ∧ p)) ∧ (r ∧ q → p ∧ q)
+(p ∧ r) ∨ r ∨ p → r ∧ r → r ∨ q
+((p → r) ∨ (q ∧ p)) ∧ (r ∧ q → p ∧ p)
+(q ∧ r → ⊥) ∧ δ
+(q → p) ∧ q ∧ r ∧ (p ∨ q) ∧ ⊤
+(α → r → p) ∧ β
+⊥ ∧ α ∧ (p → r)
+((q → q) → p ∧ q) ∨ ⊥
+(q ∧ p) ∨ (p ∧ q) → α → p → r
+(p → q) ∨ r ∨ q ∨ ⊤
+⊥ ∨ ((p → q) ∧ (p ∨ p))
+(q ∧ p → ⊤) ∧ ((r ∧ p) ∨ ⊥)
+p ∨ r ∨ p ∨ r → ⊤ ∧ r ∧ p
+δ ∧ (q ∨ p → r → r)
+(q ∧ q) ∨ δ ∨ (p ∧ p ∧ p ∧ q)
+r ∧ q ∧ (r ∨ r) ∧ ((p → r) → r ∧ q)
+(q ∧ q → r ∨ p) ∧ (q → r) ∧ (q ∨ r)
+((r ∧ q) ∨ ⊥) ∧ (r ∨ q → q ∧ r)
+((q → r) → δ) ∧ r ∧ p ∧ (p → q)
+p ∧ p ∧ (q ∨ r) ∧ (α → ⊤)
+β ∨ α ∨ q ∨ p ∨ (q → q)
+((q → q) → ⊤) → (q ∨ q) ∧ q ∧ q
+(r → p) ∧ (q → q) ∧ p ∧ p ∧ (q → q)
+(p ∨ q → r → r) ∨ r ∨ p ∨ (p → p)
+⊤ ∧ (r ∨ r → r ∧ p)
+((r ∨ q) ∧ (p ∨ p)) ∨ (r ∧ q ∧ p ∧ p)
+β ∨ (q ∧ p) ∨ (q ∨ q → r ∨ p)
+((p → q) ∧ (p → q)) ∨ ⊥
+⊥ → (p → r) ∧ (r → r)
+(r ∧ p) ∨ r ∨ q → γ ∨ (q ∧ r)
+((q ∧ p) ∨ p ∨ p) ∧ (α ∨ γ)
+δ ∧ ⊥ ∧ r ∧ r
+γ ∧ (p ∨ p ∨ p ∨ p)
+(q ∨ r → β) ∨ δ
+(p → r) ∨ β ∨ ((q → r) ∧ (p → p))
+(r ∨ r → p → q) ∧ (p → p) ∧ (r ∨ p)
+(r → r) ∧ r ∧ p → γ ∧ (r ∨ q)
+β → r ∧ r → r → r
+(q ∧ r → p ∧ r) ∧ ((r → p) ∨ p ∨ q)
+(r ∨ p → p ∨ p) ∨ β
+(p ∧ q) ∨ p ∨ r → q ∨ p → ⊤
+β ∨ r ∨ q → (r → q) ∧ r ∧ r
+(p ∨ r → ⊤) ∨ ((p → p) ∧ δ)
+p ∧ p ∧ (r → r) ∧ (p ∨ q ∨ (q ∧ r))
+(p → r) ∨ (r ∧ p) → r ∨ p → q ∧ q
+⊤ → r ∧ q → ⊥
+q ∨ p ∨ (p ∧ r) → α ∧ q ∧ r
+⊤ ∨ ((r → r) ∧ q ∧ q)
+((r → p) → p → r) ∧ (r ∧ r → q ∨ q)
+(p ∨ r → δ) ∧ ⊤ ∧ q ∧ r
+r ∨ q ∨ (p ∧ r) ∨ ⊥
+β ∧ (p → q) ∧ (p → q)
+γ → q ∧ p ∧ γ
+(p ∨ p → r ∨ p) ∧ γ ∧ (p ∨ r)
+((p ∧ p) ∨ q ∨ r) ∧ (p ∧ p → q ∧ p)
+β ∧ (p → r) ∧ q ∧ p
+(q ∨ r → p ∨ q) → (r → r) ∧ (r ∨ r)
+((q ∨ q) ∧ r ∧ r) ∨ (q ∨ p → ⊥)
+r ∨ r ∨ p ∨ r → ⊥ → ⊤
+((p → q) → p ∨ q) ∧ δ
+(p ∨ p) ∧ (r → q) → (p ∨ p) ∧ r ∧ q
+(r ∨ p ∨ q ∨ p) ∧ ((p → q) → r ∧ r)
+(q ∨ p) ∧ (p ∨ q) ∧ ((r → q) → δ)
+((r → r) → r ∨ q) ∧ ((r → p) → q ∧ r)
+(γ → β) ∨ p ∨ q ∨ (r ∧ p)
+p ∨ r ∨ p ∨ p → (p → p) ∧ q ∧ p
+(p → r) ∧ (q → p) → ⊥
+r ∨ r ∨ q ∨ p → (p ∧ p) ∨ β
+(p ∨ r ∨ (p ∧ q)) ∧ ((q ∧ p) ∨ (q → r))
+γ ∧ (p ∨ r) ∧ (r ∨ q → q → q)
+((q ∨ p) ∧ γ) ∨ (r ∨ q → p ∨ q)
+(p ∨ p → r ∧ r) → δ ∨ (q → p)
+(r ∨ q → ⊤) ∧ ((p ∧ p) ∨ (p ∧ r))
+δ ∨ ((r ∨ q) ∧ β)
+((q → q) → q ∨ r) ∨ α
+q ∧ r ∧ (q ∨ r) → (q → r) → r ∨ p
+β ∨ (p ∧ q → r ∧ r)
+δ ∨ (q → q) ∨ (p → q)
+(δ → q ∨ r) ∨ r ∨ r ∨ (r ∧ r)
+(q → r) ∧ (q ∨ p) → (q → q) ∨ α
+(p → r) ∨ δ → q ∧ q → γ
+((p ∧ r) ∨ p ∨ r) ∧ ((r → r) → p ∨ p)
+((p → q) ∧ (q → q)) ∨ ⊥
+(⊤ → q ∨ q) → δ
+(r → p) ∨ q ∨ r ∨ ⊤
+((r → q) ∨ (q ∧ p)) ∧ (⊥ → p ∨ q)
+(p ∨ p → ⊤) ∨ (q → q) ∨ (p → r)
+(p ∨ q) ∧ (q ∨ p) → δ → q → r
+((q → r) ∨ (q ∧ p)) ∧ r ∧ p ∧ (q ∨ r)
+α ∧ q ∧ p ∧ (⊤ → δ)
+β ∨ (q ∧ p) ∨ (q → q) ∨ α
+⊤ ∧ ((r ∧ r) ∨ r ∨ q)
+(p → p) ∧ (p ∨ q) ∧ (p ∨ p ∨ β)
+α → (r ∧ r) ∨ q ∨ p
+(q ∨ q → q ∧ q) → (r ∧ q) ∨ q ∨ r
+(⊥ ∧ (q → r)) ∨ p ∨ q ∨ r ∨ r
+(q ∧ p) ∨ q ∨ r ∨ ((r ∨ p) ∧ p ∧ r)
+(β → p → r) → (p ∧ r) ∨ ⊥
+(r ∨ r) ∧ (r ∨ r) ∧ (β ∨ q ∨ q)
+(r ∨ p → q ∨ q) ∧ ((p → r) ∨ ⊥)
+((q ∨ p) ∧ q ∧ p) ∨ (q ∨ q → r ∧ q)
+(p ∨ q → p → p) ∧ p ∧ p ∧ q ∧ q
+α ∨ (q ∧ p) ∨ β
+(γ → q ∧ p) → ⊥ ∨ r ∨ r
+(p ∧ q → p ∨ p) ∧ β
+(r ∨ q → r → q) → r ∨ q ∨ (p ∧ q)
+(r ∨ r → q ∨ q) ∨ (p → r) ∨ (r ∧ r)
+((p → r) → γ) ∨ β ∨ ⊤
+p ∨ q ∨ (p → p) → p ∨ p → q → p
+((q → r) → β) → (q ∨ r) ∧ (p → q)
+((q → q) → r ∧ q) ∧ (p ∨ q → q ∨ p)
+(r → q) ∨ (q ∧ p) ∨ (p ∧ q ∧ β)
+⊥ ∨ (p ∨ r → δ)
+((q → r) → r → p) ∨ (q ∧ r ∧ α)
+⊤ ∧ ((p → r) → r → q)
+(p ∧ q → p → p) → ⊤
+(p ∨ p → q ∨ p) → (r ∧ p) ∨ (p → r)
+(q ∧ r) ∨ (q ∧ q) ∨ ((r → q) → δ)
+γ → r ∧ q ∧ (r ∨ p)
+((q → r) → ⊥) → r ∨ q ∨ (p → q)
+((q → p) → r ∧ p) → q ∧ r ∧ (r ∨ q)
+(γ ∨ (r ∧ p)) ∧ ⊤
+β ∨ (p → p) → γ → γ
+(r ∨ q → r ∧ r) ∧ (q ∨ r ∨ (r → q))
+((r ∧ p) ∨ (q → r)) ∧ ((r → r) → δ)
+δ ∨ ((p ∨ p) ∧ (r ∨ r))
+(r ∧ p → p ∨ q) ∨ (r ∧ r ∧ (p → r))
+(q → p) ∨ (p ∧ r) ∨ α
+(p ∨ p → γ) ∧ (r → r) ∧ q ∧ r
+p ∧ r ∧ q ∧ q ∧ p ∧ r ∧ q ∧ p
+(r → p) ∧ ⊤ → p ∧ q ∧ δ
+(p ∧ q ∧ p ∧ p) ∨ (p ∨ p → p ∨ q)
+r ∧ q ∧ (r ∨ r) ∧ δ
+((q → q) → q ∧ q) ∧ ((r ∧ q) ∨ (p ∧ r))
+q ∨ p ∨ (p ∧ q) ∨ (r ∧ p → q ∨ q)
+δ ∨ q ∨ p → ⊥
+r ∨ q ∨ q ∨ q ∨ γ
+(r → q) ∧ α ∧ (r ∨ p → r ∧ q)
+(r → q) ∧ ⊤ → r ∨ r ∨ (q ∧ q)
+(p ∨ r → q ∨ p) ∧ (q ∧ q → δ)
+(δ → p → r) ∨ (q ∧ q → q → p)
+(q → p) ∧ (p → p) ∧ ((q → r) ∨ (r → r))
+(r → q) ∨ (q → q) ∨ (r ∧ r ∧ γ)
+r ∧ r ∧ (p → q) → γ
+(δ ∨ (q → r)) ∧ ⊤
+α ∨ ((p ∨ r) ∧ (r ∨ q))
+(r ∨ q → q ∨ q) → q ∧ r → r → q
+⊥ → γ ∨ r ∨ q
+(⊥ → r ∨ q) ∨ (p ∨ q → r ∧ p)
+(q → q) ∧ (r ∨ q) → (q → p) ∧ p ∧ r
+(r → r) ∨ (r ∧ r) → (q → r) → β
+p ∨ r ∨ q ∨ q ∨ ((p ∨ q) ∧ ⊤)
+(r ∨ q) ∧ q ∧ r ∧ ⊥ ∧ (p → p)
+(r ∧ r → r ∨ q) → ⊤ ∧ (q ∨ q)
+(p ∧ p → p ∧ r) → β
+(p → q) ∨ (r ∧ r) → ⊤ ∧ (r ∨ q)
+((q → q) → p → q) → (r → r) ∧ (p → r)
+⊥ ∧ ((r ∧ p) ∨ p ∨ q)
+⊥ ∨ ((q ∨ r) ∧ (q ∨ q))
+β ∧ γ → (p ∨ q) ∧ q ∧ r
+((r → p) → p → q) → p ∨ p ∨ q ∨ q
+(q ∨ q → α) ∧ (p ∨ p ∨ (r ∧ q))
+(r ∧ p) ∨ (p ∧ p) → q ∧ r ∧ (q → p)
+(p ∧ p) ∨ q ∨ q → (q ∧ p) ∨ (p ∧ r)
+⊥ ∨ (⊤ → r → r)
+(q ∧ q) ∨ (p → p) ∨ (⊤ ∧ r ∧ p)
+(q → r) ∨ δ ∨ (r ∧ r) ∨ q ∨ q
+(⊥ ∨ (p → p)) ∧ ((p → p) → p ∨ q)
+((q → p) → r → q) → ⊥
+(p ∧ r) ∨ (q ∧ q) → ⊥
+((p → r) ∧ (r ∨ r)) ∨ ⊥
+(p → p) ∨ r ∨ p ∨ ((q → r) ∧ (q → p))
+(r ∧ q → q → r) ∨ (r ∧ r ∧ γ)
+p ∧ p ∧ (r → r) ∧ ((p ∧ q) ∨ p ∨ q)
+(p ∧ r → α) ∧ ((p ∧ p) ∨ q ∨ p)
+(p → p) ∧ β ∧ β
+q ∨ r ∨ (q ∧ q) → γ
+(r ∨ p → q ∧ p) → γ ∨ (p → p)
+(r → r) ∧ (r → r) ∧ (γ ∨ q ∨ q)
+((r → q) → δ) ∧ (q ∧ p → q ∧ r)
+⊤ → ⊤ → p ∧ p
+q ∧ p ∧ (p ∨ r) → (r → q) ∨ r ∨ r
+((p → q) → q ∧ q) → p ∨ p ∨ r ∨ r
+(r ∨ q → p ∨ q) ∨ (q ∧ r → q ∨ q)
+(q → q) ∨ (p → q) ∨ (r ∨ q → r ∨ q)
+((p → r) ∧ (p ∨ q)) ∨ (γ → p ∧ q)
+(q ∨ q → r ∧ q) ∧ ((r ∧ p) ∨ r ∨ p)
+(r ∨ p → p ∧ p) ∧ (p ∧ p → r → q)
+((p ∧ r) ∨ q ∨ q) ∧ ((q → r) ∨ ⊤)
+(r → p) ∧ q ∧ r ∧ q ∧ q ∧ (r → p)
+⊤ → p ∧ r → p ∨ q
+(⊤ → r ∧ p) ∨ (δ ∧ (q → r))
+(r ∧ p → p ∧ r) ∧ (r ∧ p → q ∨ p)
+((r → q) → β) ∨ ((p → r) → p → r)
+(r → q) ∧ (r ∨ q) ∧ ((p → q) ∨ r ∨ q)
+(q → q) ∨ p ∨ r → (p → r) ∨ (p → p)
+(p ∨ q → q ∨ r) ∧ α
+((q → r) → p → p) ∨ ((p → r) → r ∧ r)
+((r → r) → ⊤) ∧ β
+((p → p) → r ∧ q) → p ∨ q ∨ (p ∧ p)
+(r → p) ∧ (p → r) ∧ (α → p ∧ p)
+(q ∨ q) ∧ δ → (p → q) ∨ (p ∧ q)
+⊤ ∨ (p → r) ∨ (p ∧ p → q ∧ r)
+γ ∧ ((r → r) ∨ (r → r))
+⊥ → p ∧ p → p ∧ r
+γ ∨ (q ∨ q → q → p)
+((r → r) ∨ p ∨ p) ∧ ((p → r) ∨ p ∨ q)
+((p → q) → p ∨ q) → (p → r) ∧ γ
+((q ∨ r) ∧ (r → p)) ∨ q ∨ p ∨ p ∨ q
+(r ∨ q → r ∧ r) ∧ ((q ∧ q) ∨ (q → q))
+p ∧ q ∧ (q → p) ∧ β
+((q → q) → q ∧ q) → q ∨ p → r → r
+((q → p) → r ∧ p) ∨ (q ∧ p) ∨ p ∨ q
+(γ → p ∧ p) → ⊤
+(r ∨ p → q → q) → (r → q) ∧ p ∧ p
+(q ∧ q ∧ (q → r)) ∨ (r ∧ q) ∨ (q ∧ p)
+p ∨ p ∨ p ∨ q ∨ γ
+q ∨ p ∨ q ∨ r → (p → q) ∨ (q → q)
+((q → r) → q → p) ∨ (p → r) ∨ (p ∧ q)
+p ∨ r ∨ (r ∧ p) ∨ (q ∧ p → p ∧ q)
+δ → β → q ∧ p
+(p → r) ∧ (q ∨ q) → (r ∨ r) ∧ (q ∨ q)
+(p → p) ∨ (q → p) ∨ ⊥
+r ∨ r ∨ β → γ
+((q → q) → q → r) → q ∨ r → q ∧ p
+((p → p) ∧ ⊥) ∨ ⊤
+(q ∧ q) ∨ p ∨ r ∨ (p ∧ r ∧ (r → r))
+(p → r) ∧ (r ∨ q) ∧ δ
+((p → p) → q → q) → (p → r) ∧ (q → q)
+(β ∨ (r ∧ r)) ∧ (r ∨ r ∨ p ∨ r)
+⊥ ∧ α → q ∧ q ∧ p ∧ q
+(p → r) ∨ ⊥ ∨ γ
+(q ∨ p → p ∨ q) → δ
+(p ∨ q → q → r) ∨ (r ∨ p → q → q)
+(p ∧ r) ∨ (r → q) → p ∨ r → p ∧ r
+(p ∧ r → δ) ∨ p ∨ r ∨ (p → q)
+⊥ → (p → r) ∨ ⊥
+(α → p ∧ r) ∨ (r ∧ q) ∨ r ∨ q
+(r ∨ r → p → q) ∨ (γ ∧ r ∧ r)
+⊤ ∧ r ∧ r → ⊤
+p ∨ r ∨ (r → r) → α
+(p → r) ∧ (q ∨ q) → p ∨ p ∨ (p → p)
+(q → p) ∨ (q → p) ∨ ⊥
+(r ∨ q → r → r) ∨ γ ∨ (r ∧ q)
+q ∧ q ∧ α → (q → r) ∨ (q → r)
+(q ∨ r → q ∧ p) → δ
+(β ∧ γ) ∨ ((r → r) → p ∨ q)
+(p ∨ p) ∧ r ∧ q → ⊤ ∨ (p ∧ r)
+⊤ ∨ p ∨ q ∨ α
+γ ∨ γ ∨ ((q → r) → p → p)
+(p ∧ q ∧ (p → p)) ∨ ((p → p) ∧ (p → q))
+α → (q → q) ∨ q ∨ p
+(α ∨ (q → r)) ∧ ⊤
+γ ∧ (r ∨ q) ∧ (r ∨ q) ∧ r ∧ p
+(r ∧ q ∧ δ) ∨ ((q → p) → r ∨ p)
+((r → r) → q ∨ r) ∨ ((r ∨ r) ∧ ⊥)
+r ∧ p ∧ r ∧ q ∧ r ∧ r ∧ (r ∨ p)
+γ → (p → r) → p → p
+q ∧ p ∧ α → q ∧ q ∧ (p → q)
+(q ∧ p → r ∧ q) ∧ (p → p) ∧ p ∧ p
+(p ∧ q → q ∨ p) ∨ α ∨ δ
+(q ∨ q → p ∨ r) ∧ δ
+⊤ ∧ (p ∨ p ∨ (p → r))
+r ∨ r ∨ (p → q) ∨ ⊥
+(r ∨ r → r → q) ∨ ((p → r) ∧ (q ∨ q))
+(δ → q → r) ∨ ((r ∨ p) ∧ γ)
+(α → q ∨ q) → q ∧ q → ⊤
+(r → r) ∧ (q → p) → p ∧ r → q ∨ p
+r ∧ q ∧ ⊤ ∧ r ∧ q ∧ (q → r)
+δ → (r → r) ∨ q ∨ p
+((r → p) → r → p) ∧ β
+((r → p) → q → q) → γ
+(q ∨ p → p → p) ∨ ((p ∨ r) ∧ δ)
+(q ∧ q) ∨ (p ∧ r) ∨ q ∨ q ∨ q ∨ q
+(q ∨ q → q ∨ q) ∨ (r → r) ∨ q ∨ r
+⊥ ∧ q ∧ p ∧ p ∧ q
+q ∧ q ∧ (q → p) ∧ (q ∨ q) ∧ β
+r ∧ r ∧ q ∧ r ∧ (r ∨ p) ∧ (q → r)
+(p ∨ r → q → r) → α → q ∨ r
+γ → β ∧ (q → r)
+(r ∨ p ∨ p ∨ p) ∧ ⊥
+δ ∨ α ∨ (q ∧ q ∧ q ∧ p)
+⊤ → r ∨ p → p ∨ q
+(q ∧ r ∧ p ∧ q) ∨ ⊤
+(r → q) ∧ r ∧ p ∧ (p → p) ∧ (p ∨ q)
+γ ∨ (p → p) ∨ α ∨ δ
+(q ∨ p → r ∨ p) ∧ δ
+((r → r) → q → p) ∧ (r → q) ∧ (q → q)
+γ ∧ (p ∨ q → β)
+((q ∨ q) ∧ q ∧ p) ∨ ⊥
+((q ∧ p) ∨ (r → p)) ∧ γ
+β ∧ (q → q) ∧ δ
+(α → r ∨ r) → (r → q) ∨ r ∨ q
+(r → p) ∧ (r ∨ r) → (q ∨ q) ∧ (p → p)
+⊥ ∨ p ∨ p → (q → p) ∧ p ∧ r
+⊥ → (p ∧ p) ∨ (p ∧ p)
+δ ∨ (p → p) ∨ ((q → q) ∧ p ∧ r)
+(p ∧ p) ∨ (p ∧ p) ∨ ((q → p) → r ∧ r)
+(q → p) ∨ ⊥ ∨ (p ∧ q → p → r)
+((q → p) → p ∧ p) → β
+(q ∨ q → q → q) ∨ δ
+β ∨ (p ∨ p → q ∧ r)
+(r ∨ r → q ∧ p) ∧ q ∧ q ∧ q ∧ r
+(r ∧ q → r ∨ q) ∨ (q → r) ∨ (r → r)
+δ ∨ p ∨ q ∨ (γ ∧ (q → p))
+(γ → q ∧ r) ∧ ((p ∧ p) ∨ q ∨ q)
+(q ∨ r) ∧ (q ∨ r) → q ∨ r → r ∧ q
+p ∧ q ∧ α ∧ (r ∨ q) ∧ γ
+(r → r) ∧ γ ∧ (q ∧ p → q ∨ p)
+(q ∨ r → q → p) → ⊤ ∧ (q → q)
+⊥ ∧ (q ∨ r) ∧ q ∧ r
+γ ∧ (q ∨ p) ∧ (r ∨ q ∨ r ∨ q)
+(r → q) ∧ (q ∨ q) → (p → p) → r ∧ p
+(γ → r ∨ q) → (r → q) → ⊥
+γ ∨ ((q → p) → p ∧ p)
+(p ∨ p → r ∨ q) ∨ (r ∧ r) ∨ (r ∧ p)
+(β → q ∧ p) ∨ (r ∧ q → q ∧ r)
+(⊥ ∧ (p ∨ q)) ∨ (q → p) ∨ p ∨ q
+(p ∧ q ∧ (r → r)) ∨ (q ∧ r → q ∧ p)
+δ ∧ (q ∨ r) ∧ β ∧ (r ∨ p)
+((r → p) → q ∨ p) ∨ ⊥ ∨ (q ∧ p)
+⊥ → ⊥ → p ∧ q
+(⊤ → p → p) ∨ (q ∧ q → p ∨ p)
+β ∨ ((p → q) → r ∨ p)
+(p → q) ∧ α → γ
+(p → p) ∨ (r → r) ∨ α ∨ (p → r)
+q ∨ p ∨ α ∨ r ∨ q ∨ (q → p)
+(r → r) ∧ (p → p) → (r ∨ p) ∧ r ∧ p
+(p ∨ p ∨ (r ∧ q)) ∧ (p ∨ r → r → r)
+(p ∧ p) ∨ p ∨ q ∨ ⊤
+((q → r) ∨ p ∨ p) ∧ β
+γ ∨ ((p → p) ∧ δ)
+(r ∧ r) ∨ (q ∧ q) ∨ β
+β → (r → r) → p → q
+((p ∧ p) ∨ q ∨ p) ∧ q ∧ q ∧ (p → p)
+(q ∨ p → q → p) → α ∨ (r → r)
+γ ∧ (⊤ ∨ r ∨ p)
+(p ∨ p) ∧ r ∧ q → γ ∨ r ∨ q
+α ∧ (r ∨ r) ∧ ((p → p) ∨ β)
+(q ∨ p) ∧ (p → q) ∧ (δ ∨ p ∨ q)
+(p ∨ p → q → q) ∨ δ
+⊥ ∨ (q ∧ q) ∨ (⊥ → δ)
+(r → q) ∨ p ∨ q ∨ (r ∨ q → q ∨ p)
+((q → p) → p → p) → (r → q) ∧ p ∧ r
+(r ∧ p → r ∨ p) → ⊤ ∧ (r → q)
+(r ∨ p) ∧ (p → r) ∧ (r ∨ r → q → r)
+⊥ ∨ (q ∧ q → δ)
+((p ∧ q) ∨ (r → p)) ∧ (q → p) ∧ (r ∨ r)
+(r ∨ p) ∧ (r → p) → γ
+⊤ ∨ q ∨ p ∨ (r ∧ q)
+(q ∨ p) ∧ q ∧ q ∧ (q ∨ r) ∧ p ∧ r
+(q ∨ r) ∧ (r → r) → (r ∧ r) ∨ (q ∧ p)
+((r → q) ∨ (p ∧ q)) ∧ (p ∧ r → δ)
+(q → r) ∨ (q ∧ p) ∨ ⊥
+γ ∨ q ∨ p ∨ (r ∧ q) ∨ r ∨ p
+((r ∧ q) ∨ (r ∧ r)) ∧ (r ∨ p ∨ (r ∧ r))
+(r ∨ p) ∧ (q → p) → γ → q ∧ r
+δ ∨ (p → r) ∨ δ
+(q ∧ q → p → r) → ⊥
+(r → p) ∧ p ∧ p ∧ γ ∧ (q ∨ r)
+β ∧ (r ∨ p) → (r → q) ∧ p ∧ p
+(q → r) ∨ q ∨ p → ⊥ ∨ (p → p)
+(β → p ∨ q) ∧ (p ∨ q ∨ (q ∧ r))
+((p → p) ∨ (q ∧ q)) ∧ γ
+p ∧ q ∧ p ∧ p → q ∧ q → p ∧ q
+⊤ ∧ (p → p) → (p ∧ p) ∨ (p ∧ p)
+((p → r) → q → r) → p ∨ r → p ∧ p
+⊥ ∨ (r → p) ∨ (p → r)
+(p ∨ q → δ) ∨ (q → r) ∨ (p → q)
+(p ∨ r → p ∧ p) ∧ q ∧ q ∧ β
+(q ∧ r → α) → γ ∧ α
+(p ∨ q) ∧ (p → q) ∧ δ
+(r ∨ q) ∧ r ∧ p ∧ (α → q ∨ r)
+(r → p) ∨ q ∨ r → q ∧ p → p → p
+(r ∨ r → q ∧ r) → ⊤ ∨ p ∨ r
+q ∨ p ∨ (q ∧ p) ∨ ((q → q) ∧ δ)
+(r ∨ q → p ∨ r) → (q ∨ r) ∧ p ∧ r
+⊤ → (q → r) ∧ (q → r)
+(p ∨ q) ∧ (q ∨ p) ∧ γ
+(q ∧ p → γ) → q ∨ r ∨ (r ∧ q)
+((q → p) ∧ p ∧ r) ∨ (p ∧ p → q ∧ q)
+(q → q) ∧ p ∧ p ∧ (r ∨ r → r ∨ q)
+γ → (p → p) ∨ (r → p)
+α ∨ (q → r) ∨ ⊤ ∨ (q → p)
+(q ∨ r → r ∨ q) ∧ (r → p) ∧ p ∧ p
+γ ∨ (p ∨ p → r ∨ p)
+(r ∧ p → p ∧ r) ∧ (r ∨ p) ∧ q ∧ r
+δ → α ∧ q ∧ r
+r ∨ r ∨ (r ∧ q) ∨ ((p → p) → p ∨ r)
+((r → q) → δ) ∨ (r → p) ∨ (p → q)
+γ ∨ ((r ∨ p) ∧ p ∧ r)
+δ → (r → r) ∨ (r → q)
+(r → q) ∨ ⊥ → ⊤ ∧ r ∧ q
+δ → q ∨ p → r ∨ q
+(p ∨ p) ∧ (r ∨ q) ∧ (q ∨ r → q → q)
+(q ∧ q ∧ δ) ∨ α
+((p → p) ∨ (q ∧ r)) ∧ ⊥
+(r ∧ p → q ∧ r) → γ
+(q ∨ r → p ∨ r) ∧ ⊥
+(q ∨ r) ∧ q ∧ p → (p → p) ∨ (q → r)
+(r ∨ r → ⊤) ∧ (q → r) ∧ δ
+(p → p) ∨ (q ∧ r) → (p ∨ r) ∧ r ∧ r
+(p ∧ r → p → r) ∨ (r ∧ q) ∨ q ∨ q
+(r ∨ p → r ∨ q) ∨ (β ∧ (p ∨ q))
+(p ∨ p) ∧ (q ∨ p) ∧ α ∧ p ∧ r
+(r ∧ r → r → q) ∨ (p ∧ q) ∨ r ∨ p
+((q → p) ∧ (p ∨ p)) ∨ (α ∧ p ∧ p)
+((r → q) → q ∨ p) ∨ (r ∧ p) ∨ r ∨ p
+(r ∨ q) ∧ (r ∨ r) → q ∧ r ∧ p ∧ q
+⊤ ∨ ((r → r) → r ∧ p)
+⊤ ∧ ((r → q) ∨ ⊥)
+(r → r) ∨ r ∨ p ∨ (r ∨ r → p ∨ p)
+(p ∧ p ∧ (p ∨ p)) ∨ ((q ∨ q) ∧ (q → q))
+(r ∨ q ∨ (q ∧ p)) ∧ (r ∧ r → p ∨ q)
+γ ∧ ((p → r) ∨ ⊤)
+((p → q) → p ∧ p) ∨ ((p → r) ∧ p ∧ r)
+⊤ ∧ (q ∨ q) ∧ r ∧ q
+(r ∨ q → r ∨ p) → δ → r → r
+(β ∧ (p → p)) ∨ ⊥ ∨ (p → p)
+(⊥ → α) ∧ (q ∨ p) ∧ (q → p)
+(r → q) ∨ q ∨ r → q ∨ q ∨ δ
+⊥ ∧ ((r → p) ∨ (q → q))
+(q ∧ q → p ∧ p) ∨ (q → r) ∨ δ
+(r ∧ q) ∨ (q → q) ∨ (r ∧ p ∧ (p → r))
+⊥ ∨ ((q → r) ∧ (q → r))
+((p → p) → q ∨ q) ∧ ((r → r) → p → r)
+(r → p) ∨ (r ∧ q) → β
+(p ∧ p → q → q) ∧ ((r ∧ r) ∨ r ∨ r)
+r ∨ p ∨ (q → q) ∨ ((r → p) → q → p)
+r ∨ p ∨ α ∨ (r ∧ r → p → q)
+β ∨ q ∨ q → (q → r) ∨ (r → q)
+(r ∨ q → p ∨ q) → δ
+(r ∧ p) ∨ r ∨ p → β
+(r ∧ r → q ∨ p) ∧ (γ ∨ δ)
+((r → p) ∧ α) ∨ (r ∧ q → q ∧ q)
+β ∧ (q → q) ∧ γ
+⊤ → r ∨ p → r ∨ r
+(r ∧ p → r → q) → ⊤ → p ∨ r
+((q → q) → r ∧ p) ∨ ((r → q) → q → p)
+α ∨ ((q → p) → p → q)
+(r → r) ∨ q ∨ r → ⊤ ∧ (r ∨ p)
+(q → r) ∧ p ∧ r ∧ ((q → p) → q → p)
+(q ∨ q) ∧ γ → (q → q) → r ∧ q
+(p ∨ r) ∧ q ∧ p → (p ∨ p) ∧ (p ∨ p)
+((p → p) ∨ (r → r)) ∧ (q ∧ r → p ∨ q)
+(p ∨ r) ∧ r ∧ q → r ∨ p → β
+α ∧ (r ∨ p ∨ (r → r))
+r ∧ q ∧ (q ∨ p) → (p ∧ r) ∨ (q → p)
+(q → q) ∨ (p ∧ p) ∨ (r ∧ r) ∨ (p ∧ p)
+γ → q ∧ p → q ∨ r
+α ∨ (δ ∧ (q ∨ p))
+⊥ → ⊥ ∧ (p ∨ q)
+(q ∧ q ∧ (r → p)) ∨ δ
+(p ∨ p) ∧ (r → r) → α ∨ ⊤
+p ∨ p ∨ (r ∧ p) → q ∧ r ∧ q ∧ r
+((q ∧ p) ∨ (r → p)) ∧ ((q → q) ∨ q ∨ p)
+β ∧ (r ∨ p → q ∧ q)
+(p ∧ q → r ∨ r) ∨ ((p → r) → r ∨ p)
+(r ∧ q → q ∧ r) ∧ p ∧ q ∧ (q ∨ q)
+((q → p) ∨ r ∨ p) ∧ ((p → p) → r ∨ q)
+β ∨ (p → p) ∨ (q ∧ p)
+(p → r) ∧ p ∧ q → (p → r) → α
+(p → q) ∧ (r → p) → α ∧ ⊥
+r ∨ r ∨ (q → q) → β
+q ∧ r ∧ (r → r) ∧ (β ∨ p ∨ p)
+(p ∨ r → α) ∨ ((p → p) ∧ (p ∨ r))
+α ∨ (r ∧ p) → (q → r) ∧ r ∧ p
+(⊥ ∨ (p → q)) ∧ (r ∨ r ∨ (q → r))
+((q ∨ r) ∧ p ∧ p) ∨ (q → p) ∨ r ∨ p
+p ∧ q ∧ (p → q) → (q → q) → r → r
+((r → p) → p → r) → p ∧ p ∧ (p ∨ q)
+(q ∧ q) ∨ (p ∧ p) → p ∧ p → q ∧ p
+(r ∨ p → p → q) → (p ∨ p) ∧ r ∧ p
+((r → q) → ⊤) ∨ (p ∧ r) ∨ ⊥
+((q → p) ∨ (r → p)) ∧ (p ∨ p ∨ γ)
+((p ∧ q) ∨ q ∨ q) ∧ (p ∨ r → δ)
+((p → r) → p ∨ p) ∨ ⊤
+(q ∧ p) ∨ (q ∧ q) ∨ ((q → q) ∧ r ∧ q)
+(⊤ ∧ (p → q)) ∨ (⊥ → p → q)
+(q → q) ∨ (p → q) ∨ (β → p → q)
+(r ∨ p → q → q) ∧ ((q → r) ∨ (p ∧ r))
+((q → p) → p → q) → α ∨ γ
+p ∧ q ∧ (r → p) → α ∨ q ∨ p
+⊥ ∨ (⊥ ∧ q ∧ p)
+(r → r) ∨ (q ∧ q) → δ
+((q → q) → p ∧ p) ∨ ((r → r) → r ∨ q)
+(q → p) ∧ p ∧ r ∧ (q ∨ p → q → p)
+q ∧ r ∧ (p ∨ q) ∧ (q ∨ r ∨ (q ∧ r))
+β → (p ∧ r) ∨ q ∨ q
+(p ∧ p) ∨ (q → r) ∨ ((q → q) → p → p)
+(δ ∨ p ∨ q) ∧ (p → p) ∧ r ∧ q
+(r ∨ r → r ∧ q) → (p ∨ q) ∧ ⊤
+r ∧ q ∧ (q → r) ∧ ⊥
+r ∧ q ∧ r ∧ p → (p ∧ q) ∨ ⊥
+⊤ ∨ (q ∧ q ∧ r ∧ r)
+β ∨ (q ∧ p ∧ (r → r))
+((p → r) ∧ (q → p)) ∨ β
+(p ∨ p → p → p) ∧ q ∧ p ∧ r ∧ p
+((r ∧ q) ∨ (r → p)) ∧ (p → p) ∧ ⊤
+(r ∨ q → r ∧ p) ∧ δ
+q ∨ q ∨ (q → r) → α ∨ (p ∧ p)
+(q ∧ p) ∨ δ → (r → r) ∨ (q ∧ r)
+(r ∨ p → p ∨ q) ∨ ((p → q) ∧ (q → p))
+(q ∨ r) ∧ (p ∨ p) → α → p ∧ q
+((r → q) → p ∨ q) ∨ ((q → p) → q ∧ q)
+((r → q) ∧ (q ∨ p)) ∨ ((p ∨ r) ∧ (q ∨ q))
+((q → q) → r ∨ q) ∨ (δ ∧ (p ∨ r))
+α ∧ (p → r) ∧ (r → r)
+(r ∨ p ∨ (r ∧ q)) ∧ (γ → p → q)
+((p → r) → ⊤) → (q ∨ r) ∧ (q → q)
+⊥ ∨ (r ∧ p ∧ (p ∨ r))
+β ∧ (q ∨ p ∨ (p → r))
+(q ∧ q → p ∧ p) ∧ (q ∨ p ∨ (q → q))
+((r → q) → r → q) ∧ (q ∨ p) ∧ (p → q)
+⊥ ∨ (q ∧ p ∧ (q → q))
+(r ∧ q → q → q) → (r → p) ∨ p ∨ p
+⊤ ∨ ((q ∨ q) ∧ γ)
+⊤ → r ∨ r ∨ (r ∧ p)
+q ∧ q ∧ r ∧ q ∧ ((p → r) ∨ r ∨ p)
+((q ∨ q) ∧ q ∧ p) ∨ (δ → r ∧ p)
+(⊤ → r → r) → (p → q) ∨ (p → p)
+(r ∧ q ∧ (r ∨ r)) ∨ ((p → p) ∧ (r ∨ r))
+((p → r) → q → r) ∨ ((p ∨ r) ∧ δ)
+(q ∨ q → p → q) ∧ ((r → r) → r ∧ p)
+r ∨ q ∨ r ∨ q → (p → r) ∧ (r ∨ p)
+p ∧ p ∧ q ∧ q ∧ (p ∨ p → δ)
+(q ∨ p → p ∧ p) → ⊥
+r ∨ r ∨ q ∨ r → (p → p) ∧ (r → p)
+(r ∧ r) ∨ ⊤ ∨ β ∨ (p ∧ p)
+(q ∧ r → q ∨ r) ∧ β
+((q → p) ∧ ⊤) ∨ ((p → q) → r ∨ p)
+r ∨ q ∨ (p ∧ q) → q ∨ r ∨ (p → p)
+r ∧ p ∧ (p ∨ q) → p ∧ q ∧ (q → r)
+((q ∧ r) ∨ q ∨ r) ∧ ⊥
+γ ∨ (q → q) ∨ p ∨ q
+γ ∨ (r → r) ∨ α
+(p → q) ∨ p ∨ p ∨ ⊤
+(p ∨ p) ∧ γ ∧ ((r → p) ∨ (p ∧ p))
+r ∧ r ∧ α → p ∧ q → r ∨ q
+(r ∧ r ∧ (p → q)) ∨ ((q ∨ q) ∧ (r → p))
+p ∧ q ∧ p ∧ r → (p → q) ∨ (q ∧ r)
+δ → p ∧ p ∧ (r ∨ p)
+p ∨ q ∨ q ∨ p → (q → q) ∨ (p → q)
+β ∨ p ∨ p → ⊤
+(q → r) ∨ (q → q) ∨ (p → p) ∨ (p ∧ r)
+((r → r) → q ∧ r) → (q ∨ p) ∧ (q → r)
+(r ∧ r ∧ q ∧ r) ∨ (α → q ∧ q)
+β → (p → p) → p ∨ p
+(r ∧ q ∧ r ∧ q) ∨ (γ ∧ γ)
+(p ∨ q) ∧ δ ∧ δ
+γ → (r ∨ q) ∧ (r ∨ q)
+(p ∨ q → r ∧ r) ∨ (r → q) ∨ γ
+((q → p) → p → q) ∧ (r ∨ p) ∧ (p ∨ r)
+((q ∨ q) ∧ r ∧ r) ∨ (r ∧ q) ∨ (q → p)
+α ∧ (p ∨ p → q ∧ p)
+r ∨ p ∨ p ∨ p ∨ α
+δ ∨ (α → p ∧ p)
+γ → r ∨ q ∨ r ∨ r
+(q ∧ q) ∨ (q ∧ p) → (q → r) ∧ (q ∨ q)
+((q → q) → r → p) → (r ∧ p) ∨ (r ∧ p)
+δ ∧ (p ∨ r → r → q)
+((p → q) → r → q) ∨ ((p ∨ r) ∧ (r ∨ p))
+q ∨ p ∨ r ∨ p ∨ α
+(p ∨ p) ∧ (q → p) ∧ (δ → r ∨ r)
+(q ∧ q) ∨ (q ∧ q) → q ∨ p → r ∧ q
+r ∧ p ∧ p ∧ q → (q ∨ r) ∧ (p → p)
+p ∨ p ∨ (q ∧ p) → ⊤ → p ∨ r
+((p ∨ r) ∧ (q ∨ q)) ∨ (p ∨ q → r → q)
+γ ∧ (r ∨ q) ∧ (p → r)
+(r ∧ q) ∨ r ∨ r ∨ ⊥
+(r ∧ r ∧ (r → r)) ∨ ((q → p) → q ∧ p)
+((r → q) ∨ (r ∧ p)) ∧ (q ∧ r → r ∨ q)
+(p ∧ q) ∨ (r → q) → q ∧ r ∧ β
+δ → ⊤ ∧ (p ∨ p)
+(⊤ → q ∧ r) ∨ α
+(p ∨ p ∨ (q → r)) ∧ p ∧ q ∧ (q ∨ q)
+(r → r) ∨ p ∨ r → α ∨ q ∨ q
+(q ∨ r → q ∨ p) → (p ∧ p) ∨ r ∨ r
+(r ∧ q → q → q) ∨ ((q → q) ∧ α)
+(r ∨ p ∨ (r ∧ q)) ∧ (p ∧ p → r ∨ p)
+((q → p) → γ) ∧ (p → r) ∧ δ
+(p ∨ r → p ∨ r) ∧ (p ∨ q) ∧ (p → q)
+(r ∧ q ∧ p ∧ r) ∨ (q ∧ p) ∨ p ∨ r
+(r ∨ q) ∧ α → ⊥
+(p ∧ r) ∨ (p → p) → α
+(p ∨ p → p ∨ r) → ⊥ ∨ α
+q ∧ r ∧ p ∧ p ∧ ((p ∧ p) ∨ (q ∧ q))
+((r → r) → q → r) ∨ p ∨ q ∨ δ
+(p ∧ p → α) ∨ (β ∧ (q ∨ q))
+⊥ ∨ (r ∧ q → γ)
+(p ∨ p ∨ (p → q)) ∧ ((p ∧ r) ∨ (r ∧ p))
+((p → p) → q ∨ q) ∧ (q → r) ∧ (r → q)
+p ∨ q ∨ (q ∧ p) → (p ∧ r) ∨ (r → r)
+((p → r) → r ∨ q) ∧ (p ∨ q ∨ r ∨ q)
+r ∧ q ∧ (p ∨ p) ∧ (r → p) ∧ (q ∨ q)
+⊤ ∧ (r ∧ r → γ)
+((p → r) ∧ (r → p)) ∨ (q ∧ p → r → q)
+α ∧ (p → r) ∧ q ∧ q
+(r ∨ r → r → q) ∧ ((r ∧ q) ∨ (q → q))
+(r → p) ∨ (q → p) ∨ (p → p) ∨ β
+γ ∧ (r ∨ p → p → r)
+(q → q) ∨ p ∨ q ∨ (p ∧ p) ∨ (q ∧ p)
+(γ → r → r) ∨ q ∨ q ∨ δ
+((q ∧ p) ∨ (q → p)) ∧ (q ∨ p ∨ (r → r))
+(q → p) ∨ ⊤ → r ∧ p → r ∨ q
+((p ∧ q) ∨ δ) ∧ (δ → p → q)
+⊥ ∨ α ∨ q ∨ q
+(r ∧ p ∧ r ∧ r) ∨ β
+⊥ → r ∧ q → q ∧ r
+((q → p) ∨ q ∨ p) ∧ α
+((p ∧ q) ∨ (r ∧ q)) ∧ q ∧ p ∧ (p ∨ q)
+q ∧ q ∧ p ∧ q → (q → p) ∨ (p ∧ r)
+p ∧ r ∧ q ∧ r → γ
+((p ∨ p) ∧ q ∧ p) ∨ (p ∨ q → r ∨ r)
+(p ∧ q → p ∨ q) → (p ∧ q) ∨ (p ∧ r)
+α → β ∨ (r → r)
+(p ∧ r) ∨ (r → r) → (p → p) ∧ (r → p)
+((q → q) → p → p) → p ∨ p → q ∧ p
+((q ∨ r) ∧ p ∧ r) ∨ β
+(p ∨ q) ∧ (p → r) → p ∨ p ∨ r ∨ q
+r ∨ r ∨ r ∨ r → α
+r ∧ p ∧ ⊤ → α
+(p ∧ r → r → q) ∧ ((p → r) ∨ (q ∧ q))
+γ ∧ (r ∨ r) ∧ β
+α ∧ ((r → q) → p → r)
+(r ∨ p → r → r) ∧ α ∧ p ∧ q
+p ∧ q ∧ (r → q) → α
+(p ∨ r) ∧ β → (r → p) ∨ (q ∧ r)
+(q ∨ q → p → q) ∧ (p ∧ q → r ∧ q)
+(r ∧ q ∧ (r ∨ r)) ∨ β
+(p ∧ p → r → p) ∧ ((p → p) ∨ (p ∧ r))
+((p → q) → p ∨ p) ∨ (β ∧ (q ∨ q))
+(p ∧ q → p → q) ∧ γ
+((r → r) ∧ q ∧ q) ∨ (r ∧ p → β)
+(r ∧ r) ∨ (r ∧ p) → p ∨ r → r ∧ p
+⊤ ∨ ((r → p) → ⊥)
+δ → q ∧ q ∧ r ∧ p
+(r → p) ∨ r ∨ q ∨ (p ∧ q) ∨ r ∨ q
+(⊥ ∧ p ∧ q) ∨ (p ∧ q → q ∧ q)
+((q → p) → p ∨ q) → (r → q) → r ∨ r
+(p → q) ∧ q ∧ q ∧ ((r → r) → q ∧ q)
+(r → q) ∨ (r ∧ r) → (q ∧ p) ∨ (p → q)
+((p → q) ∧ δ) ∨ q ∨ q ∨ q ∨ q
+((p → q) ∨ r ∨ r) ∧ γ
+α → (q → p) ∨ (p → p)
+⊥ ∧ (p ∨ p → q → p)
+(⊤ → q → p) ∨ ((q → r) → r ∧ r)
+((q → p) → q ∨ p) → (r → p) ∨ q ∨ r
+(p → q) ∨ (r → q) → (r ∧ p) ∨ (r ∧ r)
+β ∧ (p → p) → δ
+(q → q) ∨ (q ∧ r) → (p → r) ∧ (q ∨ r)
+γ ∨ (q ∧ p ∧ q ∧ q)
+⊥ ∨ (q ∧ r) → p ∧ p → p ∧ r
+(α → r → p) → q ∨ r ∨ (p → r)
+γ ∨ (p → r) → (p → r) ∧ (p ∨ q)
+(r ∧ p) ∨ (q ∧ r) ∨ β
+((q → p) → r ∨ q) → p ∨ q → q → r
+(r ∨ q) ∧ p ∧ r ∧ ((p ∧ r) ∨ (p ∧ r))
+β → r ∨ r → p → q
+α → γ ∨ (p ∧ r)
+r ∨ q ∨ p ∨ p ∨ (⊥ → p ∨ r)
+γ ∨ (δ → r ∧ r)
+((r → p) ∨ (p → p)) ∧ ((q → r) → p ∧ p)
+(r ∨ r → q ∨ p) ∧ (p → q) ∧ (p → q)
+((r ∧ r) ∨ (q ∧ p)) ∧ q ∧ r ∧ (p → p)
+((q → p) → q → r) ∧ (δ → r → q)
+(p → q) ∨ (r ∧ p) → β
+((p ∨ r) ∧ r ∧ p) ∨ (r → q) ∨ p ∨ q
+(q ∨ q) ∧ ⊥ → β → q ∧ r
+((r → q) → q ∧ r) → (r ∧ q) ∨ δ
+⊤ → r ∧ q ∧ α
+(β → p ∨ q) ∧ ((r ∧ p) ∨ (r → r))
+(r ∧ p) ∨ (q ∧ r) ∨ (r ∧ r ∧ (r → r))
+(β → q ∨ p) ∨ ((p ∨ r) ∧ (r ∨ r))
+(⊥ ∧ p ∧ p) ∨ γ
+p ∧ q ∧ (r → p) → α ∧ q ∧ q
+(q ∧ q → q ∨ p) → p ∧ q ∧ (r ∨ r)
+(p → q) ∨ q ∨ p ∨ ⊤
+(⊥ → p ∧ r) ∧ (r → q) ∧ (p ∨ r)
+((q → q) ∨ (p → r)) ∧ (p → p) ∧ (p ∨ r)
+⊥ ∨ (r ∨ p → q → r)
+((r ∧ q) ∨ (q → q)) ∧ (r → q) ∧ p ∧ p
+⊤ ∨ (q → p) → γ → p ∨ q
+(p ∨ r → p → r) ∨ (r ∧ r → q ∧ p)
+(r ∨ r ∨ (p → r)) ∧ ((q → p) → q → q)
+r ∧ p ∧ r ∧ p ∧ ((r → p) ∨ (r ∧ r))
+q ∨ q ∨ ⊥ ∨ (δ ∧ (p → q))
+(r → r) ∨ p ∨ r ∨ δ
+γ ∨ β → α ∨ (p ∧ r)
+((q ∧ p) ∨ (p → p)) ∧ (α → q ∧ r)
+(r ∧ q) ∨ ⊤ ∨ δ
+(q → p) ∧ (q → r) → β ∨ (q ∧ r)
+((p → p) → r ∨ r) ∧ β
+q ∧ q ∧ (r → q) → γ
+δ ∨ γ ∨ (q → p)
+(p → q) ∨ (p ∧ q) → r ∧ q → r ∨ p
+(q ∨ r) ∧ (p ∨ q) ∧ (r ∧ q → α)
+(q → q) ∧ (r → r) ∧ ((p → r) → α)
+(r ∧ p) ∨ (p → q) → ⊤
+q ∨ q ∨ (p → p) ∨ (p → q) ∨ (p → q)
+((p → r) ∨ (p ∧ r)) ∧ δ
+⊤ ∨ ((q ∨ q) ∧ (r → q))
+(α → q → q) → r ∨ p → p ∨ p
+(q ∧ p → q ∨ q) ∨ (γ → q ∨ r)
+p ∨ q ∨ r ∨ p ∨ (p ∨ p → q ∨ p)
+(q ∨ p → ⊤) → p ∧ r ∧ (r → r)
+(r → p) ∨ (q → r) ∨ ((q ∨ q) ∧ (q ∨ p))
+((r → p) ∨ r ∨ r) ∧ (r ∨ r) ∧ (q → q)
+((q → q) → p ∧ q) → (q ∧ p) ∨ δ
+p ∨ p ∨ (q ∧ p) ∨ (r ∧ p) ∨ r ∨ r
+(p ∨ p) ∧ q ∧ p → (r → p) ∧ (r → p)
+β → (p → r) ∨ r ∨ r
+δ → p ∨ p ∨ (p ∧ r)
+(q ∨ p) ∧ (p → r) ∧ (r → q) ∧ (p → p)
+(γ → p ∧ q) ∧ (p → p) ∧ r ∧ r
+⊥ ∧ (q ∨ q) → β ∨ (p → r)
+((r → p) → β) ∧ (p ∨ r) ∧ (p → p)
+((q ∧ q) ∨ p ∨ p) ∧ ((p ∧ q) ∨ (p ∧ q))
+⊥ ∧ ((q ∧ p) ∨ r ∨ q)
+(r ∨ q → ⊥) ∨ ((r → q) → δ)
+⊤ → α ∧ p ∧ r
+((p → q) → q ∨ q) ∧ ⊤
+γ ∧ (r ∨ q) ∧ (r → p) ∧ (r ∨ r)
+⊤ ∧ α → (p → q) ∨ (q ∧ q)
+δ ∧ (q ∧ r → r ∨ p)
+((q ∨ q) ∧ β) ∨ (r ∧ q) ∨ r ∨ r
+(p ∧ q ∧ p ∧ p) ∨ ((r → p) → q ∨ q)
+p ∨ p ∨ (q ∧ q) ∨ r ∨ r ∨ r ∨ r
+(α ∧ p ∧ r) ∨ (q ∨ p → p ∧ p)
+(q ∨ r → r → r) ∧ (q ∨ p → p ∨ r)
+q ∨ q ∨ p ∨ p ∨ ⊥
+(p ∧ q → q → p) ∧ ((r → r) ∨ (r → q))
+(r → r) ∧ p ∧ p → (r → r) ∨ (p → r)
+(q ∨ p) ∧ (q → p) ∧ p ∧ p ∧ p ∧ q
+α ∨ (q → r) → (q → r) → p ∧ r
+α ∧ ((p ∧ r) ∨ r ∨ r)
+⊤ → (r → p) ∨ q ∨ r
+⊥ ∧ δ ∧ (p ∨ p → r ∧ q)
+(q ∨ r → p → r) → (r → r) ∧ (p ∨ p)
+(r ∧ q → q ∧ q) ∧ (r ∨ r ∨ (q ∧ q))
+((p ∧ q) ∨ (q → q)) ∧ (q ∨ r) ∧ (p ∨ r)
+(p ∧ q → q ∨ q) → γ ∨ ⊥
+((p → p) ∨ q ∨ q) ∧ (p ∨ r → q ∧ p)
+δ ∨ p ∨ q ∨ β
+r ∧ p ∧ (p ∨ p) ∧ (q ∨ r ∨ (p → q))
+p ∨ q ∨ (p ∧ p) ∨ (p ∧ p → r → q)
+((r → p) → γ) → (q → r) ∧ (q ∨ p)
+((q → q) → r ∨ q) ∧ α
+⊤ ∨ (p → r) → (r ∧ p) ∨ ⊤
+⊤ ∨ p ∨ q ∨ (q ∧ p ∧ r ∧ r)
+(α ∨ (r ∧ p)) ∧ (β → p ∧ q)
+(r → p) ∧ p ∧ q → r ∨ r ∨ p ∨ q
+(p ∨ q) ∧ (r → p) ∧ (q ∨ q ∨ r ∨ r)
+(p → p) ∧ r ∧ r → δ ∨ α
+(q → q) ∨ (q → q) → (r → q) ∨ β
+(q ∧ q) ∨ r ∨ p → (r → q) → q → q
+((r ∧ p) ∨ p ∨ q) ∧ (q → r) ∧ (q → r)
+γ ∨ ((p → q) ∧ (r ∨ r))
+(r ∧ q) ∨ r ∨ p → q ∨ p ∨ β
+β ∧ p ∧ p ∧ δ
+(q ∧ q) ∨ q ∨ p ∨ (r ∧ p) ∨ (r → r)
+⊤ → r ∧ r → r ∧ r
+γ ∧ ((q ∧ q) ∨ (r ∧ q))
+α ∨ q ∨ p ∨ (r ∧ r)
+(r → q) ∨ (q ∧ p) → (p → r) ∧ (p ∨ r)
+(p → r) ∧ (p → p) ∧ (δ ∨ r ∨ r)
+δ ∨ (q ∧ q) ∨ γ
+(r ∨ p) ∧ (r ∨ q) → (p → p) ∨ p ∨ r
+(r ∨ q → r ∨ p) ∧ ((p → r) → q ∧ q)
+β ∨ (⊥ → r → q)
+((p → r) ∧ ⊤) ∨ δ ∨ (r ∧ r)
+((q → p) → r → q) ∨ α
+((q ∧ p) ∨ (q ∧ q)) ∧ ((r → r) ∨ α)
+(q ∧ r) ∨ p ∨ q ∨ r ∨ p ∨ ⊥
+(p → p) ∧ q ∧ r ∧ ((p → p) → q ∧ r)
+(p ∧ r → r ∧ p) ∧ ((r ∧ p) ∨ (r ∧ q))
+((r → p) → r ∨ p) ∧ ((q → q) → r → r)
+β → (r ∧ r) ∨ p ∨ q
+(q ∧ r) ∨ ⊥ → (r ∨ r) ∧ q ∧ r
+((q → q) ∨ (r ∧ r)) ∧ (q ∨ r → p ∧ p)
+(r → q) ∧ (p ∨ q) ∧ (p ∨ r → r ∧ r)
+⊥ ∧ (p ∨ q) ∧ q ∧ q
+(r → r) ∨ q ∨ q → p ∧ p ∧ (p → q)
+(⊥ → q ∧ r) ∧ (⊥ → q ∨ r)
+α → r ∨ p → q ∨ q
+⊥ → q ∧ q ∧ (q ∨ p)
+⊤ → r ∨ r → q → r
+(q → r) ∧ δ ∧ (r → q) ∧ (r → r)
+(q → r) ∨ p ∨ r → γ
+(q ∧ p) ∨ (r → q) → γ → r ∨ q
+(r ∧ p → q → r) ∨ (δ → r ∧ q)
+(p ∧ q → p → p) → r ∧ r ∧ (r → r)
+(q → p) ∧ q ∧ r ∧ α ∧ (q → r)
+(q ∨ r → p ∨ p) ∧ (p ∨ q) ∧ (r ∨ r)
+((q → p) → q ∧ p) → r ∨ p → q → q
+r ∨ p ∨ (p → p) → q ∨ q → ⊥
+⊤ ∨ γ → (r → q) ∧ (q → r)
+α ∧ (p → r) ∧ p ∧ q ∧ (q ∨ p)
+(q ∨ p) ∧ (p ∨ p) → ⊥
+((r → p) → p → p) ∨ α
+((r ∨ q) ∧ q ∧ q) ∨ (r ∧ p → γ)
+(r ∧ p ∧ p ∧ r) ∨ (r ∧ p) ∨ (r → q)
+(β ∧ ⊥) ∨ (α → p ∧ p)
+δ ∨ (r ∧ p ∧ (r → r))
+(q ∧ r → r → p) ∨ (r ∨ q → q ∧ q)
+(p → q) ∨ p ∨ q ∨ (p ∧ p) ∨ (p → r)
+(p → r) ∨ (r → p) ∨ δ
+β → (r ∧ r) ∨ ⊥
+((r → p) → q ∨ q) ∧ (q ∨ r → p → q)
+(p ∧ q → γ) ∧ (q ∨ p) ∧ r ∧ p
+(r ∧ q) ∨ q ∨ q → γ ∨ (p → q)
+γ ∧ p ∧ q → r ∨ r ∨ r ∨ r
+((p ∨ r) ∧ (p ∨ q)) ∨ (δ ∧ (p → p))
+⊤ ∨ (p ∧ q) ∨ (r ∧ r)
+(β ∧ p ∧ p) ∨ β ∨ (r → q)
+(r ∧ p ∧ (r → r)) ∨ γ
+((q ∧ r) ∨ r ∨ p) ∧ (p → p) ∧ (p → r)
+(⊤ ∧ (p ∨ r)) ∨ (r ∨ r → q ∧ q)
+(q ∨ q) ∧ r ∧ p → p ∧ r → r ∨ q
+((q → p) → γ) ∨ γ
+q ∨ q ∨ (q → r) → p ∨ p ∨ r ∨ q
+(q ∨ r → γ) ∨ (r ∧ r → q ∨ r)
+(γ → q ∧ q) ∧ r ∧ r ∧ q ∧ q
+r ∨ r ∨ (r → q) → α
+(q ∧ p → p → r) → (p ∧ r) ∨ (q ∧ r)
+(q ∨ r ∨ p ∨ r) ∧ (r ∧ r → r ∧ q)
+((r → q) → q ∨ q) ∨ δ ∨ (q ∧ p)
+(p → p) ∨ r ∨ r ∨ (q ∧ q) ∨ (r → r)
+(q ∧ q) ∨ δ ∨ r ∨ q ∨ (r ∧ p)
+((p → r) ∨ (r → r)) ∧ (p ∨ r) ∧ ⊥
+(γ ∨ r ∨ r) ∧ ((q → q) ∨ p ∨ q)
+(p ∧ r → r ∧ p) ∨ r ∨ r ∨ (p ∧ p)
+((p → q) → q ∨ r) → (q → p) ∨ ⊥
+β → (r → r) ∧ (r ∨ p)
+⊥ → (r → q) → q ∧ p
+(r ∨ q ∨ ⊥) ∧ (p ∨ p ∨ (r ∧ p))
+((r → r) → α) ∨ ((q ∨ q) ∧ q ∧ r)
+(r ∧ q → ⊤) → ⊥ → p ∧ p
+(δ ∧ (q → q)) ∨ (r ∨ r → ⊤)
+(p → p) ∨ (p ∧ r) ∨ ((p → p) ∧ (r → r))
+((r → r) → q ∧ q) → (p ∨ q) ∧ (r ∨ q)
+(δ → q ∧ q) ∨ ((q → r) → ⊤)
+(⊥ → r → p) → (q → q) ∨ γ
+⊤ ∨ (r ∧ p → p → q)
+q ∨ p ∨ r ∨ p ∨ (β ∧ (r → p))
+(p ∨ q → r → p) ∨ (r ∧ q ∧ (r ∨ p))
+(q ∨ p → p ∧ q) ∧ q ∧ p ∧ p ∧ q
+p ∨ p ∨ (q ∧ q) → q ∧ p ∧ q ∧ p
+(p → p) ∧ δ → p ∧ q ∧ γ
+β ∨ ((r ∨ q) ∧ (p ∨ r))
+(p → p) ∧ (p ∨ q) ∧ p ∧ r ∧ (q ∨ q)
+δ ∧ r ∧ r ∧ ((q → p) → p ∧ q)
+⊥ ∨ (r ∨ p → q ∨ r)
+(q ∧ p → r ∨ q) → ⊥
+r ∨ r ∨ (p ∧ p) ∨ (α → p ∧ q)
+β ∨ (r → r) ∨ ((q → q) → p ∧ r)
+(p ∨ r → α) → (q → r) ∧ (r ∨ q)
+(r → r) ∨ γ ∨ ((r ∨ p) ∧ (r ∨ p))
+(q ∧ q ∧ (p → q)) ∨ ⊤ ∨ (p ∧ q)
+(q → r) ∧ (q ∨ p) → (p → r) → γ
+⊤ ∨ γ ∨ ((r ∨ p) ∧ (r ∨ p))
+(p ∨ r ∨ (p ∧ r)) ∧ α
+(q ∧ p) ∨ (r → p) ∨ ((r → q) ∧ r ∧ q)
+(r ∨ p ∨ (q ∧ q)) ∧ δ ∧ (r → r)
+((p ∧ r) ∨ (q → p)) ∧ ⊤ ∧ (p ∨ r)
+(p ∨ q) ∧ q ∧ r ∧ q ∧ q ∧ q ∧ r
+q ∧ q ∧ γ ∧ ((q → r) → p ∧ r)
+((p → p) ∧ (r ∨ q)) ∨ (p ∧ q) ∨ p ∨ q
+(q ∧ r ∧ (r ∨ p)) ∨ δ
+β ∧ δ → (p → r) → β
+(r ∧ r ∧ δ) ∨ ((p → p) → r ∨ q)
+r ∨ r ∨ r ∨ p ∨ ((p → q) ∧ r ∧ r)
+(q ∧ r ∧ (q → r)) ∨ q ∨ p ∨ (q ∧ q)
+p ∧ p ∧ (r ∨ r) → p ∨ p → ⊤
+(q → r) ∧ (q → r) ∧ (p ∨ p) ∧ ⊥
+(⊥ → p ∨ p) → δ
+δ ∨ (p ∨ r → p ∧ q)
+β ∨ p ∨ q → α
+(q ∨ p ∨ (q → p)) ∧ ⊥ ∧ q ∧ p
+γ ∨ δ → (p → r) ∨ (q → r)
+(p ∧ q) ∨ β → r ∨ r → q ∨ q
+((r → r) ∨ (q → p)) ∧ γ
+(q ∨ r) ∧ (q ∨ q) ∧ (q ∨ p ∨ (r ∧ q))
+α ∨ (q ∧ p) ∨ (β ∧ (p → q))
+p ∨ p ∨ ⊥ → ⊤ ∧ (p → p)
+((p ∨ r) ∧ (p ∨ q)) ∨ (r ∧ p ∧ (r ∨ r))
+(p ∨ p → q ∨ p) ∨ γ
+(p ∨ r) ∧ (p ∨ q) ∧ δ ∧ q ∧ q
+(r ∧ r ∧ (q ∨ q)) ∨ ((p ∨ r) ∧ (p → r))
+(r ∧ q) ∨ q ∨ p → (r ∧ q) ∨ (p ∧ q)
+(γ ∧ p ∧ p) ∨ (p ∧ r) ∨ (p → q)
+(δ → q ∨ r) → q ∧ p ∧ (r → r)
+p ∧ p ∧ ⊤ ∧ (r ∨ r ∨ (p → q))
+((q → q) → p → r) ∨ β
+((p → p) → q ∧ p) ∨ ((p → q) → r ∨ p)
+(q → r) ∧ (q → q) ∧ δ
+(p ∨ q ∨ (r → r)) ∧ (p ∨ q) ∧ ⊥
+α → α ∨ (p → p)
+((r ∧ r) ∨ (r → p)) ∧ α
+⊤ ∧ ((p → p) → α)
+β ∧ ((p ∧ p) ∨ p ∨ q)
+γ ∧ (δ ∨ p ∨ r)
+⊥ ∧ ((p ∧ p) ∨ r ∨ p)
+(q ∨ q) ∧ p ∧ p → (q ∧ r) ∨ (p ∧ q)
+(r ∨ r) ∧ (p ∨ p) ∧ (p ∨ r) ∧ ⊥
+(γ → p → p) ∨ ((r → r) ∧ (p → r))
+(r ∨ p → r ∧ p) → γ
+(q ∨ p) ∧ r ∧ r ∧ (p ∨ r → r ∨ p)
+q ∨ p ∨ (q → q) ∨ (⊥ → p → p)
+r ∨ q ∨ p ∨ q ∨ p ∨ p ∨ (p → q)
+(q ∨ p) ∧ β → (q ∧ r) ∨ (q ∧ r)
+β → (p ∨ q) ∧ (q → r)
+r ∧ p ∧ (r ∨ p) ∧ δ
+(q ∨ r) ∧ (q → r) → p ∨ p ∨ (p ∧ p)
+(p → q) ∧ q ∧ q ∧ ((p → p) ∨ ⊤)
+(p ∧ p → q → p) → (p ∨ q) ∧ α
+γ → (p ∧ q) ∨ q ∨ p
+((r ∨ r) ∧ q ∧ p) ∨ ((q ∨ q) ∧ (p → p))
+r ∧ p ∧ (p ∨ p) ∧ α
+(p → r) ∧ (p → q) ∧ q ∧ q ∧ (p ∨ r)
+((q → p) → q → q) → q ∧ r → p ∨ r
+α ∧ q ∧ p → (p ∨ r) ∧ p ∧ p
+(p → r) ∧ (q ∨ p) → β
+(q ∧ p ∧ (p → p)) ∨ r ∨ p ∨ (p → p)
+(q ∧ p → p ∧ p) → (q → p) → p → q
+(⊥ → r → q) → q ∨ r → β
+⊥ → δ → q ∧ q
+γ ∧ (r ∨ p) → δ ∧ (r → p)
+(q ∨ q → r ∧ r) → β ∧ p ∧ p
+((p → r) ∧ (q → q)) ∨ p ∨ q ∨ α
+(γ ∧ r ∧ r) ∨ (r ∧ q ∧ (p → q))
+⊤ ∨ (p → p) → (q → p) → q ∧ p
+(q ∧ r → q → q) ∨ ⊤ ∨ (r ∧ r)
+(r ∨ r) ∧ (p → p) → (q ∧ p) ∨ r ∨ q
+(q → p) ∨ (q → q) → q ∨ q → q → q
+p ∨ q ∨ (q ∧ q) → α
+⊤ ∧ (q ∨ q) ∧ (p ∨ p → q ∧ q)
+α ∧ (q → p) → (p → p) ∧ (r → p)
+β ∧ δ ∧ (r → q)
+(r → p) ∧ p ∧ p ∧ p ∧ r ∧ (r → q)
+(q ∧ r → β) ∨ (p ∨ q → q ∧ r)
+(p ∧ q) ∨ r ∨ r → γ → p → p
+((r → r) → α) ∨ p ∨ p ∨ (q ∧ r)
+(δ ∨ (r ∧ r)) ∧ ((p ∧ q) ∨ (r → q))
+q ∨ q ∨ p ∨ q → (q → q) → ⊤
+(r → q) ∧ (q → r) ∧ (q ∧ p → q ∨ p)
+(r ∨ q → r ∨ p) → (q ∨ r) ∧ γ
+(q ∨ q) ∧ (p ∨ r) → β
+(q ∨ p ∨ r ∨ r) ∧ (r ∨ r) ∧ β
+(r → r) ∧ ⊤ ∧ (r ∧ p → p ∨ q)
+(r ∨ r → q ∧ p) ∨ ((q → r) ∧ (r → p))
+(p ∨ r ∨ p ∨ r) ∧ ((r ∧ q) ∨ p ∨ q)
+r ∨ p ∨ ⊤ ∨ (γ → p ∨ r)
+(p ∧ r → p → p) → (p ∨ q) ∧ p ∧ r
+((q ∨ q) ∧ ⊥) ∨ (r ∧ q ∧ (p ∨ q))
+((p ∨ q) ∧ (r ∨ p)) ∨ ((q → q) → γ)
+((q ∧ p) ∨ δ) ∧ δ
+γ ∨ (p ∧ r) ∨ (q ∧ q)
+⊥ ∨ (r ∧ r) → (q ∨ q) ∧ p ∧ p
+(⊤ ∨ (p ∧ q)) ∧ q ∧ q ∧ β
+(r ∧ q → q ∧ q) ∧ (p ∨ p) ∧ (q ∨ p)
+(q ∧ p ∧ ⊤) ∨ γ ∨ (p → p)
+⊤ ∧ (q ∨ p → p → p)
+p ∨ q ∨ r ∨ r ∨ ((p → r) ∧ (p ∨ q))
+(r ∧ r → p → q) → r ∨ r ∨ r ∨ r
+(p ∨ r ∨ γ) ∧ (⊤ → p ∧ q)
+(p → r) ∧ q ∧ p → p ∨ r ∨ ⊤
+(γ → r ∧ p) ∧ (p ∨ r ∨ (p ∧ r))
+(p ∧ q ∧ q ∧ q) ∨ (p ∧ p ∧ (r ∨ r))
+r ∨ r ∨ p ∨ p ∨ ((q ∨ p) ∧ (p → p))
+((q ∨ r) ∧ p ∧ p) ∨ ((r → r) ∧ α)
+(r ∨ p → δ) ∧ (p ∧ r → r ∨ r)
+((p ∧ p) ∨ (q ∧ r)) ∧ (p ∧ r → p → p)
+q ∧ p ∧ (r → q) ∧ (q ∨ r ∨ r ∨ p)
+⊥ ∧ ((q → p) ∨ p ∨ q)
+(q ∨ p) ∧ r ∧ q → (q ∨ r) ∧ r ∧ r
+⊤ ∧ r ∧ q ∧ δ ∧ (p → r)
+α ∧ (r → q) → (q → r) ∧ r ∧ q
+α ∨ α ∨ q ∨ p ∨ γ
+(r ∧ p → r ∨ p) ∨ δ ∨ δ
+(p ∨ p → r ∨ q) ∧ (q ∨ q → p ∨ q)
+(⊥ ∧ p ∧ p) ∨ (⊥ → p ∨ r)
+γ → r ∧ p ∧ (r ∨ q)
+(γ ∨ (r ∧ q)) ∧ ((q → q) → p ∧ p)
+(p ∨ p → ⊥) ∧ (γ → p ∨ p)
+((q ∧ r) ∨ (p ∧ p)) ∧ α
+(β ∨ (q ∧ q)) ∧ (q ∧ r → r → q)
+(p ∧ q ∧ q ∧ q) ∨ (γ → r ∨ r)
+γ → ⊤ → r ∨ q
+⊥ ∧ (q → p) ∧ (q ∧ p → q ∨ q)
+(r ∧ r → δ) ∧ (β → q → r)
+α ∧ (p → q) ∧ (r ∨ q)
+(r ∨ p → q → q) ∨ r ∨ p ∨ p ∨ r
+((p → r) → r ∨ r) ∧ ((q → p) → p ∨ q)
+(r → q) ∨ (r → q) ∨ γ ∨ (r → r)
+((q → p) ∧ p ∧ r) ∨ ((q ∨ q) ∧ p ∧ p)
+q ∨ r ∨ (p → p) → β ∨ (q → r)
+r ∧ r ∧ (p ∨ p) → q ∧ p ∧ p ∧ q
+(p ∧ p ∧ (r ∨ p)) ∨ (⊤ → p ∨ r)
+(q → r) ∧ p ∧ q ∧ γ ∧ (r → p)
+(p → r) ∧ δ → (q → q) → δ
+(β → q ∧ p) ∧ (β → p ∨ q)
+r ∨ r ∨ (r ∧ q) ∨ ((r → p) → p ∧ p)
+(p ∨ p ∨ ⊤) ∧ α
+(q → q) ∨ (q ∧ q) → r ∨ p ∨ (q ∧ r)
+((r → p) ∧ r ∧ p) ∨ (q ∧ p ∧ δ)
+⊥ ∨ r ∨ r → (r → p) ∧ (p ∨ p)
+((q ∨ r) ∧ p ∧ r) ∨ (δ → r → r)
+(q ∧ q ∧ (r → q)) ∨ (q ∨ q → q ∧ p)
+δ ∨ q ∨ r → (q → p) ∧ (q → r)
+α ∧ ((q → p) → p ∨ p)
+δ → p ∨ p ∨ (q ∧ q)
+(q ∨ r) ∧ (p ∨ q) → q ∨ p ∨ r ∨ q
+((p → r) ∨ r ∨ q) ∧ δ ∧ (q ∨ p)
+(r ∨ q → q ∨ p) ∨ ((r ∨ r) ∧ r ∧ p)
+q ∨ p ∨ p ∨ r → β
+((r → r) → r ∧ p) ∧ ⊥
+⊥ ∧ (p ∧ q → γ)
+(p → q) ∨ δ → (q → r) ∧ δ
+(r → q) ∨ r ∨ p ∨ ((r → q) → q ∧ q)
+β ∧ (δ → p → q)
+(q ∧ q → q → q) ∧ (q ∨ p ∨ q ∨ p)
+(p ∧ r → p ∨ p) ∧ p ∧ q ∧ p ∧ q
+(q ∨ p → q ∨ q) ∧ ((r ∧ q) ∨ (r → r))
+(β → p ∧ p) ∧ q ∧ r ∧ r ∧ p
+((r → p) → p → p) ∨ (α ∧ (r ∨ p))
+((q → q) ∨ (p ∧ q)) ∧ (p ∨ r ∨ (p ∧ r))
+(q ∨ q) ∧ p ∧ q ∧ (r ∨ q → α)
+α → δ → q ∨ p
+((q → r) → p ∧ q) ∨ (r → p) ∨ r ∨ r
+((r ∨ q) ∧ (q ∨ q)) ∨ p ∨ r ∨ ⊤
+(q ∨ p) ∧ q ∧ r → ⊥ ∨ (r ∧ q)
+(p → r) ∧ q ∧ r ∧ ((p ∧ q) ∨ p ∨ r)
+(r ∧ p ∧ p ∧ p) ∨ q ∨ q ∨ r ∨ p
+(r ∨ q) ∧ q ∧ p ∧ (r → r) ∧ (p → p)
+(q → p) ∨ (r → r) ∨ (q ∧ q) ∨ (q ∧ p)
+(α → γ) ∨ (q ∧ r ∧ ⊥)
+(p ∧ p → p ∨ r) ∧ (q ∨ p) ∧ r ∧ q
+(p ∨ r) ∧ p ∧ r ∧ α ∧ (r → p)
+(q → r) ∨ (p → q) ∨ ((q ∨ p) ∧ (q → r))
+(r ∧ q → q → q) → (q → p) ∨ γ
+(r ∨ q) ∧ (q → r) → q ∧ q ∧ (p ∨ r)
+(r ∨ r ∨ (r → r)) ∧ ((q ∧ r) ∨ r ∨ r)
+q ∧ r ∧ r ∧ r → ⊤
+(q ∧ p) ∨ (q → r) ∨ (q → p) ∨ (r ∧ r)
+(r ∧ p ∧ (q ∨ p)) ∨ (δ → p → p)
+(p ∨ r ∨ (q ∧ r)) ∧ δ
+((r → q) ∨ (q → q)) ∧ (q ∨ q ∨ α)
+((r → q) → r ∨ q) → (r → p) ∨ (r → q)
+β ∧ (p → r) → r ∧ q → r → p
+(δ ∨ r ∨ p) ∧ (p → p) ∧ (r ∨ r)
+(p ∨ r → r → r) → r ∨ p → p → p
+((r → q) ∧ (q ∨ r)) ∨ (r ∧ q) ∨ (p → q)
+β ∨ (q ∧ q ∧ (r → r))
+δ ∧ (p ∧ p → q ∧ q)
+((p ∧ p) ∨ r ∨ r) ∧ (p ∧ p → q ∨ q)
+(β → α) ∧ (r ∨ r → q ∧ r)
+((q → r) → p ∧ p) ∧ (r → r) ∧ (p → q)
+((p → r) ∧ (q → p)) ∨ ⊤
+(p ∨ p ∨ (p → q)) ∧ α
+α → (r → p) → q ∧ p
+((r → q) ∧ (q ∨ p)) ∨ (q → r) ∨ (p ∧ q)
+α ∨ (r ∧ p → r ∧ p)
+β ∨ (p ∧ q → p ∧ r)
+(p ∧ q → r → r) ∨ (⊤ → r ∧ r)
+r ∧ q ∧ ⊥ → γ ∨ (r → p)
+(r ∧ p ∧ (p ∨ r)) ∨ p ∨ q ∨ δ
+⊤ ∨ (q ∨ p → q ∧ r)
+β → (q → r) → p → q
+β ∧ ((p → p) ∨ r ∨ q)
+(p ∧ p) ∨ (p ∧ r) → (r → r) ∨ (r ∧ r)
+β ∧ p ∧ p ∧ (q ∨ r)
+⊥ ∧ r ∧ r ∧ (p → p)
+((q → r) ∨ (p ∧ q)) ∧ γ
+(q → r) ∨ (q ∧ r) → (q ∨ p) ∧ (p → q)
+(r ∧ q ∧ (q ∨ r)) ∨ (p ∧ r → r ∧ p)
+(r ∨ p → γ) ∧ ((q → r) ∨ r ∨ q)
+((q → q) ∨ (q ∧ p)) ∧ (r → q) ∧ r ∧ r
+δ ∧ γ ∧ (r → r) ∧ (p → r)
+β ∨ (α ∧ q ∧ p)
+q ∨ p ∨ p ∨ q ∨ (δ ∧ (r → p))
+p ∨ p ∨ γ → (p → p) ∨ r ∨ p
+(r ∧ p ∧ (p → r)) ∨ ⊥ ∨ (p ∧ q)
+(q → r) ∧ (q ∨ r) ∧ ((r ∧ q) ∨ (q ∧ p))
+((q → r) ∧ (r ∨ r)) ∨ ⊤ ∨ r ∨ p
+α ∧ r ∧ q → p ∨ p → α
+((r ∧ p) ∨ (q → q)) ∧ (q ∨ r ∨ δ)
+p ∨ r ∨ (p → p) → r ∨ r ∨ γ
+⊤ ∨ q ∨ p ∨ α
+(q ∨ p) ∧ (q → q) ∧ (⊥ ∨ (q ∧ r))
+(γ → p ∨ r) → γ
+(q ∧ r) ∨ (q → p) → r ∧ q ∧ (r ∨ r)
+(q → r) ∨ (q ∧ r) ∨ δ ∨ (r → r)
+((r ∨ q) ∧ (q ∨ p)) ∨ ((r ∨ q) ∧ q ∧ q)
+(p → p) ∧ (p ∨ q) → p ∧ q ∧ (r → p)
+(r → r) ∨ (p → q) ∨ (δ → p ∨ p)
+q ∧ q ∧ r ∧ r ∧ (r ∨ r ∨ (q ∧ q))
+((r → q) → r ∨ r) ∧ ((r ∧ p) ∨ p ∨ p)
+((r → p) → q → p) → (r → q) ∨ (r ∧ r)
+⊤ → γ ∧ (p ∨ q)
+(q → q) ∧ p ∧ r ∧ ((r → r) → r ∧ r)
+((p → r) → r ∧ p) ∨ (p ∧ p → r ∨ p)
+(r → p) ∧ (p ∨ q) ∧ (β ∨ r ∨ p)
+(r → r) ∨ (p ∧ p) → q ∨ q → δ
+((p → q) ∧ (r ∨ p)) ∨ ((r → p) ∧ (q → q))
+(p ∨ r → q ∧ p) → (r → r) ∨ (r ∧ q)
+(r ∧ q) ∨ (q → p) ∨ ((p → p) ∧ (p → r))
+((p → r) → q ∧ q) ∨ ((p ∨ p) ∧ p ∧ r)
+⊥ ∧ r ∧ q ∧ (γ → ⊥)
+(q ∧ p → r → q) ∧ (q ∨ p) ∧ (p → r)
+(p ∧ p ∧ q ∧ r) ∨ r ∨ q ∨ p ∨ p
+(r ∨ p) ∧ δ → r ∧ q ∧ (r → p)
+α ∧ (q → q) ∧ (p → p)
+(p ∨ p) ∧ (q → r) → β
+(p → r) ∧ q ∧ q → (r ∧ p) ∨ (r → r)
+(q ∨ r → p ∨ q) ∨ (r ∧ r ∧ p ∧ q)
+(r → r) ∧ (r → r) → q ∧ q → r ∨ p
+δ ∧ (q ∨ q) → (r → q) → δ
+γ ∨ r ∨ r ∨ α
+β ∧ (p ∨ r ∨ (p ∧ q))
+(p ∧ r → δ) ∧ ⊤
+(q ∨ q → p → q) ∨ β ∨ r ∨ q
+γ ∨ (q ∧ r) ∨ q ∨ r ∨ q ∨ q
+((p → r) ∧ (p ∨ p)) ∨ (p ∨ q → r ∧ p)
+δ ∧ (β → r → r)
+(p ∨ p ∨ (q ∧ q)) ∧ (p ∧ r → ⊤)
+(⊤ → q → q) ∨ (p ∧ q) ∨ (p → q)
+α ∨ (r ∧ p → q → q)
+β ∧ (p → p) ∧ (r ∨ p) ∧ (q ∨ r)
+(p ∨ r ∨ (q → p)) ∧ γ
+(r ∧ r → r ∨ q) ∧ ((p → r) → q → r)
+((q → r) → p → r) ∧ δ ∧ (q → q)
+(q ∧ q) ∨ r ∨ r → q ∧ p → q → p
+(p ∧ r) ∨ δ ∨ (r ∧ r) ∨ (p → q)
+(r ∧ p → r ∨ r) ∧ ((p → r) ∨ ⊥)
+(r ∨ q → p ∨ q) ∧ (q ∧ q → r → r)
+⊤ ∨ (r ∧ q) → (q ∨ r) ∧ (q → r)
+r ∨ q ∨ p ∨ r → ⊤ ∧ q ∧ p
+(p ∧ r → q ∨ q) ∧ ((r ∧ q) ∨ r ∨ q)
+((r ∨ p) ∧ q ∧ p) ∨ ((r → r) ∧ (p ∨ r))
+((r → r) → r ∨ r) ∨ (β → q ∧ q)
+δ ∨ (β → r ∧ r)
+((q → p) ∧ (r ∨ q)) ∨ ⊤ ∨ (q ∧ q)
+((q → p) → p ∧ r) → δ
+r ∧ r ∧ (p → r) ∧ ((r ∧ q) ∨ q ∨ p)
+γ ∨ ((r → q) → p ∨ q)
+(p ∧ p) ∨ p ∨ r → r ∧ r ∧ (p ∨ p)
+q ∨ r ∨ (r → r) → p ∨ r → p ∨ r
+(r ∧ p → p → r) → p ∧ p → r ∧ q
+δ ∨ (r ∨ q → δ)
+(q ∧ p → p ∧ q) → p ∧ r ∧ q ∧ q
+(p ∧ r) ∨ p ∨ r → ⊤ → β
+(r ∧ p → r → p) → (r → q) → p ∧ q
+((r → p) ∨ δ) ∧ ((q → q) ∨ α)
+(r ∧ r ∧ p ∧ r) ∨ β
+(r ∨ p → β) → q ∧ q → q ∨ q
+r ∨ q ∨ (q → r) → α ∧ (r ∨ r)
+(q → r) ∧ β → (r ∧ r) ∨ (r ∧ p)
+(q ∨ r → p ∧ p) → q ∨ r ∨ (q ∧ q)
+(q → r) ∧ r ∧ r ∧ q ∧ p ∧ (p → p)
+(p ∨ r) ∧ (r ∨ r) ∧ ((r ∧ q) ∨ (q ∧ q))
+(p ∧ q → q ∧ r) ∧ (r → p) ∧ γ
+δ ∨ ((q → q) → r ∨ q)
+q ∧ p ∧ (p ∨ q) → r ∧ q → q → q
+p ∨ r ∨ (q ∧ r) → (q ∨ r) ∧ r ∧ r
+(r ∧ r → r → p) → α
+(r ∧ r) ∨ p ∨ r ∨ (p ∧ p → q ∧ q)
+p ∨ p ∨ r ∨ q ∨ ((p → q) ∧ (q → p))
+(q ∧ r → p ∧ r) → (q → r) ∧ (p → p)
+(q ∧ q → p ∧ q) ∨ (q ∨ p → r ∨ p)
+(q ∧ r → p ∨ p) ∧ (⊥ ∨ q ∨ p)
+r ∨ q ∨ β → q ∨ p → p → p
+α → (r ∧ p) ∨ (r ∧ p)
+(δ → p → p) → (r ∧ q) ∨ q ∨ q
+(r → q) ∨ (p ∧ q) ∨ (⊥ → p → q)
+((r ∨ q) ∧ ⊤) ∨ ((p → p) → β)
+⊤ ∧ ((r → p) ∨ (q → p))
+((r → p) → p → q) → (q → p) → r ∨ r
+((q ∧ r) ∨ β) ∧ ((r ∧ q) ∨ (p → r))
+q ∨ r ∨ (p → r) → α
+(p ∨ p) ∧ (r → r) ∧ (α ∨ (p ∧ r))
+((p → r) ∧ β) ∨ ((q ∨ q) ∧ q ∧ r)
+(δ → γ) ∧ ((r → r) ∨ (r → r))
+(q → q) ∧ p ∧ r → (p ∧ r) ∨ (q ∧ q)
+(q ∨ q) ∧ p ∧ q → (r → r) → p ∨ r
+δ → q ∧ q → δ
+(q ∧ p) ∨ (p ∧ q) → α
+(r ∨ p → δ) → r ∨ r ∨ (r → p)
+((q → p) ∨ (p ∧ r)) ∧ p ∧ q ∧ p ∧ q
+β → p ∧ q ∧ γ
+(q ∧ r ∧ (q ∨ p)) ∨ (q ∧ p ∧ (q ∨ r))
+q ∨ q ∨ q ∨ p ∨ (p ∧ q ∧ (q → p))
+(q ∧ q → p → q) → (p → p) ∨ p ∨ r
+p ∨ q ∨ (q → q) → ⊥
+β ∨ (p ∧ r) ∨ p ∨ p ∨ q ∨ p
+(⊤ ∧ q ∧ p) ∨ (q ∧ r → q ∨ p)
+β ∨ (r ∧ r ∧ r ∧ q)
+(p → p) ∧ (q ∨ p) → (r → p) ∧ (q ∨ r)
+p ∨ q ∨ (q → r) ∨ ⊤
+(r ∧ q ∧ r ∧ p) ∨ (p ∨ q → r ∨ p)
+(p ∨ p → r → r) ∨ γ
+p ∨ q ∨ (q ∧ r) ∨ (β ∧ (p → r))
+(p ∧ q) ∨ α → (p → q) → p → r
+(β ∨ γ) ∧ (r ∧ r → q ∧ p)
+(q ∧ r → q ∨ p) → (q ∧ q) ∨ δ
+(q ∧ q) ∨ (r ∧ r) ∨ ⊥
+p ∧ r ∧ (r → r) → (q → p) ∧ δ
+(r ∧ r) ∨ (p → p) → β
+(r ∧ q → p ∨ r) ∨ (p ∨ r → γ)
+((r ∨ r) ∧ r ∧ r) ∨ (r ∧ r → r ∨ q)
+(q ∨ r ∨ (q → q)) ∧ δ
+(p ∧ q) ∨ (r → p) → γ ∧ q ∧ q
+(p ∧ r → r ∧ q) ∧ ((r → p) → ⊤)
+(β ∧ p ∧ q) ∨ ((p ∨ r) ∧ q ∧ r)
+((r → q) → p → q) ∨ ((r → r) ∧ (p → p))
+(q → r) ∧ ⊤ → (p ∨ p) ∧ r ∧ q
+⊤ ∧ (p ∨ r ∨ r ∨ p)
+(r ∧ r ∧ β) ∨ (p → r) ∨ (q ∧ r)
+q ∨ p ∨ (q ∧ p) → p ∨ p → q → q
+((q → r) → r ∨ q) ∨ (r ∧ p ∧ q ∧ q)
+(β → α) ∧ (p → q) ∧ q ∧ q
+γ ∨ (r ∧ p) → ⊥ ∨ (q → r)
+δ ∨ (q ∨ p → r → q)
+(p ∨ p) ∧ p ∧ q → (r ∧ p) ∨ q ∨ r
+(q ∨ q) ∧ p ∧ p ∧ ⊤ ∧ β
+p ∨ r ∨ q ∨ r → (q → p) ∨ p ∨ r
+((r → r) ∧ γ) ∨ (r ∧ r) ∨ (p ∧ q)
+α ∧ (p → p) → (q → p) → r ∧ q
+α ∨ (r ∧ r) → (p ∧ q) ∨ δ
+((p → p) ∨ (q ∧ p)) ∧ ((r → q) → p → q)
+γ ∧ (r ∨ p) ∧ (p ∨ q)
+q ∧ q ∧ (q → r) → ⊤
+(p ∨ p) ∧ (p → q) → (r ∨ r) ∧ r ∧ q
+((q → q) ∨ q ∨ q) ∧ ((q → r) → p ∨ r)
+(r → p) ∨ ⊤ → ⊥
+(q ∧ p → q → r) → r ∨ p → p ∧ r
+(q → r) ∧ (q → r) → q ∧ q → r ∨ p
+(p ∨ r → q ∨ q) ∧ ((r → p) ∨ (q → r))
+δ ∧ (q ∧ p → r → p)
+((r → q) → q ∧ r) ∧ (⊥ → r ∧ p)
+(q ∧ r → r ∨ q) → (p → q) ∨ (q ∧ p)
+q ∧ q ∧ (r → p) → δ
+((p → p) ∨ q ∨ q) ∧ (q → r) ∧ r ∧ r
+p ∨ p ∨ (r → q) ∨ ((p ∨ q) ∧ q ∧ p)
+(q ∧ r) ∨ q ∨ q ∨ ⊤
+(q ∨ q → q ∨ q) ∨ ((p → p) ∧ p ∧ q)
+(r ∧ p → r ∨ p) → (q → r) → r ∨ p
+(p → r) ∨ r ∨ q → (p ∨ r) ∧ q ∧ p
+((p ∧ r) ∨ γ) ∧ (α ∨ (r → r))
+(β → q → p) ∨ ((r ∨ r) ∧ (q ∨ q))
+(β ∨ β) ∧ (r ∨ p) ∧ (p → p)
+(p ∨ r → r → q) ∨ (α → p ∨ q)
+(r ∧ q ∧ (q ∨ p)) ∨ β ∨ (p → p)
+(r ∧ r → r ∧ q) ∧ γ
+(p ∧ r ∧ (q ∨ p)) ∨ β
+((r ∨ q) ∧ (r ∨ p)) ∨ (r → q) ∨ (p → p)
+(p → q) ∧ q ∧ r → (r ∧ q) ∨ (r ∧ r)
+(q ∨ q) ∧ r ∧ r ∧ q ∧ r ∧ (q → p)
+(p ∨ q → p ∨ p) ∧ (r ∨ q ∨ (r → p))
+((q → r) → r ∧ p) ∨ (⊥ ∧ r ∧ p)
+⊥ ∧ (r ∨ p → p ∧ p)
+(⊤ ∧ ⊥) ∨ (r ∧ p) ∨ ⊥
+q ∧ r ∧ (p ∨ p) ∧ (q ∧ p → r ∧ r)
+(γ ∨ (p ∧ p)) ∧ (r ∨ p) ∧ p ∧ p
+(q ∧ r → r ∧ r) ∧ β
+(r → r) ∧ (q ∨ p) → ⊥
+(δ → δ) ∧ (δ ∨ (q ∧ p))
+p ∨ r ∨ (q → p) ∨ ((p → p) ∧ (q → r))
+α → r ∨ q → p → r
+(q ∧ r → r → q) → ⊤ ∧ (r ∨ p)
+(q ∧ p) ∨ (r ∧ q) → (p ∨ r) ∧ (p → p)
+δ ∧ q ∧ r → (q ∧ p) ∨ (p ∧ q)
+(β ∨ (p ∧ r)) ∧ ((p → p) ∨ p ∨ q)
+⊤ ∧ r ∧ q ∧ (r → r)
+(r ∨ q) ∧ δ → q ∨ p → δ
+p ∨ r ∨ (p ∧ r) ∨ (p ∨ q → q → r)
+((q → p) ∨ β) ∧ ⊤ ∧ δ
+q ∨ p ∨ (q ∧ r) ∨ α
+β ∧ (r ∨ p) ∧ (r → r)
+(q ∧ p → p ∧ q) → β ∧ (p → r)
+(q ∨ p → q ∧ q) ∨ ((q ∨ r) ∧ p ∧ r)
+(δ → p ∧ r) ∨ ((q → p) → p ∨ p)
+⊤ ∧ (q ∧ r → r ∨ r)
+γ ∨ ((p ∨ p) ∧ α)
+⊤ ∧ r ∧ p ∧ δ
+(r ∨ r → p ∨ q) ∨ (q ∧ q → r ∧ r)
+(p ∨ r) ∧ δ ∧ (r ∨ q ∨ (q ∧ r))
+γ ∧ (r ∨ q ∨ p ∨ q)
+((q → q) → p → q) → r ∨ r ∨ (q ∧ r)
+r ∧ p ∧ (q → q) → (p ∨ p) ∧ (p → p)
+⊤ ∨ (p ∧ r) ∨ (p → q)
+γ ∨ (r → q) ∨ (r ∨ r → q ∨ r)
+⊥ ∨ (γ → p ∨ q)
+(p ∨ r) ∧ q ∧ r ∧ β
+p ∨ q ∨ (p ∧ q) ∨ (r ∨ q → q → r)
+((r → q) ∨ (p ∧ r)) ∧ ((r ∧ r) ∨ r ∨ q)
+(p ∧ q) ∨ ⊥ → p ∧ r → α
+((p → r) ∨ ⊤) ∧ ((r ∧ q) ∨ (p ∧ r))
+(p → r) ∧ (p ∨ q) ∧ ((r → p) → r ∧ p)
+(r → r) ∨ q ∨ p ∨ (δ → δ)
+⊥ → (p → q) → p ∨ r
+(δ ∨ (q ∧ p)) ∧ ((q → r) ∨ (p → p))
+⊤ ∧ (r ∧ q → r ∧ p)
+(r ∧ p) ∨ (p → q) → r ∧ r ∧ δ
+(r → r) ∨ q ∨ r ∨ (β ∧ r ∧ q)
+⊤ → (q → r) ∧ ⊥
+((p → q) ∧ (q → r)) ∨ (q ∧ r ∧ (p → r))
+r ∧ p ∧ r ∧ q ∧ (q ∨ q ∨ (p → q))
+(r → r) ∧ (p → r) → q ∨ p → p ∧ q
+r ∧ r ∧ r ∧ p ∧ ((r → q) → q → p)
+p ∧ p ∧ (p → q) ∧ (p ∨ r) ∧ (r → p)
+(q ∨ p → p ∧ p) ∨ r ∨ q ∨ (r ∧ p)
+r ∧ q ∧ q ∧ q ∧ ((r ∧ q) ∨ (p ∧ r))
+(α ∧ q ∧ q) ∨ (q ∧ p → r ∧ p)
+((q → r) → r ∨ r) → (r → r) ∨ (r → q)
+⊥ ∧ (q → p) ∧ (β ∨ (q → r))
+(p ∧ p ∧ r ∧ p) ∨ (q ∧ q) ∨ r ∨ r
+r ∧ q ∧ (p → q) → (r ∨ r) ∧ (r → p)
+p ∧ r ∧ (p ∨ p) → δ
+(r → r) ∧ p ∧ p → q ∧ p ∧ (q → p)
+(r ∨ p → p ∨ q) → (r → p) ∨ (p ∧ q)
+(p → r) ∧ (p ∨ q) → (p → p) ∨ β
+p ∨ r ∨ (p → p) → (q → r) → r ∧ r
+(p → r) ∨ (q → q) → α
+(r ∨ q → p → p) ∨ (q ∧ p ∧ β)
+(p ∧ r → β) → (r → r) → α
+⊤ ∧ (p ∨ r) ∧ ((p → q) ∨ α)
+(q ∧ p → r ∧ r) ∧ (⊥ ∨ q ∨ r)
+((p → r) → r ∨ p) ∧ ⊤
+((p → p) ∧ p ∧ p) ∨ ((r ∨ p) ∧ (r → q))
+δ ∧ r ∧ p ∧ q ∧ q
+β → (p → r) ∧ (r ∨ q)
+(p → p) ∧ q ∧ r ∧ γ
+((r ∧ p) ∨ (q ∧ p)) ∧ (α ∨ (p ∧ r))
+β ∨ (p → r) ∨ γ
+(p ∨ r) ∧ (r ∨ p) ∧ β
+((q → r) → r → r) ∧ ((r → p) ∨ ⊥)
+(q ∨ r) ∧ (r → r) ∧ (p ∨ q ∨ (q → r))
+(δ → r ∨ r) ∨ ((r ∨ q) ∧ (q ∨ p))
+(r ∧ q) ∨ (q ∧ p) ∨ ((p → q) ∧ (p ∨ q))
+((r → p) → q ∨ q) → r ∨ r → p → r
+r ∨ q ∨ (q → q) → (q ∨ q) ∧ (p ∨ p)
+(p ∨ q) ∧ (q → r) → (p → r) ∧ (p ∨ q)
+α ∧ (r ∨ p) ∧ (p → q)
+δ ∧ (δ → r ∨ q)
+(q ∧ p ∧ (q → r)) ∨ ((q → p) ∧ r ∧ p)
+((r ∨ p) ∧ (p ∨ r)) ∨ ((r ∨ p) ∧ (r ∨ q))
+α ∧ δ ∧ q ∧ p
+(r → r) ∨ (p ∧ q) ∨ β
+(r → p) ∨ β → (r → p) ∧ q ∧ p
+(q ∨ r) ∧ q ∧ p → (q → r) ∨ (q → p)
+⊤ ∨ (r ∧ p → p ∨ r)
+((p ∨ q) ∧ δ) ∨ ((q → p) → r ∧ p)
+(p → q) ∨ (p ∧ r) → p ∨ p → r ∨ q
+((q ∧ q) ∨ p ∨ r) ∧ ((r → p) ∨ (r ∧ q))
+(p → p) ∧ (p → r) → δ
+(p ∧ q ∧ ⊤) ∨ ((r ∨ r) ∧ α)
+(δ ∧ α) ∨ (p ∧ p ∧ (q → q))
+((r → p) → r → p) → p ∧ r ∧ p ∧ p
+β → ⊤ ∧ (r → r)
+p ∨ r ∨ (r ∧ p) ∨ (p ∧ q ∧ q ∧ q)
+(⊥ ∧ (r ∨ r)) ∨ ((p ∨ p) ∧ (p ∨ r))
+⊥ ∨ (q ∧ r) ∨ r ∨ q
+((q → p) ∧ r ∧ q) ∨ (δ → p ∨ q)
+(q ∨ r → p ∨ r) ∨ (p ∧ q) ∨ (p → r)
+(r ∨ p → p → r) → r ∨ p ∨ p ∨ p
+(r → q) ∨ (r → q) ∨ (q → q) ∨ q ∨ p
+δ ∧ (p → r) → r ∧ r → ⊤
+((q ∨ p) ∧ (q → q)) ∨ ⊥
+((q ∧ r) ∨ (r ∧ r)) ∧ (r ∨ r) ∧ r ∧ p
+((p ∨ r) ∧ (q ∨ r)) ∨ γ
+(p ∨ p → r ∨ r) → γ
+(p → p) ∧ (q → r) → (r ∧ q) ∨ (q → p)
+(q ∧ r → q ∨ q) → (r → q) ∨ (p → p)
+(⊥ → r ∨ p) ∨ ((p → p) → p ∨ r)
+p ∨ p ∨ (q → r) → (p → q) → q ∧ p
+(q ∨ q) ∧ (r ∨ q) ∧ (r → p) ∧ (p ∨ q)
+⊥ ∧ (p ∨ p ∨ (r → r))
+r ∧ q ∧ (p ∨ p) → q ∧ q → q ∨ q
+(q → r) ∧ p ∧ q ∧ ((r → q) ∨ q ∨ r)
+β → (p → p) → r → r
+⊤ ∨ ((r → p) ∧ (r ∨ q))
+(q ∧ q) ∨ (q → p) ∨ ((r → r) ∧ (q ∨ p))
+q ∨ q ∨ q ∨ q → (r → r) ∨ (p ∧ r)
+(r ∧ r → q ∨ q) → (r ∧ p) ∨ (q → p)
+(q → r) ∨ r ∨ q ∨ p ∨ q ∨ q ∨ r
+(q ∧ q) ∨ (q ∧ r) → γ → q → q
+(γ ∨ (p ∧ r)) ∧ (r ∧ p → r ∧ r)
+(q ∨ r) ∧ γ ∧ ⊥
+((p ∨ r) ∧ (r ∨ p)) ∨ ⊥
+(q → r) ∨ (p → p) ∨ (⊤ ∧ r ∧ p)
+α ∨ (p → q) ∨ q ∨ q
+(⊤ → r → r) → (p ∨ r) ∧ p ∧ q
+(q ∨ q → r ∨ r) → r ∧ q ∧ (p ∨ r)
+(q → p) ∧ (p → q) → r ∨ q → p → r
+((q ∨ r) ∧ q ∧ q) ∨ (r → p) ∨ q ∨ r
+α → q ∨ q ∨ (q ∧ q)
+(p → r) ∧ (p → p) → ⊥ ∨ (p → p)
+((q ∧ r) ∨ ⊤) ∧ (r ∨ q → α)
+((q → p) ∧ (p ∨ p)) ∨ γ
+(r ∨ q ∨ (p → q)) ∧ ⊤
+r ∧ q ∧ p ∧ p → ⊤
+⊥ → α ∧ q ∧ r
+δ ∧ (r ∨ q ∨ (r ∧ p))
+δ ∨ (q → p) → (q → r) ∨ (q → p)
+(p → p) ∧ q ∧ p ∧ (r → r) ∧ (q ∨ p)
+((p → r) ∨ γ) ∧ γ
+(p ∧ q) ∨ (q → q) → (p → p) → r ∨ p
+((p → q) ∨ (q → q)) ∧ ⊥
+(α → r ∧ p) ∨ β
+(r ∨ p → r → r) ∧ ⊤ ∧ r ∧ p
+(q → r) ∨ ⊥ → (p ∧ p) ∨ (r → r)
+(r ∧ r) ∨ r ∨ q → (r ∨ p) ∧ q ∧ p
+(q → p) ∨ δ ∨ ⊤
+(p ∧ q ∧ (q → r)) ∨ ((q → r) ∧ ⊤)
+(γ → r ∧ q) ∧ α
+(r ∨ r → δ) ∨ β ∨ p ∨ q
+(r → p) ∧ (q ∨ r) → (p → p) → q ∧ q
+α ∧ q ∧ p → α ∨ ⊥
+((q → p) → p ∧ p) → q ∨ r → r → r
+(r → p) ∧ r ∧ q ∧ δ
+r ∧ r ∧ q ∧ p → r ∨ q ∨ q ∨ p
+(p → q) ∧ (p → p) → β
+r ∨ q ∨ γ ∨ ((r → r) ∧ p ∧ q)
+β → α ∧ (r → p)
+r ∧ r ∧ (p ∨ p) ∧ δ
+γ → (q ∨ q) ∧ (r → p)
+((p ∧ r) ∨ (q → r)) ∧ ((p → p) ∨ q ∨ p)
+(q ∨ r → p ∧ q) → (r ∨ q) ∧ q ∧ q
+⊥ ∨ (p ∨ q → ⊥)
+(r → r) ∧ p ∧ q ∧ (p ∨ r → ⊥)
+((q ∧ q) ∨ p ∨ r) ∧ p ∧ p ∧ (q ∨ r)
+(α ∧ γ) ∨ (r → r) ∨ (r ∧ p)
+((q ∧ q) ∨ (q → r)) ∧ (r ∨ p) ∧ r ∧ p
+((r ∧ r) ∨ r ∨ r) ∧ γ ∧ (q ∨ p)
+⊥ ∧ (q ∨ q → r ∨ q)
+(p → p) ∨ (q → q) → ⊥
+(q → q) ∧ r ∧ q → q ∨ q → q ∧ r
+(p → q) ∧ r ∧ p ∧ (p ∨ q → p → p)
+⊥ ∧ (⊤ ∨ (q ∧ p))
+⊤ → (p → p) → p ∨ q
+(q → p) ∨ (r ∧ q) ∨ δ
+((q ∧ q) ∨ (q ∧ r)) ∧ δ ∧ (p → p)
+⊤ ∧ p ∧ p → p ∧ p → r ∨ r
+((q → q) → r ∧ r) → δ ∧ p ∧ q
+(β ∨ (q ∧ q)) ∧ δ
+β → (q ∧ p) ∨ p ∨ p
+(q ∨ p → r ∧ q) ∧ (q ∨ p ∨ α)
+((r → r) ∨ (p → q)) ∧ ((q → q) ∨ (r → r))
+(r ∧ p → α) ∧ (r → r) ∧ ⊥
+(q ∨ r) ∧ (r → q) → γ ∨ q ∨ p
+(p ∧ r → p ∨ q) ∧ (p ∧ p → p → r)
+(q → q) ∧ (p → p) → (r ∨ q) ∧ ⊥
+r ∧ r ∧ (q ∨ q) ∧ (q ∨ q ∨ (p ∧ r))
+(γ ∨ (q → q)) ∧ (p → p) ∧ (q → r)
+(β → p ∧ r) ∧ (q → r) ∧ (q ∨ p)
+(α → p ∧ r) ∧ ((r ∧ q) ∨ q ∨ q)
+δ → ⊥ → r → q
+α ∧ (⊥ → q ∧ q)
+(q ∨ q) ∧ ⊤ → (p ∨ p) ∧ ⊥
+α ∨ (r → q) → (r → r) ∨ α
+(r ∧ r → p ∧ p) → q ∧ q ∧ (p → r)
+(q → r) ∧ r ∧ q → p ∨ p ∨ r ∨ p
+((r → q) ∨ (p → p)) ∧ (q ∧ r → q ∨ p)
+((q ∨ p) ∧ (q → q)) ∨ (γ ∧ (q → r))
+(p ∧ p) ∨ (r ∧ p) → (q → r) ∨ (p → r)
+(p ∧ q) ∨ p ∨ p ∨ (q ∧ r ∧ (q → q))
+((r ∧ r) ∨ (q → p)) ∧ ((q → r) → p ∧ q)
+((q → r) → p → p) → p ∨ q ∨ (q → q)
+(q ∧ r → q ∨ r) ∨ (q ∧ q → q ∨ q)
+(β → r ∧ r) → q ∧ p → r → q
+(q → r) ∧ ⊥ → (p ∨ r) ∧ p ∧ p
+((q → p) → p → p) → q ∧ p → p ∨ p
+((p ∨ q) ∧ (r → q)) ∨ ((q → p) ∧ (p ∨ p))
+(r ∨ p → r → q) ∧ (r ∨ p) ∧ (p ∨ r)
+α ∧ (q ∨ q) ∧ (r ∨ r)
+(p → q) ∧ p ∧ r → (r → p) ∧ α
+(q → p) ∧ r ∧ p → (p → p) → ⊤
+δ → r ∧ p → γ
+(q ∧ q → p ∧ q) ∧ (p → q) ∧ (p ∨ q)
+((r → q) → p ∧ p) → r ∨ r ∨ p ∨ p
+(r → r) ∧ (r → p) → (r ∧ q) ∨ (q → q)
+α → q ∧ r → γ
+(p ∨ r → q → p) → ⊤
+((r → p) → r → q) ∧ α
+(q ∧ p) ∨ δ → (q ∨ p) ∧ q ∧ p
+⊤ ∧ (p → r) ∧ ((p → p) ∨ (r ∧ r))
+(q ∧ q → p ∧ r) ∧ (q → r) ∧ r ∧ q
+((r ∨ r) ∧ p ∧ p) ∨ α
+(p → q) ∧ (q ∨ p) → γ
+q ∧ q ∧ p ∧ q ∧ ((p → p) ∨ β)
+(p ∧ r → p → q) ∧ (γ ∨ (r ∧ r))
+(⊤ ∧ q ∧ q) ∨ ((r → p) → q ∧ p)
+γ ∨ (r → p) → (p → r) → r ∧ p
+q ∨ p ∨ (p → r) → ⊤
+((p → r) → p ∧ q) → α
+((p → q) ∧ (p → q)) ∨ ⊥
+((p → r) → r ∧ p) ∨ (q ∨ p → q ∧ p)
+δ → δ → r → p
+⊤ ∧ (p ∨ q) ∧ (p ∧ p → ⊤)
+(p ∨ p) ∧ δ → r ∨ p ∨ (r ∧ r)
+((p → q) → p ∨ q) → q ∨ q ∨ (r → r)
+(⊤ → p → q) → ⊥ → ⊥
+δ ∨ (p ∧ q) → ⊥ ∧ (q ∨ q)
+(r ∧ r ∧ (r → p)) ∨ (q ∧ q → q ∧ r)
+γ ∧ q ∧ r ∧ (r ∨ q → r ∨ q)
+(r ∨ p → q ∨ r) ∨ δ
+((p → r) ∧ (r ∨ r)) ∨ ((p ∨ q) ∧ γ)
+⊥ ∧ (q ∨ q) → (r → r) ∧ (q → q)
+(r → r) ∨ q ∨ r → (r → p) ∨ p ∨ p
+((r → p) → r → p) ∨ ((p → r) → q → r)
+(γ ∧ q ∧ r) ∨ (r ∧ p → q ∨ r)
+(r ∨ r → p → r) ∨ r ∨ r ∨ (q → r)
+((p → q) → r ∧ p) ∧ ⊤ ∧ (p → r)
+((q ∨ p) ∧ (r → q)) ∨ (p ∧ r ∧ (q → r))
+(δ → q ∨ p) → β ∨ (q → r)
+(δ ∧ (p → r)) ∨ ((p → p) → q → q)
+(q ∨ q) ∧ (p ∨ q) → (p → p) → r → r
+q ∨ r ∨ r ∨ p → r ∨ r ∨ (r → q)
+p ∧ p ∧ r ∧ r → q ∧ q → p → r
+(q ∨ q) ∧ (q → r) ∧ (r → r) ∧ (p ∨ q)
+α ∨ r ∨ p → α
+β ∧ (p ∧ q → p ∧ r)
+(p ∧ p → β) ∧ ((q ∧ r) ∨ (q → r))
+δ ∨ (r ∧ q) ∨ (q ∧ r)
+((q → p) ∧ (r → p)) ∨ (p ∧ p ∧ (q → q))
+((r → q) → q → r) ∨ (q ∨ r → r → p)
+r ∨ q ∨ (q → r) ∨ (α → r ∨ r)
+p ∧ r ∧ p ∧ q → ⊤
+(p ∧ r → p ∨ r) ∨ (p ∨ q → r → q)
+((p ∨ p) ∧ (r ∨ r)) ∨ ⊥
+p ∨ p ∨ (q ∧ r) ∨ ((p ∨ r) ∧ (p ∨ q))
+(p → r) ∨ p ∨ r ∨ (r → r) ∨ (p → q)
+(p ∨ q) ∧ (p ∨ q) ∧ γ ∧ r ∧ p
+⊥ ∨ (q ∧ q) ∨ (r ∨ p → p → q)
+p ∨ r ∨ γ → q ∧ r ∧ ⊥
+((r → p) ∨ (q → p)) ∧ (q → q) ∧ (p → r)
+(r ∨ p → r ∨ q) → (r → q) ∧ r ∧ q
+q ∧ q ∧ δ ∧ (β ∨ (q ∧ r))
+(q → p) ∧ (r ∨ p) ∧ (r ∨ r) ∧ p ∧ p
+(α → q ∧ r) → r ∧ q ∧ (r ∨ q)
+(r → r) ∨ (p → r) → β ∧ (q → q)
+(p ∨ q ∨ p ∨ p) ∧ (δ ∨ (r ∧ p))
+(β → p ∨ p) ∨ ((p → q) → r ∧ p)
+(q ∨ q) ∧ (r → p) → (q → p) → p ∨ q
+(α ∧ (p → p)) ∨ (p → r) ∨ (q → p)
+r ∨ p ∨ (r → r) ∨ ((r → q) → q → q)
+((r → p) ∧ (p → p)) ∨ ⊥
+(q ∨ q) ∧ γ → δ
+((p ∧ p) ∨ r ∨ r) ∧ ⊥
+(⊤ ∧ α) ∨ ((p → p) ∧ (q → p))
+γ ∨ q ∨ r ∨ p ∨ q
+((p → r) → β) ∧ (r ∨ r ∨ (q → q))
+((p ∧ p) ∨ (r → p)) ∧ γ ∧ (p ∨ q)
+((r → p) → r → p) ∧ α
+q ∨ q ∨ (q ∧ p) → ⊤
+⊥ ∧ α ∧ (q ∨ r) ∧ (r → q)
+(r ∧ q → r ∨ r) → p ∧ q → α
+(p ∧ q → r ∧ p) ∨ ((r ∨ r) ∧ γ)
+((p → r) → r ∨ q) ∨ (r → r) ∨ q ∨ r
+((r → q) ∧ (p → p)) ∨ ((p ∨ q) ∧ (q ∨ q))
+(r → q) ∨ (p ∧ r) → q ∧ q ∧ q ∧ q
+((r → q) ∨ (r ∧ r)) ∧ ((r → p) → r ∨ q)
+(p ∧ p → β) ∧ (r ∨ r ∨ (r ∧ q))
+(q → r) ∧ (q ∨ p) → ⊥ → r ∧ r
+(p ∧ q ∧ ⊥) ∨ q ∨ q ∨ r ∨ p
+((r → r) ∨ (q → r)) ∧ ((q ∧ q) ∨ α)
+(α → r ∧ p) → r ∧ q ∧ (r → r)
+(⊥ → β) ∧ γ ∧ r ∧ q
+(p → q) ∧ (p → q) ∧ ((q → p) → q → p)
+((r → p) ∧ (q → r)) ∨ (r ∧ p → p ∨ q)
+(q → r) ∨ (p → p) → γ
+(q → q) ∨ α → (p → q) ∨ (p ∧ p)
+(r ∨ p ∨ α) ∧ ((r → q) → r → p)
+(γ → β) → (q ∧ q) ∨ r ∨ q
+γ ∨ (q ∧ r) ∨ (p ∨ r → q ∨ r)
+(r → q) ∨ p ∨ r → p ∨ r ∨ p ∨ p
+(r ∧ p → p → p) ∨ ((q ∨ p) ∧ ⊤)
+(β → p → p) ∧ ((p ∧ p) ∨ r ∨ r)
+⊤ ∧ ((p ∧ q) ∨ (q ∧ r))
+(r ∧ p) ∨ (q → q) → (q ∧ p) ∨ (q ∧ r)
+(p ∧ p → β) ∨ ((q → r) ∧ (r ∨ q))
+((q ∨ q) ∧ (q ∨ p)) ∨ (r → p) ∨ (p ∧ q)
+(r ∧ r → q ∨ q) ∨ (r → q) ∨ (r ∧ p)
+(α → q ∧ q) ∧ α
+((r ∧ r) ∨ (r ∧ p)) ∧ r ∧ p ∧ q ∧ r
+γ ∨ ((q ∨ q) ∧ (p ∨ p))
+(γ → r ∨ r) → ⊥
+(p ∨ p) ∧ (q → r) → α
+(q ∧ p → q → r) → β
+(q ∨ q → ⊥) ∧ ((r → r) ∨ γ)
+(r ∨ q → q ∨ p) → (r ∨ p) ∧ (p → r)
+((r → r) → p ∨ r) ∨ ((p → p) ∧ (p ∨ q))
+(q ∨ q → p ∧ p) ∨ r ∨ q ∨ (p → q)
+((r ∧ q) ∨ r ∨ q) ∧ (p ∨ q ∨ (r → q))
+(q ∧ p → r ∨ p) → α ∨ r ∨ q
+((q → p) ∧ p ∧ r) ∨ ((r → q) ∧ (q → p))
+(p ∧ p → p ∧ r) → (r ∧ r) ∨ (p → p)
+p ∨ p ∨ (p ∧ q) → (p ∧ p) ∨ (q → q)
+δ ∧ ((q → r) → p ∧ q)
+(q → q) ∧ γ → (q → p) → r ∧ p
+⊤ ∧ r ∧ p ∧ q ∧ p
+γ → (q → p) ∧ p ∧ r
+(p ∧ p ∧ α) ∨ (q → q) ∨ α
+((q → p) ∨ (q → p)) ∧ (q ∨ p) ∧ δ
+q ∨ r ∨ β → δ
+δ ∧ ((q → p) ∨ q ∨ q)
+(β → q ∧ p) ∨ α
+(α ∧ γ) ∨ (p ∧ r ∧ (r → p))
+(⊤ → q ∧ q) → (q → r) ∨ (p → r)
+⊥ ∨ q ∨ q ∨ (⊥ ∧ r ∧ r)
+((r → p) → β) ∨ (δ ∧ p ∧ q)
+r ∧ r ∧ (q ∨ q) ∧ q ∧ q ∧ (r → q)
+(r ∧ p → δ) → (q → r) ∨ r ∨ p
+(δ ∧ q ∧ q) ∨ ((p → q) ∧ γ)
+((r → r) ∧ δ) ∨ ((q → q) ∧ (p → q))
+(p ∨ r) ∧ (p → p) ∧ q ∧ p ∧ r ∧ r
+(p → r) ∨ γ → p ∨ q ∨ ⊥
+(r ∨ r) ∧ (q ∨ q) → (q → p) ∨ α
+(r → q) ∨ (p → q) ∨ δ
+(⊥ → r ∨ p) ∧ (⊤ → q ∨ p)
+(r ∨ q → p ∨ q) ∧ α
+r ∧ r ∧ (p → r) → γ ∧ (p ∨ p)
+(p ∨ q → p ∧ p) → q ∨ q ∨ (p ∧ r)
+(q → r) ∧ (r → p) ∧ (p ∨ r) ∧ β
+⊥ → p ∨ r ∨ p ∨ p
+((q → r) ∧ (r → p)) ∨ (p ∨ r → q ∧ q)
+((r → p) ∨ (p ∧ p)) ∧ q ∧ q ∧ (p ∨ p)
+(q ∧ q) ∨ (p → r) → (r → q) ∧ (p ∨ q)
+r ∨ p ∨ r ∨ q → (r → r) → p → q
+⊥ ∨ p ∨ q → (p ∨ q) ∧ p ∧ q
+(r ∨ r → p → q) ∧ ⊥
+((p ∨ p) ∧ p ∧ q) ∨ (q → r) ∨ γ
+δ → r ∧ q → p ∧ r
+(q ∧ q) ∨ (r → p) → (p → p) ∧ (q ∨ r)
+(γ → q → q) ∧ ((q → q) → q ∧ p)
+(p ∨ q → q → q) ∧ γ
+(r ∧ r → r ∧ q) → (r ∨ q) ∧ p ∧ r
+(p ∧ q) ∨ p ∨ p → (r → r) → q ∨ q
+r ∨ p ∨ (r ∧ r) → ⊥ ∨ α
+δ → (q ∧ r) ∨ (r ∧ r)
+δ ∧ (p ∨ q → ⊥)
+(q ∧ q) ∨ (q ∧ p) → (r → q) ∨ (p ∧ r)
+δ ∧ r ∧ r → β → p ∧ q
+((q → p) → δ) ∧ (r ∨ p → q ∧ r)
+(r ∧ r → r → r) ∨ ((r → q) ∧ (q ∨ r))
+(q ∨ r) ∧ (r → r) → ⊥
+γ ∧ δ → α ∧ (q ∨ q)
+(r → q) ∨ δ → ⊥ ∨ α
+(q → p) ∨ (p ∧ r) ∨ α
+(p ∨ r → q ∧ p) ∧ (p ∨ p → γ)
+p ∨ r ∨ q ∨ r → γ
+q ∨ r ∨ γ ∨ ((p ∨ p) ∧ α)
+α → q ∧ q ∧ ⊤
+(r → p) ∧ p ∧ q → (r → p) ∨ (p ∧ q)
+(q ∨ p → p → q) ∧ ((r → q) ∨ (r ∧ p))
+r ∨ q ∨ (r ∧ r) → (r → q) ∨ q ∨ p
+((p → q) → p ∧ p) → ⊥ → p ∨ r
+r ∧ r ∧ (p → r) → p ∨ q → r ∨ r
+(r ∧ r) ∨ r ∨ q → q ∧ r ∧ (p → r)
+(p → q) ∨ (q → q) → (q ∧ r) ∨ (p → q)
+(q ∧ p → r ∨ p) ∧ r ∧ p ∧ q ∧ p
+q ∧ r ∧ (q → p) ∧ (r ∧ r → q → p)
+(⊤ ∨ (r ∧ p)) ∧ α ∧ ⊤
+((p → p) ∧ r ∧ q) ∨ (p ∨ r → q → r)
+((p → r) → δ) ∧ ((p ∧ r) ∨ (r → r))
+((p → r) ∧ r ∧ q) ∨ p ∨ q ∨ (q → q)
+⊤ ∨ (α → r ∨ q)
+q ∨ q ∨ (q ∧ r) → (q → p) ∨ α
+(⊥ → q → q) ∧ α
+((q → r) → q ∨ q) → (p ∧ q) ∨ (p ∧ q)
+δ → p ∧ p → p ∧ r
+(β → q ∧ r) ∨ ⊤
+(p ∧ q) ∨ (p → r) → γ ∧ (q → r)
+(p ∨ p → γ) ∧ (p ∧ p → β)
+p ∨ r ∨ q ∨ p ∨ δ
+(⊥ ∧ p ∧ q) ∨ ((q → p) ∧ (q ∨ q))
+(p ∧ p → q ∧ p) ∧ (q ∨ p) ∧ p ∧ p
+(δ → q ∨ r) → (q → p) → ⊤
+((r → r) → p → r) ∧ (q ∨ r → γ)
+(r ∨ r → p → q) → (p → p) → p → p
+((r → q) → ⊥) → (r → p) ∧ q ∧ q
+(q ∨ r → q → p) ∧ (p ∧ q → p ∧ q)
+(q → p) ∧ ⊤ → γ
+(q ∧ p ∧ α) ∨ ((q ∨ p) ∧ δ)
+δ → r ∨ p → r ∨ r
+α ∨ (p → p) ∨ (q → r)
+(r ∨ q ∨ p ∨ p) ∧ ((r ∧ r) ∨ r ∨ p)
+(r → p) ∨ p ∨ p ∨ (q ∧ r → γ)
+(q ∨ r → γ) → (p → q) → q ∧ q
+(r ∧ r) ∨ q ∨ q → (r → q) ∨ γ
+((p ∨ r) ∧ (q ∨ r)) ∨ ((r ∨ q) ∧ p ∧ p)
+δ ∧ p ∧ p → δ ∨ γ
+(r ∨ r ∨ (r ∧ q)) ∧ (β ∨ (p ∧ p))
+(γ → δ) → β → p ∨ p
+⊤ → (q → r) → γ
+((q → p) → p ∨ p) ∧ ((r → q) → p ∧ q)
+(p ∧ r → r → p) → (r ∨ p) ∧ r ∧ r
+γ ∨ (r → p) ∨ ((q ∨ p) ∧ p ∧ r)
+(p ∨ r → p ∧ q) ∧ (r ∨ q → q ∧ r)
+(r ∧ r) ∨ (q → q) → ⊥ ∧ p ∧ r
+β ∨ q ∨ p ∨ ((q → q) ∧ (q → p))
+(r → p) ∨ (q → r) ∨ q ∨ q ∨ r ∨ q
+((p → p) → q ∧ q) ∧ ((p → p) ∨ (p ∧ r))
+(q ∧ p) ∨ p ∨ r → (p → r) → q → p
+((q → p) → r ∧ r) ∧ γ
+(δ → r ∧ p) ∧ (p ∧ q → p → r)
+(r ∨ q → q → r) ∨ β
+δ ∧ (q ∧ p → q → q)
+((q ∨ r) ∧ (r → p)) ∨ ((q → q) ∧ β)
+(q ∧ r) ∨ p ∨ q ∨ α
+(p → r) ∨ β ∨ (α → q → q)
+r ∧ r ∧ (q → r) → p ∨ q ∨ p ∨ r
+(p ∨ p) ∧ q ∧ r → p ∨ r ∨ q ∨ q
+(β ∨ (q ∧ q)) ∧ p ∧ q ∧ r ∧ q
+δ → ⊤ → r ∧ p
+(r ∨ r) ∧ (q → p) ∧ (r ∨ p) ∧ ⊤
+((q → r) → p ∧ q) → p ∨ q → p → r
+(r → r) ∧ (p → p) ∧ α
+δ → p ∨ p → r → p
+((r → p) ∨ r ∨ p) ∧ ((p ∧ q) ∨ (r → r))
+γ ∨ ((p → r) → ⊥)
+(p ∧ p → q ∨ q) ∧ ((p ∧ q) ∨ r ∨ p)
+q ∧ q ∧ (q → r) → q ∨ p ∨ (r ∧ p)
+⊤ ∨ ((p → p) → p → q)
+(q ∧ p) ∨ (r → p) ∨ (p ∧ p) ∨ (p → r)
+(r ∨ q → ⊥) ∧ α
+q ∨ p ∨ (p ∧ p) → q ∧ r → r ∨ p
+r ∧ p ∧ (p → r) → ⊥
+(r ∧ r → β) ∧ (p ∨ p → p ∨ p)
+⊤ ∧ γ → q ∧ q ∧ (r → p)
+(⊥ ∧ (p → p)) ∨ ⊥ ∨ (p → q)
+r ∧ r ∧ r ∧ p ∧ (p ∨ q) ∧ q ∧ q
+r ∨ q ∨ (r ∧ p) ∨ γ
+(q ∧ r → p ∧ p) ∧ (r → r) ∧ (r → q)
+α ∧ (r ∨ p) ∧ q ∧ r
+((q → p) → q → p) ∨ (δ → r ∧ r)
+(r ∧ p ∧ (p → r)) ∨ ((p → q) → δ)
+(q ∨ p → r ∧ q) ∨ (q ∧ r) ∨ β
+(p ∧ p) ∨ (q → p) ∨ (q ∧ q ∧ (r → r))
+(δ → ⊥) → α ∨ (p ∧ q)
+(q ∨ q → q ∨ r) → ⊥
+q ∨ r ∨ (q → p) ∨ ⊥
+(β → r ∧ q) → α
+(p ∨ q) ∧ ⊥ → p ∧ r → q ∨ q
+α ∨ (p ∨ r → r ∧ q)
+(p ∧ q) ∨ (q → p) → β
+β ∨ (q ∧ q) ∨ δ
+r ∧ r ∧ p ∧ q → ⊥ → r → r
+r ∨ q ∨ (p ∧ q) → (p → p) → q ∨ q
+(r ∨ p → r ∨ p) → (q → r) → r ∧ q
+(p ∨ p → ⊥) → (q → q) → p ∧ p
+⊤ → (q → q) ∨ p ∨ p
+(p ∨ q → q ∧ r) ∨ γ
+γ ∧ (p ∧ p → q ∧ p)
+((r → p) → p → p) ∨ ((p → r) ∧ p ∧ q)
+q ∨ q ∨ (r → p) → (q ∧ r) ∨ (p → q)
+(r → r) ∧ p ∧ q ∧ (p ∨ r ∨ (q ∧ p))
+⊥ → ⊥ → p ∨ q
+(p ∧ r → ⊥) ∨ ((q ∨ q) ∧ (r ∨ q))
+⊥ ∨ ((r ∨ p) ∧ (q ∨ q))
+(p ∨ p → r ∧ r) ∧ (p ∨ p) ∧ (r ∨ p)
+(p ∨ q) ∧ (p → q) → (p → r) ∨ (r ∧ r)
+(q ∧ p) ∨ (p → p) ∨ ((r → q) ∧ (r → q))
+(r ∧ q → ⊤) ∧ (q ∨ q ∨ r ∨ p)
+⊤ → q ∨ r ∨ (q ∧ r)
+p ∨ q ∨ (q ∧ q) → α ∧ (p ∨ p)
+α ∨ (r ∧ q ∧ (q → r))
+((q → q) → ⊤) ∧ (p ∧ q → q → r)
+γ ∧ ((r → q) → r ∨ r)
+δ ∧ (r ∨ p) ∧ r ∧ p
+(⊤ → ⊥) → p ∧ p ∧ (q ∨ p)
+(δ ∧ (r → q)) ∨ (γ ∧ (p → q))
+(q ∨ p → r ∨ r) ∨ (q ∨ q → q ∨ q)
+δ ∧ (q ∨ r → ⊤)
+(r → q) ∧ p ∧ q → r ∧ p ∧ (p → p)
+p ∧ p ∧ (p → q) ∧ q ∧ q ∧ q ∧ p
+(q ∨ p → r ∧ r) ∨ (p ∧ q ∧ (q → q))
+p ∧ r ∧ r ∧ r ∧ β
+(q ∨ p → r ∨ r) → p ∨ r ∨ (q ∧ r)
+(r ∨ p → r ∧ p) → (p ∧ r) ∨ (p → q)
+⊤ → (r → q) ∨ p ∨ r
+((q ∨ p) ∧ q ∧ q) ∨ (q ∧ q ∧ (p → r))
+((q → p) → p ∨ r) → α ∧ r ∧ p
+(r ∨ q ∨ (p ∧ p)) ∧ ((r ∧ r) ∨ ⊤)
+β ∨ (p ∧ q) → (p → r) → q → p
+p ∨ r ∨ (p → p) → q ∧ q ∧ ⊥
+β ∧ (p ∧ p → ⊤)
+p ∧ p ∧ (r → r) ∧ ⊥
+α → ⊥ ∨ (q ∧ p)
+(p ∨ q → p ∧ q) ∨ (⊤ ∧ (r ∨ r))
+((r ∧ q) ∨ (p → p)) ∧ ((q → p) ∨ (p → r))
+(r ∨ q → r ∧ p) ∨ ((r ∨ p) ∧ (r → r))
+β ∨ (q ∧ p) → p ∧ q ∧ r ∧ r
+(p ∨ r) ∧ r ∧ r → γ ∨ p ∨ p
+(r ∨ r → p ∨ q) → (q ∨ r) ∧ q ∧ q
+α ∨ (r ∧ q ∧ α)
+(r ∨ r → p ∧ r) ∨ γ ∨ (r ∧ q)
+(q ∧ q ∧ (p ∨ r)) ∨ ((r → p) → r → r)
+(α → r → q) → (q ∨ r) ∧ (r ∨ p)
+δ → r ∨ p ∨ (r → r)
+((q ∧ p) ∨ (p ∧ q)) ∧ α
+(δ ∨ (p → r)) ∧ (q ∨ p → q → q)
+(⊤ → p → q) ∨ (p ∨ r → r ∨ q)
+(q ∧ p → p ∧ p) ∧ (r ∨ r) ∧ (p ∨ q)
+α ∨ (α ∧ (p → p))
+q ∧ q ∧ (q → p) → (q ∨ r) ∧ ⊤
+((r → p) → q ∧ r) ∨ p ∨ p ∨ q ∨ p
+δ ∨ r ∨ p → (p → q) → p ∨ p
+(p ∨ q → p → q) ∧ ⊥
+(β → p → r) ∧ ((q → r) → ⊤)
+α ∧ (r ∨ p → p ∧ p)
+(p ∨ p → α) ∨ ((r ∨ r) ∧ (p → r))
+β ∧ (p ∨ r) ∧ (r ∨ p → q ∧ q)
+(q ∨ q → p → p) ∧ (p → p) ∧ p ∧ p
+(q ∧ q) ∨ (p → r) → (p → p) → q ∨ q
+γ ∧ (p ∨ p → q ∧ r)
+(⊥ → q ∧ r) ∨ (q ∧ q) ∨ (q ∧ p)
+(r ∧ q → β) → γ → r ∨ r
+((r → q) → r ∧ q) ∨ (⊤ ∧ ⊥)
+(q ∨ r → q ∨ q) ∧ ((p → r) ∨ q ∨ p)
+(p ∨ q → γ) ∧ (p → r) ∧ (r → r)
+(q ∧ r) ∨ (r → p) ∨ β
+((q → q) → r ∧ r) ∧ ((q ∧ r) ∨ r ∨ q)
+δ ∨ ((r → q) ∧ (p → p))
+((r → p) → q ∨ p) ∧ α
+⊥ ∧ (p ∨ p) ∧ (q ∨ r)
+(p ∧ q ∧ (r ∨ r)) ∨ (p ∨ p → p ∨ p)
+(⊤ ∧ (q ∨ r)) ∨ (q ∧ r) ∨ (q ∧ p)
+((p → q) → q ∨ r) → ⊤
+(q ∧ p) ∨ (r ∧ r) → (q → r) ∧ (q ∨ r)
+β ∧ (⊥ ∨ (q ∧ r))
+((p ∧ r) ∨ r ∨ q) ∧ (p ∨ r) ∧ (p → q)
+(δ → q → p) ∨ (p → p) ∨ q ∨ q
+(q → r) ∧ (q ∨ q) ∧ ((p → p) → r ∧ r)
+((q → p) ∧ (p ∨ q)) ∨ ((q → p) → q ∨ r)
+(q ∧ r) ∨ (p ∧ p) → ⊤
+(p ∧ r → q ∨ r) ∨ ((r → p) ∧ (r ∨ q))
+α ∧ (q → p) ∧ (p ∨ q)
+γ ∨ (α → q ∨ q)
+p ∨ q ∨ p ∨ q → r ∨ r → p ∧ r
+p ∨ q ∨ (r → p) ∨ (q ∧ q → p ∧ q)
+(p ∨ q) ∧ q ∧ q ∧ ((p → q) ∨ q ∨ q)
+(p → q) ∧ (q → r) → δ ∧ (r ∨ p)
+(p ∨ r → p ∧ q) ∧ α
+⊤ ∨ (r → r) → (p → r) ∨ r ∨ r
+(r → p) ∧ (q → r) → β → r ∧ q
+(q → p) ∧ p ∧ r → (p → r) ∨ (q → p)
+(r → q) ∧ (r → p) → (r ∨ p) ∧ p ∧ p
+p ∨ q ∨ α ∨ ((q ∨ p) ∧ r ∧ p)
+q ∨ p ∨ γ → (p ∧ q) ∨ p ∨ r
+(q ∨ p) ∧ p ∧ r ∧ (r ∨ q → r → r)
+((q ∧ p) ∨ r ∨ q) ∧ ((q → q) → p ∨ r)
+q ∧ q ∧ β ∧ (r → q) ∧ (q → r)
+((p → p) ∧ q ∧ r) ∨ p ∨ q ∨ (r ∧ p)
+(q → q) ∧ q ∧ p → q ∧ r → q ∧ r
+(r ∧ q → p → q) → α → p ∧ p
+(p ∨ p ∨ q ∨ p) ∧ p ∧ p ∧ ⊥
+(r ∨ r ∨ (q → r)) ∧ (p ∨ p → γ)
+(α → q ∧ p) ∧ ((r ∧ r) ∨ (q → p))
+β ∨ (p ∧ p) ∨ (r ∧ r) ∨ (r → q)
+(r ∨ q) ∧ δ → q ∨ p ∨ (p → q)
+r ∧ q ∧ q ∧ q → q ∨ p → p → r
+(q ∨ p) ∧ δ → r ∨ r → p → q
+(r ∨ q) ∧ (r ∨ r) → r ∨ r → q → q
+(q → p) ∧ r ∧ r ∧ ((p ∧ p) ∨ q ∨ p)
+(r ∨ p) ∧ r ∧ q ∧ (r ∨ q ∨ (r → p))
+(β → r ∧ p) ∨ (β ∧ (r ∨ r))
+(p ∨ p → β) → r ∧ q → r ∨ p
+((q → r) ∧ (p ∨ p)) ∨ (q ∧ q → r ∨ r)
+(p ∨ p → q ∧ q) ∨ (q ∨ q → p ∧ r)
+((r → p) ∧ (r ∨ p)) ∨ ((q → r) → p ∧ q)
+(p ∨ p) ∧ p ∧ p ∧ ⊤
+γ → p ∧ q → p → p
+(p → q) ∨ (r → r) → p ∨ r ∨ ⊥
+p ∨ q ∨ r ∨ r → γ → p → r
+⊥ ∧ β → (p ∨ r) ∧ (p ∨ q)
+⊤ ∨ (p → r) → ⊤
+(p → p) ∨ (p → r) ∨ (p ∧ p → q ∧ p)
+(q ∨ q ∨ (q ∧ p)) ∧ (β → q ∨ p)
+(r ∧ r → q ∨ p) ∨ (p ∧ r → p → q)
+((r → r) → p → r) ∧ (r ∨ r → p ∧ r)
+β ∧ γ ∧ (q → r)
+((p → p) → γ) ∨ (r ∧ r → γ)
+(q → p) ∨ (p → r) → (p ∧ r) ∨ p ∨ p
+p ∧ p ∧ (r ∨ q) → p ∧ q → q ∨ r
+((q → r) → p ∨ r) → (p → r) ∧ (p → p)
+(q ∧ p → r ∨ r) ∧ (δ ∨ (q → r))
+(p → p) ∨ (r → r) → β ∨ (p → q)
+β ∧ (p ∨ r) ∧ (q ∨ p)
+δ → r ∧ r → q → q
+(r ∧ q) ∨ q ∨ p → (q ∧ p) ∨ p ∨ q
+(δ → q ∧ r) ∧ ((p ∧ r) ∨ q ∨ p)
+γ ∨ ((p → p) ∧ α)
+((q → q) ∨ δ) ∧ (r → p) ∧ (r → p)
+((r → p) → q ∧ p) ∧ ((q ∧ q) ∨ (p → r))
+(r → p) ∧ (r → p) → p ∧ r ∧ q ∧ q
+(p → q) ∨ (p ∧ q) ∨ γ
+(r ∨ r → p ∨ r) ∧ (p ∧ q → q ∨ r)
+δ ∧ (r → p) → (r → r) ∨ q ∨ p
+(p ∧ p) ∨ (q ∧ p) → (p ∨ q) ∧ β
+((p → q) → δ) ∧ ⊤ ∧ (q ∨ p)
+((p ∨ q) ∧ q ∧ p) ∨ r ∨ q ∨ (p → r)
+p ∧ r ∧ (p → r) → β ∨ (r → r)
+(p → q) ∨ p ∨ p → (r ∧ p) ∨ (r ∧ q)
+(⊤ → q → p) → q ∨ q → q ∧ p
+β ∧ (γ → q ∨ r)
+γ ∧ (q ∨ r ∨ (q ∧ p))
+(p ∧ r) ∨ r ∨ q ∨ ((r → p) ∧ (q ∨ q))
+α ∨ (r ∧ p) ∨ r ∨ q
+(r ∧ r → r → q) → (r ∨ r) ∧ (p → q)
+((p ∨ q) ∧ (q ∨ r)) ∨ (p ∨ r → q ∨ q)
+(r ∨ p → r → q) ∨ (q ∧ p ∧ r ∧ p)
+(r → p) ∨ q ∨ p → (p → p) ∧ (p → r)
+(⊥ → r ∧ p) → (r → p) ∨ (r ∧ r)
+(q → r) ∨ (p → q) → β → ⊥
+(r ∨ r ∨ (p → p)) ∧ ((p → q) → q → r)
+(q ∧ q) ∨ (r → p) → (r → q) ∧ r ∧ r
+(q ∨ r) ∧ (r ∨ p) → (r → q) → ⊥
+(p ∧ q → p ∧ r) ∧ (β ∨ (q → p))
+γ → (p ∨ r) ∧ r ∧ r
+(⊤ → p → r) ∨ (q → q) ∨ (p ∧ p)
+q ∧ r ∧ γ → (q ∨ r) ∧ δ
+((q → p) → p ∧ r) ∨ ((q ∨ r) ∧ (r → p))
+(q → p) ∨ α → (p → r) ∨ (r → p)
+((p ∧ p) ∨ (p → q)) ∧ (q → q) ∧ q ∧ q
+(r ∧ r) ∨ (q ∧ q) ∨ (q → q) ∨ (r ∧ q)
+(α ∧ p ∧ p) ∨ (p ∧ q) ∨ (p → q)
+α ∧ (r ∨ q) ∧ α
+(r ∧ p) ∨ (q → r) → (q ∨ r) ∧ β
+(r → p) ∧ (r ∨ p) → (p → r) ∧ (q → r)
+p ∧ r ∧ (r → r) → r ∧ r → q → p
+(q ∧ p → q ∨ r) ∧ (γ → p ∨ q)
+q ∨ r ∨ β → p ∨ r ∨ (r → q)
+(q → r) ∧ (p ∨ r) → ⊤
+δ ∨ (r ∧ p → p → q)
+β ∧ (p ∧ r → r ∨ p)
+(p → p) ∧ r ∧ r → (q ∨ p) ∧ r ∧ r
+(q ∨ q → q ∧ r) ∧ γ
+q ∨ p ∨ r ∨ p ∨ α
+δ → (r → r) → r → q
+⊤ ∨ ⊤ → α ∨ (r ∧ r)
+(q ∧ p → r → p) ∧ (p ∨ p) ∧ q ∧ r
+(p → q) ∧ δ → p ∨ p → p → p
+((q → p) → α) → q ∧ q → p ∧ r
+(q ∨ r) ∧ (p → p) → ⊤
+p ∨ q ∨ (p ∧ q) ∨ ((q → p) → p ∨ q)
+(r ∨ r → r ∨ p) ∧ q ∧ p ∧ q ∧ q
+β ∨ (p ∧ r ∧ (r → r))
+q ∨ q ∨ r ∨ r ∨ r ∨ r ∨ β
+(p ∨ q → q ∨ q) ∨ β ∨ (r → r)
+α → (p → p) ∨ p ∨ r
+q ∨ q ∨ q ∨ p ∨ (⊥ → q ∨ q)
+γ ∨ (q ∧ q ∧ α)
+(r ∨ q) ∧ r ∧ r ∧ (r ∨ p ∨ (p → p))
+(p ∧ p → r ∨ p) ∨ (q ∨ q → p → p)
+p ∧ q ∧ r ∧ p → p ∨ r → r → p
+⊥ → (q → q) ∨ (p ∧ p)
+(γ ∧ (r → q)) ∨ ((r ∨ q) ∧ q ∧ q)
+((r ∨ r) ∧ (r → p)) ∨ ((q ∨ p) ∧ (p ∨ p))
+((q → r) → p → q) ∧ (p ∨ r ∨ (r ∧ q))
+((q → p) → p ∧ q) ∨ ((q → p) → p → p)
+(q ∨ q) ∧ (p → q) → γ ∨ (q ∧ p)
+⊥ ∧ (q ∧ r → q → p)
+(γ → r ∨ q) → (p → r) ∨ (q → r)
+((r → q) → p → q) → (r → q) ∨ (q ∧ r)
+q ∧ p ∧ (p → r) → (p → p) ∨ (q ∧ r)
+δ ∧ (r ∨ p → p ∧ p)
+(p ∨ q → p → p) ∧ δ
+β → r ∨ q ∨ (r → r)
+⊥ ∧ (p ∨ r) ∧ p ∧ p
+(r ∧ r ∧ (p ∨ p)) ∨ (β → p ∧ q)
+(r ∨ p ∨ (q ∧ q)) ∧ p ∧ p ∧ p ∧ p
+(q → p) ∨ γ → q ∧ q ∧ β
+β ∧ q ∧ q ∧ ⊥
+((r → r) ∧ p ∧ r) ∨ (β → q ∧ p)
+(q ∨ q) ∧ (r ∨ p) → q ∨ r → q → q
+((p → r) ∧ (p → q)) ∨ (⊤ ∧ r ∧ p)
+⊤ → γ ∨ (q → p)
+δ ∨ δ ∨ ⊤ ∨ p ∨ p
+(α ∨ (q ∧ q)) ∧ ⊥
+(q ∧ q) ∨ (r ∧ q) → ⊥ ∨ q ∨ r
+(r ∨ q) ∧ (r → q) → β
+(r ∨ q → r ∧ p) ∨ (r → r) ∨ q ∨ p
+(p → p) ∨ q ∨ r ∨ β
+⊤ ∧ p ∧ p ∧ (r ∨ q → p ∨ r)
+r ∨ p ∨ ⊤ → γ ∨ (q → r)
+(p ∧ p) ∨ (r → r) → ⊥ ∧ β
+(r ∧ q → δ) ∧ (p → q) ∧ (p → q)
+(r → p) ∨ q ∨ q → ⊥
+α ∨ (r → r) → (q ∨ r) ∧ (q → p)
+((p → p) → r → r) ∨ ⊥
+((p → q) → q → p) ∧ β
+((p → p) ∧ (r ∨ p)) ∨ (r ∨ q → p ∨ p)
+β ∨ (q → r) ∨ α
+(r ∧ q → r ∨ r) ∨ ((r → q) ∧ (r ∨ p))
+(p → r) ∧ (q → q) ∧ (p ∨ p → p ∨ q)
+(q ∨ r → r ∨ p) ∨ (q ∨ p → ⊥)
+β ∧ ((r → r) → r → r)
+((p → p) ∧ (q ∨ p)) ∨ (p ∧ p ∧ γ)
+(δ → q ∨ r) ∧ (r ∨ q ∨ p ∨ r)
+(p ∨ q ∨ γ) ∧ (r ∧ p → r ∨ q)
+β ∧ (q → q) ∧ q ∧ r
+((q → p) ∨ (r ∧ p)) ∧ p ∧ p ∧ (r ∨ q)
+p ∧ r ∧ (r ∨ r) → p ∨ r → q → q
+⊤ ∧ (r ∨ r → δ)
+((q → p) ∨ p ∨ r) ∧ ((p → p) ∨ q ∨ q)
+p ∨ r ∨ (q ∧ p) ∨ ((r → r) ∧ (p → q))
+β → (r → r) → ⊥
+(r ∧ r ∧ q ∧ q) ∨ (α → r ∨ q)
+q ∧ q ∧ (q → r) → α ∨ (q → r)
+((p → q) ∨ α) ∧ q ∧ q ∧ ⊥
+q ∨ r ∨ (p ∧ q) ∨ ((r ∨ q) ∧ β)
+p ∨ r ∨ ⊤ → β → r ∧ q
+r ∧ p ∧ (r → p) → r ∨ r → γ
+(⊥ → p → r) → r ∨ q ∨ (r ∧ r)
+(q ∨ p → q ∧ p) ∨ ⊥ ∨ (p ∧ r)
+⊤ ∨ ((q → q) ∧ q ∧ q)
+(p ∧ r ∧ ⊥) ∨ (q → r) ∨ (q ∧ q)
+((p → q) → p ∧ q) ∨ δ
+((q → r) → δ) ∨ (r ∧ q ∧ γ)
+(α → q → p) ∧ (q ∧ p → ⊤)
+(β ∧ (q → r)) ∨ ((p → q) ∧ (r ∨ p))
+((r ∨ q) ∧ (r ∨ q)) ∨ δ
+⊥ ∨ ((r → p) ∧ (r ∨ p))
+γ ∨ p ∨ r → (p ∨ p) ∧ (q → q)
+⊥ → (p ∧ p) ∨ (p ∧ q)
+(q → r) ∧ r ∧ p ∧ (δ ∨ ⊤)
+α ∧ ((q → r) ∨ (p → p))
+β → q ∨ p ∨ r ∨ q
+(r ∧ r → δ) ∧ r ∧ q ∧ (r → p)
+(p ∨ p ∨ (r ∧ p)) ∧ β
+r ∨ q ∨ ⊥ → (p ∨ p) ∧ q ∧ q
+((q → r) → p → p) → ⊤ ∧ (q → q)
+(p ∨ q ∨ q ∨ q) ∧ δ
+(q ∨ p) ∧ q ∧ p → β
+(q ∧ q) ∨ (q ∧ r) ∨ (q → r) ∨ (r → p)
+((q → q) → δ) ∧ ((r → q) ∨ α)
+⊥ ∨ (q ∧ q → α)
+(p ∧ r → q ∨ p) ∧ (q ∨ p ∨ p ∨ q)
+(p → q) ∧ (r ∨ p) ∧ (⊤ ∨ p ∨ q)
+(p ∧ q ∧ ⊥) ∨ γ
+(δ → r ∨ q) ∨ (q ∧ r → r ∨ r)
+(q ∨ p ∨ q ∨ q) ∧ (⊤ ∨ r ∨ p)
+((r → r) → p ∨ q) ∨ δ ∨ (q ∧ p)
+r ∨ q ∨ q ∨ p ∨ (r ∧ r) ∨ (r ∧ q)
+(q ∨ p → p ∨ r) ∨ ((p ∨ r) ∧ r ∧ r)
+r ∨ p ∨ (p → r) → p ∧ p ∧ (r ∨ p)
+δ → (p ∨ r) ∧ (r ∨ q)
+(p ∧ q → α) → α
+q ∨ r ∨ p ∨ q ∨ ((p → p) → p ∨ q)
+(p ∨ r) ∧ (q → p) → (p ∧ r) ∨ (r ∧ r)
+(p → q) ∨ (q → q) → (q → r) ∧ p ∧ q
+r ∨ p ∨ p ∨ r → r ∨ p → q ∧ p
+⊥ → (p ∨ p) ∧ (q ∨ r)
+((r → r) → q → q) ∨ ((r ∨ r) ∧ r ∧ q)
+((p → p) → q ∧ q) → (q → q) ∧ (r ∨ r)
+α ∧ p ∧ r → (p ∨ q) ∧ p ∧ p
+(p ∧ r) ∨ p ∨ p → q ∨ r → r → r
+((q → p) → r ∧ r) ∨ ((q ∨ p) ∧ q ∧ r)
+((p → p) ∨ (q ∧ q)) ∧ ((r ∧ p) ∨ (r → r))
+((r ∧ p) ∨ (p ∧ p)) ∧ δ
+(q ∧ q → p ∨ q) ∨ ((r → q) ∧ p ∧ q)
+((q → r) → q → p) ∧ p ∧ p ∧ (r ∨ r)
+⊥ ∧ ⊥ ∧ (r ∧ q → p ∨ r)
+(δ → p ∨ r) → r ∨ q → p ∧ r
+((r → p) → ⊥) → (p ∧ q) ∨ (p ∧ p)
+(p ∨ p) ∧ (p ∨ r) ∧ (β → p → r)
+β ∨ ((r ∨ q) ∧ r ∧ q)
+(q ∧ r → q ∧ r) ∧ (β → p → p)
+(q ∨ p → β) ∧ ((r → p) → r → q)
+⊥ ∧ (q → r) → q ∨ q → p ∨ p
+β ∧ (p ∧ p → p ∨ q)
+((p → p) → q → r) ∧ (p ∨ r ∨ (q → r))
+((q → r) → β) ∧ (⊤ → q ∧ r)
+(p ∧ q → δ) ∧ ((r ∧ r) ∨ (r → r))
+(r → p) ∨ (r ∧ q) ∨ q ∨ p ∨ (p ∧ q)
+((p → r) → p ∨ r) ∨ (q ∧ q → q ∧ p)
+β ∨ (q ∧ q ∧ r ∧ q)
+(q ∨ p ∨ ⊥) ∧ ((q → r) ∨ q ∨ q)
+((p → p) ∨ (r → q)) ∧ ⊥
+(r → r) ∧ (p ∨ p) → (r ∧ p) ∨ (r → p)
+(r → q) ∨ r ∨ p → (p ∧ p) ∨ q ∨ p
+(q ∧ r → r ∧ q) ∧ (p ∨ r) ∧ p ∧ r
+(q ∧ q) ∨ (p → p) ∨ ((p → q) → q → p)
+(r ∧ q → p ∨ p) → α
+γ → q ∧ p ∧ q ∧ q
+(q → r) ∨ γ → α
+β ∨ ((q → r) ∧ β)
+(q ∨ q → p ∧ p) ∨ ((p → p) ∧ ⊥)
+(p ∧ p → r ∨ q) → r ∧ r → r ∧ p
+(q ∨ q) ∧ q ∧ r → ⊥
+(p ∨ p) ∧ p ∧ p → ⊤ ∨ β
+(q ∨ r → δ) ∧ ((r ∧ q) ∨ (p ∧ p))
+α ∧ (r ∨ q) ∧ (r → r)
+((p ∧ p) ∨ r ∨ q) ∧ r ∧ q ∧ p ∧ p
+β ∨ p ∨ q ∨ (q → p)
+((p → q) → β) ∧ ((p ∧ p) ∨ (q → r))
+(r ∨ r → q ∧ r) ∨ ⊥
+(r ∧ p ∧ ⊥) ∨ (β → r ∨ r)
+γ ∧ (p → q) → (p ∨ r) ∧ (q ∨ p)
+(q → r) ∧ p ∧ p → p ∨ p → p ∧ p
+(γ → q ∨ q) ∨ ((r → r) ∧ γ)
+p ∨ p ∨ α ∨ β
+(r ∧ r) ∨ p ∨ q ∨ γ
+(p → p) ∧ (q ∨ r) → β ∨ (q → r)
+(q ∨ r) ∧ γ ∧ (q ∨ r ∨ r ∨ p)
+((r ∨ q) ∧ (q ∨ p)) ∨ ⊤
+((p ∨ r) ∧ (r ∨ r)) ∨ (r → p) ∨ α
+(r → r) ∨ p ∨ r ∨ (γ ∧ (p → r))
+γ ∧ (p ∧ r → q ∧ q)
+q ∨ p ∨ (q ∧ r) → p ∨ r ∨ (r ∧ p)
+⊥ ∨ (q → p) → α → p ∧ q
+(q ∧ r) ∨ (q ∧ p) → (q → p) ∧ (r → r)
+((q → q) → r ∧ p) → γ
+(β ∧ r ∧ q) ∨ (r ∨ r → r ∧ r)
+r ∨ q ∨ (q → r) ∨ α ∨ (q → p)
+p ∧ r ∧ (p → p) → ⊤ → r → p
+(q → r) ∧ q ∧ p ∧ p ∧ p ∧ q ∧ r
+(q ∧ p) ∨ (r → p) ∨ δ ∨ (r ∧ q)
+q ∨ p ∨ (r → p) ∨ (r ∧ p) ∨ r ∨ q
+(r ∨ r → β) ∧ (β → q → q)
+(q ∧ p → r ∧ q) ∧ ((r → r) ∨ (p → r))
+(q ∨ r → r ∧ r) ∧ (p ∨ r → r ∨ p)
+((q ∧ p) ∨ (q → r)) ∧ (r ∨ q → δ)
+(p → p) ∧ q ∧ r ∧ (r ∨ r ∨ q ∨ r)
+p ∧ p ∧ (r ∨ r) → (r ∧ q) ∨ (p ∧ p)
+⊤ ∨ (q ∧ r) → (p ∧ q) ∨ q ∨ q
+((p ∨ r) ∧ α) ∨ ((q → q) → r ∧ q)
+(p ∨ q → q ∧ p) → α → p ∨ p
+(γ ∨ (r → p)) ∧ β
+(r ∧ r → q ∨ p) → (r → p) → ⊥
+⊥ ∨ (q → p) ∨ ((r → p) ∧ q ∧ q)
+δ ∧ (q ∨ p) ∧ r ∧ q
+γ ∧ (r ∨ p) → (q → q) ∨ ⊤
+(q ∧ p) ∨ ⊥ → r ∨ p → α
+(r → r) ∨ (p ∧ r) → (p → q) ∨ ⊥
+(q ∨ q → r → r) ∧ ((q → r) → q → q)
+(⊤ → q ∧ q) → ⊤ ∧ δ
+(α → q ∧ r) → ⊥
+((q → p) → r ∧ r) ∨ ((r → q) ∧ q ∧ r)
+(q ∧ q) ∨ (p → r) ∨ (p → r) ∨ (q ∧ p)
+q ∨ q ∨ (q → p) → p ∨ r → q → r
+q ∨ p ∨ (r ∧ p) → (q → q) ∨ (q ∧ r)
+⊥ ∨ ((r ∨ q) ∧ (p → q))
+r ∨ p ∨ p ∨ p → γ ∨ (r ∧ p)
+((q → r) → p ∨ p) → (r ∧ p) ∨ (q → r)
+β ∨ (q ∧ p → r ∧ q)
+((r → p) → q ∨ q) ∧ (q → q) ∧ (q → q)
+δ → (p ∨ p) ∧ (q ∨ q)
+((p → q) → p ∨ p) ∧ (q ∨ p → p ∧ p)
+(p ∨ r → q → r) → (r ∧ p) ∨ ⊥
+α ∨ (q → r) ∨ (⊤ ∧ p ∧ q)
+(p ∨ q ∨ q ∨ p) ∧ (p ∨ q ∨ q ∨ q)
+((p → r) → ⊤) ∧ ((r → q) → p → q)
+(γ ∨ δ) ∧ (r ∧ q → r ∧ p)
+(δ → r ∨ q) → (q → r) ∨ r ∨ p
+(r → r) ∧ q ∧ q ∧ (r ∨ r → q → p)
+r ∨ p ∨ ⊥ → (p ∧ p) ∨ δ
+(q → q) ∧ q ∧ q ∧ ((r → p) ∨ p ∨ p)
+(r ∨ q ∨ ⊤) ∧ p ∧ p ∧ p ∧ r
+(α ∨ (p ∧ q)) ∧ γ
+((p ∧ q) ∨ (q ∧ p)) ∧ (q → q) ∧ q ∧ q
+(r → r) ∧ (r ∨ q) ∧ r ∧ q ∧ ⊤
+(p ∨ q) ∧ γ ∧ p ∧ q ∧ q ∧ p
+(p ∧ p → r ∨ r) ∨ ((r → p) → r ∧ r)
+(r ∧ q → ⊤) ∧ r ∧ q ∧ (p ∨ p)
+γ ∨ (p ∧ p ∧ p ∧ p)
+(r ∧ r) ∨ (p ∧ p) ∨ ((p ∨ q) ∧ (q ∨ q))
+(p ∨ r) ∧ (p ∨ p) → ⊥ ∧ r ∧ p
+(p ∧ p) ∨ (p → q) ∨ (p ∨ q → q ∧ r)
+((p → r) → p ∨ p) ∨ α
+(q → q) ∧ r ∧ r → δ → p ∨ r
+q ∧ q ∧ q ∧ r ∧ p ∧ p ∧ (p → q)
+(r → p) ∧ (r → p) ∧ ((q → q) ∨ (r ∧ q))
+δ ∧ (q → p) → β ∧ (r ∨ r)
+(r → p) ∨ (r ∧ r) ∨ γ
+(β ∨ (q ∧ r)) ∧ ((q → q) → p → r)
+(p ∧ q → q ∨ p) ∨ (r ∧ r ∧ (r ∨ q))
+⊤ ∧ (q ∨ q → q → r)
+(r ∧ q → p ∧ q) ∧ ((p → q) ∨ (p ∧ r))
+(p → q) ∧ (q ∨ r) ∧ (p ∨ r ∨ (q → q))
+(r ∨ r → p ∨ p) ∧ ((p → p) → q → r)
+(p ∨ r) ∧ γ → ⊥ → q ∨ p
+(⊤ ∨ ⊥) ∧ ((p → r) ∨ (r ∧ q))
+((q ∧ r) ∨ (r ∧ p)) ∧ (⊥ → r → r)
+(r ∧ q → q ∧ q) ∨ ((p → q) → γ)
+(p → r) ∨ (p ∧ r) → (r → q) ∧ α
+(q ∨ q → q ∨ r) ∨ γ
+(r ∨ q → r ∧ q) ∨ (p ∧ q ∧ β)
+(q → r) ∧ (r → r) → β
+(r ∧ p → γ) ∨ ⊥
+⊤ ∨ (q → r) ∨ q ∨ q
+(p → r) ∧ p ∧ p → q ∧ q → q ∨ p
+(p ∨ p ∨ (q ∧ q)) ∧ ⊥
+(p ∨ p) ∧ γ ∧ p ∧ q ∧ β
+(⊥ ∧ γ) ∨ (p ∧ q) ∨ γ
+(p ∧ q ∧ (r → p)) ∨ (q ∧ p → q ∧ p)
+((p ∧ q) ∨ ⊥) ∧ ((p ∧ p) ∨ (p ∧ r))
+q ∧ r ∧ (r ∨ q) → ⊤ ∨ r ∨ r
+⊥ ∧ (r ∨ r) → (r → q) ∨ (q ∧ q)
+(p ∨ q ∨ (p → q)) ∧ β
+β → (r → r) ∧ q ∧ r
+(q ∨ r) ∧ (q → p) ∧ (δ ∨ (p → p))
+p ∧ q ∧ (q → q) → (r ∧ r) ∨ (r ∧ p)
+β ∧ ((p ∧ r) ∨ r ∨ p)
+(r ∨ r → r ∨ p) → ⊤
+r ∧ q ∧ (r ∨ p) → ⊤
+q ∧ q ∧ (r → q) ∧ (r → p) ∧ (p ∨ r)
+((r → r) ∧ p ∧ q) ∨ (p ∧ p) ∨ r ∨ p
+(r ∧ r → r ∧ r) ∨ (p → q) ∨ (p ∧ p)
+q ∧ p ∧ ⊥ → δ
+q ∧ q ∧ (r ∨ p) → (p ∧ q) ∨ (r → r)
+α ∧ ⊤ → (p → r) ∧ (p ∨ q)
+(p ∨ p → q ∨ q) ∧ (r → p) ∧ (q → q)
+α ∨ α ∨ (r → p)
+((q → p) ∨ (r ∧ p)) ∧ ((q ∧ q) ∨ (q → r))
+⊤ → q ∧ q ∧ (q ∨ p)
+((r → r) → p → q) ∧ p ∧ r ∧ q ∧ q
+(q ∨ q → p → r) → ⊥ ∧ p ∧ q
+γ ∧ (q ∨ p) ∧ p ∧ p ∧ (q → p)
+((p → r) → r ∨ q) ∧ ((q ∧ q) ∨ ⊥)
+(r → q) ∨ α ∨ ⊥
+α ∧ (q ∨ q) ∧ (q → r)
+(r ∧ p) ∨ (p ∧ r) ∨ ⊥
+((q → p) → r ∨ r) ∨ (r ∨ r → r → p)
+(r ∧ p → q ∧ r) → (q ∨ r) ∧ β
+((p → r) → r ∧ q) → p ∧ p ∧ (r ∨ r)
+(q ∨ p) ∧ (q ∨ r) → ⊥
+(q ∨ q → r → p) → ⊤ → r ∧ p
+(p → p) ∧ γ → γ
+(q ∧ r → p ∧ q) → (p ∨ p) ∧ (p ∨ q)
+⊤ → (r → r) ∨ β
+(p ∨ q ∨ (r ∧ q)) ∧ ((p → q) ∨ (p → p))
+((r → r) → q ∨ q) → β ∧ p ∧ r
+γ ∧ (r ∨ p) → α ∧ (q → q)
+((q → p) ∧ (r → p)) ∨ δ
+((r ∨ p) ∧ (p → r)) ∨ (r → r) ∨ (p ∧ r)
+(r ∧ p → q ∨ r) ∧ γ
+(q ∨ p ∨ (r → r)) ∧ (p ∨ p) ∧ (q ∨ r)
+(r ∨ p → q ∨ r) → ⊤
+δ → q ∧ q ∧ (p ∨ r)
+(p ∨ r) ∧ (q → p) → (p → q) → α
+(r ∨ p) ∧ (p → r) → β ∨ (p ∧ p)
+(p ∧ q → r ∨ r) ∨ (p ∧ q) ∨ r ∨ q
+(γ ∧ r ∧ p) ∨ (⊤ → q ∨ p)
+(r ∧ q) ∨ (r → r) → (p ∨ q) ∧ (p → r)
+γ ∨ (δ ∧ (q → p))
+(α → p ∧ p) ∨ γ
+(α ∨ (r ∧ q)) ∧ ((p → p) ∨ γ)
+(r ∧ q) ∨ (q ∧ r) → (r → r) ∨ (p ∧ r)
+(⊤ → r ∨ r) ∧ ((q ∧ q) ∨ (p ∧ p))
+((r → p) → p → r) ∨ β
+(⊤ ∧ (r → q)) ∨ ⊥ ∨ (r ∧ p)
+((p → q) → δ) → (p → q) ∨ (p ∧ p)
+((q → p) → r → q) ∨ (r ∨ r → r ∧ r)
+⊤ ∧ ((p ∧ q) ∨ r ∨ p)
+(γ → q → q) → ⊤ → r ∨ r
+⊤ ∨ (r ∨ q → r ∧ p)
+(p → r) ∧ β ∧ α
+(q ∨ q) ∧ (r → r) → r ∧ q ∧ (q → q)
+(p → r) ∧ (p ∨ r) → p ∨ q → q ∨ q
+(p ∧ p) ∨ (p ∧ r) → p ∨ p → q ∨ p
+(p ∨ p ∨ (p → r)) ∧ ⊤
+(p → p) ∧ (q ∨ p) ∧ p ∧ q ∧ (p ∨ p)
+α ∨ ((p ∨ q) ∧ r ∧ r)
+(p ∨ q) ∧ (r ∨ q) → (q ∨ r) ∧ (p → r)
+(γ ∧ p ∧ p) ∨ ((r → p) → p → r)
+γ ∧ q ∧ p ∧ β
+((q ∧ p) ∨ (p → q)) ∧ (r → q) ∧ β
+(α ∧ p ∧ q) ∨ (p ∧ r) ∨ (p ∧ r)
+(p ∨ r → q ∨ r) ∨ (p ∨ q → q ∧ q)
+γ ∧ (⊥ ∨ p ∨ r)
+(p ∨ p ∨ p ∨ q) ∧ ((q → q) → q → q)
+((q → r) → q ∨ p) ∨ (p ∨ r → β)
+(r ∧ r → r ∧ q) → p ∧ r ∧ (r ∨ p)
+⊤ ∨ (p ∧ r) ∨ (p ∧ q ∧ q ∧ r)
+(r ∨ r ∨ (p → p)) ∧ (q ∨ r) ∧ r ∧ r
+α ∧ (p ∨ q) ∧ ((p → q) → r → q)
+p ∨ p ∨ (p → r) ∨ (r ∨ r → r ∨ q)
+(δ → r → p) ∧ (⊤ → r ∧ q)
+((q → q) → q → p) → q ∨ p → α
+((p → p) ∧ (r → p)) ∨ ((q → p) ∧ (q ∨ q))
+β ∧ r ∧ p ∧ (p → r)
+r ∧ q ∧ r ∧ q → p ∨ q ∨ (q ∧ q)
+((p → r) → q → q) ∨ (r ∧ r) ∨ (r ∧ p)
+(q ∨ r ∨ q ∨ q) ∧ r ∧ p ∧ (r → p)
+((q ∧ q) ∨ r ∨ p) ∧ ⊥
+((q ∧ p) ∨ q ∨ p) ∧ (p ∨ q ∨ q ∨ r)
+β ∧ (r ∨ r ∨ r ∨ r)
+(q ∧ q ∧ (q ∨ q)) ∨ α
+q ∧ p ∧ r ∧ q ∧ (p ∨ r) ∧ (q → p)
+(q ∨ q → p ∨ q) → q ∨ p ∨ (r → q)
+(⊤ → r → p) ∧ (r ∨ q → p → q)
+(r ∧ q) ∨ (r ∧ q) ∨ ((q ∨ q) ∧ (r → p))
+r ∨ p ∨ p ∨ q → α
+q ∧ q ∧ (p ∨ q) ∧ ((q → r) → p ∨ q)
+(q → r) ∧ (p → q) ∧ (γ ∨ p ∨ r)
+δ ∧ ((q → q) → p ∨ r)
+δ ∧ ((p ∧ r) ∨ (r ∧ r))
+(p ∧ p → γ) ∨ (r ∧ p → ⊤)
+α → p ∨ r ∨ r ∨ q
+p ∧ p ∧ r ∧ r → (r → q) → q ∨ p
+((p → r) → β) ∧ β
+q ∨ q ∨ (q ∧ r) → ⊥ ∧ (q ∨ p)
+⊥ ∨ ((r → r) ∧ (q ∨ r))
+(q ∨ p → r ∨ r) ∨ (p ∧ p) ∨ r ∨ q
+(β → α) ∨ ((q ∨ r) ∧ (r ∨ p))
+p ∨ p ∨ β → q ∧ r → q → p
+(δ → r → p) ∧ γ
+p ∨ p ∨ β ∨ β
+r ∨ q ∨ (r ∧ r) → α → p ∨ q
+((r → q) → p → q) → ⊤ ∧ (p → q)
+α ∨ (r ∨ p → r → q)
+r ∨ p ∨ (p ∧ q) → (p ∧ q) ∨ p ∨ r
+γ ∨ (q ∧ p → q → r)
+((r ∧ r) ∨ r ∨ p) ∧ ((q → p) ∨ q ∨ r)
+((r ∨ r) ∧ α) ∨ (δ ∧ (r ∨ r))
+(α → r ∧ r) → α ∨ (q → q)
+(q → p) ∨ (r → p) → (q → r) ∨ ⊤
+δ → (q → q) → p ∧ q
+(q ∨ r ∨ ⊥) ∧ (q ∨ p) ∧ p ∧ r
+(p ∧ p) ∨ (p ∧ r) ∨ (r → q) ∨ q ∨ p
+p ∨ q ∨ α ∨ (q → p) ∨ (r ∧ q)
+γ ∧ (q ∧ p → q → r)
+(r → p) ∨ (q ∧ q) ∨ (p → p) ∨ r ∨ p
+((p → r) ∨ r ∨ r) ∧ (q → q) ∧ (q → q)
+q ∧ q ∧ q ∧ p ∧ δ
+p ∨ r ∨ r ∨ q → ⊤
+(r ∧ q ∧ (r → q)) ∨ ((r → p) ∧ (p → q))
+(p ∨ r) ∧ δ ∧ (r → p) ∧ (r ∨ r)
+(r ∨ p ∨ q ∨ q) ∧ ((q → q) ∨ r ∨ p)
+((r → p) ∨ p ∨ r) ∧ ((q → r) ∨ (r ∧ p))
+⊤ ∨ (p → p) ∨ (q → r)
+α ∧ (r → p) ∧ ((p → p) → β)
+(q ∨ p → q ∨ p) → γ
+(p ∧ p → β) ∧ (q ∨ r → p ∨ q)
+⊥ ∨ ((p → q) → p ∧ q)
+((p → r) → p ∨ p) → q ∧ q ∧ p ∧ r
+((q → r) → p ∨ q) → δ
+(p ∧ p) ∨ (r → q) ∨ ⊥
+r ∧ r ∧ (r ∨ q) ∧ α
+p ∨ r ∨ (r → p) → (q ∨ q) ∧ r ∧ q
+(r ∧ q → r ∨ q) ∨ (q ∧ p → q ∧ r)
+(r → q) ∧ (q ∨ q) → q ∨ q ∨ (q ∧ p)
+((r → q) → r ∧ p) ∨ (p ∧ q) ∨ ⊥
+(α ∨ r ∨ r) ∧ ((p → p) → q → p)
+⊥ ∧ δ ∧ α ∧ (q → r)
+((r → r) → r ∧ p) ∨ γ
+γ ∨ (β → r → q)
+(q ∧ q → q ∨ r) ∨ (p → p) ∨ (q ∧ q)
+(p ∨ q) ∧ (q → q) ∧ ((q ∧ r) ∨ (r ∧ p))
+(q ∨ p → p ∨ p) ∧ ((q ∧ r) ∨ (q ∧ r))
+((p → q) → q ∧ r) ∧ δ
+p ∨ p ∨ (p ∧ r) ∨ γ
+(r ∨ r → r ∧ q) → α
+(r ∧ p) ∨ p ∨ q → γ ∨ r ∨ r
+((q ∧ p) ∨ (q ∧ q)) ∧ δ ∧ (q → p)
+((p → p) ∨ α) ∧ (⊤ → q ∧ r)
+((q → q) → p → q) ∧ ((r → r) ∨ (q ∧ p))
+(r ∨ p → r ∧ r) ∧ ⊥ ∧ ⊥
+p ∧ q ∧ γ → ⊥
+(α → ⊤) ∨ (⊤ ∧ r ∧ r)
+p ∨ q ∨ ⊥ ∨ α ∨ p ∨ q
+p ∨ p ∨ r ∨ r ∨ (p → q) ∨ (q → r)
+α ∨ (p → p) → p ∨ r ∨ (r → r)
+((p → r) → q → q) ∨ ((q ∨ p) ∧ (p ∨ q))
+(⊥ → p ∧ r) ∧ (⊤ → p → q)
+α → r ∨ q → p ∧ q
+(q ∨ r) ∧ (q ∨ p) → r ∨ q ∨ β
+q ∧ r ∧ (q ∨ r) ∧ β
+(p ∧ p) ∨ ⊤ ∨ δ
+(r ∧ q → r → q) ∨ (p ∧ q → r → r)
+(q ∧ q) ∨ (r → r) → β → r ∧ q
+(r ∧ r → r ∨ q) ∧ ((p ∧ r) ∨ (r → p))
+(p → p) ∧ (q → q) → p ∧ p → ⊥
+((r ∨ r) ∧ (q ∨ p)) ∨ (p ∨ r → q ∧ p)
+(q ∨ q → p → q) ∨ (r ∨ q → q → r)
+δ ∧ p ∧ q ∧ ((q → q) → δ)
+⊤ → (r ∨ r) ∧ (q → r)
+⊤ ∨ (q → q) ∨ β
+p ∨ p ∨ (q → r) ∨ (q → p) ∨ (q → q)
+((r ∧ q) ∨ γ) ∧ α ∧ (q ∨ r)
+(q ∧ p → q ∧ q) ∧ ((r ∧ r) ∨ (r ∧ q))
+⊤ ∧ (q → r) ∧ q ∧ q ∧ β
+(β ∨ ⊥) ∧ ((r → q) → q ∨ r)
