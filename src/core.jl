@@ -25,7 +25,7 @@ abstract type AbstractTableau end
     mutable struct Tableau <: AbstractTableau
         const formula::Formula
         const father::Union{Tableau, Nothing}
-        children::Set{Tableau}
+        children::Vector{Tableau}
         expanded::Bool
         closed::Bool
     end
@@ -111,11 +111,11 @@ function findexpansionnode(tableau::Tableau)
 end
 
 """
-    leaves(leavesset::Set{Tableau}, tableau::Tableau)
+    leaves(leavesset::Vector{Tableau}, tableau::Tableau)
 
 Getter for the leaves of a tableau.
 """
-function leaves(leavesset::Set{Tableau}, tableau::Tableau)
+function leaves(leavesset::Vector{Tableau}, tableau::Tableau)
     if isempty(children(tableau))
         push!(leavesset, tableau)
     else
@@ -132,7 +132,7 @@ end
 Getter for the leaves of a tableau.
 """
 function leaves(tableau::Tableau)
-    leaves(Set{Tableau}(), tableau)
+    leaves(Vector{Tableau}(), tableau)
 end
 
 """
@@ -241,20 +241,6 @@ mutable struct MetricHeap{F<:Function}
     end
 end
 
-function cleanheap!(metricheap::MetricHeap)
-    elements = extract_all!(metricheap.heap)
-    deleteat!(elements, findall(x->!isleaf(x.tableau), elements))
-    deleteat!(elements, findall(x->isclosed(x.tableau), elements))
-    metricheap.heap = BinaryHeap{MetricHeapNode}(MetricHeapOrdering(), elements)
-end
-
-
-function cleanheaps!(metricheaps::Vector{MetricHeap})
-    for mh in metricheaps
-        cleanheap!(mh)
-    end
-end
-
 """
     heap(metricheap::MetricHeap)
 
@@ -300,6 +286,19 @@ pop!(metricheap::MetricHeap) = tableau(pop!(heap(metricheap)))
 Returns true if the MetricHeap is empty, false otherwise.
 """
 isempty(metricheap::MetricHeap) = DataStructures.isempty(heap(metricheap))
+
+function cleanheap!(metricheap::MetricHeap)
+    elements = extract_all!(metricheap.heap)
+    deleteat!(elements, findall(x->!isleaf(x.tableau), elements))
+    deleteat!(elements, findall(x->isclosed(x.tableau), elements))
+    metricheap.heap = BinaryHeap{MetricHeapNode}(MetricHeapOrdering(), elements)
+end
+
+function cleanheaps!(metricheaps::Vector{MetricHeap})
+    for mh in metricheaps
+        cleanheap!(mh)
+    end
+end
 
 ############################################################################################
 #### SAT ###################################################################################
@@ -419,9 +418,23 @@ Given a formula, return true if an interpretation that satisfies the formula exi
 otherwise.
 """
 function sat(metricheaps::Vector{MetricHeap}, chooseleaf::F) where {F<:Function}
-    cycle = 0
+    cycle = 1
     while true
-        cycle%1e5==0 && getfreemem() < gettotmem()*2e-1 && error("Too much memory being used, exiting")
+
+        if cycle%1e3==0
+            cleanheaps!(metricheaps)
+        end
+
+        # if using too much memory, try to free memory calling full GC sweep
+        if cycle%10==0 && getfreemem() < gettotmem()*5e-2
+            verbose && println("Calling Garbage Collector")
+            GC.gc()
+        end
+        # if using too much memory, kill execution to avoid crashes
+        if cycle%10==0 && getfreemem() < gettotmem()*5e-2
+            error("Too much memory being used, exiting")
+        end
+        
         leaf = chooseleaf(metricheaps, cycle)
         isnothing(leaf) && return false # all branches are closed
         en = findexpansionnode(leaf)

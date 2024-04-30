@@ -19,6 +19,7 @@ test_suites = [
     ("HeytingAlphaProve", ["heytingalphaprove.jl",]),
     ("AlphaSat", ["alphasat.jl",]),
     ("AlphaProve", ["alphaprove.jl",]),
+    # ("BackwardCompatibility", ["backwardcompatibility.jl"]),
     ("Utils", ["utils.jl"]),
 ]
 

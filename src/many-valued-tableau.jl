@@ -70,14 +70,14 @@ end
 mutable struct ManyValuedTableau{T<:Truth} <: AbstractTableau
     const signedformula::SignedFormula{T}
     const father::Union{ManyValuedTableau{T}, Nothing}
-    children::Set{ManyValuedTableau{T}}
+    children::Vector{ManyValuedTableau{T}}
     expanded::Bool
     closed::Bool
 
     function ManyValuedTableau(
         signedformula::SignedFormula{T},
         father::ManyValuedTableau{T},
-        children::Set{ManyValuedTableau{T}},
+        children::Vector{ManyValuedTableau{T}},
         expanded::Bool,
         closed::Bool
     ) where {
@@ -89,7 +89,7 @@ mutable struct ManyValuedTableau{T<:Truth} <: AbstractTableau
     function ManyValuedTableau(
         signedformula::SignedFormula{T},
         _::Nothing,
-        children::Set{ManyValuedTableau{T}},
+        children::Vector{ManyValuedTableau{T}},
         expanded::Bool,
         closed::Bool
     ) where {
@@ -107,7 +107,7 @@ mutable struct ManyValuedTableau{T<:Truth} <: AbstractTableau
         ft = ManyValuedTableau(
             signedformula,
             father,
-            Set{ManyValuedTableau{T}}(),
+            Vector{ManyValuedTableau{T}}(),
             false,
             false
         )
@@ -119,7 +119,7 @@ mutable struct ManyValuedTableau{T<:Truth} <: AbstractTableau
         return ManyValuedTableau(
             signedformula,
             nothing,
-            Set{ManyValuedTableau{T}}(),
+            Vector{ManyValuedTableau{T}}(),
             false,
             false
         )
@@ -139,22 +139,6 @@ function close!(ft::ManyValuedTableau)
     end
 end
 
-function cleanheap!(metricheap::MetricHeap)
-    elements = extract_all!(metricheap.heap)
-    deleteat!(elements, findall(x->!isleaf(x.tableau), elements))
-    deleteat!(elements, findall(x->isclosed(x.tableau), elements))
-    for e in elements
-        push!(metricheap, e)
-    end
-end
-
-
-function cleanheaps!(metricheaps::Vector{MetricHeap})
-    for mh in metricheaps
-        cleanheap!(mh)
-    end
-end
-
 isroot(ft::ManyValuedTableau) = isnothing(ft.father)
 
 function findexpansionnode(ft::ManyValuedTableau{T}) where {T<:Truth}
@@ -169,7 +153,7 @@ end
 
 isleaf(ft::ManyValuedTableau) = isempty(ft.children) ? true : false
 
-function findleaves(leavesset::Set{ManyValuedTableau}, ft::ManyValuedTableau)
+function findleaves(leavesset::Vector{ManyValuedTableau}, ft::ManyValuedTableau)
     children = ft.children
     if isempty(children)
         push!(leavesset, ft)
@@ -182,7 +166,7 @@ function findleaves(leavesset::Set{ManyValuedTableau}, ft::ManyValuedTableau)
 end
 
 function findleaves(ft::ManyValuedTableau)
-    findleaves(Set{ManyValuedTableau}(), ft)
+    findleaves(Vector{ManyValuedTableau}(), ft)
 end
 
 function pushchildren!(ft::ManyValuedTableau, children::ManyValuedTableau...)
@@ -249,16 +233,24 @@ function sat(
     chooseleaf::Function,
     h::FiniteFLewAlgebra{T,D};
     verbose::Bool=false,
+    timeout::Union{Nothing,Int}=nothing,
     kwargs...
 ) where {
     T<:Truth,
     D<:AbstractVector{T}
 }
     cycle = 1
+    t0 = time_ns()
     while true
 
         if cycle%1e3==0
             cleanheaps!(leaves)
+        end
+
+        # if timeout, return false with a warning
+        if !isnothing(timeout) && (time_ns()-t0)/1e9 > timeout
+            verbose && println("Timeout")
+            return nothing
         end
 
         # if using too much memory, try to free memory calling full GC sweep
@@ -268,7 +260,8 @@ function sat(
         end
         # if using too much memory, kill execution to avoid crashes
         if cycle%10==0 && getfreemem() < gettotmem()*5e-2
-            error("Too much memory being used, exiting")
+            verbose && println("Too much memory being used, exiting")
+            return nothing
         end
 
         leaf = chooseleaf(leaves, cycle)
@@ -282,6 +275,8 @@ function sat(
         end
         s = sz.sign
         z = sz.boundingimplication
+
+        # println(string(s) * "\t" * string(z))
 
         if z isa Tuple{Truth, Truth}
             # Branch Closure Conditions
@@ -335,8 +330,8 @@ function sat(
                         end
                     end
                 end
-                newleaves = false
                 for l ∈ findleaves(en)
+                    newleaves = false
                     for pair in pairs
                         newleaf = false
                         sy = SignedFormula(true, (pair[1], a))
@@ -353,15 +348,15 @@ function sat(
                             else
                                 push!(leaves, fta)
                             end
-                        elseif !findformula(l, sy)
+                        elseif !findformula(l, sy) # BUG
                             newleaves = true
                             ftb = ManyValuedTableau(sy, l)
                             push!(leaves, ftb)
                         end     
                     end
-                end
-                if !newleaves
-                    push!(leaves, leaf)
+                    if !newleaves && l == leaf
+                        push!(leaves, leaf)
+                    end
                 end
             elseif !s && token(z[2]) isa NamedConnective{:∧} && !isbot(z[1])
                 # F(t→(A∧B)) case
@@ -383,8 +378,8 @@ function sat(
                         end
                     end
                 end
-                newleaves = false
                 for l ∈ findleaves(en)
+                    newleaves = false
                     for pair in pairs
                         newleaf = false
                         sy = SignedFormula(true, (a, pair[1]))
@@ -401,15 +396,15 @@ function sat(
                             else
                                 push!(leaves, fta)
                             end
-                        elseif !findformula(l, sy)
+                        elseif !findformula(l, sy) # BUG
                             newleaves = true
                             ftb = ManyValuedTableau(sy, l)
                             push!(leaves, ftb)
-                        end     
+                       end     
                     end
-                end
-                if !newleaves
-                    push!(leaves, leaf)
+                    if !newleaves && l == leaf
+                        push!(leaves, leaf)
+                    end
                 end
             # Implication Rules
             elseif !s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
@@ -432,8 +427,8 @@ function sat(
                         end
                     end
                 end
-                newleaves = false
                 for l ∈ findleaves(en)
+                    newleaves = false
                     for pair in pairs
                         newleaf = false
                         sy = SignedFormula(true, (pair[1], a))
@@ -450,15 +445,15 @@ function sat(
                             else
                                 push!(leaves, fta)
                             end
-                        elseif !findformula(l, sy)
+                        elseif !findformula(l, sy) # BUG
                             newleaves = true
                             ftb = ManyValuedTableau(sy, l)
                             push!(leaves, ftb)
-                        end     
+                       end     
                     end
-                end
-                if !newleaves
-                    push!(leaves, leaf)
+                    if !newleaves && l == leaf
+                        push!(leaves, leaf)
+                    end
                 end
             elseif s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
                 # T(t→(A→B)) case
@@ -480,8 +475,8 @@ function sat(
                         end
                     end
                 end
-                newleaves = false
                 for l ∈ findleaves(en)
+                    newleaves = false
                     for pair in pairs
                         newleaf = false
                         sy = SignedFormula(true, (a, pair[1]))
@@ -498,15 +493,15 @@ function sat(
                             else
                                 push!(leaves, fta)
                             end
-                        elseif !findformula(l, sy)
+                        elseif !findformula(l, sy) # BUG
                             newleaves = true
                             ftb = ManyValuedTableau(sy, l)
                             push!(leaves, ftb)
-                        end     
+                       end     
                     end
-                end
-                if !newleaves
-                    push!(leaves, leaf)
+                    if !newleaves && l == leaf
+                        push!(leaves, leaf)
+                    end
                 end
             # Atom case
             elseif z[2] isa Atom
@@ -517,8 +512,8 @@ function sat(
             elseif !s && !isbot(z[1])
                 # F(a→X) case
                 expand!(en)
-                newleaves = false
                 for l ∈ findleaves(en)
+                    newleaves = false
                     for ti ∈ maximalmembers(h, z[1])
                         sy = SignedFormula(true, (z[2], ti))
                         if !findformula(en, sy)
@@ -527,9 +522,9 @@ function sat(
                             push!(leaves, fti)
                         end
                     end
-                end
-                if newleaves == false
-                    push!(leaves, leaf)
+                    if !newleaves && l == leaf
+                        push!(leaves, leaf)
+                    end
                 end
             elseif s && !isbot(z[1])
                 # T(a→X) case
@@ -548,10 +543,9 @@ function sat(
                     if newleaf == true
                         newleaves = true
                         push!(leaves, fti)
+                    elseif l == leaf
+                        push!(leaves, leaf)
                     end
-                end
-                if newleaves == false
-                    push!(leaves, leaf)
                 end
             # Base case
             else
@@ -585,8 +579,8 @@ function sat(
                         end
                     end
                 end
-                newleaves = false
                 for l ∈ findleaves(en)
+                    newleaves = false
                     for pair in pairs
                         newleaf = false
                         sy = SignedFormula(true, (a, pair[1]))
@@ -603,15 +597,15 @@ function sat(
                             else
                                 push!(leaves, fta)
                             end
-                        elseif !findformula(l, sy)
+                        elseif !findformula(l, sy) # BUG
                             newleaves = true
                             ftb = ManyValuedTableau(sy, l)
                             push!(leaves, ftb)
-                        end     
+                       end     
                     end
-                end
-                if !newleaves
-                    push!(leaves, leaf)
+                    if !newleaves && l == leaf
+                        push!(leaves, leaf)
+                    end
                 end
             elseif !s && token(z[1]) isa NamedConnective{:∨} && !istop(z[2])
                 # F((A∨B)→t) case
@@ -633,8 +627,8 @@ function sat(
                         end
                     end
                 end
-                newleaves = false
                 for l ∈ findleaves(en)
+                    newleaves = false
                     for pair in pairs
                         newleaf = false
                         sy = SignedFormula(true, (pair[1], a))
@@ -651,22 +645,22 @@ function sat(
                             else
                                 push!(leaves, fta)
                             end
-                        elseif !findformula(l, sy)
+                        elseif !findformula(l, sy) # BUG
                             newleaves = true
                             ftb = ManyValuedTableau(sy, l)
                             push!(leaves, ftb)
-                        end     
+                       end     
                     end
-                end
-                if !newleaves
-                    push!(leaves, leaf)
+                    if !newleaves && l == leaf
+                        push!(leaves, leaf)
+                    end
                 end
             # Reversal Rules
             elseif !s && !istop(z[2])
                 # F(X→a) case
                 expand!(en)
-                newleaves = false
                 for l ∈ findleaves(en)
+                    newleaves = false
                     for ui ∈ minimalmembers(h, z[2])
                         sy = SignedFormula(true, (ui, z[1]))
                         if !findformula(en, sy)
@@ -675,15 +669,15 @@ function sat(
                             push!(leaves, fti)
                         end
                     end
-                end
-                if newleaves == false
-                    push!(leaves, leaf)
+                    if !newleaves && l == leaf
+                        push!(leaves, leaf)
+                    end
                 end
             elseif s && !istop(z[2])
                 # T(X→A) case
                 expand!(en)
-                newleaves = false
                 for l ∈ findleaves(en)
+                    newleaves = false
                     newleaf = false
                     fui = l
                     for ui in minimalmembers(h, z[2])
@@ -696,10 +690,9 @@ function sat(
                     if newleaf == true
                         newleaves = true
                         push!(leaves, fui)
+                    elseif l == leaf
+                        push!(leaves, leaf)
                     end
-                end
-                if newleaves == false
-                    push!(leaves, leaf)
                 end
             # Base case
             else
@@ -721,17 +714,35 @@ function sat(
     h::FiniteHeytingAlgebra{T,D};
     oldrule::Bool = false,
     verbose::Bool=false,
+    timeout::Union{Nothing,Int}=nothing,
     kwargs...
 ) where {
     T<:Truth,
     D<:AbstractVector{T}
 }
-    cycle = 0
+    cycle = 1
+    t0 = time_ns()
     while true
 
+        if cycle%1e3==0
+            cleanheaps!(leaves)
+        end
+
+        # if timeout, return false with a warning
+        if !isnothing(timeout) && (time_ns()-t0)/1e9 > timeout
+            verbose && println("Timeout")
+            return nothing
+        end
+
+        # if using too much memory, try to free memory calling full GC sweep
+        if cycle%10==0 && getfreemem() < gettotmem()*5e-2
+            verbose && println("Calling Garbage Collector")
+            GC.gc()
+        end
         # if using too much memory, kill execution to avoid crashes
         if cycle%10==0 && getfreemem() < gettotmem()*5e-2
-            error("Too much memory being used, exiting")
+            verbose && println("Too much memory being used, exiting")
+            return nothing
         end
 
         leaf = chooseleaf(leaves, cycle)
@@ -951,6 +962,7 @@ function sat(
     chooseleaf::Function,
     metrics::Function...;
     verbose::Bool=false,
+    timeout::Union{Nothing,Int}=nothing,
     kwargs...
 ) where {
     T<:Truth,
@@ -967,7 +979,7 @@ function sat(
     for metricheap ∈ metricheaps
         push!(heap(metricheap), MetricHeapNode(metric(metricheap), root))
     end
-    sat(metricheaps, chooseleaf, h; verbose, kwargs...)
+    sat(metricheaps, chooseleaf, h; verbose, timeout, kwargs...)
 end
 
 function sat(
@@ -976,13 +988,14 @@ function sat(
     chooseleaf::Function,
     metrics::Function...;
     verbose::Bool=false,
+    timeout::Union{Nothing,Int}=nothing,
     kwargs...
 ) where {
     T<:Truth,
     D<:AbstractVector{T},
     A<:FiniteAlgebra{T,D}
 }
-    return sat(SignedFormula(true, (⊤, z)), h, chooseleaf, metrics...; verbose, kwargs...)
+    return sat(SignedFormula(true, (⊤, z)), h, chooseleaf, metrics...; verbose, timeout, kwargs...)
 end
 
 function sat(
@@ -990,6 +1003,7 @@ function sat(
     h::A;
     rng = Random.GLOBAL_RNG,
     verbose::Bool=false,
+    timeout::Union{Nothing,Int}=nothing,
     kwargs...
 ) where {
     T<:Truth,
@@ -997,7 +1011,7 @@ function sat(
     A<:FiniteAlgebra{T,D}
 }
     randombranch(_::ManyValuedTableau{T}) where {T<:Truth} = rand(rng, Int)
-    return sat(SignedFormula(true, (⊤, z)), h, roundrobin, randombranch; verbose, kwargs...)
+    return sat(SignedFormula(true, (⊤, z)), h, roundrobin, randombranch; verbose, timeout, kwargs...)
 end
 
 function prove(
@@ -1005,6 +1019,7 @@ function prove(
     h::A;
     rng = Random.GLOBAL_RNG,
     verbose::Bool=false,
+    timeout::Union{Nothing,Int}=nothing,
     kwargs...
 ) where {
     T<:Truth,
@@ -1012,7 +1027,12 @@ function prove(
     A<:FiniteAlgebra{T,D}
 }
     randombranch(_::ManyValuedTableau) = rand(rng, Int)
-    return !sat(SignedFormula(false, (⊤, z)), h, roundrobin, randombranch; kwargs...)
+    r = sat(SignedFormula(false, (⊤, z)), h, roundrobin, randombranch; timeout, kwargs...)
+    if isnothing(r)
+        return r
+    else
+        return !r
+    end
 end
 
 function alphasat(
@@ -1021,6 +1041,7 @@ function alphasat(
     a::A;
     rng = Random.GLOBAL_RNG,
     verbose::Bool=false,
+    timeout::Union{Nothing,Int}=nothing,
     kwargs...
 ) where {
     T<:Truth,
@@ -1035,7 +1056,7 @@ function alphasat(
         println()
     end
     randombranch(_::ManyValuedTableau) = rand(rng, Int)
-    return sat(SignedFormula(true, (α, z)), a, roundrobin, randombranch; verbose, kwargs...)
+    return sat(SignedFormula(true, (α, z)), a, roundrobin, randombranch; verbose, timeout, kwargs...)
 end
 
 function alphaprove(
@@ -1044,6 +1065,7 @@ function alphaprove(
     a::A;
     rng = Random.GLOBAL_RNG,
     verbose::Bool=false,
+    timeout::Union{Nothing,Int}=nothing,
     kwargs...
 ) where {
     T<:Truth,
@@ -1051,6 +1073,17 @@ function alphaprove(
     A<:FiniteAlgebra{T,D},
     T1<:Truth
 }
+    if verbose
+        println("Solving alphasat for: " * syntaxstring(α) * " ⪯ " * syntaxstring(z))
+        println("Height: " * string(height(z)))
+        println("Tokens: " * string(ntokens(z)))
+        println()
+    end
     randombranch(_::ManyValuedTableau) = rand(rng, Int)
-    return !sat(SignedFormula(false, (α, z)), a, roundrobin, randombranch; verbose, kwargs...)
+    r = sat(SignedFormula(false, (α, z)), a, roundrobin, randombranch; verbose, timeout, kwargs...)
+    if isnothing(r)
+        return r
+    else
+        return !r
+    end
 end
