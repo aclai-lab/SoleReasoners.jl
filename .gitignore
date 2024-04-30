@@ -4,6 +4,4 @@
 /Manifest.toml
 /docs/build/
 .vscode
-/test/results
-/test/formulas
-/test/formulas.zip
+/experiments/formulas/*/

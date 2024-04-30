@@ -10,24 +10,24 @@ BaseManyValuedConnectives = Union{typeof.(BASE_MANY_VALUED_CONNECTIVES)...}
 
 myalphabet = Atom.(["p", "q", "r"])
 
-max_height = 7
-max_it = 500
-max_avg = 200
-max_timeout = 60 # seconds
+max_height = 10
+max_it = 6000
+max_avg = 5000
+max_timeout = 1 # seconds
 
 ############################################################################################
 #### BooleanAlgebra ########################################################################
 ############################################################################################
 
-include("algebras/booleanalgebra.jl")
+using SoleLogics.ManyValuedLogics: booleanalgebra
 myoperators2 = []
 append!(myoperators2, BASE_MANY_VALUED_CONNECTIVES)
-append!(myoperators2, d2)
+append!(myoperators2, getdomain(booleanalgebra))
 opweights2 = [10, 10, 10, 1, 1]
 
 for height in 1:max_height
     println("Alphasat on booleanalgebra formulas of height " * string(height))
-    e_time = 0
+    timeouts = 0
     j = 0
     for i in 1:max_it
         f = randformula(
@@ -38,9 +38,9 @@ for height in 1:max_height
             opweights=opweights2
         )
         if SoleLogics.height(f) == height
-            t = rand(MersenneTwister(i), d2)
+            j += 1
+            t = rand(MersenneTwister(i), getdomain(booleanalgebra))
             brng = MersenneTwister(i)
-            t0 = time_ns()
             r = alphasat(
                 t,
                 f,
@@ -48,21 +48,18 @@ for height in 1:max_height
                 rng=brng,
                 timeout=max_timeout
             )
-            t1 = time_ns()
-            if !isnothing(r)
-                j += 1
-                e_time += t1-t0
+            if isnothing(r)
+                timeouts += 1
             end
             if j == max_avg
                 break
             end
             if i == max_it
-                @warn "Maximum iterations reached"
+                println("Warning: maximum iterations reached")
             end
         end
     end
-    print("Average execution time (over " * string(max_avg) * " formulas): ")
-    println(string((e_time/1e6)/max_avg) * " ms\n")
+    println(string(timeouts) * " formulas over " * string(max_avg) * " timeout\n")
 end
 println()
 
@@ -70,15 +67,15 @@ println()
 #### G3 ####################################################################################
 ############################################################################################
 
-include("algebras/g3.jl")
+using SoleLogics.ManyValuedLogics: G3
 myoperators3 = []
 append!(myoperators3, BASE_MANY_VALUED_CONNECTIVES)
-append!(myoperators3, d3)
+append!(myoperators3, getdomain(G3))
 opweights3 = [10, 10, 10, 1, 1, 1]
 
 for height in 1:max_height
     println("Alphasat on G3 formulas of height " * string(height))
-    e_time = 0
+    timeouts = 0
     j = 0
     for i in 1:max_it
         f = randformula(
@@ -89,9 +86,9 @@ for height in 1:max_height
             opweights=opweights3
         )
         if SoleLogics.height(f) == height
-            t = rand(MersenneTwister(i), d3)
+            j += 1
+            t = rand(MersenneTwister(i), getdomain(G3))
             brng = MersenneTwister(i)
-            t0 = time_ns()
             r = alphasat(
                 t,
                 f,
@@ -99,21 +96,18 @@ for height in 1:max_height
                 rng=brng,
                 timeout=max_timeout
             )
-            t1 = time_ns()
-            if !isnothing(r)
-                j += 1
-                e_time += t1-t0
+            if isnothing(r)
+                timeouts += 1
             end
             if j == max_avg
                 break
             end
             if i == max_it
-                @warn "Maximum iterations reached"
+                println("Warning: maximum iterations reached")
             end
         end
     end
-    print("Average execution time (over " * string(max_avg) * " formulas): ")
-    println(string((e_time/1e6)/max_avg) * " ms\n")
+    println(string(timeouts) * " formulas over " * string(max_avg) * " timeout\n")
 end
 println()
 
@@ -121,15 +115,15 @@ println()
 #### Ł3 ####################################################################################
 ############################################################################################
 
-include("algebras/l3.jl")
+using SoleLogics.ManyValuedLogics: Ł3
 myoperators3 = []
 append!(myoperators3, BASE_MANY_VALUED_CONNECTIVES)
-append!(myoperators3, d3)
+append!(myoperators3, getdomain(Ł3))
 opweights3 = [10, 10, 10, 1, 1, 1]
 
 for height in 1:max_height
     println("Alphasat on Ł3 formulas of height " * string(height))
-    e_time = 0
+    timeouts = 0
     j = 0
     for i in 1:max_it
         f = randformula(
@@ -140,9 +134,9 @@ for height in 1:max_height
             opweights=opweights3
         )
         if SoleLogics.height(f) == height
-            t = rand(MersenneTwister(i), d3)
+            j += 1
+            t = rand(MersenneTwister(i), getdomain(Ł3))
             brng = MersenneTwister(i)
-            t0 = time_ns()
             r = alphasat(
                 t,
                 f,
@@ -150,21 +144,18 @@ for height in 1:max_height
                 rng=brng,
                 timeout=max_timeout
             )
-            t1 = time_ns()
-            if !isnothing(r)
-                j += 1
-                e_time += t1-t0
+            if isnothing(r)
+                timeouts += 1
             end
             if j == max_avg
                 break
             end
             if i == max_it
-                @warn "Maximum iterations reached"
+                println("Warning: maximum iterations reached")
             end
         end
     end
-    print("Average execution time (over " * string(max_avg) * " formulas): ")
-    println(string((e_time/1e6)/max_avg) * " ms\n")
+    println(string(timeouts) * " formulas over " * string(max_avg) * " timeout\n")
 end
 println()
 
@@ -172,15 +163,15 @@ println()
 #### G4 ####################################################################################
 ############################################################################################
 
-include("algebras/g4.jl")
+using SoleLogics.ManyValuedLogics: G4
 myoperators4 = []
 append!(myoperators4, BASE_MANY_VALUED_CONNECTIVES)
-append!(myoperators4, d4)
+append!(myoperators4, getdomain(G4))
 opweights4 = [10, 10, 10, 1, 1, 1, 1]
 
 for height in 1:max_height
     println("Alphasat on G4 formulas of height " * string(height))
-    e_time = 0
+    timeouts = 0
     j = 0
     for i in 1:max_it
         f = randformula(
@@ -191,9 +182,9 @@ for height in 1:max_height
             opweights=opweights4
         )
         if SoleLogics.height(f) == height
-            t = rand(MersenneTwister(i), d4)
+            j += 1
+            t = rand(MersenneTwister(i), getdomain(G4))
             brng = MersenneTwister(i)
-            t0 = time_ns()
             r = alphasat(
                 t,
                 f,
@@ -201,21 +192,18 @@ for height in 1:max_height
                 rng=brng,
                 timeout=max_timeout
             )
-            t1 = time_ns()
-            if !isnothing(r)
-                j += 1
-                e_time += t1-t0
+            if isnothing(r)
+                timeouts += 1
             end
             if j == max_avg
                 break
             end
             if i == max_it
-                @warn "Maximum iterations reached"
+                println("Warning: maximum iterations reached")
             end
         end
     end
-    print("Average execution time (over " * string(max_avg) * " formulas): ")
-    println(string((e_time/1e6)/max_avg) * " ms\n")
+    println(string(timeouts) * " formulas over " * string(max_avg) * " timeout\n")
 end
 println()
 
@@ -223,15 +211,15 @@ println()
 #### Ł4 ####################################################################################
 ############################################################################################
 
-include("algebras/l4.jl")
+using SoleLogics.ManyValuedLogics: Ł4
 myoperators4 = []
 append!(myoperators4, BASE_MANY_VALUED_CONNECTIVES)
-append!(myoperators4, d4)
+append!(myoperators4, getdomain(Ł4))
 opweights4 = [10, 10, 10, 1, 1, 1, 1]
 
 for height in 1:max_height
     println("Alphasat on Ł4 formulas of height " * string(height))
-    e_time = 0
+    timeouts = 0
     j = 0
     for i in 1:max_it
         f = randformula(
@@ -242,9 +230,9 @@ for height in 1:max_height
             opweights=opweights4
         )
         if SoleLogics.height(f) == height
-            t = rand(MersenneTwister(i), d4)
+            j += 1
+            t = rand(MersenneTwister(i), getdomain(Ł4))
             brng = MersenneTwister(i)
-            t0 = time_ns()
             r = alphasat(
                 t,
                 f,
@@ -252,37 +240,34 @@ for height in 1:max_height
                 rng=brng,
                 timeout=max_timeout
             )
-            t1 = time_ns()
-            if !isnothing(r)
-                j += 1
-                e_time += t1-t0
+            if isnothing(r)
+                timeouts += 1
             end
             if j == max_avg
                 break
             end
             if i == max_it
-                @warn "Maximum iterations reached"
+                println("Warning: maximum iterations reached")
             end
         end
     end
-    print("Average execution time (over " * string(max_avg) * " formulas): ")
-    println(string((e_time/1e6)/max_avg) * " ms\n")
+    println(string(timeouts) * " formulas over " * string(max_avg) * " timeout\n")
 end
 println()
 
-# ############################################################################################
-# #### H4 ####################################################################################
-# ############################################################################################
+############################################################################################
+#### H4 ####################################################################################
+############################################################################################
 
-include("algebras/h4.jl")
+using SoleLogics.ManyValuedLogics: H4
 myoperators4 = []
 append!(myoperators4, BASE_MANY_VALUED_CONNECTIVES)
-append!(myoperators4, d4)
+append!(myoperators4, getdomain(H4))
 opweights4 = [10, 10, 10, 1, 1, 1, 1]
 
 for height in 1:max_height
     println("Alphasat on H4 formulas of height " * string(height))
-    e_time = 0
+    timeouts = 0
     j = 0
     for i in 1:max_it
         f = randformula(
@@ -293,9 +278,9 @@ for height in 1:max_height
             opweights=opweights4
         )
         if SoleLogics.height(f) == height
-            t = rand(MersenneTwister(i), d4)
+            j += 1
+            t = rand(MersenneTwister(i), getdomain(H4))
             brng = MersenneTwister(i)
-            t0 = time_ns()
             r = alphasat(
                 t,
                 f,
@@ -303,19 +288,17 @@ for height in 1:max_height
                 rng=brng,
                 timeout=max_timeout
             )
-            t1 = time_ns()
-            if !isnothing(r)
-                j += 1
-                e_time += t1-t0
+            if isnothing(r)
+                timeouts += 1
             end
             if j == max_avg
                 break
             end
             if i == max_it
-                @warn "Maximum iterations reached"
+                println("Warning: maximum iterations reached")
             end
         end
     end
-    print("Average execution time (over " * string(max_avg) * " formulas): ")
-    println(string((e_time/1e6)/max_avg) * " ms\n")
+    println(string(timeouts) * " formulas over " * string(max_avg) * " timeout\n")
 end
+println()

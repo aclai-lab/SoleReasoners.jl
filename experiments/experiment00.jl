@@ -15,10 +15,10 @@ max_it = 6000
 max_avg = 5000
 max_timeout = 1 # seconds
 
-include("algebras/booleanalgebra.jl")
+using SoleLogics.ManyValuedLogics: booleanalgebra
 myoperators2 = []
 append!(myoperators2, BASE_MANY_VALUED_CONNECTIVES)
-append!(myoperators2, d2)
+append!(myoperators2, getdomain(booleanalgebra))
 opweights2 = [10, 10, 10, 1, 1]
 
 for height in 1:max_height
@@ -47,10 +47,10 @@ for height in 1:max_height
 end
 println()
 
-include("algebras/g3.jl")
+using SoleLogics.ManyValuedLogics: G3
 myoperators3 = []
 append!(myoperators3, BASE_MANY_VALUED_CONNECTIVES)
-append!(myoperators3, d3)
+append!(myoperators3, getdomain(G3))
 opweights3 = [10, 10, 10, 1, 1, 1]
 
 for height in 1:max_height
@@ -79,10 +79,10 @@ for height in 1:max_height
 end
 println()
 
-include("algebras/g4.jl")
+using SoleLogics.ManyValuedLogics: G4
 myoperators4 = []
 append!(myoperators4, BASE_MANY_VALUED_CONNECTIVES)
-append!(myoperators4, d4)
+append!(myoperators4, getdomain(G4))
 opweights4 = [10, 10, 10, 1, 1, 1, 1]
 
 for height in 1:max_height

@@ -19,10 +19,10 @@ max_timeout = 60 # seconds
 #### BooleanAlgebra ########################################################################
 ############################################################################################
 
-include("algebras/booleanalgebra.jl")
+using SoleLogics.ManyValuedLogics: booleanalgebra
 myoperators2 = []
 append!(myoperators2, BASE_MANY_VALUED_CONNECTIVES)
-append!(myoperators2, d2)
+append!(myoperators2, getdomain(booleanalgebra))
 opweights2 = [10, 10, 10, 1, 1]
 
 for height in 1:max_height
@@ -38,7 +38,7 @@ for height in 1:max_height
             opweights=opweights2
         )
         if SoleLogics.height(f) == height
-            t = rand(MersenneTwister(i), d2)
+            t = rand(MersenneTwister(i), getdomain(booleanalgebra))
             brng = MersenneTwister(i)
             t0 = time_ns()
             r = alphaprove(
@@ -70,10 +70,10 @@ println()
 #### G3 ####################################################################################
 ############################################################################################
 
-include("algebras/g3.jl")
+using SoleLogics.ManyValuedLogics: G3
 myoperators3 = []
 append!(myoperators3, BASE_MANY_VALUED_CONNECTIVES)
-append!(myoperators3, d3)
+append!(myoperators3, getdomain(G3))
 opweights3 = [10, 10, 10, 1, 1, 1]
 
 for height in 1:max_height
@@ -89,7 +89,7 @@ for height in 1:max_height
             opweights=opweights3
         )
         if SoleLogics.height(f) == height
-            t = rand(MersenneTwister(i), d3)
+            t = rand(MersenneTwister(i), getdomain(G3))
             brng = MersenneTwister(i)
             t0 = time_ns()
             r = alphaprove(
@@ -121,10 +121,10 @@ println()
 #### Ł3 ####################################################################################
 ############################################################################################
 
-include("algebras/l3.jl")
+using SoleLogics.ManyValuedLogics: Ł3
 myoperators3 = []
 append!(myoperators3, BASE_MANY_VALUED_CONNECTIVES)
-append!(myoperators3, d3)
+append!(myoperators3, getdomain(Ł3))
 opweights3 = [10, 10, 10, 1, 1, 1]
 
 for height in 1:max_height
@@ -140,7 +140,7 @@ for height in 1:max_height
             opweights=opweights3
         )
         if SoleLogics.height(f) == height
-            t = rand(MersenneTwister(i), d3)
+            t = rand(MersenneTwister(i), getdomain(Ł3))
             brng = MersenneTwister(i)
             t0 = time_ns()
             r = alphaprove(
@@ -172,10 +172,10 @@ println()
 #### G4 ####################################################################################
 ############################################################################################
 
-include("algebras/g4.jl")
+using SoleLogics.ManyValuedLogics: G4
 myoperators4 = []
 append!(myoperators4, BASE_MANY_VALUED_CONNECTIVES)
-append!(myoperators4, d4)
+append!(myoperators4, getdomain(G4))
 opweights4 = [10, 10, 10, 1, 1, 1, 1]
 
 for height in 1:max_height
@@ -191,7 +191,7 @@ for height in 1:max_height
             opweights=opweights4
         )
         if SoleLogics.height(f) == height
-            t = rand(MersenneTwister(i), d4)
+            t = rand(MersenneTwister(i), getdomain(G4))
             brng = MersenneTwister(i)
             t0 = time_ns()
             r = alphaprove(
@@ -223,10 +223,10 @@ println()
 #### Ł4 ####################################################################################
 ############################################################################################
 
-include("algebras/l4.jl")
+using SoleLogics.ManyValuedLogics: Ł4
 myoperators4 = []
 append!(myoperators4, BASE_MANY_VALUED_CONNECTIVES)
-append!(myoperators4, d4)
+append!(myoperators4, getdomain(Ł4))
 opweights4 = [10, 10, 10, 1, 1, 1, 1]
 
 for height in 1:max_height
@@ -242,7 +242,7 @@ for height in 1:max_height
             opweights=opweights4
         )
         if SoleLogics.height(f) == height
-            t = rand(MersenneTwister(i), d4)
+            t = rand(MersenneTwister(i), getdomain(Ł4))
             brng = MersenneTwister(i)
             t0 = time_ns()
             r = alphaprove(
@@ -274,10 +274,10 @@ println()
 # #### H4 ####################################################################################
 # ############################################################################################
 
-include("algebras/h4.jl")
+using SoleLogics.ManyValuedLogics: H4
 myoperators4 = []
 append!(myoperators4, BASE_MANY_VALUED_CONNECTIVES)
-append!(myoperators4, d4)
+append!(myoperators4, getdomain(H4))
 opweights4 = [10, 10, 10, 1, 1, 1, 1]
 
 for height in 1:max_height
@@ -293,7 +293,7 @@ for height in 1:max_height
             opweights=opweights4
         )
         if SoleLogics.height(f) == height
-            t = rand(MersenneTwister(i), d4)
+            t = rand(MersenneTwister(i), getdomain(H4))
             brng = MersenneTwister(i)
             t0 = time_ns()
             r = alphaprove(

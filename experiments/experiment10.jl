@@ -10,61 +10,54 @@ BaseManyValuedConnectives = Union{typeof.(BASE_MANY_VALUED_CONNECTIVES)...}
 
 myalphabet = Atom.(["p", "q", "r"])
 
-max_height = 7
-max_it = 1000
+max_height = 6
+max_it = 2000
 max_avg = 500
 max_timeout = 60 # seconds
 
-include("algebras/booleanalgebra.jl")
+using SoleLogics.ManyValuedLogics: booleanalgebra
 myoperators2 = []
 append!(myoperators2, BASE_MANY_VALUED_CONNECTIVES)
-append!(myoperators2, d2)
+append!(myoperators2, getdomain(booleanalgebra))
 opweights2 = [10, 10, 10, 1, 1]
 
-include("algebras/g3.jl")
-include("algebras/l3.jl")
+using SoleLogics.ManyValuedLogics: G3, Ł3
 myoperators3 = []
 append!(myoperators3, BASE_MANY_VALUED_CONNECTIVES)
-append!(myoperators3, d3)
+append!(myoperators3, getdomain(G3))
 opweights3 = [10, 10, 10, 1, 1, 1]
 
-include("algebras/g4.jl")
-include("algebras/l4.jl")
-include("algebras/h4.jl")
+using SoleLogics.ManyValuedLogics: G4, Ł4, H4
 myoperators4 = []
 append!(myoperators4, BASE_MANY_VALUED_CONNECTIVES)
-append!(myoperators4, d4)
+append!(myoperators4, getdomain(G4))
 opweights4 = [10, 10, 10, 1, 1, 1, 1]
 
-include("algebras/g5.jl")
+using SoleLogics.ManyValuedLogics: G5
 myoperators5 = []
 append!(myoperators5, BASE_MANY_VALUED_CONNECTIVES)
-append!(myoperators5, d5)
+append!(myoperators5, getdomain(G5))
 opweights5 = [10, 10, 10, 1, 1, 1, 1, 1]
 
-include("algebras/sixvaluedalgebras/g6.jl")
-include("algebras/sixvaluedalgebras/h6_1.jl")
-include("algebras/sixvaluedalgebras/h6_2.jl")
-include("algebras/sixvaluedalgebras/h6_3.jl")
-include("algebras/sixvaluedalgebras/h6.jl")
+using SoleLogics.ManyValuedLogics: G6, H6_1, H6_2, H6_3, H6
 myoperators6 = []
 append!(myoperators6, BASE_MANY_VALUED_CONNECTIVES)
-append!(myoperators6, d6)
+append!(myoperators6, getdomain(G6))
 opweights6 = [10, 10, 10, 1, 1, 1, 1, 1, 1]
 
 algebras = [
-    ("BA",   booleanalgebra, d2, myoperators2, opweights2),
-    ("G3",   G3,             d3, myoperators3, opweights3),
-    ("Ł3",   Ł3,             d3, myoperators3, opweights3),
-    ("G4",   G4,             d4, myoperators4, opweights4),
-    ("Ł4",   Ł4,             d4, myoperators4, opweights4),
-    ("H4",   H4,             d4, myoperators4, opweights4),
-    ("G5",   G5,             d5, myoperators5, opweights5),
-    ("G6",   G6,             d6, myoperators6, opweights6),
-    ("H6_1", H6_1,           d6, myoperators6, opweights6),
-    ("H6_2", H6_2,           d6, myoperators6, opweights6),
-    ("H6_3", H6_3,           d6, myoperators6, opweights6),
-    ("H6",   H6,             d6, myoperators6, opweights6)
+    ("BA",   booleanalgebra, myoperators2, opweights2),
+    ("G3",   G3,             myoperators3, opweights3),
+    ("Ł3",   Ł3,             myoperators3, opweights3),
+    ("G4",   G4,             myoperators4, opweights4),
+    ("Ł4",   Ł4,             myoperators4, opweights4),
+    ("H4",   H4,             myoperators4, opweights4),
+    ("G5",   G5,             myoperators5, opweights5),
+    ("G6",   G6,             myoperators6, opweights6),
+    ("H6_1", H6_1,           myoperators6, opweights6),
+    ("H6_2", H6_2,           myoperators6, opweights6),
+    ("H6_3", H6_3,           myoperators6, opweights6),
+    ("H6",   H6,             myoperators6, opweights6)
 ]
 
 for a in algebras
@@ -75,15 +68,15 @@ for a in algebras
         unsat = 0
         skipped = 0
         for i in 1:max_it
+            t = rand(MersenneTwister(i), getdomain(a[2]))
             f = randformula(
                 MersenneTwister(i),
                 height,
                 myalphabet,
-                a[4],
-                opweights=a[5]
+                a[3],
+                opweights=a[4]
             )
-            if SoleLogics.height(f) == height
-                t = rand(MersenneTwister(i), a[3])
+            if !isbot(t) && SoleLogics.height(f) == height
                 brng = MersenneTwister(i)
                 r = alphasat(
                     t,
@@ -126,15 +119,15 @@ for a in algebras
         unsat = 0
         skipped = 0
         for i in 1:max_it
+            t = rand(MersenneTwister(i), getdomain(a[2]))
             f = randformula(
                 MersenneTwister(i),
                 height,
                 myalphabet,
-                a[4],
-                opweights=a[5]
+                a[3],
+                opweights=a[4]
             )
-            if SoleLogics.height(f) == height
-                t = rand(MersenneTwister(i), a[3])
+            if !isbot(t) && SoleLogics.height(f) == height
                 brng = MersenneTwister(i)
                 r = alphaprove(
                     t,

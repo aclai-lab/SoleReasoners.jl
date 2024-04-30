@@ -15,17 +15,12 @@ max_it = 500
 max_avg = 200
 max_timeout = 60 # seconds
 
-include("algebras/sixvaluedalgebras/g6.jl")
-include("algebras/sixvaluedalgebras/h6_1.jl")
-include("algebras/sixvaluedalgebras/h6_2.jl")
-include("algebras/sixvaluedalgebras/h6_3.jl")
-include("algebras/sixvaluedalgebras/h6.jl")
-
+using SoleLogics.ManyValuedLogics: G6, H6_1, H6_2, H6_3, H6
 algebras = [("G6", G6), ("H6_1", H6_1), ("H6_2", H6_2), ("H6_3", H6_3), ("H6", H6)]
 
 myoperators6 = []
 append!(myoperators6, BASE_MANY_VALUED_CONNECTIVES)
-append!(myoperators6, d6)
+append!(myoperators6, getdomain(G6))
 opweights6 = [10, 10, 10, 1, 1, 1, 1, 1, 1]
 
 for a in algebras
@@ -42,7 +37,7 @@ for a in algebras
                 opweights=opweights6
             )
             if SoleLogics.height(f) == height
-                t = rand(MersenneTwister(i), d6)
+                t = rand(MersenneTwister(i), getdomain(a[2]))
                 brng = MersenneTwister(i)
                 t0 = time_ns()
                 r = alphaprove(

@@ -2,7 +2,8 @@
 #### H4 ####################################################################################
 ############################################################################################
 
-include("algebras/h4.jl")
+using SoleLogics.ManyValuedLogics: H4
+using SoleLogics.ManyValuedLogics: α, β
 
 ############################################################################################
 ## Base cases ##############################################################################
@@ -397,7 +398,8 @@ include("algebras/h4.jl")
 #### H9 ####################################################################################
 ############################################################################################
 
-include("algebras/h9.jl")
+using SoleLogics.ManyValuedLogics: H9
+using SoleLogics.ManyValuedLogics: α, β, γ, δ, ε, ζ, η
 
 BASE_MANY_VALUED_CONNECTIVES = [∨, ∧, →]
 BaseManyValuedConnectives = Union{typeof.(BASE_MANY_VALUED_CONNECTIVES)...}
@@ -406,8 +408,8 @@ BaseManyValuedConnectives = Union{typeof.(BASE_MANY_VALUED_CONNECTIVES)...}
 #### Old and new rules compatibility #######################################################
 ############################################################################################
 
-for i ∈ d9
-    for j ∈ d9
+for i ∈ getdomain(H9)
+    for j ∈ getdomain(H9)
         @test alphasat(
             i,
             j,
@@ -418,7 +420,7 @@ for i ∈ d9
             FiniteHeytingAlgebra(H9),
             oldrule=true
         )
-        for k ∈ d9
+        for k ∈ getdomain(H9)
             for o ∈ BASE_MANY_VALUED_CONNECTIVES
                 @test alphasat(
                     k,

@@ -15,22 +15,47 @@ max_it = 500
 max_avg = 200
 max_timeout = 60 # seconds
 
-include("algebras/sixvaluedalgebras/g6.jl")
-include("algebras/sixvaluedalgebras/h6_1.jl")
-include("algebras/sixvaluedalgebras/h6_2.jl")
-include("algebras/sixvaluedalgebras/h6_3.jl")
-include("algebras/sixvaluedalgebras/h6.jl")
+using SoleLogics.ManyValuedLogics: booleanalgebra
+myoperators2 = []
+append!(myoperators2, BASE_MANY_VALUED_CONNECTIVES)
+append!(myoperators2, getdomain(booleanalgebra))
+opweights2 = [10, 10, 10, 1, 1]
 
-algebras = [("G6", G6), ("H6_1", H6_1), ("H6_2", H6_2), ("H6_3", H6_3), ("H6", H6)]
+using SoleLogics.ManyValuedLogics: G3
+myoperators3 = []
+append!(myoperators3, BASE_MANY_VALUED_CONNECTIVES)
+append!(myoperators3, getdomain(G3))
+opweights3 = [10, 10, 10, 1, 1, 1]
 
+using SoleLogics.ManyValuedLogics: G4
+myoperators4 = []
+append!(myoperators4, BASE_MANY_VALUED_CONNECTIVES)
+append!(myoperators4, getdomain(G4))
+opweights4 = [10, 10, 10, 1, 1, 1, 1]
+
+using SoleLogics.ManyValuedLogics: G5
+myoperators5 = []
+append!(myoperators5, BASE_MANY_VALUED_CONNECTIVES)
+append!(myoperators5, getdomain(G5))
+opweights5 = [10, 10, 10, 1, 1, 1, 1, 1]
+
+using SoleLogics.ManyValuedLogics: G6
 myoperators6 = []
 append!(myoperators6, BASE_MANY_VALUED_CONNECTIVES)
-append!(myoperators6, d6)
+append!(myoperators6, getdomain(G6))
 opweights6 = [10, 10, 10, 1, 1, 1, 1, 1, 1]
+
+algebras = [
+    ("booleanalgebra", booleanalgebra, myoperators2, opweights2),
+    ("G3",             G3,             myoperators3, opweights3),
+    ("G4",             G4,             myoperators4, opweights4),
+    ("G5",             G5,             myoperators5, opweights5),
+    ("G6",             G6,             myoperators6, opweights6)
+]
 
 for a in algebras
     for height in 1:max_height
-        println("Alphasat on " * a[1] * " formulas of height " * string(height))
+        println("Alphaprove on " * a[1] * " formulas of height " * string(height))
         e_time = 0
         j = 0
         for i in 1:max_it
@@ -38,14 +63,14 @@ for a in algebras
                 MersenneTwister(i),
                 height,
                 myalphabet,
-                myoperators6,
-                opweights=opweights6
+                a[3],
+                opweights=a[4]
             )
             if SoleLogics.height(f) == height
-                t = rand(MersenneTwister(i), d6)
+                t = rand(MersenneTwister(i), getdomain(a[2]))
                 brng = MersenneTwister(i)
                 t0 = time_ns()
-                r = alphasat(
+                r = alphaprove(
                     t,
                     f,
                     a[2],
