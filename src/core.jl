@@ -289,7 +289,7 @@ isempty(metricheap::MetricHeap) = DataStructures.isempty(heap(metricheap))
 
 function cleanheap!(metricheap::MetricHeap)
     elements = extract_all!(metricheap.heap)
-    deleteat!(elements, findall(x->!isleaf(x.tableau), elements))
+    deleteat!(elements, findall(x->(isexpanded(x.tableau) && !isleaf(x.tableau)), elements))
     deleteat!(elements, findall(x->isclosed(x.tableau), elements))
     metricheap.heap = BinaryHeap{MetricHeapNode}(MetricHeapOrdering(), elements)
 end
@@ -348,32 +348,35 @@ end
 """
     roundrobin(metricheaps::Vector{MetricHeap}, cycle::Int)
 
-Choose a leaf using the provided metric heaps, alternating between them at each cycle.
+Choose a node using the provided metric heaps, alternating between them at each cycle.
+
+The result can either be nothing, in case all heaps are empty and therefore the tableau is
+closed, or a node; an expanded node can only be returned if it is a leaf and in that case
+it represents a satisfiable branch for the tableau (i.e., a fully expanded open branch
+without contraddictions).
 """
 function roundrobin(metricheaps::Vector{MetricHeap}, cycle::Int)
     counter = 0
-    leaf = nothing
+    node = nothing
     while counter != length(metricheaps)
         metricheap = metricheaps[((cycle + counter) % length(metricheaps)) + 1]
-        if !isempty(metricheap)
-            leaf = pop!(metricheap)
-            while (!isleaf(leaf) && !isempty(metricheap))
-                leaf = pop!(metricheap)
-            end
-            if isleaf(leaf)
-                break
+        while !isempty(metricheap)
+            node = pop!(metricheap)
+            if isclosed(node)
+                continue
+            elseif isexpanded(node)
+                if isleaf(node)
+                    return node # found a satisfiable branch
+                else
+                    continue
+                end
             else
-                counter +=1
+                return node
             end
-        else
-            counter += 1
         end
+        counter += 1    # try next heap
     end
-    if counter == length(metricheaps)
-        return nothing
-    else
-        return leaf    
-    end
+    return nothing  # all heaps are empty, therefore the tableau is closed
 end
 
 """

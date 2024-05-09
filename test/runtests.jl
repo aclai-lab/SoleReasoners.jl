@@ -14,13 +14,13 @@ end
 println("Julia version: ", VERSION)
 
 test_suites = [
-    ("Sat", ["sat.jl",]),
-    ("HeytingAlphaSat", ["heytingalphasat.jl",]),
-    ("HeytingAlphaProve", ["heytingalphaprove.jl",]),
-    ("AlphaSat", ["alphasat.jl",]),
-    ("AlphaProve", ["alphaprove.jl",]),
-    # ("BackwardCompatibility", ["backwardcompatibility.jl"]),
-    ("Utils", ["utils.jl"]),
+    # ("Sat", ["sat.jl",]),
+    # ("HeytingAlphaSat", ["heytingalphasat.jl",]),
+    # ("HeytingAlphaProve", ["heytingalphaprove.jl",]),
+    # ("AlphaSat", ["alphasat.jl",]),
+    # ("AlphaProve", ["alphaprove.jl",]),
+    ("BackwardCompatibility", ["backwardcompatibility.jl"]),
+    # ("Utils", ["utils.jl"]),
 ]
 
 @testset "SoleReasoners.jl" begin

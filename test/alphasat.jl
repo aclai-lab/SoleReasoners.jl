@@ -1210,6 +1210,8 @@ using SoleLogics.ManyValuedLogics: H9
 using SoleLogics.ManyValuedLogics: α, β, γ, δ, ε, ζ, η
 
 BASE_MANY_VALUED_CONNECTIVES = [∨, ∧, →]
+# BASE_MANY_VALUED_CONNECTIVES = [∨]
+
 BaseManyValuedConnectives = Union{typeof.(BASE_MANY_VALUED_CONNECTIVES)...}
 
 ############################################################################################
@@ -1217,7 +1219,9 @@ BaseManyValuedConnectives = Union{typeof.(BASE_MANY_VALUED_CONNECTIVES)...}
 ############################################################################################
 
 for i ∈ getdomain(H9)
+# for i ∈ [η]
     for j ∈ getdomain(H9)
+    # for j ∈ [γ]
         @test alphasat(
             i,
             j,
@@ -1228,11 +1232,13 @@ for i ∈ getdomain(H9)
             H9
         )
         for k ∈ getdomain(H9)
+        # for k ∈ [⊤]
             for o ∈ BASE_MANY_VALUED_CONNECTIVES
                 @test alphasat(
                     k,
                     o(i, j),
-                    FiniteHeytingAlgebra(H9)
+                    FiniteHeytingAlgebra(H9),
+                    # verbose=true
                 ) == alphasat(
                     k,
                     o(i, j),
