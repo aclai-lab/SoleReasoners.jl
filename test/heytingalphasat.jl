@@ -436,3 +436,29 @@ for i ∈ getdomain(H9)
         end
     end
 end
+
+using Random
+
+BASE_MANY_VALUED_CONNECTIVES = [∨, ∧, →]
+BaseManyValuedConnectives = Union{typeof.(BASE_MANY_VALUED_CONNECTIVES)...}
+
+myalphabet = Atom.(["p"])
+
+# TODO: test with H9
+for height in 1:4
+    for i in 1:1000
+        @test alphasat(
+        rand(MersenneTwister(i), getdomain(H4)),
+        randformula(MersenneTwister(i), height, myalphabet, BASE_MANY_VALUED_CONNECTIVES),
+        FiniteHeytingAlgebra(H4),
+        oldrule=false,
+        timeout=60
+    ) == alphasat(
+        rand(MersenneTwister(i), getdomain(H4)),
+        randformula(MersenneTwister(i), height, myalphabet, BASE_MANY_VALUED_CONNECTIVES),
+        FiniteHeytingAlgebra(H4),
+        oldrule=true,
+        timeout=60
+    )
+    end
+end
