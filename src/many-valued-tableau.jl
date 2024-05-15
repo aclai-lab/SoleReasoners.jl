@@ -99,11 +99,15 @@ mutable struct ManyValuedTableau{T<:Truth} <: AbstractTableau
     end
 
     function ManyValuedTableau(
-        signedformula::SignedFormula{T},
+        signedformula::SignedFormula{T1},
         father::ManyValuedTableau{T}
     ) where {
+        T1<:Truth,
         T<:Truth
     }
+        if !isa(signedformula, SignedFormula{T})
+            signedformula = convert(SignedFormula{T}, signedformula)::SignedFormula{T}
+        end
         ft = ManyValuedTableau(
             signedformula,
             father,
@@ -351,35 +355,32 @@ function sat(
                 for l ∈ findleaves(en)
                     newnodes = false
                     for pair in pairs
-                        newnode = false
-                        # if !isbot(pair[1])
-                            sy = SignedFormula(true, (pair[1], a))
-                            # if !findformula(l, sy)
-                                newnode = true
-                                fta = ManyValuedTableau(sy, l)
-                                push!(metricheaps, fta)
-                            # end
-                        # end
-                        # if !isbot(pair[2])
+                        newnodes = true
+                        sy = SignedFormula(true, (pair[1], a))
+                        if !findformula(l, sy)
+                            fta = ManyValuedTableau(sy, l)
+                            push!(metricheaps, fta)
                             sy = SignedFormula(true, (pair[2], b))
-                            if newnode
-                                newnodes = true
-                                # if !findformula(fta, sy)
-                                    ftb = ManyValuedTableau(sy, fta)
-                                    push!(metricheaps, ftb)
-                                # end
-                            # elseif !findformula(l, sy)
-                            else
+                            if !findformula(fta, sy)
+                                ftb = ManyValuedTableau(sy, fta)
+                                push!(metricheaps, ftb)
+                            end
+                        else
+                            sy = SignedFormula(true, (pair[2], b))
+                            if !findformula(l, sy)
                                 newnodes = true
                                 ftb = ManyValuedTableau(sy, l)
                                 push!(metricheaps, ftb)
+                            else  # Here there should be a branch and I need to keep track of it
+                                sy = SignedFormula(true, (⊤, ⊤))    # Fake node (always true)
+                                fti = ManyValuedTableau(sy, l)
+                                push!(metricheaps, fti)
                             end
-                        # end
+                        end
                     end
-                    if !newnodes && l == node
-                        push!(metricheaps, node)
-                    end
-                end                
+                    !newnodes && l == node && push!(metricheaps, node)
+                end
+
             elseif !s && token(z[2]) isa NamedConnective{:∧} && !isbot(z[1])
                 # F(t→(A∧B)) case
                 (a, b) = children(z[2])
@@ -402,35 +403,31 @@ function sat(
                 for l ∈ findleaves(en)
                     newnodes = false
                     for pair in pairs
-                        newnode = false
-                        # if !istop(pair[1])
-                            sy = SignedFormula(true, (a, pair[1]))
-                            # if !findformula(l, sy)
-                                newnode = true
-                                fta = ManyValuedTableau(sy, l)
-                                push!(metricheaps, fta)
-                            # end
-                        # end
-                        # if !istop(pair[2])
+                        newnodes = true
+                        sy = SignedFormula(true, (a, pair[1]))
+                        if !findformula(l, sy)
+                            fta = ManyValuedTableau(sy, l)
+                            push!(metricheaps, fta)
                             sy = SignedFormula(true, (b, pair[2]))
-                            if newnode
-                                newnodes = true
-                                # if !findformula(fta, sy)
-                                    ftb = ManyValuedTableau(sy, fta)
-                                    push!(metricheaps, ftb)
-                                # end
-                            # elseif !findformula(l, sy) # BUG
-                            else
+                            if !findformula(fta, sy)
+                                ftb = ManyValuedTableau(sy, fta)
+                                push!(metricheaps, ftb)
+                            end
+                        else
+                            sy = SignedFormula(true, (b, pair[2]))
+                            if !findformula(l, sy)
                                 newnodes = true
                                 ftb = ManyValuedTableau(sy, l)
                                 push!(metricheaps, ftb)
-                            end     
-                        # end
+                            else  # Here there should be a branch and I need to keep track of it
+                                sy = SignedFormula(true, (⊤, ⊤))    # Fake node (always true)
+                                fti = ManyValuedTableau(sy, l)
+                                push!(metricheaps, fti)
+                            end
+                        end
                     end
-                    if !newnodes && l == node
-                        push!(metricheaps, node)
-                    end
-                end                    
+                    !newnodes && l == node && push!(metricheaps, node)
+                end
             # Implication Rules
             elseif !s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
                 # F(t→(A→B)) case
@@ -454,34 +451,30 @@ function sat(
                 for l ∈ findleaves(en)
                     newnodes = false
                     for pair in pairs
-                        newnode = false                        
-                        # if !isbot(pair[1])
-                            sy = SignedFormula(true, (pair[1], a))
-                            # if !findformula(l, sy)
-                                newnode = true
-                                fta = ManyValuedTableau(sy, l)
-                                push!(metricheaps, fta)
-                            # end
-                        # end
-                        # if !istop(pair[2])
+                        newnodes = true
+                        sy = SignedFormula(true, (pair[1], a))
+                        if !findformula(l, sy)
+                            fta = ManyValuedTableau(sy, l)
+                            push!(metricheaps, fta)
                             sy = SignedFormula(true, (b, pair[2]))
-                            if newnode
-                                newnodes = true
-                                # if !findformula(fta, sy)
-                                    ftb = ManyValuedTableau(sy, fta)
-                                    push!(metricheaps, ftb)
-                            #     end
-                            # elseif !findformula(l, sy) # BUG
-                            else
+                            if !findformula(fta, sy)
+                                ftb = ManyValuedTableau(sy, fta)
+                                push!(metricheaps, ftb)
+                            end
+                        else
+                            sy = SignedFormula(true, (b, pair[2]))
+                            if !findformula(l, sy)
                                 newnodes = true
                                 ftb = ManyValuedTableau(sy, l)
                                 push!(metricheaps, ftb)
+                            else  # Here there should be a branch and I need to keep track of it
+                                sy = SignedFormula(true, (⊤, ⊤))    # Fake node (always true)
+                                fti = ManyValuedTableau(sy, l)
+                                push!(metricheaps, fti)
                             end
-                        # end
+                        end
                     end
-                    if !newnodes && l == node
-                        push!(metricheaps, node)
-                    end
+                    !newnodes && l == node && push!(metricheaps, node)
                 end
             elseif s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
                 # T(t→(A→B)) case
@@ -505,34 +498,30 @@ function sat(
                 for l ∈ findleaves(en)
                     newnodes = false
                     for pair in pairs
-                        newnode = false
-                        # if !istop(pair[1])
-                            sy = SignedFormula(true, (a, pair[1]))
-                            # if !findformula(l, sy)
-                                newnode = true
-                                fta = ManyValuedTableau(sy, l)
-                                push!(metricheaps, fta)
-                            # end
-                        # end
-                        # if !isbot(pair[2])
+                        newnodes = true
+                        sy = SignedFormula(true, (a, pair[1]))
+                        if !findformula(l, sy)
+                            fta = ManyValuedTableau(sy, l)
+                            push!(metricheaps, fta)
                             sy = SignedFormula(true, (pair[2], b))
-                            if newnode
-                                newnodes = true
-                                # if !findformula(fta, sy)
-                                    ftb = ManyValuedTableau(sy, fta)
-                                    push!(metricheaps, ftb)
-                            #     end
-                            # elseif !findformula(l, sy) # BUG
-                            else
+                            if !findformula(fta, sy)
+                                ftb = ManyValuedTableau(sy, fta)
+                                push!(metricheaps, ftb)
+                            end
+                        else
+                            sy = SignedFormula(true, (pair[2], b))
+                            if !findformula(l, sy)
                                 newnodes = true
                                 ftb = ManyValuedTableau(sy, l)
                                 push!(metricheaps, ftb)
-                            end 
-                        # end    
+                            else  # Here there should be a branch and I need to keep track of it
+                                sy = SignedFormula(true, (⊤, ⊤))    # Fake node (always true)
+                                fti = ManyValuedTableau(sy, l)
+                                push!(metricheaps, fti)
+                            end
+                        end
                     end
-                    if !newnodes && l == node
-                        push!(metricheaps, node)
-                    end
+                    !newnodes && l == node && push!(metricheaps, node)
                 end
             # Reversal Rules
             elseif !s && !isbot(z[1])
@@ -540,16 +529,19 @@ function sat(
                 for l ∈ findleaves(en)
                     newnodes = false
                     for ti ∈ maximalmembers(h, z[1])
+                        newnodes = true
                         sy = SignedFormula(true, (z[2], ti))
                         if !findformula(l, sy)
                             newnodes = true
                             fti = ManyValuedTableau(sy, l)
                             push!(metricheaps, fti)
+                        else  # Here there should be a branch and I need to keep track of it
+                            sy = SignedFormula(true, (⊤, ⊤))    # Fake node (always true)
+                            fti = ManyValuedTableau(sy, l)
+                            push!(metricheaps, fti)
                         end
                     end
-                    if !newnodes && l == node
-                        push!(metricheaps, node)
-                    end
+                    !newnodes && l == node && push!(metricheaps, node)
                 end
             elseif s && !isbot(z[1])
                 # T(a→X) case
@@ -564,9 +556,7 @@ function sat(
                             push!(metricheaps, fti)
                         end
                     end
-                    if !newnodes && l == node
-                        push!(metricheaps, node)
-                    end
+                    !newnodes && l == node && push!(metricheaps, node)
                 end
             # Base case
             else
@@ -601,34 +591,30 @@ function sat(
                 for l ∈ findleaves(en)
                     newnodes = false
                     for pair in pairs
-                        newnode = false
-                        # if !istop(pair[1])
-                            sy = SignedFormula(true, (a, pair[1]))
-                            # if !findformula(l, sy)
-                                newnode = true
-                                fta = ManyValuedTableau(sy, l)
-                                push!(metricheaps, fta)
-                            # end
-                        # end
-                        # if !istop(pair[2])
+                        newnodes = true
+                        sy = SignedFormula(true, (a, pair[1]))
+                        if !findformula(l, sy)
+                            fta = ManyValuedTableau(sy, l)
+                            push!(metricheaps, fta)
                             sy = SignedFormula(true, (b, pair[2]))
-                            if newnode
-                                newnodes = true
-                                # if !findformula(fta, sy)
-                                    ftb = ManyValuedTableau(sy, fta)
-                                    push!(metricheaps, ftb)
-                            #     end
-                            # elseif !findformula(l, sy) # BUG
-                            else
+                            if !findformula(fta, sy)
+                                ftb = ManyValuedTableau(sy, fta)
+                                push!(metricheaps, ftb)
+                            end
+                        else
+                            sy = SignedFormula(true, (b, pair[2]))
+                            if !findformula(l, sy)
                                 newnodes = true
                                 ftb = ManyValuedTableau(sy, l)
                                 push!(metricheaps, ftb)
-                            end     
-                        # end
+                            else  # Here there should be a branch and I need to keep track of it
+                                sy = SignedFormula(true, (⊤, ⊤))    # Fake node (always true)
+                                fti = ManyValuedTableau(sy, l)
+                                push!(metricheaps, fti)
+                            end
+                        end
                     end
-                    if !newnodes && l == node
-                        push!(metricheaps, node)
-                    end
+                    !newnodes && l == node && push!(metricheaps, node)
                 end
             elseif !s && token(z[1]) isa NamedConnective{:∨} && !istop(z[2])
                 # F((A∨B)→t) case
@@ -652,34 +638,30 @@ function sat(
                 for l ∈ findleaves(en)
                     newnodes = false
                     for pair in pairs
-                        newnode = false
-                        # if !isbot(pair[1])
-                            sy = SignedFormula(true, (pair[1], a))
-                            # if !findformula(l, sy)
-                                newnode = true
-                                fta = ManyValuedTableau(sy, l)
-                                push!(metricheaps, fta)
-                            # end
-                        # end
-                        # if !isbot(pair[2])
+                        newnodes = true
+                        sy = SignedFormula(true, (pair[1], a))
+                        if !findformula(l, sy)
+                            fta = ManyValuedTableau(sy, l)
+                            push!(metricheaps, fta)
                             sy = SignedFormula(true, (pair[2], b))
-                            if newnode
-                                newnodes = true
-                                # if !findformula(fta, sy)
-                                    ftb = ManyValuedTableau(sy, fta)
-                                    push!(metricheaps, ftb)
-                            #     end
-                            # elseif !findformula(l, sy) # BUG
-                            else
+                            if !findformula(fta, sy)
+                                ftb = ManyValuedTableau(sy, fta)
+                                push!(metricheaps, ftb)
+                            end
+                        else
+                            sy = SignedFormula(true, (pair[2], b))
+                            if !findformula(l, sy)
                                 newnodes = true
                                 ftb = ManyValuedTableau(sy, l)
                                 push!(metricheaps, ftb)
-                            end    
-                        # end 
+                            else  # Here there should be a branch and I need to keep track of it
+                                sy = SignedFormula(true, (⊤, ⊤))    # Fake node (always true)
+                                fti = ManyValuedTableau(sy, l)
+                                push!(metricheaps, fti)
+                            end
+                        end
                     end
-                    if !newnodes && l == node
-                        push!(metricheaps, node)
-                    end
+                    !newnodes && l == node && push!(metricheaps, node)
                 end
             # Reversal Rules
             elseif !s && !istop(z[2])
@@ -687,16 +669,18 @@ function sat(
                 for l ∈ findleaves(en)
                     newnodes = false
                     for ui ∈ minimalmembers(h, z[2])
+                        newnodes = true
                         sy = SignedFormula(true, (ui, z[1]))
                         if !findformula(l, sy)
-                            newnodes = true
                             fui = ManyValuedTableau(sy, l)
                             push!(metricheaps, fui)
+                        else  # Here there should be a branch and I need to keep track of it
+                            sy = SignedFormula(true, (⊤, ⊤))    # Fake node (always true)
+                            fti = ManyValuedTableau(sy, l)
+                            push!(metricheaps, fti)
                         end
                     end
-                    if !newnodes && l == node
-                        push!(metricheaps, node)
-                    end
+                    !newnodes && l == node && push!(metricheaps, node)
                 end
             elseif s && !istop(z[2])
                 # T(X→A) case
@@ -711,9 +695,7 @@ function sat(
                             push!(metricheaps, fui)
                         end
                     end
-                    if !newnodes && l == node
-                        push!(metricheaps, node)
-                    end
+                    !newnodes && l == node && push!(metricheaps, node)
                 end
             # Base case
             else
@@ -731,7 +713,7 @@ function sat(
     metricheaps::Vector{MetricHeap},
     choosenode::Function,
     h::FiniteHeytingAlgebra{T,D};
-    oldrule::Bool = false,
+    oldrule::Bool=false,
     verbose::Bool=false,
     timeout::Union{Nothing,Int}=nothing,
     kwargs...
@@ -838,14 +820,17 @@ function sat(
                 lvs = lesservalues(h, z[1])
                 push!(lvs, z[1])
                 for l ∈ findleaves(en)
+                    newnodes = false
                     for ti ∈ lvs
                         if !isbot(ti)
+                            newnodes = true
                             fta = ManyValuedTableau(SignedFormula(true, (ti, a)), l)
                             push!(metricheaps, fta)
                             ftb = ManyValuedTableau(SignedFormula(false, (ti, b)), fta)
                             push!(metricheaps, ftb)
                         end
-                    end           
+                    end
+                    !newnodes && l == node && push!(metricheaps, node)   
                 end
             elseif s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
                 if oldrule
@@ -853,15 +838,20 @@ function sat(
                     (a, b) = children(z[2])
                     lvs = lesservalues(h, z[1])
                     push!(lvs, z[1])
+                    newnodes = false
                     for ti in lvs
                         if !isbot(ti)
                             for l ∈ findleaves(en)
+                                if l == node
+                                    newnodes = true
+                                end
                                 fta = ManyValuedTableau(SignedFormula(false, (ti, a)), l)
                                 push!(metricheaps, fta)
                                 ftb = ManyValuedTableau(SignedFormula(true, (ti, b)), l)
                                 push!(metricheaps, ftb)
                             end
                         end
+                        !newnodes && push!(metricheaps, node)
                     end
                 else
                     # (NEW) T(t→(A→B)) case
@@ -883,29 +873,53 @@ function sat(
                         end
                     end
                     for l ∈ findleaves(en)
+                        newnodes = false
                         for pair in pairs
-                            fta = ManyValuedTableau(SignedFormula(true, (a, pair[1])), l)
-                            push!(metricheaps, fta)
-                            ftb = ManyValuedTableau(SignedFormula(true, (pair[2], b)), fta)
-                            push!(metricheaps, ftb)
+                            newnodes = true
+                            sy = SignedFormula(true, (a, pair[1]))
+                            if !findformula(l, sy)
+                                fta = ManyValuedTableau(sy, l)
+                                push!(metricheaps, fta)
+                                sy = SignedFormula(true, (pair[2], b))
+                                if !findformula(fta, sy)
+                                    ftb = ManyValuedTableau(sy, fta)
+                                    push!(metricheaps, ftb)
+                                end
+                            else
+                                sy = SignedFormula(true, (pair[2], b))
+                                if !findformula(l, sy)
+                                    newnodes = true
+                                    ftb = ManyValuedTableau(sy, l)
+                                    push!(metricheaps, ftb)
+                                else  # Here there should be a branch and I need to keep track of it
+                                    sy = SignedFormula(true, (⊤, ⊤))    # Fake node (always true)
+                                    fti = ManyValuedTableau(sy, l)
+                                    push!(metricheaps, fti)
+                                end
+                            end
                         end
+                        !newnodes && l == node && push!(metricheaps, node)
                     end
-                end                
+                end
+            # Reversal Rules
             elseif !s && !isbot(z[1])
                 # F(a→X) case
                 for l ∈ findleaves(en)
                     newnodes = false
                     for ti ∈ maximalmembers(h, z[1])
+                        newnodes = true
                         sy = SignedFormula(true, (z[2], ti))
                         if !findformula(l, sy)
                             newnodes = true
                             fti = ManyValuedTableau(sy, l)
                             push!(metricheaps, fti)
+                        else  # Here there should be a branch and I need to keep track of it
+                            sy = SignedFormula(true, (⊤, ⊤))    # Fake node (always true)
+                            fti = ManyValuedTableau(sy, l)
+                            push!(metricheaps, fti)
                         end
                     end
-                    if !newnodes && l == node
-                        push!(metricheaps, node)
-                    end
+                    !newnodes && l == node && push!(metricheaps, node)
                 end
             elseif s && !isbot(z[1])
                 # T(a→X) case
@@ -920,9 +934,7 @@ function sat(
                             push!(metricheaps, fti)
                         end
                     end
-                    if !newnodes && l == node
-                        push!(metricheaps, node)
-                    end
+                    !newnodes && l == node && push!(metricheaps, node)
                 end
             # Base case
             else
@@ -953,21 +965,24 @@ function sat(
                     ftb = ManyValuedTableau(SignedFormula(false, (b, z[2])), l)
                     push!(metricheaps, ftb)
                 end
+            # Reversal Rules
             elseif !s && !istop(z[2])
                 # F(X→a) case
                 for l ∈ findleaves(en)
                     newnodes = false
                     for ui ∈ minimalmembers(h, z[2])
+                        newnodes = true
                         sy = SignedFormula(true, (ui, z[1]))
                         if !findformula(l, sy)
-                            newnodes = true
                             fui = ManyValuedTableau(sy, l)
                             push!(metricheaps, fui)
+                        else  # Here there should be a branch and I need to keep track of it
+                            sy = SignedFormula(true, (⊤, ⊤))    # Fake node (always true)
+                            fti = ManyValuedTableau(sy, l)
+                            push!(metricheaps, fti)
                         end
                     end
-                    if !newnodes && l == node
-                        push!(metricheaps, node)
-                    end
+                    !newnodes && l == node && push!(metricheaps, node)
                 end
             elseif s && !istop(z[2])
                 # T(X→A) case
@@ -982,11 +997,8 @@ function sat(
                             push!(metricheaps, fui)
                         end
                     end
-                    if !newnodes && l == node
-                        push!(metricheaps, node)
-                    end
+                    !newnodes && l == node && push!(metricheaps, node)
                 end
-
             # Base case
             else
                 # No condition matched, pushing node back into metricheaps

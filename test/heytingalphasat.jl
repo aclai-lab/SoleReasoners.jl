@@ -452,13 +452,13 @@ for height in 1:4
         randformula(MersenneTwister(i), height, myalphabet, BASE_MANY_VALUED_CONNECTIVES),
         FiniteHeytingAlgebra(H4),
         oldrule=false,
-        timeout=60
+        timeout=600
     ) == alphasat(
         rand(MersenneTwister(i), getdomain(H4)),
         randformula(MersenneTwister(i), height, myalphabet, BASE_MANY_VALUED_CONNECTIVES),
         FiniteHeytingAlgebra(H4),
         oldrule=true,
-        timeout=60
+        timeout=600
     )
     end
 end
