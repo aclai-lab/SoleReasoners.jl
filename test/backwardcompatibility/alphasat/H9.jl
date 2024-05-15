@@ -11,8 +11,8 @@ BaseManyValuedConnectives = Union{typeof.(BASE_MANY_VALUED_CONNECTIVES)...}
 myalphabet = Atom.(["p"])
 
 max_height = 4
-max_it = 1000
-max_timeout = 120 # seconds
+max_it = 500
+max_timeout = 60 # seconds
 
 using SoleLogics.ManyValuedLogics: H9
 using SoleLogics.ManyValuedLogics: α, β, γ, δ, ε, ζ, η
