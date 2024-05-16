@@ -30,14 +30,14 @@ for a in algebras
         j = 0
         for i in 1:max_it
             f = randformula(
+            t = rand(MersenneTwister(i), getdomain(a[2]))
                 MersenneTwister(i),
                 height,
                 myalphabet,
                 myoperators6,
                 opweights=opweights6
             )
-            if SoleLogics.height(f) == height
-                t = rand(MersenneTwister(i), getdomain(a[2]))
+            if !isbot(t) && SoleLogics.height(f) == height
                 brng = MersenneTwister(i)
                 t0 = time_ns()
                 r = alphaprove(

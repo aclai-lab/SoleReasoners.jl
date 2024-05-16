@@ -11,8 +11,8 @@ BaseManyValuedConnectives = Union{typeof.(BASE_MANY_VALUED_CONNECTIVES)...}
 myalphabet = Atom.(["p", "q", "r"])
 
 max_height = 7
-max_it = 1000
-max_avg = 500
+max_it = 500
+max_avg = 200
 max_timeout = 60 # seconds
 
 using SoleLogics.ManyValuedLogics: booleanalgebra
@@ -68,6 +68,7 @@ for a in algebras
         unsat = 0
         skipped = 0
         for i in 1:max_it
+            t = rand(MersenneTwister(i), getdomain(a[2]))
             f = randformula(
                 MersenneTwister(i),
                 height,
@@ -75,8 +76,7 @@ for a in algebras
                 a[3],
                 opweights=a[4]
             )
-            if SoleLogics.height(f) == height
-                t = rand(MersenneTwister(i), getdomain(a[2]))
+            if !isbot(t) && SoleLogics.height(f) == height
                 brng = MersenneTwister(i)
                 r = alphasat(
                     t,
@@ -119,6 +119,7 @@ for a in algebras
         unsat = 0
         skipped = 0
         for i in 1:max_it
+            t = rand(MersenneTwister(i), getdomain(a[2]))
             f = randformula(
                 MersenneTwister(i),
                 height,
@@ -126,8 +127,7 @@ for a in algebras
                 a[3],
                 opweights=a[4]
             )
-            if SoleLogics.height(f) == height
-                t = rand(MersenneTwister(i), getdomain(a[2]))
+            if !isbot(t) && SoleLogics.height(f) == height
                 brng = MersenneTwister(i)
                 r = alphaprove(
                     t,

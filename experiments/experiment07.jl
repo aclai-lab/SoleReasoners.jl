@@ -60,6 +60,7 @@ for a in algebras
         e_time = 0
         j = 0
         for i in 1:max_it
+            t = rand(MersenneTwister(i), getdomain(a[2]))
             f = randformula(
                 MersenneTwister(i),
                 height,
@@ -67,8 +68,7 @@ for a in algebras
                 a[3],
                 opweights=a[4]
             )
-            if SoleLogics.height(f) == height
-                t = rand(MersenneTwister(i), getdomain(a[2]))
+            if !isbot(t) && SoleLogics.height(f) == height
                 brng = MersenneTwister(i)
                 t0 = time_ns()
                 r = alphasat(

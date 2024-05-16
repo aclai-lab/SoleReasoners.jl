@@ -30,6 +30,7 @@ for height in 1:max_height
     e_time = 0
     j = 0
     for i in 1:max_it
+        t = rand(MersenneTwister(i), getdomain(booleanalgebra))
         f = randformula(
             MersenneTwister(i),
             height,
@@ -37,8 +38,7 @@ for height in 1:max_height
             myoperators2,
             opweights=opweights2
         )
-        if SoleLogics.height(f) == height
-            t = rand(MersenneTwister(i), getdomain(booleanalgebra))
+        if !isbot(t) && SoleLogics.height(f) == height
             brng = MersenneTwister(i)
             t0 = time_ns()
             r = alphasat(
@@ -81,6 +81,7 @@ for height in 1:max_height
     e_time = 0
     j = 0
     for i in 1:max_it
+        t = rand(MersenneTwister(i), getdomain(G3))
         f = randformula(
             MersenneTwister(i),
             height,
@@ -88,8 +89,7 @@ for height in 1:max_height
             myoperators3,
             opweights=opweights3
         )
-        if SoleLogics.height(f) == height
-            t = rand(MersenneTwister(i), getdomain(G3))
+        if !isbot(t) && SoleLogics.height(f) == height
             brng = MersenneTwister(i)
             t0 = time_ns()
             r = alphasat(
@@ -132,6 +132,7 @@ for height in 1:max_height
     e_time = 0
     j = 0
     for i in 1:max_it
+        t = rand(MersenneTwister(i), getdomain(Ł3))
         f = randformula(
             MersenneTwister(i),
             height,
@@ -139,8 +140,7 @@ for height in 1:max_height
             myoperators3,
             opweights=opweights3
         )
-        if SoleLogics.height(f) == height
-            t = rand(MersenneTwister(i), getdomain(Ł3))
+        if !isbot(t) && SoleLogics.height(f) == height
             brng = MersenneTwister(i)
             t0 = time_ns()
             r = alphasat(
@@ -183,6 +183,7 @@ for height in 1:max_height
     e_time = 0
     j = 0
     for i in 1:max_it
+        t = rand(MersenneTwister(i), getdomain(G4))
         f = randformula(
             MersenneTwister(i),
             height,
@@ -190,8 +191,7 @@ for height in 1:max_height
             myoperators4,
             opweights=opweights4
         )
-        if SoleLogics.height(f) == height
-            t = rand(MersenneTwister(i), getdomain(G4))
+        if !isbot(t) && SoleLogics.height(f) == height
             brng = MersenneTwister(i)
             t0 = time_ns()
             r = alphasat(
@@ -234,6 +234,7 @@ for height in 1:max_height
     e_time = 0
     j = 0
     for i in 1:max_it
+        t = rand(MersenneTwister(i), getdomain(Ł4))
         f = randformula(
             MersenneTwister(i),
             height,
@@ -241,8 +242,7 @@ for height in 1:max_height
             myoperators4,
             opweights=opweights4
         )
-        if SoleLogics.height(f) == height
-            t = rand(MersenneTwister(i), getdomain(Ł4))
+        if !isbot(t) && SoleLogics.height(f) == height
             brng = MersenneTwister(i)
             t0 = time_ns()
             r = alphasat(
@@ -285,6 +285,7 @@ for height in 1:max_height
     e_time = 0
     j = 0
     for i in 1:max_it
+        t = rand(MersenneTwister(i), getdomain(H4))
         f = randformula(
             MersenneTwister(i),
             height,
@@ -292,8 +293,7 @@ for height in 1:max_height
             myoperators4,
             opweights=opweights4
         )
-        if SoleLogics.height(f) == height
-            t = rand(MersenneTwister(i), getdomain(H4))
+        if !isbot(t) && SoleLogics.height(f) == height
             brng = MersenneTwister(i)
             t0 = time_ns()
             r = alphasat(

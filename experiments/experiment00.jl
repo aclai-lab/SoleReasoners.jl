@@ -26,6 +26,7 @@ for height in 1:max_height
     timeouts = 0
     j = 0
     for i in 1:max_it
+        t = rand(MersenneTwister(i), getdomain(booleanalgebra))
         f = randformula(
             MersenneTwister(i),
             height,
@@ -33,10 +34,10 @@ for height in 1:max_height
             myoperators2,
             opweights=opweights2
         )
-        if SoleLogics.height(f) == height
+        if !isbot(t) && SoleLogics.height(f) == height
             j += 1
             if j == max_avg
-                println("$(i-max_avg) formulas over $i were too short ")
+                println("$(i-max_avg) formulas over $i were too short or were tautologies")
                 break
             end
             if i == max_it
@@ -58,6 +59,7 @@ for height in 1:max_height
     timeouts = 0
     j = 0
     for i in 1:max_it
+        t = rand(MersenneTwister(i), getdomain(G3))
         f = randformula(
             MersenneTwister(i),
             height,
@@ -65,10 +67,10 @@ for height in 1:max_height
             myoperators3,
             opweights=opweights3
         )
-        if SoleLogics.height(f) == height
+        if !isbot(t) && SoleLogics.height(f) == height
             j += 1
             if j == max_avg
-                println("$(i-max_avg) formulas over $i were too short ")
+                println("$(i-max_avg) formulas over $i were too short or were tautologies")
                 break
             end
             if i == max_it
@@ -90,6 +92,7 @@ for height in 1:max_height
     timeouts = 0
     j = 0
     for i in 1:max_it
+        t = rand(MersenneTwister(i), getdomain(G4))
         f = randformula(
             MersenneTwister(i),
             height,
@@ -97,10 +100,76 @@ for height in 1:max_height
             myoperators4,
             opweights=opweights4
         )
-        if SoleLogics.height(f) == height
+        if !isbot(t) && SoleLogics.height(f) == height
             j += 1
             if j == max_avg
-                println("$(i-max_avg) formulas over $i were too short ")
+                println("$(i-max_avg) formulas over $i were too short or were tautologies")
+                break
+            end
+            if i == max_it
+                println("Warning: maximum iterations reached")
+            end
+        end
+    end
+end
+println()
+
+using SoleLogics.ManyValuedLogics: G5
+myoperators5 = []
+append!(myoperators5, BASE_MANY_VALUED_CONNECTIVES)
+append!(myoperators5, getdomain(G5))
+opweights5 = [10, 10, 10, 1, 1, 1, 1, 1]
+
+for height in 1:max_height
+    println("Generating G5 formulas of height " * string(height))
+    timeouts = 0
+    j = 0
+    for i in 1:max_it
+        t = rand(MersenneTwister(i), getdomain(G5))
+        f = randformula(
+            MersenneTwister(i),
+            height,
+            myalphabet,
+            myoperators5,
+            opweights=opweights5
+        )
+        if !isbot(t) && SoleLogics.height(f) == height
+            j += 1
+            if j == max_avg
+                println("$(i-max_avg) formulas over $i were too short or were tautologies")
+                break
+            end
+            if i == max_it
+                println("Warning: maximum iterations reached")
+            end
+        end
+    end
+end
+println()
+
+using SoleLogics.ManyValuedLogics: G6
+myoperators6 = []
+append!(myoperators6, BASE_MANY_VALUED_CONNECTIVES)
+append!(myoperators6, getdomain(G6))
+opweights6 = [10, 10, 10, 1, 1, 1, 1, 1, 1]
+
+for height in 1:max_height
+    println("Generating G6 formulas of height " * string(height))
+    timeouts = 0
+    j = 0
+    for i in 1:max_it
+        t = rand(MersenneTwister(i), getdomain(G6))
+        f = randformula(
+            MersenneTwister(i),
+            height,
+            myalphabet,
+            myoperators6,
+            opweights=opweights6
+        )
+        if !isbot(t) && SoleLogics.height(f) == height
+            j += 1
+            if j == max_avg
+                println("$(i-max_avg) formulas over $i were too short or were tautologies")
                 break
             end
             if i == max_it
