@@ -11,7 +11,7 @@ BaseManyValuedConnectives = Union{typeof.(BASE_MANY_VALUED_CONNECTIVES)...}
 myalphabet = Atom.(["p", "q", "r"])
 
 max_height = 10
-max_it = 6000
+max_it = 20000
 max_avg = 5000
 max_timeout = 1 # seconds
 
@@ -40,9 +40,9 @@ for height in 1:max_height
                 println("$(i-max_avg) formulas over $i were too short or were tautologies")
                 break
             end
-            if i == max_it
-                println("Warning: maximum iterations reached")
-            end
+        end
+        if i == max_it
+            println("Warning: maximum iterations reached")
         end
     end
 end
@@ -73,9 +73,9 @@ for height in 1:max_height
                 println("$(i-max_avg) formulas over $i were too short or were tautologies")
                 break
             end
-            if i == max_it
-                println("Warning: maximum iterations reached")
-            end
+        end
+        if i == max_it
+            println("Warning: maximum iterations reached")
         end
     end
 end
@@ -106,9 +106,9 @@ for height in 1:max_height
                 println("$(i-max_avg) formulas over $i were too short or were tautologies")
                 break
             end
-            if i == max_it
-                println("Warning: maximum iterations reached")
-            end
+        end
+        if i == max_it
+            println("Warning: maximum iterations reached")
         end
     end
 end
@@ -139,9 +139,9 @@ for height in 1:max_height
                 println("$(i-max_avg) formulas over $i were too short or were tautologies")
                 break
             end
-            if i == max_it
-                println("Warning: maximum iterations reached")
-            end
+        end
+        if i == max_it
+            println("Warning: maximum iterations reached")
         end
     end
 end
@@ -172,9 +172,9 @@ for height in 1:max_height
                 println("$(i-max_avg) formulas over $i were too short or were tautologies")
                 break
             end
-            if i == max_it
-                println("Warning: maximum iterations reached")
-            end
+        end
+        if i == max_it
+            println("Warning: maximum iterations reached")
         end
     end
 end

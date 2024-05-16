@@ -11,7 +11,7 @@ BaseManyValuedConnectives = Union{typeof.(BASE_MANY_VALUED_CONNECTIVES)...}
 myalphabet = Atom.(["p", "q", "r"])
 
 max_height = 7
-max_it = 500
+max_it = 1000
 max_avg = 200
 max_timeout = 60 # seconds
 
@@ -29,8 +29,8 @@ for a in algebras
         e_time = 0
         j = 0
         for i in 1:max_it
-            f = randformula(
             t = rand(MersenneTwister(i), getdomain(a[2]))
+            f = randformula(
                 MersenneTwister(i),
                 height,
                 myalphabet,

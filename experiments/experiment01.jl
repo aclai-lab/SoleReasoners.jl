@@ -11,7 +11,7 @@ BaseManyValuedConnectives = Union{typeof.(BASE_MANY_VALUED_CONNECTIVES)...}
 myalphabet = Atom.(["p", "q", "r"])
 
 max_height = 10
-max_it = 6000
+max_it = 20000
 max_avg = 5000
 max_timeout = 1 # seconds
 
