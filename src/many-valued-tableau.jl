@@ -1,6 +1,11 @@
 """
-All formulas appearing in the tableau will be bounding implications, i.e.,
-a → A (or A → a), where a is a propositional constant and asserting a ≤ A (resp. A ≤ a)
+    struct SignedFormula{T<:Truth}
+        sign::Bool
+        boundingimplication::Union{Tuple{T, Formula}, Tuple{Formula, T}, Tuple{T, T}}
+    end
+
+All formulas appearing in the many-valued tableau will be bounding implications, i.e.,
+a → A (or A → a), where a is a propositional constant and asserting a ≤ A (resp. A ≤ a).
 """
 struct SignedFormula{T<:Truth}
     sign::Bool
@@ -67,6 +72,20 @@ function Base.convert(
     end
 end
 
+"""
+    mutable struct ManyValuedTableau{T<:Truth} <: AbstractTableau
+        const signedformula::SignedFormula{T}
+        const father::Union{ManyValuedTableau{T}, Nothing}
+        children::Vector{ManyValuedTableau{T}}
+        expanded::Bool
+        closed::Bool
+    end
+
+A mutable structure representing a tableau as a tree structure, with each node containing
+a signed formula, the father and children in the tree structure, a flag saying if the node
+has already been expanded and a flag saying if the branch represented by the node has been
+closed. Each path from a leaf to the root respresents a branch.
+"""
 mutable struct ManyValuedTableau{T<:Truth} <: AbstractTableau
     const signedformula::SignedFormula{T}
     const father::Union{ManyValuedTableau{T}, Nothing}
@@ -1011,6 +1030,21 @@ function sat(
     end
 end
 
+"""
+    alphaprove(
+        α::T1,
+        z::Formula,
+        a::A;
+        rng = Random.GLOBAL_RNG,
+        verbose::Bool=false,
+        timeout::Union{Nothing,Int}=nothing,
+        kwargs...
+    )
+
+Given a formula, return true if it is α-valid, i.e., there is not an interpretation that
+does not satisfy the formula, nothing in case of timeout or out-of-memory error, false
+otherwise.
+"""
 function sat(
     sz::SignedFormula{T1},
     h::A,
@@ -1053,6 +1087,23 @@ function sat(
     return sat(SignedFormula(true, (⊤, z)), h, choosenode, metrics...; verbose, timeout, kwargs...)
 end
 
+"""
+    sat(
+        z::Formula,
+        h::A;
+        rng = Random.GLOBAL_RNG,
+        verbose::Bool=false,
+        timeout::Union{Nothing,Int}=nothing,
+        kwargs...
+    ) where {
+        T<:Truth,
+        D<:AbstractVector{T},
+        A<:FiniteAlgebra{T,D}
+    }
+
+Given a formula, return true if an interpretation that satisfies the formula exists, false
+otherwise.
+"""
 function sat(
     z::Formula,
     h::A;
@@ -1068,7 +1119,23 @@ function sat(
     randombranch(_::ManyValuedTableau{T}) where {T<:Truth} = rand(rng, Int)
     return sat(SignedFormula(true, (⊤, z)), h, roundrobin, randombranch; verbose, timeout, kwargs...)
 end
+"""
+    prove(
+        z::Formula,
+        h::A;
+        rng = Random.GLOBAL_RNG,
+        verbose::Bool=false,
+        timeout::Union{Nothing,Int}=nothing,
+        kwargs...
+    ) where {
+        T<:Truth,
+        D<:AbstractVector{T},
+        A<:FiniteAlgebra{T,D}
+    }
 
+Given a formula, return true if it is valid, i.e., there is not an interpretation that does
+not satisfy the formula, false otherwise.
+"""
 function prove(
     z::Formula,
     h::A;
@@ -1090,6 +1157,26 @@ function prove(
     end
 end
 
+"""
+    alphasat(
+        α::T1,
+        z::Formula,
+        a::A;
+        rng = Random.GLOBAL_RNG,
+        verbose::Bool=false,
+        timeout::Union{Nothing,Int}=nothing,
+        kwargs...
+    ) where {
+        T<:Truth,
+        D<:AbstractVector{T},
+        A<:FiniteAlgebra{T,D},
+        T1<:Truth
+    }
+
+Given a formula, return true if it is α-satisfiable, i.e., there is an interpretation such
+that the formula assumes value of at least α, nothing in case of timeout or out-of-memory
+error, false otherwise.
+"""
 function alphasat(
     α::T1,
     z::Formula,
@@ -1114,6 +1201,26 @@ function alphasat(
     return sat(SignedFormula(true, (α, z)), a, roundrobin, randombranch; verbose, timeout, kwargs...)
 end
 
+"""
+    alphaprove(
+        α::T1,
+        z::Formula,
+        a::A;
+        rng = Random.GLOBAL_RNG,
+        verbose::Bool=false,
+        timeout::Union{Nothing,Int}=nothing,
+        kwargs...
+    ) where {
+        T<:Truth,
+        D<:AbstractVector{T},
+        A<:FiniteAlgebra{T,D},
+        T1<:Truth
+    }
+
+Given a formula, return true if it is α-valid, i.e., there is not an interpretation such
+that the formula does not assume value of at least α, nothing in case of timeout or
+out-of-memory error, false otherwise.
+"""
 function alphaprove(
     α::T1,
     z::Formula,
