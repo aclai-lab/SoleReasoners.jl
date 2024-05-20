@@ -12,7 +12,7 @@ top = SoleLogics.top
 
 include("core.jl")
 
-export naivechooseleaf, roundrobin, sat
+export naivechoosenode, roundrobin, sat
 
 using SoleLogics.ManyValuedLogics
 using SoleLogics.ManyValuedLogics: FiniteTruth, FiniteAlgebra
@@ -21,6 +21,8 @@ using SoleLogics.ManyValuedLogics: lesservalues, maximalmembers, minimalmembers
 include("many-valued-tableau.jl")
 
 export alphasat, prove, alphaprove
+
+include("modal-tableau.jl")
 
 include("utils.jl")
 
