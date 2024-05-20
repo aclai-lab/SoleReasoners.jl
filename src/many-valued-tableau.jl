@@ -577,6 +577,10 @@ function sat(
                     end
                     !newnodes && l == node && push!(metricheaps, node)
                 end
+            # Error
+            elseif !isa(z[2], Atom) && token(z[2]) ∉ [∧, ∨, →]
+                println(token(z[2]))
+                error("Unrecognized operator.")
             # Base case
             else
                 # No condition matched, pushing node back into metricheaps
@@ -716,6 +720,10 @@ function sat(
                     end
                     !newnodes && l == node && push!(metricheaps, node)
                 end
+            # Error
+            elseif !isa(z[1], Atom) && token(z[1]) ∉ [∧, ∨, →]
+                println(token(z[1]))
+                error("Unrecognized operator.")
             # Base case
             else
                 # No condition matched, pushing node back into metricheaps
@@ -955,6 +963,10 @@ function sat(
                     end
                     !newnodes && l == node && push!(metricheaps, node)
                 end
+            # Error
+            elseif !isa(z[2], Atom) && token(z[2]) ∉ [∧, ∨, →]
+                println(token(z[2]))
+                error("Unrecognized operator.")
             # Base case
             else
                 # No condition matched, pushing node back into metricheaps
@@ -1018,6 +1030,10 @@ function sat(
                     end
                     !newnodes && l == node && push!(metricheaps, node)
                 end
+            # Error
+            elseif !isa(z[1], Atom) && token(z[1]) ∉ [∧, ∨, →]
+                println(token(z[1]))
+                error("Unrecognized operator.")
             # Base case
             else
                 # No condition matched, pushing node back into metricheaps
@@ -1031,7 +1047,7 @@ function sat(
 end
 
 """
-    alphaprove(
+    sat(
         α::T1,
         z::Formula,
         a::A;

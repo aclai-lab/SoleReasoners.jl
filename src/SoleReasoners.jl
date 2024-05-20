@@ -12,7 +12,7 @@ top = SoleLogics.top
 
 include("core.jl")
 
-export naivechooseleaf, roundrobin, sat
+export naivechoosenode, roundrobin, sat
 
 using SoleLogics.ManyValuedLogics
 using SoleLogics.ManyValuedLogics: FiniteTruth, FiniteAlgebra
