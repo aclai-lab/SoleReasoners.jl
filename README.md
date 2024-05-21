@@ -4,26 +4,33 @@
 [![Build Status](https://api.cirrus-ci.com/github/aclai-lab/SoleReasoners.jl.svg?branch=main)](https://cirrus-ci.com/github/aclai-lab/SoleReasoners.jl)
 [![codecov](https://codecov.io/gh/aclai-lab/SoleReasoners.jl/branch/main/graph/badge.svg?token=LT9IYIYNFI)](https://codecov.io/gh/aclai-lab/SoleReasoners.jl)
 
-This package provides algorithms for reasoning, namely including a sat solver based on analytic tableau technique.
+[SoleReasoners](https://github.com/aclai-lab/SoleReasoners.jl/) is a Julia package for [automated reasoning](https://en.wikipedia.org/wiki/Automated_reasoning) built on top of [SoleLogics](https://github.com/aclai-lab/SoleLogics.jl/) and part of [Sole.jl](https://github.com/aclai-lab/Sole.jl), an open-source framework for symbolic machine learning.
 
-## Installation & Usage
+## Installation
 
-Simply type the following commands in Julia's REPL
-
+To install SoleReasoners.jl, use the Julia package manager:
 ```julia
-# Install package
-using Pkg; Pkg.add("Reasoners");
+using Pkg
+Pkg.add("SoleReasoners")
+```
 
-# Import packages
-using Random
-using Reasoners
+## Feature Summary
 
-# Instantiate a formula (syntax based on the SoleLogics package)
-φ = parseformula("(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)")   # false
+SoleReasoners.jl provides a [sat solver](https://en.wikipedia.org/wiki/SAT_solver) and an [automated theorem prover](https://en.wikipedia.org/wiki/Automated_theorem_proving) based on the [method of analytic tableau](https://en.wikipedia.org/wiki/Method_of_analytic_tableaux). 
 
-# Instantiate one ore more metrics (functions taking as input a Tableau and giving as output an Int)
-randombranch(tableau::Tableau) = rand(Random.GLOBAL_RNG, Int)
+It also provides a Many-Valued version for both algorithms, therefore solving the $\alpha$-satisfiability and $\alpha$-validity problems respectively.
 
-# Call sat con the formula
-sat(φ, randombranch)
-``````
+## Future work
+
+We are currently working on a Modal version of both algorithms which also works with Many-Valued logics.
+
+## About
+
+The package is developed by the [ACLAI Lab](https://aclai.unife.it/en/) @ University of Ferrara.
+
+## More on Sole
+- [SoleLogics](https://github.com/aclai-lab/SoleLogics.jl/)
+- [SoleData.jl](https://github.com/aclai-lab/SoleData.jl)
+- [SoleFeatures.jl](https://github.com/aclai-lab/SoleFeatures.jl) 
+- [SoleModels.jl](https://github.com/aclai-lab/SoleModels.jl)
+- [SolePostHoc.jl](https://github.com/aclai-lab/SolePostHoc.jl)
