@@ -280,24 +280,60 @@ function sat2(
 
             elseif !s && token(z[2]) isa NamedConnective{:□}
                 println("BOX")
-                oldleaves = findleaves(en)
-                # evaluate S# for each leaf
-                i = 0
-                for l in findleaves(en)
-                    println("l$i")
+
+                # Check that everything propositional has been solved
+                # (and every other modal is in its true form)
+                postpone = false
+                for l ∈ findleaves(en)
                     temp = l
                     while !isexpanded(temp)
-                        println(temp)
+                        sy = temp.signedformula
+                        if sy.boundingimplication isa Tuple{Formula, T}
+                            if token(sy.boundingimplication[1]) ∉ [□, ◊] || !sy.sign
+                                postpone = true
+                                break
+                            end
+                        elseif sy.boundingimplication sy isa Tuple{T, Formula}
+                            if token(sy.boundingimplication[2]) ∉ [□, ◊] || !sy.sign
+                                postpone = true
+                                break
+                            end
+                        elseif sy.boundingimplication isa Tuple{T, T}
+                            postpone = true
+                            break
+                        else
+                            error("Unexpected error")
+                        end
                         temp = temp.father
+                    end 
+                    if postpone
+                        break
                     end
-                    i+=1
                 end
-                # mark every node from each old leaf to the expansion node as expanded
-                for l in oldleaves
-                    temp = l
-                    while !isexpanded(temp)
-                        expand!(temp)
-                        temp = temp.father
+                if postpone
+                    for l ∈ findleaves(en)
+                        push!(metricheaps, ManyValuedTableau(sz, l))
+                    end
+                else
+                    oldleaves = findleaves(en)
+                    # evaluate S# for each leaf
+                    i = 0
+                    for l in findleaves(en)
+                        println("l$i")
+                        temp = l
+                        while !isexpanded(temp)
+                            println(temp.signedformula)
+                            temp = temp.father
+                        end
+                        i+=1
+                    end
+                    # mark every node from each old leaf to the expansion node as expanded
+                    for l in oldleaves
+                        temp = l
+                        while !isexpanded(temp)
+                            expand!(temp)
+                            temp = temp.father
+                        end
                     end
                 end
             
@@ -449,24 +485,61 @@ function sat2(
 
             elseif !s && token(z[1]) isa NamedConnective{:◊}
                 println("DIAMOND")
-                oldleaves = findleaves(en)
-                # evaluate S# for each leaf
-                i = 0
-                for l in findleaves(en)
-                    println("l$i")
+
+                # Check that everything propositional has been solved
+                # (and every other modal is in its true form)
+                postpone = false
+                for l ∈ findleaves(en)
                     temp = l
                     while !isexpanded(temp)
-                        println(temp)
+                        sy = temp.signedformula
+                        if sy.boundingimplication isa Tuple{Formula, T}
+                            if token(sy.boundingimplication[1]) ∉ [□, ◊] || !sy.sign
+                                postpone = true
+                                break
+                            end
+                        elseif sy.boundingimplication sy isa Tuple{T, Formula}
+                            if token(sy.boundingimplication[2]) ∉ [□, ◊] || !sy.sign
+                                postpone = true
+                                break
+                            end
+                        elseif sy.boundingimplication isa Tuple{T, T}
+                            postpone = true
+                            break
+                        else
+                            error("Unexpected error")
+                        end
                         temp = temp.father
+                    end 
+                    if postpone
+                        break
                     end
-                    i+=1
                 end
-                # mark every node from each old leaf to the expansion node as expanded
-                for l in oldleaves
-                    temp = l
-                    while !isexpanded(temp)
-                        expand!(temp)
-                        temp = temp.father
+                if postpone
+                    for l ∈ findleaves(en)
+                        push!(metricheaps, ManyValuedTableau(sz, l))
+                    end
+                else
+                    oldleaves = findleaves(en)
+                    # evaluate S# for each leaf
+                    i = 0
+                    revert = false
+                    for l in findleaves(en)
+                        println("l$i")
+                        temp = l
+                        while !isexpanded(temp)
+                            println(temp.signedformula)
+                            temp = temp.father
+                        end
+                        i+=1
+                    end
+                    # mark every node from each old leaf to the expansion node as expanded
+                    for l in oldleaves
+                        temp = l
+                        while !isexpanded(temp)
+                            expand!(temp)
+                            temp = temp.father
+                        end
                     end
                 end
 

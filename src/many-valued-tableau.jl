@@ -157,7 +157,7 @@ function Base.show(io::IO, t::ManyValuedTableau)
         append!(b, [t.signedformula])
     end
     reverse!(b)
-    # println(io, "Satisfiable branch:")
+    println(io, "Satisfiable branch:")
     for sz in b
         println(io, string(sz))
     end
