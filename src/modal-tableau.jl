@@ -275,6 +275,32 @@ function sat2(
                     end
                     !newnodes && l == node && push!(metricheaps, node)
                 end
+
+            # Modal Branch Replacement Rules
+
+            elseif !s && token(z[2]) isa NamedConnective{:□}
+                println("BOX")
+                oldleaves = findleaves(en)
+                # evaluate S# for each leaf
+                i = 0
+                for l in findleaves(en)
+                    println("l$i")
+                    temp = l
+                    while !isexpanded(temp)
+                        println(temp)
+                        temp = temp.father
+                    end
+                    i+=1
+                end
+                # mark every node from each old leaf to the expansion node as expanded
+                for l in oldleaves
+                    temp = l
+                    while !isexpanded(temp)
+                        expand!(temp)
+                        temp = temp.father
+                    end
+                end
+            
             # Reversal Rules
             elseif !s && !isbot(z[1])
                 # F(a→X) case
@@ -310,12 +336,13 @@ function sat2(
                     end
                     !newnodes && l == node && push!(metricheaps, node)
                 end
+            # Error
+            elseif !isa(z[2], Atom) && token(z[2]) ∉ [∧, ∨, →, □, ◊]
+                error("Unrecognized operator $(token(z[2])).")
             # Base case
             else
-                # # No condition matched, pushing node back into metricheaps
-                # push!(metricheaps, node)
-                println("ERROR: unrecognized operator")
-                return nothing
+                # No condition matched, pushing node back into metricheaps
+                push!(metricheaps, node)
             end
         elseif z isa Tuple{Formula, T}
             # Branch Closure Conditions
@@ -417,6 +444,32 @@ function sat2(
                     end
                     !newnodes && l == node && push!(metricheaps, node)
                 end
+
+            # Modal Branch Replacement Rules
+
+            elseif !s && token(z[1]) isa NamedConnective{:◊}
+                println("DIAMOND")
+                oldleaves = findleaves(en)
+                # evaluate S# for each leaf
+                i = 0
+                for l in findleaves(en)
+                    println("l$i")
+                    temp = l
+                    while !isexpanded(temp)
+                        println(temp)
+                        temp = temp.father
+                    end
+                    i+=1
+                end
+                # mark every node from each old leaf to the expansion node as expanded
+                for l in oldleaves
+                    temp = l
+                    while !isexpanded(temp)
+                        expand!(temp)
+                        temp = temp.father
+                    end
+                end
+
             # Reversal Rules
             elseif !s && !istop(z[2])
                 # F(X→a) case
@@ -451,12 +504,13 @@ function sat2(
                     end
                     !newnodes && l == node && push!(metricheaps, node)
                 end
+            # Error
+            elseif !isa(z[1], Atom) && token(z[1]) ∉ [∧, ∨, →, □, ◊]
+                error("Unrecognized operator $(token(z[1])).")
             # Base case
             else
                 # No condition matched, pushing node back into metricheaps
                 push!(metricheaps, node)
-                # println("ERROR: unrecognized operator")
-                # return nothing
             end
         else
             error("Something went wrong with tuple $(z) of type $(typeof(z))")
