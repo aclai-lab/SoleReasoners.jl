@@ -579,8 +579,7 @@ function sat(
                 end
             # Error
             elseif !isa(z[2], Atom) && token(z[2]) ∉ [∧, ∨, →]
-                println(token(z[2]))
-                error("Unrecognized operator.")
+                error("Unrecognized operator $(token(z[2])).")
             # Base case
             else
                 # No condition matched, pushing node back into metricheaps
@@ -722,8 +721,7 @@ function sat(
                 end
             # Error
             elseif !isa(z[1], Atom) && token(z[1]) ∉ [∧, ∨, →]
-                println(token(z[1]))
-                error("Unrecognized operator.")
+                error("Unrecognized operator $(token(z[1])).")
             # Base case
             else
                 # No condition matched, pushing node back into metricheaps
@@ -965,8 +963,7 @@ function sat(
                 end
             # Error
             elseif !isa(z[2], Atom) && token(z[2]) ∉ [∧, ∨, →]
-                println(token(z[2]))
-                error("Unrecognized operator.")
+                error("Unrecognized operator $(token(z[2])).")
             # Base case
             else
                 # No condition matched, pushing node back into metricheaps
@@ -1032,8 +1029,7 @@ function sat(
                 end
             # Error
             elseif !isa(z[1], Atom) && token(z[1]) ∉ [∧, ∨, →]
-                println(token(z[1]))
-                error("Unrecognized operator.")
+                error("Unrecognized operator $(token(z[1])).")
             # Base case
             else
                 # No condition matched, pushing node back into metricheaps
