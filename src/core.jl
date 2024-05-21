@@ -313,11 +313,20 @@ function naivechoosenode(metricheaps::Vector{MetricHeap})
     for metricheap ∈ metricheaps
         while !isempty(metricheap)
             head = tableau(first(heap(metricheap)))
-            if isleaf(head)
+
+            if isclosed(node)
+                pop!(metricheap)
+                continue
+            elseif isexpanded(node)
+                if isleaf(node)
+                    return node # found a satisfiable branch
+                else
+                    pop!(metricheap)
+                    continue
+                end
+            else
                 push!(candidates, head)
                 break
-            else
-                pop!(metricheap)
             end
         end
     end
