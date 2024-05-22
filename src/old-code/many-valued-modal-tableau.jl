@@ -1,7 +1,17 @@
-function sat2(
+############################################################################################
+# This was an attempt to implement the Many-Valued Modal Tableau proposed by Melvin        #
+# Fitting in his seminal work in 1995. It has not been tested thoughly.                    #
+# Also, keep in mind that this work is only  thought for automated theorem proving on      #
+# many-valued logics representable with an Heyting algebra, and could not work on          #
+# sat/alphasat and using other many-valued logics (e.g, FLew).                             #
+# For the same reason, oldrule default to true.                                            #
+############################################################################################
+
+function manyvaluedmodalsat(
     metricheaps::Vector{MetricHeap},
     choosenode::Function,
-    h::FiniteFLewAlgebra{T,D};
+    h::FiniteHeytingAlgebra{T,D};
+    oldrule::Bool=true,
     verbose::Bool=false,
     timeout::Union{Nothing,Int}=nothing,
     kwargs...
@@ -13,12 +23,11 @@ function sat2(
     t0 = time_ns()
     while true
 
-        # every 1000 cycles, clean heaps to improve both time and space efficiency
         if cycle%1e3==0
             cleanheaps!(metricheaps)
         end
 
-        # if timeout, return nothing with a warning
+        # if timeout, return false with a warning
         if !isnothing(timeout) && (time_ns()-t0)/1e9 > timeout
             verbose && println("Timeout")
             return nothing
@@ -29,7 +38,6 @@ function sat2(
             verbose && println("Calling Garbage Collector")
             GC.gc()
         end
-
         # if using too much memory, kill execution to avoid crashes
         if cycle%10==0 && getfreemem() < gettotmem()*5e-2
             verbose && println("Too much memory being used, exiting")
@@ -84,202 +92,115 @@ function sat2(
             elseif findsimilar(en, h)
                 # T(b→X) and F(a→X) where a ≤ b case
                 close!(en)
-            # Strong conjunction Rules
+            # Weak conjunction Rules
             elseif s && token(z[2]) isa NamedConnective{:∧} && !isbot(z[1])
                 # T(t→(A∧B)) case
                 (a, b) = children(z[2])
-                # Search for support tuples
-                pairs = Set{NTuple{2,T}}()
-                for ti ∈ getdomain(h)
-                    for si ∈ getdomain(h)
-                        if precedeq(h, z[1], h.monoid(ti, si))
-                            push!(pairs, (ti, si))
-                        end
-                    end
-                end
-                for p in pairs
-                    for q in pairs
-                        if precedeq(h, q[1], p[1]) && precedeq(h, q[2], p[2]) && p != q
-                            delete!(pairs, p)
-                        end
-                    end
-                end
                 for l ∈ findleaves(en)
-                    newnodes = false
-                    for pair in pairs
-                        newnodes = true
-                        sy = SignedFormula(true, (pair[1], a))
-                        if !findformula(l, sy)
-                            fta = ManyValuedTableau(sy, l)
-                            push!(metricheaps, fta)
-                            sy = SignedFormula(true, (pair[2], b))
-                            if !findformula(fta, sy)
-                                ftb = ManyValuedTableau(sy, fta)
-                                push!(metricheaps, ftb)
-                            end
-                        else
-                            sy = SignedFormula(true, (pair[2], b))
-                            if !findformula(l, sy)
-                                newnodes = true
-                                ftb = ManyValuedTableau(sy, l)
-                                push!(metricheaps, ftb)
-                            else  # Here there should be a branch and I need to keep track of it
-                                sy = SignedFormula(true, (⊤, ⊤))    # Fake node (always true)
-                                fti = ManyValuedTableau(sy, l)
-                                push!(metricheaps, fti)
-                            end
-                        end
-                    end
-                    !newnodes && l == node && push!(metricheaps, node)
+                    fta = ManyValuedTableau(SignedFormula(true, (z[1], a)), l)
+                    push!(metricheaps, fta)
+                    ftb = ManyValuedTableau(SignedFormula(true, (z[1], b)), fta)
+                    push!(metricheaps, ftb)
                 end
-
             elseif !s && token(z[2]) isa NamedConnective{:∧} && !isbot(z[1])
                 # F(t→(A∧B)) case
                 (a, b) = children(z[2])
-                # Search for support tuples
-                pairs = Set{NTuple{2,T}}()
-                for ti ∈ getdomain(h)
-                    for si ∈ getdomain(h)
-                        if !precedeq(h, z[1], h.monoid(ti, si))
-                            push!(pairs, (ti, si))
-                        end
-                    end
-                end
-                for p in pairs
-                    for q in pairs
-                        if precedeq(h, p[1], q[1]) && precedeq(h, p[2], q[2]) && p != q
-                            delete!(pairs, p)
-                        end
-                    end
-                end
                 for l ∈ findleaves(en)
-                    newnodes = false
-                    for pair in pairs
-                        newnodes = true
-                        sy = SignedFormula(true, (a, pair[1]))
-                        if !findformula(l, sy)
-                            fta = ManyValuedTableau(sy, l)
-                            push!(metricheaps, fta)
-                            sy = SignedFormula(true, (b, pair[2]))
-                            if !findformula(fta, sy)
-                                ftb = ManyValuedTableau(sy, fta)
-                                push!(metricheaps, ftb)
-                            end
-                        else
-                            sy = SignedFormula(true, (b, pair[2]))
-                            if !findformula(l, sy)
-                                newnodes = true
-                                ftb = ManyValuedTableau(sy, l)
-                                push!(metricheaps, ftb)
-                            else  # Here there should be a branch and I need to keep track of it
-                                sy = SignedFormula(true, (⊤, ⊤))    # Fake node (always true)
-                                fti = ManyValuedTableau(sy, l)
-                                push!(metricheaps, fti)
-                            end
-                        end
-                    end
-                    !newnodes && l == node && push!(metricheaps, node)
+                    fta = ManyValuedTableau(SignedFormula(false, (z[1], a)), l)
+                    push!(metricheaps, fta)
+                    ftb = ManyValuedTableau(SignedFormula(false, (z[1], b)), l)
+                    push!(metricheaps, ftb)
                 end
-            # Implication Rules
+            # Implication rules
             elseif !s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
                 # F(t→(A→B)) case
                 (a, b) = children(z[2])
-                # Search for support tuples
-                pairs = Set{NTuple{2,T}}()
-                for ti ∈ getdomain(h)
-                    for si ∈ getdomain(h)
-                        if !precedeq(h, z[1], h.implication(ti, si))
-                            push!(pairs, (ti, si))
-                        end
-                    end
-                end
-                for p in pairs
-                    for q in pairs
-                        if precedeq(h, q[1], p[1]) && precedeq(h, p[2], q[2]) && p != q
-                            delete!(pairs, p)
-                        end
-                    end
-                end
+                lvs = lesservalues(h, z[1])
+                push!(lvs, z[1])
                 for l ∈ findleaves(en)
                     newnodes = false
-                    for pair in pairs
-                        newnodes = true
-                        sy = SignedFormula(true, (pair[1], a))
-                        if !findformula(l, sy)
-                            fta = ManyValuedTableau(sy, l)
+                    for ti ∈ lvs
+                        if !isbot(ti)
+                            newnodes = true
+                            fta = ManyValuedTableau(SignedFormula(true, (ti, a)), l)
                             push!(metricheaps, fta)
-                            sy = SignedFormula(true, (b, pair[2]))
-                            if !findformula(fta, sy)
-                                ftb = ManyValuedTableau(sy, fta)
-                                push!(metricheaps, ftb)
-                            end
-                        else
-                            sy = SignedFormula(true, (b, pair[2]))
-                            if !findformula(l, sy)
-                                newnodes = true
-                                ftb = ManyValuedTableau(sy, l)
-                                push!(metricheaps, ftb)
-                            else  # Here there should be a branch and I need to keep track of it
-                                sy = SignedFormula(true, (⊤, ⊤))    # Fake node (always true)
-                                fti = ManyValuedTableau(sy, l)
-                                push!(metricheaps, fti)
-                            end
+                            ftb = ManyValuedTableau(SignedFormula(false, (ti, b)), fta)
+                            push!(metricheaps, ftb)
                         end
                     end
-                    !newnodes && l == node && push!(metricheaps, node)
+                    !newnodes && l == node && push!(metricheaps, node)   
                 end
             elseif s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
-                # T(t→(A→B)) case
-                (a, b) = children(z[2])
-                # Search for support tuples
-                pairs = Set{NTuple{2,T}}()
-                for ti ∈ getdomain(h)
-                    for si ∈ getdomain(h)
-                        if precedeq(h, z[1], h.implication(ti, si))
-                            push!(pairs, (ti, si))
-                        end
-                    end
-                end
-                for p in pairs
-                    for q in pairs
-                        if precedeq(h, p[1], q[1]) && precedeq(h, q[2], p[2]) && p != q
-                            delete!(pairs, p)
-                        end
-                    end
-                end
-                for l ∈ findleaves(en)
+                if oldrule
+                    # (OLD) T(t→(A→B)) case
+                    (a, b) = children(z[2])
+                    lvs = lesservalues(h, z[1])
+                    push!(lvs, z[1])
                     newnodes = false
-                    for pair in pairs
-                        newnodes = true
-                        sy = SignedFormula(true, (a, pair[1]))
-                        if !findformula(l, sy)
-                            fta = ManyValuedTableau(sy, l)
-                            push!(metricheaps, fta)
-                            sy = SignedFormula(true, (pair[2], b))
-                            if !findformula(fta, sy)
-                                ftb = ManyValuedTableau(sy, fta)
+                    for ti in lvs
+                        if !isbot(ti)
+                            for l ∈ findleaves(en)
+                                if l == node
+                                    newnodes = true
+                                end
+                                fta = ManyValuedTableau(SignedFormula(false, (ti, a)), l)
+                                push!(metricheaps, fta)
+                                ftb = ManyValuedTableau(SignedFormula(true, (ti, b)), l)
                                 push!(metricheaps, ftb)
                             end
-                        else
-                            sy = SignedFormula(true, (pair[2], b))
-                            if !findformula(l, sy)
-                                newnodes = true
-                                ftb = ManyValuedTableau(sy, l)
-                                push!(metricheaps, ftb)
-                            else  # Here there should be a branch and I need to keep track of it
-                                sy = SignedFormula(true, (⊤, ⊤))    # Fake node (always true)
-                                fti = ManyValuedTableau(sy, l)
-                                push!(metricheaps, fti)
+                        end
+                        !newnodes && push!(metricheaps, node)
+                    end
+                else
+                    # (NEW) T(t→(A→B)) case
+                    (a, b) = children(z[2])
+                    # Search for support tuples
+                    pairs = Set{NTuple{2,T}}()
+                    for ti ∈ getdomain(h)
+                        for si ∈ getdomain(h)
+                            if precedeq(h, z[1], h.implication(ti, si))
+                                push!(pairs, (ti, si))
                             end
                         end
                     end
-                    !newnodes && l == node && push!(metricheaps, node)
+                    for p in pairs
+                        for q in pairs
+                            if precedeq(h, p[1], q[1]) && precedeq(h, q[2], p[2]) && p != q
+                                delete!(pairs, p)
+                            end
+                        end
+                    end
+                    for l ∈ findleaves(en)
+                        newnodes = false
+                        for pair in pairs
+                            newnodes = true
+                            sy = SignedFormula(true, (a, pair[1]))
+                            if !findformula(l, sy)
+                                fta = ManyValuedTableau(sy, l)
+                                push!(metricheaps, fta)
+                                sy = SignedFormula(true, (pair[2], b))
+                                if !findformula(fta, sy)
+                                    ftb = ManyValuedTableau(sy, fta)
+                                    push!(metricheaps, ftb)
+                                end
+                            else
+                                sy = SignedFormula(true, (pair[2], b))
+                                if !findformula(l, sy)
+                                    newnodes = true
+                                    ftb = ManyValuedTableau(sy, l)
+                                    push!(metricheaps, ftb)
+                                else  # Here there should be a branch and I need to keep track of it
+                                    sy = SignedFormula(true, (⊤, ⊤))    # Fake node (always true)
+                                    fti = ManyValuedTableau(sy, l)
+                                    push!(metricheaps, fti)
+                                end
+                            end
+                        end
+                        !newnodes && l == node && push!(metricheaps, node)
+                    end
                 end
-
             # Modal Branch Replacement Rules
-            
             elseif token(z[2]) isa NamedConnective{:◊}
-
                 if s && !isbot(z[1])
                     # T(a→◊X) case (reversal rule)
                     for l ∈ findleaves(en)
@@ -304,35 +225,46 @@ function sat2(
                             push!(metricheaps, fti)
                         end
                         !newnodes && l == node && push!(metricheaps, node)
-                    end     
-
-            # SONO ARRIVATO QUI
-
-            elseif token(z[2]) isa NamedConnective{:◊}
+                    end
+                end
+            elseif token(z[2]) isa NamedConnective{:□}
                 if s
-                    # T(◊X→a)
+                    # T(a→□X)
                     # Check if T(□X→a), T(a→◊X), F(a→□X), F(◊X→a) is in the path
+                    found = false
                     for l in findleaves(en)
-                        temp = l
-                        while !isexpanded(l)
-                            sy = temp.signedformula
+                        slider = l
+                        slider.expanded = false
+                        while !isexpanded(slider)
+                            sy = slider.signedformula
                             y = sy.boundingimplication
                             if (
                                 sy.sign &&
                                 (
-                                    token(y[1] isa NamedConnective{:□}) ||
-                                    token(y[2] isa NamedConnective{:◊})
+                                    (
+                                        y isa Tuple{Formula, T} &&
+                                        token(y[1]) isa NamedConnective{:□}
+                                    ) || (
+                                        y isa Tuple{T, Formula} &&
+                                        token(y[2]) isa NamedConnective{:◊}
+                                    )
                                 )
                             ) || (
                                 !sy.sign &&
                                 (
-                                    token(y[1] isa NamedConnective{:◊}) ||
-                                    token(y[2] isa NamedConnective{:□})
+                                    (
+                                        y isa Tuple{Formula, T} &&
+                                        token(y[1]) isa NamedConnective{:◊}
+                                    ) || (
+                                        y isa Tuple{T, Formula} &&
+                                        token(y[2]) isa NamedConnective{:□}
+                                    )
                                 )
                             )
-                            found = true
-                            break 
+                                found = true
+                                break 
                             end
+                            slider = slider.father
                         end
                         found && break
                     end
@@ -344,14 +276,15 @@ function sat2(
                         push!(metricheaps, node) # Formula is no longer useful
                     end
                 else
-                    # F(◊X→a)
+                    # F(a→□X)
                     # Check that everything propositional has been solved
                     # and there are no more F(□X→a) and F(a→◊X) to expand
                     postpone = false
                     for l ∈ findleaves(en)
-                        temp = l
-                        while !isexpanded(temp)
-                            sy = temp.signedformula
+                        slider = l
+                        slider.expanded = false
+                        while !isexpanded(slider)
+                            sy = slider.signedformula
                             y = sy.boundingimplication
                             if y isa Tuple{Formula, T}
                                 if (
@@ -377,7 +310,7 @@ function sat2(
                             else
                                 error("Unexpected error")
                             end
-                            temp = temp.father
+                            slider = slider.father
                         end 
                         if postpone
                             break
@@ -389,32 +322,29 @@ function sat2(
                         end
                     else
                         oldleaves = findleaves(en)
+                        isempty(oldleaves) && push!(metricheaps, node)
                         # evaluate S# for each leaf
                         for l in findleaves(en)
-                            for t in domain(h)
-                                if istop(h.implication(t, z[2]))
-                                    # Here there should be a branch and I need to keep track
-                                    # of it with a fake node (always true)
-                                    push!(
-                                        metricheaps,
-                                        ManyValuedTableau(SignedFormula(true, (⊤, ⊤)), l)
-                                    )                   
-                                else
+                            newnodes = false
+                            for t in getdomain(h)
+                                newnodes = true
+                                if !isbot(h.meet(z[1], t))
                                     slider = l
                                     newleaf = l
+                                    slider.expanded = false
                                     while !isexpanded(slider)
-                                        sy = temp.signedformula
+                                        sy = slider.signedformula
                                         y = sy.boundingimplication
                                         # Possible cases: T(a→□X), T(◊X→a), F(a→□X), F(◊X→a)
                                         if sy.sign
                                             if token(y[2]) isa NamedConnective{:□}
-                                                if !isbot(h.monoid(y[1],t))
+                                                if !isbot(h.meet(y[1],t))
                                                     # T(a→□X)
                                                     newleaf = ManyValuedTableau(
                                                         SignedFormula(
                                                             true,
                                                             (
-                                                                h.monoid(y[1], t),
+                                                                h.meet(y[1], t),
                                                                 y[2].children[1]
                                                             )
                                                         ),
@@ -458,17 +388,19 @@ function sat2(
                                     newleaf = ManyValuedTableau(
                                         SignedFormula(
                                             false,
-                                            (z[1].children[1], h.implication(t, z[2]))
+                                            (h.meet(z[1], t), z[2].children[1])
                                         ),
                                         newleaf
                                     )
                                     push!(metricheaps, newleaf)
                                 end
                             end
+                            !newnodes && l == node && push!(metricheaps, node)
                         end
                         # Mark every node from each old above (of the branch) as expanded
                         for l in oldleaves
                             slider = l
+                            slider.expanded = false
                             while !isexpanded(slider)
                                 expand!(slider)
                                 slider = slider.father
@@ -476,7 +408,6 @@ function sat2(
                         end
                     end
                 end
-
             # Reversal Rules
             elseif !s && !isbot(z[1])
                 # F(a→X) case
@@ -525,104 +456,26 @@ function sat2(
             if !s && istop(z[2])
                 # F(X→⊤) case
                 close!(en)
-            # Strong disjunction rules
+            # Weak disjunction Rules
             elseif s && token(z[1]) isa NamedConnective{:∨} && !istop(z[2])
                 # T((A∨B)→t) case
                 (a, b) = children(z[1])
-                # Search for support tuples
-                pairs = Set{NTuple{2,T}}()
-                for ti ∈ getdomain(h)
-                    for si ∈ getdomain(h)
-                        if precedeq(h, h.join(ti, si), z[2])
-                            push!(pairs, (ti, si))
-                        end
-                    end
-                end
-                for p in pairs
-                    for q in pairs
-                        if precedeq(h, p[1], q[1]) && precedeq(h, p[2], q[2]) && p != q
-                            delete!(pairs, p)
-                        end
-                    end
-                end
                 for l ∈ findleaves(en)
-                    newnodes = false
-                    for pair in pairs
-                        newnodes = true
-                        sy = SignedFormula(true, (a, pair[1]))
-                        if !findformula(l, sy)
-                            fta = ManyValuedTableau(sy, l)
-                            push!(metricheaps, fta)
-                            sy = SignedFormula(true, (b, pair[2]))
-                            if !findformula(fta, sy)
-                                ftb = ManyValuedTableau(sy, fta)
-                                push!(metricheaps, ftb)
-                            end
-                        else
-                            sy = SignedFormula(true, (b, pair[2]))
-                            if !findformula(l, sy)
-                                newnodes = true
-                                ftb = ManyValuedTableau(sy, l)
-                                push!(metricheaps, ftb)
-                            else  # Here there should be a branch and I need to keep track of it
-                                sy = SignedFormula(true, (⊤, ⊤))    # Fake node (always true)
-                                fti = ManyValuedTableau(sy, l)
-                                push!(metricheaps, fti)
-                            end
-                        end
-                    end
-                    !newnodes && l == node && push!(metricheaps, node)
+                    fta = ManyValuedTableau(SignedFormula(true, (a, z[2])), l)
+                    push!(metricheaps, fta)
+                    ftb = ManyValuedTableau(SignedFormula(true, (b, z[2])), fta)
+                    push!(metricheaps, ftb)
                 end
             elseif !s && token(z[1]) isa NamedConnective{:∨} && !istop(z[2])
                 # F((A∨B)→t) case
                 (a, b) = children(z[1])
-                # Search for support tuples
-                pairs = Set{NTuple{2,T}}()
-                for ti ∈ getdomain(h)
-                    for si ∈ getdomain(h)
-                        if !precedeq(h, h.join(ti, si), z[2])
-                            push!(pairs, (ti, si))
-                        end
-                    end
-                end
-                for p in pairs
-                    for q in pairs
-                        if precedeq(h, q[1], p[1]) && precedeq(h, q[2], p[2]) && p != q
-                            delete!(pairs, p)
-                        end
-                    end
-                end
                 for l ∈ findleaves(en)
-                    newnodes = false
-                    for pair in pairs
-                        newnodes = true
-                        sy = SignedFormula(true, (pair[1], a))
-                        if !findformula(l, sy)
-                            fta = ManyValuedTableau(sy, l)
-                            push!(metricheaps, fta)
-                            sy = SignedFormula(true, (pair[2], b))
-                            if !findformula(fta, sy)
-                                ftb = ManyValuedTableau(sy, fta)
-                                push!(metricheaps, ftb)
-                            end
-                        else
-                            sy = SignedFormula(true, (pair[2], b))
-                            if !findformula(l, sy)
-                                newnodes = true
-                                ftb = ManyValuedTableau(sy, l)
-                                push!(metricheaps, ftb)
-                            else  # Here there should be a branch and I need to keep track of it
-                                sy = SignedFormula(true, (⊤, ⊤))    # Fake node (always true)
-                                fti = ManyValuedTableau(sy, l)
-                                push!(metricheaps, fti)
-                            end
-                        end
-                    end
-                    !newnodes && l == node && push!(metricheaps, node)
+                    fta = ManyValuedTableau(SignedFormula(false, (a, z[2])), l)
+                    push!(metricheaps, fta)
+                    ftb = ManyValuedTableau(SignedFormula(false, (b, z[2])), l)
+                    push!(metricheaps, ftb)
                 end
-
-            # Modal Branch Replacement Rules
-            
+            # Modal Branch Replacement Rules 
             elseif token(z[1]) isa NamedConnective{:□}
                 if s && !istop(z[2])
                     # T(□X→a) case (reversal rule)
@@ -651,32 +504,44 @@ function sat2(
                         !newnodes && l == node && push!(metricheaps, node)
                     end
                 end                
-
             elseif token(z[1]) isa NamedConnective{:◊}
                 if s
                     # T(◊X→a)
                     # Check if T(□X→a), T(a→◊X), F(a→□X), F(◊X→a) is in the path
+                    found = false
                     for l in findleaves(en)
-                        temp = l
-                        while !isexpanded(l)
-                            sy = temp.signedformula
+                        slider = l
+                        slider.expanded = false
+                        while !isexpanded(slider)
+                            sy = slider.signedformula
                             y = sy.boundingimplication
                             if (
                                 sy.sign &&
                                 (
-                                    token(y[1] isa NamedConnective{:□}) ||
-                                    token(y[2] isa NamedConnective{:◊})
+                                    (
+                                        y isa Tuple{Formula, T} &&
+                                        token(y[1]) isa NamedConnective{:□}
+                                    ) || (
+                                        y isa Tuple{T, Formula} &&
+                                        token(y[2]) isa NamedConnective{:◊}
+                                    )
                                 )
                             ) || (
                                 !sy.sign &&
                                 (
-                                    token(y[1] isa NamedConnective{:◊}) ||
-                                    token(y[2] isa NamedConnective{:□})
+                                    (
+                                        y isa Tuple{Formula, T} &&
+                                        token(y[1]) isa NamedConnective{:◊}
+                                    ) || (
+                                        y isa Tuple{T, Formula} &&
+                                        token(y[2]) isa NamedConnective{:□}
+                                    )
                                 )
                             )
                                found = true
                                break 
                             end
+                            slider = slider.father
                         end
                         found && break
                     end
@@ -693,9 +558,10 @@ function sat2(
                     # and there are no more F(□X→a) and F(a→◊X) to expand
                     postpone = false
                     for l ∈ findleaves(en)
-                        temp = l
-                        while !isexpanded(temp)
-                            sy = temp.signedformula
+                        slider = l
+                        slider.expanded = false
+                        while !isexpanded(slider)
+                            sy = slider.signedformula
                             y = sy.boundingimplication
                             if y isa Tuple{Formula, T}
                                 if (
@@ -721,7 +587,7 @@ function sat2(
                             else
                                 error("Unexpected error")
                             end
-                            temp = temp.father
+                            slider = slider.father
                         end 
                         if postpone
                             break
@@ -733,32 +599,29 @@ function sat2(
                         end
                     else
                         oldleaves = findleaves(en)
+                        isempty(oldleaves) && push!(metricheaps, node)
                         # evaluate S# for each leaf
                         for l in findleaves(en)
-                            for t in domain(h)
-                                if istop(h.implication(t, z[2]))
-                                    # Here there should be a branch and I need to keep track
-                                    # of it with a fake node (always true)
-                                    push!(
-                                        metricheaps,
-                                        ManyValuedTableau(SignedFormula(true, (⊤, ⊤)), l)
-                                    )                   
-                                else
+                            newnodes = false
+                            for t in getdomain(h)
+                                newnodes = true
+                                if !istop(h.implication(t, z[2]))
                                     slider = l
                                     newleaf = l
+                                    slider.expanded = false
                                     while !isexpanded(slider)
-                                        sy = temp.signedformula
+                                        sy = slider.signedformula
                                         y = sy.boundingimplication
                                         # Possible cases: T(a→□X), T(◊X→a), F(a→□X), F(◊X→a)
                                         if sy.sign
                                             if token(y[2]) isa NamedConnective{:□}
-                                                if !isbot(h.monoid(y[1],t))
+                                                if !isbot(h.meet(y[1],t))
                                                     # T(a→□X)
                                                     newleaf = ManyValuedTableau(
                                                         SignedFormula(
                                                             true,
                                                             (
-                                                                h.monoid(y[1], t),
+                                                                h.meet(y[1], t),
                                                                 y[2].children[1]
                                                             )
                                                         ),
@@ -809,10 +672,12 @@ function sat2(
                                     push!(metricheaps, newleaf)
                                 end
                             end
+                            !newnodes && l == node && push!(metricheaps, node)
                         end
                         # Mark every node from each old above (of the branch) as expanded
                         for l in oldleaves
                             slider = l
+                            slider.expanded = false
                             while !isexpanded(slider)
                                 expand!(slider)
                                 slider = slider.father
@@ -820,7 +685,6 @@ function sat2(
                         end
                     end
                 end
-
             # Reversal Rules
             elseif !s && !istop(z[2])
                 # F(X→a) case
@@ -871,7 +735,7 @@ function sat2(
 end
 
 """
-    sat2(
+    manyvaluedmodalsat(
         α::T1,
         z::Formula,
         a::A;
@@ -885,7 +749,7 @@ Given a formula, return true if it is α-valid, i.e., there is not an interpreta
 does not satisfy the formula, nothing in case of timeout or out-of-memory error, false
 otherwise.
 """
-function sat2(
+function manyvaluedmodalsat(
     sz::SignedFormula{T1},
     h::A,
     choosenode::Function,
@@ -908,10 +772,10 @@ function sat2(
     for metricheap ∈ metricheaps
         push!(heap(metricheap), MetricHeapNode(metric(metricheap), root))
     end
-    sat2(metricheaps, choosenode, h; verbose, timeout, kwargs...)
+    manyvaluedmodalsat(metricheaps, choosenode, h; verbose, timeout, kwargs...)
 end
 
-function sat2(
+function manyvaluedmodalsat(
     z::Formula,
     h::A,
     choosenode::Function,
@@ -924,11 +788,11 @@ function sat2(
     D<:AbstractVector{T},
     A<:FiniteAlgebra{T,D}
 }
-    return sat2(SignedFormula(true, (⊤, z)), h, choosenode, metrics...; verbose, timeout, kwargs...)
+    return manyvaluedmodalsat(SignedFormula(true, (⊤, z)), h, choosenode, metrics...; verbose, timeout, kwargs...)
 end
 
 """
-    sat2(
+    manyvaluedmodalsat(
         z::Formula,
         h::A;
         rng = Random.GLOBAL_RNG,
@@ -944,7 +808,7 @@ end
 Given a formula, return true if an interpretation that satisfies the formula exists, false
 otherwise.
 """
-function sat2(
+function manyvaluedmodalsat(
     z::Formula,
     h::A;
     rng = Random.GLOBAL_RNG,
@@ -957,10 +821,10 @@ function sat2(
     A<:FiniteAlgebra{T,D}
 }
     randombranch(_::ManyValuedTableau{T}) where {T<:Truth} = rand(rng, Int)
-    return sat2(SignedFormula(true, (⊤, z)), h, roundrobin, randombranch; verbose, timeout, kwargs...)
+    return manyvaluedmodalsat(SignedFormula(true, (⊤, z)), h, roundrobin, randombranch; verbose, timeout, kwargs...)
 end
 """
-    prove2(
+    manyvaluedmodalprove(
         z::Formula,
         h::A;
         rng = Random.GLOBAL_RNG,
@@ -976,7 +840,7 @@ end
 Given a formula, return true if it is valid, i.e., there is not an interpretation that does
 not satisfy the formula, false otherwise.
 """
-function prove2(
+function manyvaluedmodalprove(
     z::Formula,
     h::A;
     rng = Random.GLOBAL_RNG,
@@ -989,7 +853,7 @@ function prove2(
     A<:FiniteAlgebra{T,D}
 }
     randombranch(_::ManyValuedTableau) = rand(rng, Int)
-    r = sat2(SignedFormula(false, (⊤, z)), h, roundrobin, randombranch; verbose, timeout, kwargs...)
+    r = manyvaluedmodalsat(SignedFormula(false, (⊤, z)), h, roundrobin, randombranch; verbose, timeout, kwargs...)
     if isnothing(r)
         return r
     else
@@ -998,7 +862,7 @@ function prove2(
 end
 
 """
-    alphasat2(
+    manyvaluedmodalalphasat(
         α::T1,
         z::Formula,
         a::A;
@@ -1017,7 +881,7 @@ Given a formula, return true if it is α-satisfiable, i.e., there is an interpre
 that the formula assumes value of at least α, nothing in case of timeout or out-of-memory
 error, false otherwise.
 """
-function alphasat2(
+function manyvaluedmodalalphasat(
     α::T1,
     z::Formula,
     a::A;
@@ -1032,17 +896,17 @@ function alphasat2(
     T1<:Truth
 }
     if verbose
-        println("Solving alphasat2 for: " * syntaxstring(α) * " ⪯ " * syntaxstring(z))
+        println("Solving manyvaluedmodalalphasat for: " * syntaxstring(α) * " ⪯ " * syntaxstring(z))
         println("Height: " * string(height(z)))
         println("Tokens: " * string(ntokens(z)))
         println()
     end
     randombranch(_::ManyValuedTableau) = rand(rng, Int)
-    return sat2(SignedFormula(true, (α, z)), a, roundrobin, randombranch; verbose, timeout, kwargs...)
+    return manyvaluedmodalsat(SignedFormula(true, (α, z)), a, roundrobin, randombranch; verbose, timeout, kwargs...)
 end
 
 """
-    alphaprove2(
+    manyvaluedmodalalphaprove(
         α::T1,
         z::Formula,
         a::A;
@@ -1061,7 +925,7 @@ Given a formula, return true if it is α-valid, i.e., there is not an interpreta
 that the formula does not assume value of at least α, nothing in case of timeout or
 out-of-memory error, false otherwise.
 """
-function alphaprove2(
+function manyvaluedmodalalphaprove(
     α::T1,
     z::Formula,
     a::A;
@@ -1076,13 +940,13 @@ function alphaprove2(
     T1<:Truth
 }
     if verbose
-        println("Solving alphaprove2 for: " * syntaxstring(α) * " ⪯ " * syntaxstring(z, remove_redundant_parentheses=false))
+        println("Solving manyvaluedmodalalphaprove for: " * syntaxstring(α) * " ⪯ " * syntaxstring(z, remove_redundant_parentheses=false))
         println("Height: " * string(height(z)))
         println("Tokens: " * string(ntokens(z)))
         println()
     end
     randombranch(_::ManyValuedTableau) = rand(rng, Int)
-    r = sat2(SignedFormula(false, (α, z)), a, roundrobin, randombranch; verbose, timeout, kwargs...)
+    r = manyvaluedmodalsat(SignedFormula(false, (α, z)), a, roundrobin, randombranch; verbose, timeout, kwargs...)
     if isnothing(r)
         return r
     else
