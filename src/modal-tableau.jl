@@ -293,7 +293,7 @@ function sat2(
                                 postpone = true
                                 break
                             end
-                        elseif sy.boundingimplication sy isa Tuple{T, Formula}
+                        elseif sy.boundingimplication isa Tuple{T, Formula}
                             if token(sy.boundingimplication[2]) ∉ [□, ◊] || !sy.sign
                                 postpone = true
                                 break
@@ -482,63 +482,201 @@ function sat2(
                 end
 
             # Modal Branch Replacement Rules
-
-            elseif !s && token(z[1]) isa NamedConnective{:◊}
-                println("DIAMOND")
-
-                # Check that everything propositional has been solved
-                # (and every other modal is in its true form)
-                postpone = false
-                for l ∈ findleaves(en)
-                    temp = l
-                    while !isexpanded(temp)
-                        sy = temp.signedformula
-                        if sy.boundingimplication isa Tuple{Formula, T}
-                            if token(sy.boundingimplication[1]) ∉ [□, ◊] || !sy.sign
-                                postpone = true
-                                break
-                            end
-                        elseif sy.boundingimplication sy isa Tuple{T, Formula}
-                            if token(sy.boundingimplication[2]) ∉ [□, ◊] || !sy.sign
-                                postpone = true
-                                break
-                            end
-                        elseif sy.boundingimplication isa Tuple{T, T}
-                            postpone = true
-                            break
-                        else
-                            error("Unexpected error")
-                        end
-                        temp = temp.father
-                    end 
-                    if postpone
-                        break
-                    end
-                end
-                if postpone
+            
+            elseif token(z[1]) isa NamedConnective{:□}
+                if s && !istop(z[2])
+                    # T(□X→a) case (reversal rule)
                     for l ∈ findleaves(en)
-                        push!(metricheaps, ManyValuedTableau(sz, l))
+                        newnodes = false
+                        fui = l
+                        for ui in minimalmembers(h, z[2])
+                            newnodes = true
+                            sy = SignedFormula(false, (ui, z[1]))
+                            fui = ManyValuedTableau(sy, fui)
+                            push!(metricheaps, fui)
+                        end
+                        !newnodes && l == node && push!(metricheaps, node)
+                    end
+                elseif !s && !istop(z[2])
+                    # F(□X→a) case (reversal rule)
+                    for l ∈ findleaves(en)
+                        mm = minimalmembers(h, z[2])
+                        newnodes = false
+                        for ui ∈ mm
+                            newnodes = true
+                            sy = SignedFormula(true, (ui, z[1]))
+                            fui = ManyValuedTableau(sy, l)
+                            push!(metricheaps, fui)
+                        end
+                        !newnodes && l == node && push!(metricheaps, node)
+                    end
+                end                
+
+            elseif token(z[1]) isa NamedConnective{:◊}
+                if s
+                    # T(◊X→a)
+                    # Check if T(□X→a), T(a→◊X), F(a→□X), F(◊X→a) is in the path
+                    for l in findleaves(en)
+                        temp = l
+                        while !isexpanded(l)
+                            sy = temp.signedformula
+                            y = sy.boundingimplication
+                            if (
+                                sy.sign &&
+                                (
+                                    token(y[1] isa NamedConnective{:□}) ||
+                                    token(y[2] isa NamedConnective{:◊})
+                                )
+                            ) || (
+                                !sy.sign &&
+                                (
+                                    token(y[1] isa NamedConnective{:◊}) ||
+                                    token(y[2] isa NamedConnective{:□})
+                                )
+                            )
+                               found = true
+                               break 
+                            end
+                        end
+                        found && break
+                    end
+                    if found
+                        for l in findleaves(en)
+                            push!(metricheaps, ManyValuedTableau(sz, l)) # It will be useful
+                        end
+                    else
+                        push!(metricheaps, node) # Formula is no longer useful
                     end
                 else
-                    oldleaves = findleaves(en)
-                    # evaluate S# for each leaf
-                    i = 0
-                    revert = false
-                    for l in findleaves(en)
-                        println("l$i")
+                    # F(◊X→a)
+                    # Check that everything propositional has been solved
+                    # and there are no more F(□X→a) and F(a→◊X) to expand
+                    postpone = false
+                    for l ∈ findleaves(en)
                         temp = l
                         while !isexpanded(temp)
-                            println(temp.signedformula)
+                            sy = temp.signedformula
+                            y = sy.boundingimplication
+                            if y isa Tuple{Formula, T}
+                                if (
+                                    token(y[1]) ∉ [□, ◊]
+                                 ) || (
+                                    !sy.sign && token(y[1]) isa NamedConnective{:□}                                    
+                                 )
+                                    postpone = true
+                                    break
+                                end
+                            elseif y isa Tuple{T, Formula}
+                                if (
+                                    token(y[2]) ∉ [□, ◊]
+                                ) || (
+                                    !sy.sign && token(y[2]) isa NamedConnective{:◊}
+                                )
+                                    postpone = true
+                                    break
+                                end
+                            elseif sy.boundingimplication isa Tuple{T, T}
+                                postpone = true
+                                break
+                            else
+                                error("Unexpected error")
+                            end
                             temp = temp.father
+                        end 
+                        if postpone
+                            break
                         end
-                        i+=1
                     end
-                    # mark every node from each old leaf to the expansion node as expanded
-                    for l in oldleaves
-                        temp = l
-                        while !isexpanded(temp)
-                            expand!(temp)
-                            temp = temp.father
+                    if postpone
+                        for l ∈ findleaves(en)
+                            push!(metricheaps, ManyValuedTableau(sz, l))
+                        end
+                    else
+                        oldleaves = findleaves(en)
+                        # evaluate S# for each leaf
+                        for l in findleaves(en)
+                            for t in domain(h)
+                                if istop(h.implication(t, z[2]))
+                                    # Here there should be a branch and I need to keep track
+                                    # of it with a fake node (always true)
+                                    push!(
+                                        metricheaps,
+                                        ManyValuedTableau(SignedFormula(true, (⊤, ⊤)), l)
+                                    )                   
+                                else
+                                    slider = l
+                                    newleaf = l
+                                    while !isexpanded(slider)
+                                        sy = temp.signedformula
+                                        y = sy.boundingimplication
+                                        # Possible cases: T(a→□X), T(◊X→a), F(a→□X), F(◊X→a)
+                                        if sy.sign
+                                            if token(y[2]) isa NamedConnective{:□}
+                                                if !isbot(h.monoid(y[1],t))
+                                                    # T(a→□X)
+                                                    newleaf = ManyValuedTableau(
+                                                        SignedFormula(
+                                                            true,
+                                                            (
+                                                                h.monoid(y[1], t),
+                                                                y[2].children[1]
+                                                            )
+                                                        ),
+                                                        newleaf
+                                                    )
+                                                    push!(metricheaps, newleaf)
+                                                end
+                                            elseif token(y[1]) isa NamedConnective{:◊}
+                                                if !istop(h.implication(t, y[2]))
+                                                    # T(◊X→a)
+                                                    newleaf = ManyValuedTableau(
+                                                        SignedFormula(
+                                                            true,
+                                                            (
+                                                                y[1].children[1],
+                                                                h.implication(t, y[2])
+                                                            )
+                                                        ),
+                                                        newleaf
+                                                    )
+                                                    push!(metricheaps, newleaf)
+                                                end
+                                            else
+                                                error("Unexpected error")
+                                            end
+                                        else
+                                            # Other F(a→□X) and F(◊X→a) are discarded
+                                            # (loss of information)
+                                            if token(y[2]) isa NamedConnective{:□}
+                                                # F(a→□X)
+                                                continue
+                                            elseif token(y[1]) isa NamedConnective{:◊}
+                                                # F(◊X→a)
+                                                continue
+                                            else
+                                                error("Unexpected error")
+                                            end
+                                        end
+                                        slider = slider.father
+                                    end
+                                    newleaf = ManyValuedTableau(
+                                        SignedFormula(
+                                            false,
+                                            (z[1].children[1], h.implication(t, z[2]))
+                                        ),
+                                        newleaf
+                                    )
+                                    push!(metricheaps, newleaf)
+                                end
+                            end
+                        end
+                        # Mark every node from each old above (of the branch) as expanded
+                        for l in oldleaves
+                            slider = l
+                            while !isexpanded(slider)
+                                expand!(slider)
+                                slider = slider.father
+                            end
                         end
                     end
                 end
