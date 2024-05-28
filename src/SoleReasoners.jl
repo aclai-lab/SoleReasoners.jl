@@ -22,7 +22,7 @@ include("many-valued-tableau.jl")
 
 export alphasat, prove, alphaprove
 
-include("modal-tableau.jl")
+include("mvhs.jl")
 
 include("utils.jl")
 
