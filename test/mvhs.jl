@@ -7,7 +7,7 @@ using SoleReasoners: Point, AFSLOS, checkafslos, mvhsalphasat
 
 using SoleLogics.ManyValuedLogics: α, β, H4
 
-u, v = Point.(["u", "v"])
+u, v = Point.(['u', 'v'])
 afslos1 = AFSLOS(
     [u, v],
     FiniteHeytingAlgebra(H4),
@@ -32,7 +32,7 @@ end
 
 using SoleLogics.ManyValuedLogics: G3
 
-w = Point("w")
+w = Point('w')
 afslos2 = AFSLOS(
     [u, v, w],
     FiniteHeytingAlgebra(G3),
