@@ -56,16 +56,26 @@ function checkafslos(afslos::AFSLOS)
         end
     end
 end
+
 """
-The natural definition of many-valued Allen's relations.
-For every X ∈ {A, Ai, L, Li, B, Bi, E, Ei, D, Di, O, Oi} we have RX: I(D)×I(D)→H defined by
+The natural definition of many-valued Allen's relations. 
+For every X ∈ {A, Ai, L, Li, B, Bi, E, Ei, D, Di, O, Oi} we have RX: I(D)×I(D)→H defined by:
+
  - RA([x,y],[z,t]) = =(y,z)
  - RL([x,y],[z,t]) = <(y,z)
  - RB([x,y],[z,t]) = =(x,z) ∩ <(t,y)
  - RE([x,y],[z,t]) = <(x,z) ∩ =(y,t)
  - RD([x,y],[z,t]) = <(x,z) ∩ <(t,y)
  - RO([x,y],[z,t]) = <(x,z) ∩ <(z,y) ∩ <(y,t)
-and similarly for the inverse relations.
+
+and similarly for the inverse relations:
+
+- RAi([x,y],[z,t]) = =(t,x)
+- RLi([x,y],[z,t]) = <(t,x)
+- RBi([x,y],[z,t]) = =(z,x) ∩ <(y,t)
+- REi([x,y],[z,t]) = <(z,x) ∩ =(t,y)
+- RDi([x,y],[z,t]) = <(z,x) ∩ <(y,t)
+- ROi([x,y],[z,t]) = <(z,x) ∩ <(x,t) ∩ <(y,t)
 """
 function mveval(
     r::R,
@@ -87,7 +97,18 @@ function mveval(
         return c.algebra.meet(c.mvlt[(x,z)], c.mvlt(t,y))
     elseif r == SoleLogics.IA_O
         return c.algebra.meet(c.algebra.meet(c.mvlt[(x,z)], c.mvlt(z,y)), c.mvlt[(y,t)])
-    # TODO: inverse relations
+    elseif r == SoleLogics.IA_A
+        return c.mveq[(t,x)]
+    elseif r == SoleLogics.IA_L
+        return c.mvlt[(t,x)]
+    elseif r == SoleLogics.IA_B
+        return c.algebra.meet(c.mveq[(z,x)], c.mvlt(y,t))
+    elseif r == SoleLogics.IA_E
+        return c.algebra.meet(c.mvlt[(z,x)], c.mveq(t,y))
+    elseif r == SoleLogics.IA_D
+        return c.algebra.meet(c.mvlt[(z,x)], c.mvlt(y,t))
+    elseif r == SoleLogics.IA_O
+        return c.algebra.meet(c.algebra.meet(c.mvlt[(z,x)], c.mvlt(x,t)), c.mvlt[(t,y)])
     else
         error("Relation $r not in HS")
     end
