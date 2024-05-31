@@ -161,7 +161,14 @@ isexpanded(t::MVHSTableau) = t.expanded
 isclosed(t::MVHSTableau) = t.closed
 
 expand!(t::MVHSTableau) = t.expanded = true
-close!(t::MVHSTableau) = t.closed = true
+
+function close!(t::MVHSTableau)
+    t.closed = true
+    while !isempty(t.children)
+        c = pop!(t.children)
+        close!(c)
+    end
+end
 
 function pushchildren!(t::MVHSTableau, children::MVHSTableau...)
     push!(t.children, children...)
@@ -193,6 +200,40 @@ function Base.show(io::IO, t::MVHSTableau)
     )
 end
 
+function findsimilar(
+    t::MVHSTableau,
+    a::A
+) where {
+    T<:Truth,
+    D<:AbstractVector{T},
+    A<:FiniteAlgebra{T,D}
+}
+    ψ = t.boundingimplication[2]
+    if t.judgement
+        β = t.boundingimplication[1]
+        # Looking for F(α⪯ψ) where α⪯β
+        while !isroot(t)
+            t = t.father
+            α = t.boundingimplication[1]
+            if α isa Truth && t.boundingimplication[2] == ψ && !t.judgement && precedeq(a, α, β)
+                return true
+            end
+        end
+    else
+        α = t.boundingimplication[1]
+        # Looking for T(β⪯ψ) where α⪯β
+        while !isroot(t)
+            t = t.father
+            β = t.boundingimplication[1]
+            if β isa Truth && t.boundingimplication[2] == ψ && t.judgement && precedeq(a, α, β)
+                return true
+            end
+        end
+    end
+    return false
+end
+
+
 function mvhsalphasat(
     metricheaps::Vector{MetricHeap},
     choosenode::Function,
@@ -211,10 +252,55 @@ function mvhsalphasat(
         expand!(en)
         verbose && println("expansion node:")
         verbose && println(en)
-        if en.boundingimplication isa Tuple{FiniteTruth, Formula}
+        if en.boundingimplication isa Tuple{Truth, Truth}
+            α = en.boundingimplication[1]
+            β = en.boundingimplication[2]
+            if en.judgement && !precedeq(a, α, β)
+                # X1
+                verbose && println("X1")
+                close!(en)
+            elseif !en.judgement && precedeq(a, α, β)
+                # X2
+                verbose && println("X2")
+                close!(en)
+            elseif !en.judgement && isbot(α)
+                # X3
+                verbose && println("X3")
+                close!(en)
+            elseif !en.judgement && istop(β)
+                # X4
+                verbose && println("X4")
+                close!(en)
+            elseif findsimilar(en, a)
+                # X5
+                verbose && println("X5")
+                close!(en)
+            else
+                let err
+                    try
+                        checkafslos(en.constraintsystem)
+                    catch err
+                        # X6
+                        verbose && println(sprint(showerror, err))
+                        verbose && println("X6")
+                        close!(en)
+                    end
+                end
+                # No condition matched, pushing node back into metricheaps
+                push!(metricheaps, node)
+            end
+        elseif en.boundingimplication isa Tuple{Truth, Formula}
             α = en.boundingimplication[1]
             φ = en.boundingimplication[2]
-            if en.judgement && token(φ) isa NamedConnective{:∧} && !isbot(α)
+            if !en.judgement && isbot(α)
+                # X3
+                verbose && println("X3")
+                close!(en)                
+            elseif findsimilar(en, a)
+                # X5
+                verbose && println("X5")
+                close!(en)
+            elseif en.judgement && token(φ) isa NamedConnective{:∧} && !isbot(α)
                 # T∧
                 verbose && println("T∧")
                 for l ∈ findleaves(en)
@@ -239,6 +325,33 @@ function mvhsalphasat(
                     verbose && println(t2)
                     verbose && println()
                 end
+            elseif en.judgement && token(φ) isa NamedConnective{:→} && !isbot(α)
+                # T→
+                verbose && println("T→")
+                for γ ∈ lesservalues(a, α)
+                    isbot(γ) && continue
+                    for l ∈ findleaves(en)
+                        t1 = MVHSTableau(
+                            false,
+                            (γ, φ.children[1]),
+                            en.interval,
+                            l.constraintsystem,
+                            l
+                        )
+                        push!(metricheaps, t1)
+                        verbose && println(t1)
+                        t2 = MVHSTableau(
+                            true,
+                            (γ, φ.children[2]),
+                            en.interval,
+                            l.constraintsystem,
+                            l
+                        )
+                        push!(metricheaps, t2)
+                        verbose && println(t2)
+                    end
+                end
+                verbose && println()
             elseif en.judgement && token(φ) isa BoxRelationalConnective
                 # T□"
                 verbose && println("T□")
@@ -296,10 +409,14 @@ function mvhsalphasat(
                     verbose && println()
                 end
             end
-        elseif en.boundingimplication isa Tuple{Formula, FiniteTruth}
+        elseif en.boundingimplication isa Tuple{Formula, Truth}
             φ = en.boundingimplication[1]
             α = en.boundingimplication[2]
-            if !en.judgement && token(φ) isa DiamondRelationalConnective
+            if !en.judgement && istop(α)
+                # X4
+                verbose && println("X4")
+                close!(en)                
+            elseif !en.judgement && token(φ) isa DiamondRelationalConnective
                 # F◊
                 verbose && println("F◊")
                 for l ∈ findleaves(en)
@@ -461,14 +578,32 @@ function mvhsalphasat(
                                         end
                                     end
                                 catch err1
-                                    #verbose && println(sprint(showerror, err1))
+                                    # verbose && println(sprint(showerror, err1))
+                                    # return
                                 end
                             end
                         end
                     end
                     verbose && println()
                 end
-                return
+            elseif !en.judgement && !istop(α)
+                # F⪯
+                verbose && println("F⪯")
+                for l ∈ findleaves(en)
+                    verbose && println(l)
+                    for βi in minimalmembers(a, α)
+                        ti = MVHSTableau(
+                            true,
+                            (βi, φ),
+                            en.interval,
+                            l.constraintsystem,
+                            l
+                        )
+                        push!(metricheaps, ti)
+                        verbose && println(ti)
+                    end
+                    verbose && println()
+                end
             end
         end
     end

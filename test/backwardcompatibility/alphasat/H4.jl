@@ -1,4 +1,3 @@
-using BenchmarkTools
 using Random
 using SoleLogics
 using SoleLogics.ManyValuedLogics
