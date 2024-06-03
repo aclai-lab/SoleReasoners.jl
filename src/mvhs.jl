@@ -1065,3 +1065,90 @@ function mvhsalphasat(
     randombranch(_::MVHSTableau) = rand(rng, Int)
     mvhsalphasat(α, φ, a, randombranch; verbose)
 end
+
+function mvhsalphaprove(
+    α::T,
+    φ::Formula,
+    a::FiniteHeytingAlgebra,
+    choosenode::Function,
+    metrics::Function...;
+    verbose::Bool=false
+) where {
+    T<:Truth
+}
+    if !isa(α, FiniteTruth)
+        α = convert(FiniteTruth, α)
+    end
+    tableaux = Vector{MVHSTableau}()
+    x, y = Point.(['A', 'B'])
+    for δ ∈ getdomain(a)
+        istop(δ) && continue    # (1)
+        for β ∈ getdomain(a)
+            isbot(β) && continue    # <(x,y) ≻ 0
+            for γ ∈ getdomain(a)
+                afslos = AFSLOS(
+                    [x, y],
+                    a,
+                    Dict(
+                        (x,x) => ⊥, (x,y) => β,
+                        (y,x) => γ, (y,y) => ⊥
+                    ),
+                    Dict(
+                        (x,x) => ⊤, (x,y) => δ,
+                        (y,x) => δ, (y,y) => ⊤
+                    )
+                )
+                try
+                    checkafslos(afslos)
+                    push!(
+                        tableaux,
+                        MVHSTableau(
+                            false,
+                            (α, φ),
+                            Interval(x, y),
+                            afslos
+                        )
+                    )
+                catch err
+                    verbose && println(sprint(showerror, err))
+                end
+            end
+        end
+    end
+    verbose && println("Starting with $(length(tableaux)) tableaux")
+    metricheaps = Vector{MetricHeap}()   # Heaps to be used for node selection
+    for metric ∈ metrics
+        push!(metricheaps, MetricHeap(metric))
+    end
+    for tableau ∈ tableaux
+        for metricheap ∈ metricheaps
+            push!(heap(metricheap), MetricHeapNode(metric(metricheap), tableau))
+        end
+    end
+    !mvhsalphasat(metricheaps, choosenode, a; verbose)
+end
+
+function mvhsalphaprove(
+    α::T,
+    φ::Formula,
+    a::FiniteHeytingAlgebra,
+    metric::Function;
+    verbose::Bool=false
+) where {
+    T<:Truth
+}
+    mvhsalphaprove(α, φ, a, roundrobin, metric; verbose)
+end
+
+function mvhsalphaprove(
+    α::T,
+    φ::Formula,
+    a::FiniteHeytingAlgebra;
+    rng = Random.GLOBAL_RNG,
+    verbose::Bool=false
+) where {
+    T<:Truth
+}
+    randombranch(_::MVHSTableau) = rand(rng, Int)
+    mvhsalphaprove(α, φ, a, randombranch; verbose)
+end
