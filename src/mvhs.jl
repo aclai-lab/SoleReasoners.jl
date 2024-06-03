@@ -254,6 +254,22 @@ function findsimilar(
     return false
 end
 
+function findformula(
+    t::MVHSTableau,
+    j::Bool,
+    φ::Union{
+        Tuple{FiniteTruth,Formula},
+        Tuple{Formula,FiniteTruth},
+        Tuple{FiniteTruth,FiniteTruth}
+    }
+)
+    t.judgement == j && t.boundingimplication == φ && return true
+    while !isroot(t)
+        t = t.father
+        t.judgement == j && t.boundingimplication == φ && return true
+    end
+    return false
+end
 
 function mvhsalphasat(
     metricheaps::Vector{MetricHeap},
@@ -635,17 +651,22 @@ function mvhsalphasat(
                 for l ∈ findleaves(en)
                     verbose && println(l)
                     ti = l
+                    newnodes = false
                     for γ in maximalmembers(a, α)
-                        ti = MVHSTableau(
-                            false,
-                            (φ, γ),
-                            en.interval,
-                            l.constraintsystem,
-                            ti
-                        )
-                        push!(metricheaps, ti)
-                        verbose && println(ti)
+                        if !findformula(ti, false, (φ, γ))
+                            newnodes = true
+                            ti = MVHSTableau(
+                                false,
+                                (φ, γ),
+                                en.interval,
+                                l.constraintsystem,
+                                ti
+                            )
+                            push!(metricheaps, ti)
+                            verbose && println(ti)
+                        end
                     end
+                    !newnodes && l == node && push!(metricheaps, node)
                     verbose && println()
                 end
             elseif !en.judgement && !isbot(α)
@@ -653,17 +674,31 @@ function mvhsalphasat(
                 verbose && println("F⪰")
                 for l ∈ findleaves(en)
                     verbose && println(l)
+                    newnodes = false
                     for βi in maximalmembers(a, α)
-                        ti = MVHSTableau(
-                            true,
-                            (φ, βi),
-                            en.interval,
-                            l.constraintsystem,
-                            l
-                        )
-                        push!(metricheaps, ti)
-                        verbose && println(ti)
+                        newnodes = true
+                        if !findformula(l, true, (φ, βi))
+                            ti = MVHSTableau(
+                                true,
+                                (φ, βi),
+                                en.interval,
+                                l.constraintsystem,
+                                l
+                            )
+                            push!(metricheaps, ti)
+                            verbose && println(ti)
+                        else  # Here there should be a branch and I need to keep track of it
+                            ti = MVHSTableau(   # Fake node (always true)
+                                true,
+                                (convert(FiniteTruth, ⊤), convert(FiniteTruth, ⊤)),
+                                en.interval,
+                                l.constraintsystem,
+                                l
+                            )
+                            push!(metricheaps, ti)
+                        end
                     end
+                    !newnodes && l == node && push!(metricheaps, node)
                     verbose && println()
                 end
             else
@@ -940,17 +975,22 @@ function mvhsalphasat(
                 for l ∈ findleaves(en)
                     verbose && println(l)
                     ti = l
+                    newnodes = false
                     for γ in minimalmembers(a, α)
-                        ti = MVHSTableau(
-                            false,
-                            (γ, φ),
-                            en.interval,
-                            l.constraintsystem,
-                            ti
-                        )
-                        push!(metricheaps, ti)
-                        verbose && println(ti)
+                        if !findformula(ti, false, (γ, φ))
+                            newnodes = true
+                            ti = MVHSTableau(
+                                false,
+                                (γ, φ),
+                                en.interval,
+                                l.constraintsystem,
+                                ti
+                            )
+                            push!(metricheaps, ti)
+                            verbose && println(ti)
+                        end
                     end
+                    !newnodes && l == node && push!(metricheaps, node)
                     verbose && println()
                 end
             elseif !en.judgement && !istop(α)
@@ -958,17 +998,31 @@ function mvhsalphasat(
                 verbose && println("F⪯")
                 for l ∈ findleaves(en)
                     verbose && println(l)
+                    newnodes = false
                     for βi in minimalmembers(a, α)
-                        ti = MVHSTableau(
-                            true,
-                            (βi, φ),
-                            en.interval,
-                            l.constraintsystem,
-                            l
-                        )
-                        push!(metricheaps, ti)
-                        verbose && println(ti)
+                        newnodes = true
+                        if !findformula(l, true, (βi, φ))
+                            ti = MVHSTableau(
+                                true,
+                                (βi, φ),
+                                en.interval,
+                                l.constraintsystem,
+                                l
+                            )
+                            push!(metricheaps, ti)
+                            verbose && println(ti)
+                        else  # Here there should be a branch and I need to keep track of it
+                            ti = MVHSTableau(   # Fake node (always true)
+                                true,
+                                (convert(FiniteTruth, ⊤), convert(FiniteTruth, ⊤)),
+                                en.interval,
+                                l.constraintsystem,
+                                l
+                            )
+                            push!(metricheaps, ti)
+                        end
                     end
+                    !newnodes && l == node && push!(metricheaps, node)
                     verbose && println()
                 end
             else

@@ -23,6 +23,7 @@ include("many-valued-tableau.jl")
 export alphasat, prove, alphaprove
 
 include("mvhs.jl")
+export mvhsalphasat, mvhsalphaprove
 
 include("utils.jl")
 
