@@ -19,46 +19,46 @@ test_suites = [
     ("HeytingAlphaProve", ["heytingalphaprove.jl",]),
     ("AlphaSat", ["alphasat.jl",]),
     ("AlphaProve", ["alphaprove.jl",]),
-    # (
-    #     "BackwardCompatibility - Alphasat - booleanalgebra",
-    #     ["backwardcompatibility/alphasat/booleanalgebra.jl"]
-    # ),
-    # (
-    #     "BackwardCompatibility - Alphasat - G3",
-    #     ["backwardcompatibility/alphasat/G3.jl"]
-    # ),
-    # (
-    #     "BackwardCompatibility - Alphasat - G4",
-    #     ["backwardcompatibility/alphasat/G4.jl"]
-    # ),
-    # (
-    #     "BackwardCompatibility - Alphasat - H4",
-    #     ["backwardcompatibility/alphasat/H4.jl"]
-    # ),
-    # (
-    #     "BackwardCompatibility - Alphasat - H9",
-    #     ["backwardcompatibility/alphasat/H9.jl"]
-    # ),
-    # (
-    #     "BackwardCompatibility - Alphaprove - booleanalgebra",
-    #     ["backwardcompatibility/alphaprove/booleanalgebra.jl"]
-    # ),
-    # (
-    #     "BackwardCompatibility - Alphaprove - G3",
-    #     ["backwardcompatibility/alphaprove/G3.jl"]
-    # ),
-    # (
-    #     "BackwardCompatibility - Alphaprove - G4",
-    #     ["backwardcompatibility/alphaprove/G4.jl"]
-    # ),
-    # (
-    #     "BackwardCompatibility - Alphaprove - H4",
-    #     ["backwardcompatibility/alphaprove/H4.jl"]
-    # ),
-    # (
-    #     "BackwardCompatibility - Alphaprove - H9",
-    #     ["backwardcompatibility/alphaprove/H9.jl"]
-    # ),
+    (
+        "BackwardCompatibility - Alphasat - booleanalgebra",
+        ["backwardcompatibility/alphasat/booleanalgebra.jl"]
+    ),
+    (
+        "BackwardCompatibility - Alphasat - G3",
+        ["backwardcompatibility/alphasat/G3.jl"]
+    ),
+    (
+        "BackwardCompatibility - Alphasat - G4",
+        ["backwardcompatibility/alphasat/G4.jl"]
+    ),
+    (
+        "BackwardCompatibility - Alphasat - H4",
+        ["backwardcompatibility/alphasat/H4.jl"]
+    ),
+    (
+        "BackwardCompatibility - Alphasat - H9",
+        ["backwardcompatibility/alphasat/H9.jl"]
+    ),
+    (
+        "BackwardCompatibility - Alphaprove - booleanalgebra",
+        ["backwardcompatibility/alphaprove/booleanalgebra.jl"]
+    ),
+    (
+        "BackwardCompatibility - Alphaprove - G3",
+        ["backwardcompatibility/alphaprove/G3.jl"]
+    ),
+    (
+        "BackwardCompatibility - Alphaprove - G4",
+        ["backwardcompatibility/alphaprove/G4.jl"]
+    ),
+    (
+        "BackwardCompatibility - Alphaprove - H4",
+        ["backwardcompatibility/alphaprove/H4.jl"]
+    ),
+    (
+        "BackwardCompatibility - Alphaprove - H9",
+        ["backwardcompatibility/alphaprove/H9.jl"]
+    ),
     ("MVHS", ["mvhs.jl"]),
     ("Utils", ["utils.jl"]),
 ]
