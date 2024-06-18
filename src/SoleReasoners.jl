@@ -4,6 +4,7 @@ import Base: isempty, push!, Base.pop!, Order.lt
 using DataStructures
 using Random
 using Reexport
+using Base.Threads
 using StatsBase
 
 @reexport using SoleLogics
