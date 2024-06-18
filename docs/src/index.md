@@ -18,7 +18,13 @@ Pkg.add("SoleReasoners")
 
 ## Feature Summary
 
-SoleReasoners.jl provides a [sat solver](https://en.wikipedia.org/wiki/SAT_solver) based on the [method of analytic tableau](https://en.wikipedia.org/wiki/Method_of_analytic_tableaux). 
+SoleReasoners.jl provides a [sat solver](https://en.wikipedia.org/wiki/SAT_solver) and an [automated theorem prover](https://en.wikipedia.org/wiki/Automated_theorem_proving) based on the [method of analytic tableau](https://en.wikipedia.org/wiki/Method_of_analytic_tableaux). 
+
+It also provides a Many-Valued version for both algorithms, therefore solving the $\alpha$-satisfiability and $\alpha$-validity problems respectively.
+
+## Future work
+
+We are currently working on a Modal version of both algorithms which also works with Many-Valued logics.
 
 ## About
 

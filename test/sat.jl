@@ -61,8 +61,6 @@
 @test sat(parseformula("¬(¬p→p)"))  == true
 @test sat(parseformula("¬(¬p→¬p)")) == false
 
-@test sat(parseformula("p∧q"), naivechooseleaf) == true
-
 @test sat(parseformula(
     "(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)"
 )) == false

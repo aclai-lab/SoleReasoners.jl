@@ -8,63 +8,23 @@ Pages = ["getting-started.md"]
 
 # [Getting started](@id man-core)
 
-In this introductory section you will learn about the main building blocks of SoleReasoners. Their definition, usage examples and how to customize them to your own needings. 
+*SoleReasoners* mainly provides two tools for reasoning: *sat*, which aims at solving the [boolean satisfiability problem](https://en.wikipedia.org/wiki/Boolean_satisfiability_problem), and *prove*, which serves as an [automated theorem prover](https://en.wikipedia.org/wiki/Automated_theorem_proving) for propositional boolean formulae. Both algorithms are based on the [method of analytic tableaux](https://en.wikipedia.org/wiki/Method_of_analytic_tableaux).
 
-## Tableau
+*SoleReasoners* also provides a suite for managing the tableau expansion policy, allowing for different configurations based on the specific application problem. This system is based on min-heaps concurring to provide candidates for the extraction based on user specified policies, and an agreement function to choose amongst such proposals.
+
+For more information about the data structures involved, please refer to the developer documentation.
+
+## SAT solver
 
 ```@docs
-Tableau
-φ(tableau::Tableau)
-fatherset(tableau::Tableau)
-father(tableau::Tableau)
-childrenset(tableau::Tableau)
-literals(tableau::Tableau)
-leaves(leavesset::Set{Tableau}, tableau::Tableau)
-leaves(tableau::Tableau)
-pushfather!(tableau::Tableau, newfather::Tableau)
-popfather!(tableau::Tableau)
-pushchildren!(tableau::Tableau, children::Tableau...)
-pushliterals!(tableau::Tableau, newliterals::Formula...)
-findroot(tableau::Tableau)
-isleaf(tableau::Tableau) 
+sat(formula::Formula, chooseleaf::F, metrics::Function...) where {F<:Function}
+sat(formula::Formula, metric::F; kwargs...) where {F<:Function}
+sat(formula::Formula; rng = Random.GLOBAL_RNG, kwargs...)
 ```
 
-## MetricHeapNode
-
+## Automated theorem prover
 ```@docs
-MetricHeapNode
-metricvalue(metricheapnode::MetricHeapNode)
-tableau(metricheapnode::MetricHeapNode)
-```
-
-## MetricHeapOrdering
-
-```@docs
-MetricHeapOrdering
-lt(o::MetricHeapOrdering, a::MetricHeapNode, b::MetricHeapNode)
-```
-
-## MetricHeap
-
-```@docs
-MetricHeap
-heap(metricheap::MetricHeap)
-metric(metricheap::MetricHeap)
-push!(metricheap::MetricHeap, metricheapnode::MetricHeapNode)
-push!(metricheap::MetricHeap, tableau::Tableau)
-pop!(metricheap::MetricHeap)
-isempty(metricheap::MetricHeap)
-```
-
-## SAT
-
-```@docs
-naivechooseleaf(metricheaps::Vector{MetricHeap})
-naivechooseleaf(metricheaps::Vector{MetricHeap}, cycle::Int)
-roundrobin(metricheaps::Vector{MetricHeap}, cycle::Int)
-push!(metricheaps::Vector{MetricHeap}, tableau::Tableau)
-sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)
-sat(φ::Formula, chooseleaf::Function, metrics::Function...)
-sat(φ::Formula, chooseleaf::Function; rng = Random.GLOBAL_RNG)
-sat(φ::Formula; rng = Random.GLOBAL_RNG)
+prove(formula::Formula, chooseleaf::F, metrics::Function...) where {F<:Function}
+prove(formula::Formula, metric::F; kwargs...) where {F<:Function}
+prove(formula::Formula; rng = Random.GLOBAL_RNG, kwargs...)
 ```

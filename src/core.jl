@@ -12,8 +12,6 @@ structure computed for a logical formula having at each node a subformula of the
 formula to be proved or refuted. It is used in many automated reasoning tasks, such as
 [automated theorem proving](https://en.wikipedia.org/wiki/Automated_theorem_proving) and the
 [satifiability problem](https://en.wikipedia.org/wiki/Boolean_satisfiability_problem).
-
-See also [`Tableau`](@ref), [`FuzzyTableau`](@ref).
 """
 abstract type AbstractTableau end
 
@@ -34,8 +32,6 @@ A mutable structure representing a tableau as a tree structure, with each node c
 a subformula of the original formula, the father and children in the tree structure, a flag
 saying if the node has already been expanded and a flag saying if the branch represented by
 the node has been closed. Each path from a leaf to the root respresents a branch.
-
-See also [`sat`](@ref), [`prove`](@ref).
 """
 mutable struct Tableau <: AbstractTableau
     const formula::Formula
@@ -305,23 +301,32 @@ end
 ############################################################################################
 
 """
-    naivechooseleaf(metricheaps::Vector{MetricHeap})
+    naivechoosenode(metricheaps::Vector{MetricHeap})
 
 Choose a leaf using the provided metric heaps.
 At this moment, it simply returns the leaf which compares the most as head of the heaps.
 
 To prevent starvation, use roundrobin instead.
 """
-function naivechooseleaf(metricheaps::Vector{MetricHeap})
+function naivechoosenode(metricheaps::Vector{MetricHeap})
     candidates = Vector{AbstractTableau}()
     for metricheap ∈ metricheaps
         while !isempty(metricheap)
             head = tableau(first(heap(metricheap)))
-            if isleaf(head)
+
+            if isclosed(node)
+                pop!(metricheap)
+                continue
+            elseif isexpanded(node)
+                if isleaf(node)
+                    return node # found a satisfiable branch
+                else
+                    pop!(metricheap)
+                    continue
+                end
+            else
                 push!(candidates, head)
                 break
-            else
-                pop!(metricheap)
             end
         end
     end
@@ -334,15 +339,15 @@ function naivechooseleaf(metricheaps::Vector{MetricHeap})
 end
 
 """
-    naivechooseleaf(metricheaps::Vector{MetricHeap}, _::Int)
+    naivechoosenode(metricheaps::Vector{MetricHeap}, _::Int)
 
 Choose a leaf using the provided metric heaps.
 At this moment, it simply returns the leaf which compares the most as head of the heaps.
 
 To prevent starvation, use roundrobin instead.
 """
-function naivechooseleaf(metricheaps::Vector{MetricHeap}, _::Int)
-    naivechooseleaf(metricheaps)
+function naivechoosenode(metricheaps::Vector{MetricHeap}, _::Int)
+    naivechoosenode(metricheaps)
 end
 
 """
@@ -414,13 +419,7 @@ function findsimilar(t::Tableau)
     return false
 end
 
-"""
-    sat(metricheaps::Vector{MetricHeap}, chooseleaf::Function)
-
-Given a formula, return true if an interpretation that satisfies the formula exists, false
-otherwise.
-"""
-function sat(metricheaps::Vector{MetricHeap}, chooseleaf::F) where {F<:Function}
+function sat(metricheaps::Vector{MetricHeap}, choosenode::F) where {F<:Function}
     cycle = 1
     while true
 
@@ -438,7 +437,7 @@ function sat(metricheaps::Vector{MetricHeap}, chooseleaf::F) where {F<:Function}
             error("Too much memory being used, exiting")
         end
         
-        leaf = chooseleaf(metricheaps, cycle)
+        leaf = choosenode(metricheaps, cycle)
         isnothing(leaf) && return false # all branches are closed
         en = findexpansionnode(leaf)
         isnothing(en) && return true    # found a satisfiable branch
@@ -555,14 +554,31 @@ function sat(metricheaps::Vector{MetricHeap}, chooseleaf::F) where {F<:Function}
 end
 
 """
-    sat(formula::Formula, chooseleaf::Function, metrics::Function...)
+    sat(formula::Formula, choosenode::Function, metrics::Function...)
 
 Given a formula, return true if an interpretation that satisfies the formula exists, false
 otherwise.
 
-TODO: Fix metrics type for perfomance
+*choosenode* should be a function taking a vector of metricheaps as an argument (and
+eventually a counter) and giving a tableau (or nothing) as output that is used to extract a
+node representing a branch to be expanded. If nothing, all branches are closed.
+
+*metrics* should be functions taking a tableau as an argument and giving an integer as
+output that are used to model the order in which tableau branches are expanded. For example,
+one could declare the following metric functions:
+
+    mf1(t::Tableau) = noperators(t.formula)
+    mf2(t::Tableau) = height(t.formula)
+
+The first metric will generate a metricheap proposing to expand first branches comprising
+the node containing the formula with the less number of operators, the second metric will
+generate a metricheap proposing to expand first branches comprising the node containing the
+formula of less height.
+
+*choosenode* will then be used to choose which policy to follow (e.g., choosing the node
+voted by most heaps, or alternating between each heap at each cycle).
 """
-function sat(formula::Formula, chooseleaf::F, metrics::Function...) where {F<:Function}
+function sat(formula::Formula, choosenode::F, metrics::Function...) where {F<:Function}
     metricheaps = Vector{MetricHeap}()   # Heaps to be used for tableau selection
     for metric ∈ metrics
         push!(metricheaps, MetricHeap(metric))
@@ -571,18 +587,26 @@ function sat(formula::Formula, chooseleaf::F, metrics::Function...) where {F<:Fu
     for metricheap ∈ metricheaps
         push!(heap(metricheap), MetricHeapNode(metric(metricheap), root))
     end
-    sat(metricheaps, chooseleaf)
+    return sat(metricheaps, choosenode)
 end
 
 """
-    sat(formula::Formula, chooseleaf::Function; rng = Random.GLOBAL_RNG)
+    sat(formula::Formula, metric::F; rng = Random.GLOBAL_RNG) where {F<:Function}
 
-Given a formula, return true if an interpretation that satisfies the formula exists, false
-otherwise.
+Given a formula and an extraction policy metric, return true if an interpretation that
+satisfies the formula exists, false otherwise.
+
+*metric* should be a function taking a tableau as an argument and giving an integer as
+output that is used to model the order in which tableau branches are expanded. For example,
+one could declare the following metric function:
+
+    mf(t::Tableau) = noperators(t.formula)
+
+This way, the tableau will be expanded giving precedence to branches comprising nodes
+containing formulae with the smallest number operators.
 """
-function sat(formula::Formula, chooseleaf::F; rng = Random.GLOBAL_RNG) where {F<:Function}
-    randombranch(tableau::Tableau) = rand(rng, Int)
-    sat(formula, chooseleaf, randombranch)
+function sat(formula::Formula, metric::F; kwargs...) where {F<:Function}
+    return sat(formula, roundrobin, metric)
 end
 
 """
@@ -591,7 +615,75 @@ end
 Given a formula, return true if an interpretation that satisfies the formula exists, false
 otherwise.
 """
-function sat(formula::Formula; rng = Random.GLOBAL_RNG)
-    randombranch(tableau::Tableau) = rand(rng, Int)
-    sat(formula, roundrobin, randombranch)
+function sat(formula::Formula; rng = Random.GLOBAL_RNG, kwargs...)
+    randombranch(_::Tableau) = rand(rng, Int)
+    return sat(formula, randombranch)
+end
+
+"""
+    sat(formula::Formula, choosenode::Function, metrics::Function...)
+
+Given a formula, return true if it is valid, i.e., there is not an interpretation that does
+not satisfy the formula, false otherwise.
+
+*choosenode* should be a function taking a vector of metricheaps as an argument (and
+eventually a counter) and giving a tableau (or nothing) as output that is used to extract a
+node representing a branch to be expanded. If nothing, all branches are closed.
+
+*metrics* should be functions taking a tableau as an argument and giving an integer as
+output that are used to model the order in which tableau branches are expanded. For example,
+one could declare the following metric functions:
+
+    mf1(t::Tableau) = noperators(t.formula)
+    mf2(t::Tableau) = height(t.formula)
+
+The first metric will generate a metricheap proposing to expand first branches comprising
+the node containing the formula with the less number of operators, the second metric will
+generate a metricheap proposing to expand first branches comprising the node containing the
+formula of less height.
+
+*choosenode* will then be used to choose which policy to follow (e.g., choosing the node
+voted by most heaps, or alternating between each heap at each cycle).
+"""
+function prove(formula::Formula, choosenode::F, metrics::Function...) where {F<:Function}
+    metricheaps = Vector{MetricHeap}()   # Heaps to be used for tableau selection
+    for metric ∈ metrics
+        push!(metricheaps, MetricHeap(metric))
+    end
+    root = Tableau(¬(formula))
+    for metricheap ∈ metricheaps
+        push!(heap(metricheap), MetricHeapNode(metric(metricheap), root))
+    end
+    return !sat(metricheaps, choosenode)
+end
+
+"""
+    prove(formula::Formula, metric::F; kwargs...) where {F<:Function}
+
+Given a formula, return true if it is valid, i.e., there is not an interpretation that does
+not satisfy the formula, false otherwise.
+
+*metric* should be a function taking a tableau as an argument and giving an integer as
+output that is used to model the order in which tableau branches are expanded. For example,
+one could declare the following metric function:
+
+    mf(t::Tableau) = noperators(t.formula)
+    
+This way, the tableau will be expanded giving precedence to branches comprising nodes
+containing formulae with the smallest number operators.
+"""
+function prove(formula::Formula, metric::F; kwargs...) where {F<:Function}
+    randombranch(_::Tableau) = rand(rng, Int)
+    return prove(formula, roundrobin, metric)
+end
+
+"""
+    prove(formula::Formula; rng = Random.GLOBAL_RNG)
+
+Given a formula, return true if it is valid, i.e., there is not an interpretation that does
+not satisfy the formula, false otherwise.
+"""
+function prove(formula::Formula; rng = Random.GLOBAL_RNG, kwargs...)
+    randombranch(_::Tableau) = rand(rng, Int)
+    return prove(formula, randombranch)
 end

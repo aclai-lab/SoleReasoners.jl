@@ -17,7 +17,8 @@ makedocs(;
     pages = [
         "Home" => "index.md",
         "Getting started" => "getting-started.md",
-        "Utils" => "utils.md"
+        "Many-Valued logics" => "many-valued-logics.md",
+        "Developer documentation" => "developer-documentation.md",
     ],
     # NOTE: warning
     warnonly = :true,
