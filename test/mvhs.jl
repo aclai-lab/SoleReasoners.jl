@@ -9,6 +9,8 @@ include("mvhs/mvhsalphasat.jl")
 
 include("mvhs/mvhsalphaprove.jl")
 
+include("mvhs/modalrules.jl")
+
 # p, q = Atom.(["p", "q"])
 # diamondA = diamond(IA_A)
 # boxA = box(IA_A)
