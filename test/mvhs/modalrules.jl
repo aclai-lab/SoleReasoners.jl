@@ -28,133 +28,193 @@ boxEi = box(IA_Ei)
 boxDi = box(IA_Di)
 boxOi = box(IA_Oi)
 
-# @test mvhsalphasat(
-#     ⊥,
-#     ∧(diamondA(p), boxA(→(p, ⊥))),
-#     FiniteHeytingAlgebra(G3),
-#     verbose=false
-# ) == true
+###################################################
+# Base cases ######################################
+###################################################
 
-# @test mvhsalphasat(
-#     α,
-#     ∧(diamondA(p), boxA(→(p, ⊥))),
-#     FiniteHeytingAlgebra(G3),
-#     verbose=false
-# ) == false
+@test mvhsalphasat(
+    ⊥,
+    ∧(diamondA(p), boxA(→(p, ⊥))),
+    FiniteHeytingAlgebra(G3),
+    verbose=false
+) == true
 
-# @test mvhsalphasat(
-#     ⊤,
-#     ∧(diamondA(p), boxA(→(p, ⊥))),
-#     FiniteHeytingAlgebra(G3),
-#     verbose=false
-# ) == false
+@test mvhsalphasat(
+    α,
+    ∧(diamondA(p), boxA(→(p, ⊥))),
+    FiniteHeytingAlgebra(G3),
+    verbose=false
+) == false
 
-# ###################################################
-# # Examples from Fuzzy Sets and Systems 456 (2023) #
-# ###################################################
+@test mvhsalphasat(
+    ⊤,
+    ∧(diamondA(p), boxA(→(p, ⊥))),
+    FiniteHeytingAlgebra(G3),
+    verbose=false
+) == false
 
-# f, b = Atom.(["f", "b"])
-# @test mvhsalphasat(
-#     α,
-#     ∧(f,diamondA(b)),
-#     FiniteHeytingAlgebra(H4),
-#     verbose=false
-# ) == true
+###################################################
+# Examples from Fuzzy Sets and Systems 456 (2023) #
+###################################################
 
-# for X in [IA_A, IA_L, IA_B, IA_E, IA_D, IA_O, IA_Ai, IA_Li, IA_Bi, IA_Ei, IA_Di, IA_Oi]
+f, b = Atom.(["f", "b"])
+@test mvhsalphasat(
+    α,
+    ∧(f,diamondA(b)),
+    FiniteHeytingAlgebra(H4),
+    verbose=false
+) == true
+
+###################################################
+# Properties ######################################
+###################################################
+## Theorem 1 ######################################
+###################################################
+for boxX in [
+    boxA
+    boxL
+    boxB
+    boxE
+    boxD
+    boxO
+    boxAi
+    boxLi
+    boxBi
+    boxEi
+    boxDi
+    boxOi
+]
+    # k axiom
+    # TODO: inverse version
+    @test mvhsalphaprove(
+        ⊤,
+        →(
+            boxX(→(p,q)),
+            →(boxX(p),boxX(q))
+        ),
+        FiniteHeytingAlgebra(H4)
+    ) == true
+end
+for (boxX,diamondXi) in [
+    (boxA,  boxAi),
+    (boxL,  boxLi),
+    (boxB,  boxBi),
+    (boxE,  boxEi),
+    (boxD,  boxDi),
+    (boxO,  boxOi),
+    (boxAi, boxA),
+    (boxLi, boxL),
+    (boxBi, boxB),
+    (boxEi, boxE),
+    (boxDi, boxD),
+    (boxOi, boxO),
+]
+    # TODO: inverse version
+    @test mvhsalphaprove(
+        ⊤,
+        →(
+            p,
+            boxX(diamondXi(p))
+        )
+    ) == true
+end
+
+###################################################
+## Theorem 2 ######################################
+###################################################
+# TODO: inverse version
 @test mvhsalphaprove(
     ⊤,
     →(
-        boxA(→(p,q)),
-        →(boxA(p),boxA(q))
-    ),
-    FiniteHeytingAlgebra(H4)
+        diamondD(diamondD(p)),
+        diamondD(p)
+    )
 ) == true
-#     @test mvhsalphaprove(
-#         ⊤,
-#         →(
-#             box(X)(→(p,q)),
-#             →(box(X)p,box(X)q)
-#         )
-#     ) == true
-#     @test mvhsalphaprove(
-#         ⊤,
-#         →(
-#             box(X)(→(p,q)),
-#             →(box(X)p,box(X)q)
-#         )
-#     ) == true
-#     @test mvhsalphaprove(
-#         ⊤,
-#         →(
-#             box(X)(→(p,q)),
-#             →(box(X)p,box(X)q)
-#         )
-#     ) == true
-#     @test mvhsalphaprove(
-#         ⊤,
-#         →(
-#             box(X)(→(p,q)),
-#             →(box(X)p,box(X)q)
-#         )
-#     ) == true
-#     @test mvhsalphaprove(
-#         ⊤,
-#         →(
-#             box(X)(→(p,q)),
-#             →(box(X)p,box(X)q)
-#         )
-#     ) == true
-#     @test mvhsalphaprove(
-#         ⊤,
-#         →(
-#             box(X)(→(p,q)),
-#             →(box(X)p,box(X)q)
-#         )
-#     ) == true
-#     @test mvhsalphaprove(
-#         ⊤,
-#         →(
-#             box(X)(→(p,q)),
-#             →(box(X)p,box(X)q)
-#         )
-#     ) == true
-#     @test mvhsalphaprove(
-#         ⊤,
-#         →(
-#             box(X)(→(p,q)),
-#             →(box(X)p,box(X)q)
-#         )
-#     ) == true
-#     @test mvhsalphaprove(
-#         ⊤,
-#         →(
-#             box(X)(→(p,q)),
-#             →(box(X)p,box(X)q)
-#         )
-#     ) == true
-#     @test mvhsalphaprove(
-#         ⊤,
-#         →(
-#             box(X)(→(p,q)),
-#             →(box(X)p,box(X)q)
-#         )
-#     ) == true
-#     @test mvhsalphaprove(
-#         ⊤,
-#         →(
-#             box(X)(→(p,q)),
-#             →(box(X)p,box(X)q)
-#         )
-#     ) == true
-# end
+for dimaondX in [
+    diamondB,
+    diamondL,
+    diamondE
+]
+    # TODO: inverse version
+    @test mvhsalphaprove(
+        ⊤,
+        →(
+            diamondX(diamondX(p)),
+            diamondX(p)
+        )
+    ) == false
+end
 
-# for X in [IA_A, IA_L, IA_B, IA_E, IA_D, IA_O]
-#     @test mvhsalphaprove(
-#         ⊤,
-#         →(
-#             p,
-#             box(X)diamond(converse(X))p
-#         )
-#     ) == true
-# end
+###################################################
+## Theorem 3 ######################################
+###################################################
+@test mvhsalphaprove(
+    ⊤,
+    →(
+        diamondL(p),
+        diamondA(diamondA(p))
+    )
+) == true
+@test mvhsalphaprove(
+    ⊤,
+    →(
+        diamondD(p),
+        diamondB(diamondE(p))
+    )
+) == true
+@test mvhsalphaprove(
+    ⊤,
+    →(
+        diamondD(p),
+        diamondE(diamondB(p))
+    )
+) == true
+@test mvhsalphaprove(
+    ⊤,
+    →(
+        diamondO(p),
+        diamondE(diamondBi(p))
+    )
+) == true
+@test mvhsalphaprove(
+    ⊤,
+    →(
+        diamondA(diamondA(p)),
+        diamondL(p)
+    )
+) == false
+@test mvhsalphaprove(
+    ⊤,
+    →(
+        diamondB(diamondE(p)),
+        diamondD(p)
+    )
+) == false
+@test mvhsalphaprove(
+    ⊤,
+    →(
+        diamondE(diamondB(p)),
+        diamondD(p)
+    )
+) == false
+@test mvhsalphaprove(
+    ⊤,
+    →(
+        diamondE(diamondBi(p)),
+        diamondO(p)
+    )
+) == false
+@test mvhsalphaprove(
+    ⊤,
+    →(
+        diamondL(p),
+        diamondBi(boxE(diamondBi(diamondE(p))))
+    )
+) == false
+@test mvhsalphaprove(
+    ⊤,
+    →(
+        diamondBi(boxE(diamondBi(diamondE(p)))),
+        diamondL(p)
+    )
+) == false

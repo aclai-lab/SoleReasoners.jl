@@ -55,9 +55,9 @@ BaseManyValuedConnectives = Union{typeof.(BASE_MANY_VALUED_MODAL_CONNECTIVES)...
 myalphabet = Atom.(["p", "q"])
 
 min_height = 1
-max_height = 6
-max_it = 50
-max_avg = 20
+max_height = 3
+max_it = 20
+max_avg = 5
 
 using SoleLogics.ManyValuedLogics: booleanalgebra
 myoperators2 = []
