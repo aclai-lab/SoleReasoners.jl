@@ -1,0 +1,49 @@
+Julia version: 1.9.3
+
+##################################################
+TEST: mvhs.jl
+false(⊤ ⪯ [A](p → q) → [A]p → [A]q), [A,B], C = (
+	<: Dict{Tuple{SoleReasoners.Point, SoleReasoners.Point}, FiniteTruth}((A, B) => β, (B, A) => ⊥, (A, A) => ⊥, (B, B) => ⊥),
+	=: Dict{Tuple{SoleReasoners.Point, SoleReasoners.Point}, FiniteTruth}((A, B) => α, (B, A) => α, (A, A) => ⊤, (B, B) => ⊤)
+)
+true(β ⪯ [A](p → q)), [A,B], C = (
+	<: Dict{Tuple{SoleReasoners.Point, SoleReasoners.Point}, FiniteTruth}((A, B) => β, (B, A) => ⊥, (A, A) => ⊥, (B, B) => ⊥),
+	=: Dict{Tuple{SoleReasoners.Point, SoleReasoners.Point}, FiniteTruth}((A, B) => α, (B, A) => α, (A, A) => ⊤, (B, B) => ⊤)
+)
+false(β ⪯ [A]p → [A]q), [A,B], C = (
+	<: Dict{Tuple{SoleReasoners.Point, SoleReasoners.Point}, FiniteTruth}((A, B) => β, (B, A) => ⊥, (A, A) => ⊥, (B, B) => ⊥),
+	=: Dict{Tuple{SoleReasoners.Point, SoleReasoners.Point}, FiniteTruth}((A, B) => α, (B, A) => α, (A, A) => ⊤, (B, B) => ⊤)
+)
+true(β ⪯ [A](p → q)), [A,B], C = (
+	<: Dict{Tuple{SoleReasoners.Point, SoleReasoners.Point}, FiniteTruth}((A, B) => β, (B, A) => ⊥, (A, A) => ⊥, (B, B) => ⊥),
+	=: Dict{Tuple{SoleReasoners.Point, SoleReasoners.Point}, FiniteTruth}((A, B) => α, (B, A) => α, (A, A) => ⊤, (B, B) => ⊤)
+)
+MVHS: Test Failed at /home/ilpaps/.julia/dev/SoleReasoners/test/mvhs/modalrules.jl:65
+  Expression: mvhsalphaprove(⊤, boxA(p → q) → (boxA(p) → boxA(q)), FiniteHeytingAlgebra(H4)) == true
+   Evaluated: false == true
+
+Stacktrace:
+  [1] top-level scope
+    @ ~/.julia_exec/julia-1.9.3/share/julia/stdlib/v1.9/Test/src/Test.jl:478
+  [2] include(fname::String)
+    @ Base.MainInclude ./client.jl:478
+  [3] top-level scope
+    @ ~/.julia/dev/SoleReasoners/test/mvhs.jl:12
+  [4] include
+    @ ./client.jl:478 [inlined]
+  [5] run_tests(list::Vector{String})
+    @ Main ~/.julia/dev/SoleReasoners/test/runtests.jl:10
+  [6] macro expansion
+    @ ~/.julia/dev/SoleReasoners/test/runtests.jl:72 [inlined]
+  [7] macro expansion
+    @ ~/.julia_exec/julia-1.9.3/share/julia/stdlib/v1.9/Test/src/Test.jl:1498 [inlined]
+  [8] macro expansion
+    @ ~/.julia/dev/SoleReasoners/test/runtests.jl:72 [inlined]
+  [9] macro expansion
+    @ ~/.julia_exec/julia-1.9.3/share/julia/stdlib/v1.9/Test/src/Test.jl:1498 [inlined]
+ [10] top-level scope
+    @ ~/.julia/dev/SoleReasoners/test/runtests.jl:67
+
+Test Summary:    | Fail  Total  Time
+SoleReasoners.jl |    1      1  4.2s
+  MVHS           |    1      1  4.2s

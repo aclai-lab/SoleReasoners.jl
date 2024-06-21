@@ -6,61 +6,105 @@ using SoleLogics.ManyValuedLogics
 using SoleReasoners
 using Test
 
-BASE_MANY_VALUED_CONNECTIVES = [∨, ∧, →]
-BaseManyValuedConnectives = Union{typeof.(BASE_MANY_VALUED_CONNECTIVES)...}
+using SoleLogics: IA_O # momentary fix
 
-myalphabet = Atom.(["p", "q", "r"])
+diamondA = diamond(IA_A)
+diamondL = diamond(IA_L)
+diamondB = diamond(IA_B)
+diamondE = diamond(IA_E)
+diamondD = diamond(IA_D)
+diamondO = diamond(IA_O)
+diamondAi = diamond(IA_Ai)
+diamondLi = diamond(IA_Li)
+diamondBi = diamond(IA_Bi)
+diamondEi = diamond(IA_Ei)
+diamondDi = diamond(IA_Di)
+diamondOi = diamond(IA_Oi)
+boxA = box(IA_A)
+boxL = box(IA_L)
+boxB = box(IA_B)
+boxE = box(IA_E)
+boxD = box(IA_D)
+boxO = box(IA_O)
+boxAi = box(IA_Ai)
+boxLi = box(IA_Li)
+boxBi = box(IA_Bi)
+boxEi = box(IA_Ei)
+boxDi = box(IA_Di)
+boxOi = box(IA_Oi)
 
-max_height = 10
-max_it = 7000
-max_avg = 5000
-max_timeout = 1 # seconds
+BASE_MANY_VALUED_MODAL_CONNECTIVES = [
+    ∨,
+    ∧,
+    →,
+    diamondA,
+    diamondL,
+    diamondB,
+    diamondE,
+    diamondD,
+    diamondO,
+    diamondAi,
+    diamondLi,
+    diamondBi,
+    diamondEi,
+    diamondDi,
+    diamondOi,
+]
+BaseManyValuedConnectives = Union{typeof.(BASE_MANY_VALUED_MODAL_CONNECTIVES)...}
+
+myalphabet = Atom.(["p", "q"])
+
+min_height = 1
+max_height = 6
+max_it = 50
+max_avg = 20
 
 using SoleLogics.ManyValuedLogics: booleanalgebra
 myoperators2 = []
-append!(myoperators2, BASE_MANY_VALUED_CONNECTIVES)
+append!(myoperators2, BASE_MANY_VALUED_MODAL_CONNECTIVES)
 append!(myoperators2, getdomain(booleanalgebra))
-opweights2 = [10, 10, 10, 1, 1]
+opweights2 = [4, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
 using SoleLogics.ManyValuedLogics: G3
 myoperators3 = []
-append!(myoperators3, BASE_MANY_VALUED_CONNECTIVES)
+append!(myoperators3, BASE_MANY_VALUED_MODAL_CONNECTIVES)
 append!(myoperators3, getdomain(G3))
-opweights3 = [10, 10, 10, 1, 1, 1]
+opweights3 = [4, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
 using SoleLogics.ManyValuedLogics: G4
 myoperators4 = []
-append!(myoperators4, BASE_MANY_VALUED_CONNECTIVES)
+append!(myoperators4, BASE_MANY_VALUED_MODAL_CONNECTIVES)
 append!(myoperators4, getdomain(G4))
-opweights4 = [10, 10, 10, 1, 1, 1, 1]
+opweights4 = [4, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
 using SoleLogics.ManyValuedLogics: G5
 myoperators5 = []
-append!(myoperators5, BASE_MANY_VALUED_CONNECTIVES)
+append!(myoperators5, BASE_MANY_VALUED_MODAL_CONNECTIVES)
 append!(myoperators5, getdomain(G5))
-opweights5 = [10, 10, 10, 1, 1, 1, 1, 1]
+opweights5 = [4, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
 using SoleLogics.ManyValuedLogics: G6
 myoperators6 = []
-append!(myoperators6, BASE_MANY_VALUED_CONNECTIVES)
+append!(myoperators6, BASE_MANY_VALUED_MODAL_CONNECTIVES)
 append!(myoperators6, getdomain(G6))
-opweights6 = [10, 10, 10, 1, 1, 1, 1, 1, 1]
+opweights6 = [4, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
 algebras = [
-    ("booleanalgebra", booleanalgebra, myoperators2, opweights2, "twovaluedformulas"),
-    ("G3",             G3,             myoperators3, opweights3, "threevaluedformulas"),
-    ("G4",             G4,             myoperators4, opweights4, "fourvaluedformulas"),
-    ("G5",             G5,             myoperators5, opweights5, "fivevaluedformulas"),
-    ("G6",             G6,             myoperators6, opweights6, "sixvaluedformulas")
+    ("BA",   booleanalgebra, myoperators2, opweights2, "twovaluedformulas"),
+    ("G3",   G3,             myoperators3, opweights3, "threevaluedformulas"),
+    ("G4",   G4,             myoperators4, opweights4, "fourvaluedformulas"),
+    ("G5",   G5,             myoperators5, opweights5, "fivevaluedformulas"),
+    ("G6",   G6,             myoperators6, opweights6, "sixvaluedformulas")
 ]
 
 for a in algebras
     mkdir(a[5])
-    for height in 1:max_height
+    for height in min_height:max_height
         # Open file in append mode and then write to it
         file =  open(a[5] * "/height" * string(height) * ".txt","a")
         j = 0
         for i in 1:max_it
+            t = rand(MersenneTwister(i), getdomain(a[2]))
             f = randformula(
                 MersenneTwister(i),
                 height,
@@ -68,8 +112,8 @@ for a in algebras
                 a[3],
                 opweights=a[4]
             )
-            if SoleLogics.height(f) == height
-                write(file, syntaxstring(f) * "\n");
+            if !isbot(t) && SoleLogics.height(f) == height
+                write(file, "($t⪯$(syntaxstring(f)))\n");
                 j+=1
                 if j == max_avg
                     break
