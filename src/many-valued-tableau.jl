@@ -1129,6 +1129,7 @@ function sat(
     randombranch(_::ManyValuedTableau{T}) where {T<:Truth} = rand(rng, Int)
     return sat(SignedFormula(true, (⊤, z)), h, roundrobin, randombranch; verbose, timeout, kwargs...)
 end
+
 """
     prove(
         z::Formula,
