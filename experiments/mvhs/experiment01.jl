@@ -46,46 +46,58 @@ BASE_MANY_VALUED_MODAL_CONNECTIVES = [
     diamondEi,
     diamondDi,
     diamondOi,
+    boxA,
+    boxL,
+    boxB,
+    boxE,
+    boxD,
+    boxO,
+    boxAi,
+    boxLi,
+    boxBi,
+    boxEi,
+    boxDi,
+    boxOi
 ]
 BaseManyValuedConnectives = Union{typeof.(BASE_MANY_VALUED_MODAL_CONNECTIVES)...}
 
-myalphabet = Atom.(["p", "q"])
+myalphabet = Atom.(["p", "q", "r"])
 
 min_height = 1
-max_height = 3
-max_it = 20
-max_avg = 5
+max_height = 5
+max_it = 999
+max_avg = 100
 max_timeout = 10 # seconds
 
 using SoleLogics.ManyValuedLogics: booleanalgebra
 myoperators2 = []
 append!(myoperators2, BASE_MANY_VALUED_MODAL_CONNECTIVES)
 append!(myoperators2, getdomain(booleanalgebra))
-opweights2 = [4, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+opweights2 = [8, 8, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
 using SoleLogics.ManyValuedLogics: G3, Ł3
 myoperators3 = []
 append!(myoperators3, BASE_MANY_VALUED_MODAL_CONNECTIVES)
 append!(myoperators3, getdomain(G3))
-opweights3 = [4, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+opweights3 = [8, 8, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
 using SoleLogics.ManyValuedLogics: G4, Ł4, H4
 myoperators4 = []
 append!(myoperators4, BASE_MANY_VALUED_MODAL_CONNECTIVES)
 append!(myoperators4, getdomain(G4))
-opweights4 = [4, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+opweights4 = [8, 8, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
 using SoleLogics.ManyValuedLogics: G5
 myoperators5 = []
 append!(myoperators5, BASE_MANY_VALUED_MODAL_CONNECTIVES)
 append!(myoperators5, getdomain(G5))
-opweights5 = [4, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+opweights5 = [8, 8, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
 using SoleLogics.ManyValuedLogics: G6, H6_1, H6_2, H6_3, H6
 myoperators6 = []
 append!(myoperators6, BASE_MANY_VALUED_MODAL_CONNECTIVES)
 append!(myoperators6, getdomain(G6))
-opweights6 = [4, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+opweights6 = [8, 8, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
 algebras = [
     ("BA",   booleanalgebra, myoperators2, opweights2),
@@ -94,12 +106,12 @@ algebras = [
     ("G4",   G4,             myoperators4, opweights4),
     # ("Ł4",   Ł4,             myoperators4, opweights4),
     ("H4",   H4,             myoperators4, opweights4),
-    ("G5",   G5,             myoperators5, opweights5),
-    ("G6",   G6,             myoperators6, opweights6),
+    # ("G5",   G5,             myoperators5, opweights5),
+    # ("G6",   G6,             myoperators6, opweights6),
     # ("H6_1", H6_1,           myoperators6, opweights6),
     # ("H6_2", H6_2,           myoperators6, opweights6),
     # ("H6_3", H6_3,           myoperators6, opweights6),
-    ("H6",   H6,             myoperators6, opweights6)
+    # ("H6",   H6,             myoperators6, opweights6)
 ]
 
 for a in algebras

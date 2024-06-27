@@ -6,3 +6,4 @@
 .vscode
 /experiments/*/formulas/*/
 /experiments/*/results/*
+/test/log.txt

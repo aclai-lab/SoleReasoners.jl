@@ -54,40 +54,75 @@ BaseManyValuedConnectives = Union{typeof.(BASE_MANY_VALUED_MODAL_CONNECTIVES)...
 
 myalphabet = Atom.(["p", "q"])
 
+myalphabet = Atom.(["p", "q", "r"])
+
+BASE_MANY_VALUED_MODAL_CONNECTIVES = [
+    ∨,
+    ∧,
+    →,
+    diamondA,
+    diamondL,
+    diamondB,
+    diamondE,
+    diamondD,
+    diamondO,
+    diamondAi,
+    diamondLi,
+    diamondBi,
+    diamondEi,
+    diamondDi,
+    diamondOi,
+    boxA,
+    boxL,
+    boxB,
+    boxE,
+    boxD,
+    boxO,
+    boxAi,
+    boxLi,
+    boxBi,
+    boxEi,
+    boxDi,
+    boxOi
+]
+BaseManyValuedConnectives = Union{typeof.(BASE_MANY_VALUED_MODAL_CONNECTIVES)...}
+
+myalphabet = Atom.(["p", "q", "r"])
+
 min_height = 1
-max_height = 3
-max_it = 20
-max_avg = 5
+max_height = 5
+max_it = 999
+max_avg = 100
 
 using SoleLogics.ManyValuedLogics: booleanalgebra
 myoperators2 = []
 append!(myoperators2, BASE_MANY_VALUED_MODAL_CONNECTIVES)
 append!(myoperators2, getdomain(booleanalgebra))
-opweights2 = [4, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+opweights2 = [8, 8, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
 using SoleLogics.ManyValuedLogics: G3
 myoperators3 = []
 append!(myoperators3, BASE_MANY_VALUED_MODAL_CONNECTIVES)
 append!(myoperators3, getdomain(G3))
-opweights3 = [4, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+opweights3 = [8, 8, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
 using SoleLogics.ManyValuedLogics: G4
 myoperators4 = []
 append!(myoperators4, BASE_MANY_VALUED_MODAL_CONNECTIVES)
 append!(myoperators4, getdomain(G4))
-opweights4 = [4, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+opweights4 = [8, 8, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
 using SoleLogics.ManyValuedLogics: G5
 myoperators5 = []
 append!(myoperators5, BASE_MANY_VALUED_MODAL_CONNECTIVES)
 append!(myoperators5, getdomain(G5))
-opweights5 = [4, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+opweights5 = [8, 8, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
 using SoleLogics.ManyValuedLogics: G6
 myoperators6 = []
 append!(myoperators6, BASE_MANY_VALUED_MODAL_CONNECTIVES)
 append!(myoperators6, getdomain(G6))
-opweights6 = [4, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+opweights6 = [8, 8, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
 algebras = [
     ("BA",   booleanalgebra, myoperators2, opweights2, "twovaluedformulas"),
