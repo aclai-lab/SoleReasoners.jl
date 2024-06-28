@@ -9,4 +9,4 @@ include("mvhs/mvhsalphasat.jl")
 
 include("mvhs/mvhsalphaprove.jl")
 
-include("mvhs/modalrules.jl")
+# include("mvhs/modalrules.jl")

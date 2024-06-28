@@ -720,89 +720,142 @@ function mvhsalphasat(
                     end
                     !newnodes && l == node && push!(metricheaps, node)
                 end
-
-                verbose && println("F∧")
-                for l ∈ findleaves(en)
-                    # verbose && println(l)
-                    t1 = MVHSTableau{T}(
-                        false,
-                        (β, φ.children[1]),
-                        en.interval,
-                        l.constraintsystem,
-                        l
-                    )
-                    push!(metricheaps, t1)
-                    # verbose && println(t1)
-                    t2 = MVHSTableau{T}(
-                        false,
-                        (β, φ.children[2]),
-                        en.interval,
-                        l.constraintsystem,
-                        l
-                    )
-                    push!(metricheaps, t2)
-                    # verbose && println(t2)
-                    # verbose && println()
-                end
             elseif en.judgement && token(φ) isa NamedConnective{:→} && !isbot(β)
                 # T→
-                verbose && println("T→")
-                for γ ∈ lesservalues(a, β)
-                    isbot(γ) && continue
-                    for l ∈ findleaves(en)
-                        t1 = MVHSTableau{T}(
-                            false,
-                            (γ, φ.children[1]),
-                            en.interval,
-                            l.constraintsystem,
-                            l
-                        )
-                        push!(metricheaps, t1)
-                        # verbose && println(t1)
-                        t2 = MVHSTableau{T}(
-                            true,
-                            (γ, φ.children[2]),
-                            en.interval,
-                            l.constraintsystem,
-                            l
-                        )
-                        push!(metricheaps, t2)
-                        # verbose && println(t2)
-                        # verbose && println()
+                (ψ, ε) = children(φ)
+                # Search for support tuples
+                pairs = Set{NTuple{2,T}}()
+                for βi ∈ getdomain(a)
+                    for γi ∈ getdomain(a)
+                        if precedeq(a, β, a.implication(βi, γi))
+                            push!(pairs, (βi, γi))
+                        end
                     end
+                end
+                for p in pairs
+                    for q in pairs
+                        if precedeq(a, p[1], q[1]) && precedeq(a, q[2], p[2]) && p != q
+                            delete!(pairs, p)
+                        end
+                    end
+                end
+                for l ∈ findleaves(en)
+                    newnodes = false
+                    for pair in pairs
+                        newnodes = true
+                        if !findtableau(l, true, (ψ, pair[1]), en.interval)
+                            t1 = MVHSTableau{T}(
+                                true,
+                                (ψ, pair[1]),
+                                en.interval,
+                                l.constraintsystem,
+                                l
+                            )
+                            push!(metricheaps, t1)
+                            if !findtableau(t1, true, (pair[2], ε), en.interval)
+                                    t2 = MVHSTableau{T}(
+                                    true,
+                                    (pair[2], ε),
+                                    en.interval,
+                                    t1.constraintsystem,
+                                    t1
+                                )
+                                push!(metricheaps, t2)
+                            end
+                        else
+                            if !findtableau(l, true, (pair[2], ε), en.interval)
+                                t2 = MVHSTableau{T}(
+                                    true,
+                                    (pair[2], ε),
+                                    en.interval,
+                                    l.constraintsystem,
+                                    l
+                                )
+                                push!(metricheaps, t2)
+                            else  # Here there should be a branch and I need to keep track of it
+                                ti = MVHSTableau{T}(   # Fake node (always true)
+                                    true,
+                                    (⊤, ⊤),
+                                    en.interval,
+                                    l.constraintsystem,
+                                    l
+                                )
+                                push!(metricheaps, ti)
+                            end
+                        end
+                    end
+                    !newnodes && l == node && push!(metricheaps, node)
                 end
             elseif !en.judgement && token(φ) isa NamedConnective{:→} && !isbot(β)
                 # F→
-                verbose && println("F→")
-                for l ∈ findleaves(en)
-                    for βi ∈ lesservalues(a, β)
-                        isbot(βi) && continue
-                        t1 = MVHSTableau{T}(
-                            true,
-                            (βi, φ.children[1]),
-                            en.interval,
-                            l.constraintsystem,
-                            l
-                        )
-                        push!(metricheaps, t1)
-                        # verbose && println(t1)
-                        t2 = MVHSTableau{T}(
-                            false,
-                            (βi, φ.children[2]),
-                            en.interval,
-                            l.constraintsystem,
-                            t1
-                        )
-                        push!(metricheaps, t2)
-                        # verbose && println(t2)
-                        # verbose && println()
+                (ψ, ε) = children(φ)
+                # Search for support tuples
+                pairs = Set{NTuple{2,T}}()
+                for βi ∈ getdomain(a)
+                    for γi ∈ getdomain(a)
+                        if !precedeq(a, β, a.implication(βi, γi))
+                            push!(pairs, (βi, γi))
+                        end
                     end
+                end
+                for p in pairs
+                    for q in pairs
+                        if precedeq(a, q[1], p[1]) && precedeq(a, p[2], q[2]) && p != q
+                            delete!(pairs, p)
+                        end
+                    end
+                end
+                for l ∈ findleaves(en)
+                    newnodes = false
+                    for pair in pairs
+                        newnodes = true
+                        if !findtableau(l, true, (pair[1], ψ), en.interval)
+                            t1 = MVHSTableau{T}(
+                                true,
+                                (pair[1], ψ),
+                                en.interval,
+                                l.constraintsystem,
+                                l
+                            )
+                            push!(metricheaps, t1)
+                            if !findtableau(t1, true, (ε, pair[2]), en.interval)
+                                t2 = MVHSTableau{T}(
+                                    true,
+                                    (ε, pair[2]),
+                                    en.interval,
+                                    t1.constraintsystem,
+                                    t1
+                                )
+                                push!(metricheaps, t2)
+                            end
+                        else
+                            if !findtableau(l, true, (ε, pair[2]), en.interval)
+                                t2 = MVHSTableau{T}(
+                                    true,
+                                    (ε, pair[2]),
+                                    en.interval,
+                                    l.constraintsystem,
+                                    l
+                                )
+                                push!(metricheaps, t2)
+                            else  # Here there should be a branch and I need to keep track of it
+                                ti = MVHSTableau{T}(   # Fake node (always true)
+                                    true,
+                                    (⊤, ⊤),
+                                    en.interval,
+                                    l.constraintsystem,
+                                    l
+                                )
+                                push!(metricheaps, ti)
+                            end
+                        end
+                    end
+                    !newnodes && l == node && push!(metricheaps, node)
                 end
             elseif en.judgement && token(φ) isa BoxRelationalConnective
                 # T□"
                 verbose && println("T□")
                 for l ∈ findleaves(en)
-                    # verbose && println(l)
                     r = SoleLogics.relation(token(φ))
                     (x, y) = (en.interval.x, en.interval.y)
                     cB = l.constraintsystem
@@ -845,7 +898,6 @@ function mvhsalphasat(
                 # F□"
                 verbose && println("F□")
                 for l ∈ findleaves(en)
-                    # verbose && println(l)
                     r = SoleLogics.relation(token(φ))
                     (x, y) = (en.interval.x, en.interval.y)
                     cB0 = l.constraintsystem
@@ -864,24 +916,9 @@ function mvhsalphasat(
                                     l
                                 )
                                 push!(metricheaps, tj)
-                                # verbose && println(tj)
                             end
                         end
                     end
-
-                    # # cB1 = o(cB) ∪ {z}
-                    # z = Point(Char(Int(last(cB0.domain).label)+1))
-                    # cB1 = AFSLOS(
-                    #     vcat(cB0.domain, z),
-                    #     cB0.algebra,
-                    #     Dict(cB0.mvlt),
-                    #     Dict(cB0.mveq)
-                    # )
-                    # cB1.mvlt[(z,z)] = ⊥
-                    # cB1.mveq[(z,z)] = ⊤
-
-                    # # cB2 = cB1 ∪ {t} = o(cB) ∪ {z,t}
-                    # t = Point(Char(Int(last(cB1.domain).label)+1))
 
                     u = Threads.SpinLock();
 
@@ -936,7 +973,6 @@ function mvhsalphasat(
                                                 )
                                                 push!(metricheaps, tj)
                                             end
-                                            # verbose && println(tj)
                                         end
                                     end
                                     for ti ∈ cB0.domain
@@ -953,7 +989,6 @@ function mvhsalphasat(
                                                 )
                                                 push!(metricheaps, tj)
                                             end
-                                            # verbose && println(tj)
                                         end
                                     end
 
@@ -1003,7 +1038,6 @@ function mvhsalphasat(
                                                                 )
                                                                 push!(metricheaps, tj)
                                                             end
-                                                            # verbose && println(tj)
                                                         end
                                                     else    # <(t,z) ≻ 0
                                                         βi = mveval(r, (x,y), (t,z), cB2)
@@ -1018,29 +1052,25 @@ function mvhsalphasat(
                                                                 )
                                                                 push!(metricheaps, tj)
                                                             end
-                                                            # verbose && println(tj)
                                                         end
                                                     end
                                                 catch err2
-                                                    #verbose && println(sprint(showerror, err2))
+                                                    verbose && println(sprint(showerror, err2))
                                                 end
                                             end
                                         end
                                     end
                                 catch err1
-                                    # verbose && println(sprint(showerror, err1))
-                                    # return
+                                    verbose && println(sprint(showerror, err1))
                                 end
                             end
                         end
                     end
-                    # verbose && println()
                 end
             elseif en.judgement && !isbot(β)
                 # T⪰
                 verbose && println("T⪰")
                 for l ∈ findleaves(en)
-                    # verbose && println(l)
                     ti = l
                     newnodes = false
                     for γ in maximalmembers(a, β)
@@ -1054,17 +1084,14 @@ function mvhsalphasat(
                                 ti
                             )
                             push!(metricheaps, ti)
-                            # verbose && println(ti)
                         end
                     end
                     !newnodes && l == node && push!(metricheaps, node)
-                    # verbose && println()
                 end
             elseif !en.judgement && !isbot(β)
                 # F⪰
                 verbose && println("F⪰")
                 for l ∈ findleaves(en)
-                    # verbose && println(l)
                     newnodes = false
                     for βi in maximalmembers(a, β)
                         newnodes = true
@@ -1077,7 +1104,6 @@ function mvhsalphasat(
                                 l
                             )
                             push!(metricheaps, ti)
-                            # verbose && println(ti)
                         else  # Here there should be a branch and I need to keep track of it
                             ti = MVHSTableau{T}(   # Fake node (always true)
                                 true,
@@ -1090,7 +1116,6 @@ function mvhsalphasat(
                         end
                     end
                     !newnodes && l == node && push!(metricheaps, node)
-                    # verbose && println()
                 end
             else
                 # No condition matched, pushing node back into metricheaps
@@ -1105,59 +1130,140 @@ function mvhsalphasat(
                 close!(en)
             elseif en.judgement && token(φ) isa NamedConnective{:∨} && !istop(β)
                 # T∨
-                verbose && println("T∨")
+                (ψ, ε) = children(φ)
+                # Search for support tuples
+                pairs = Set{NTuple{2,T}}()
+                for βi ∈ getdomain(a)
+                    for γi ∈ getdomain(a)
+                        if precedeq(a, a.join(βi, γi), β)
+                            push!(pairs, (βi, γi))
+                        end
+                    end
+                end
+                for p in pairs
+                    for q in pairs
+                        if precedeq(a, p[1], q[1]) && precedeq(a, p[2], q[2]) && p != q
+                            delete!(pairs, p)
+                        end
+                    end
+                end
                 for l ∈ findleaves(en)
-                    # verbose && println(l)
-                    t1 = MVHSTableau{T}(
-                        true,
-                        (φ.children[1], β),
-                        en.interval,
-                        l.constraintsystem,
-                        l
-                    )
-                    push!(metricheaps, t1)
-                    # verbose && println(t1)
-                    t2 = MVHSTableau{T}(
-                        true,
-                        (φ.children[2], β),
-                        en.interval,
-                        l.constraintsystem,
-                        t1
-                    )
-                    push!(metricheaps, t2)
-                    # verbose && println(t2)
-                    # verbose && println()
+                    newnodes = false
+                    for pair in pairs
+                        newnodes = true
+                        if !findtableau(l, true, (ψ, pair[1]), en.interval)
+                            t1 = MVHSTableau{T}(
+                                true,
+                                (ψ, pair[1]),
+                                en.interval,
+                                l.constraintsystem,
+                                l
+                            )
+                            push!(metricheaps, t1)
+                            if !findtableau(t1, true, (ε, pair[2]), en.interval)
+                                t2 = MVHSTableau{T}(
+                                    true,
+                                    (ε, pair[2]),
+                                    en.interval,
+                                    t1.constraintsystem,
+                                    t1
+                                )
+                                push!(metricheaps, t2)
+                            end
+                        else
+                            if !findtableau(l, true, (ε, pair[2]), en.interval)
+                                t2 = MVHSTableau{T}(
+                                    true,
+                                    (ε, pair[2]),
+                                    en.interval,
+                                    l.constraintsystem,
+                                    l
+                                )
+                                push!(metricheaps, t2)
+                            else  # Here there should be a branch and I need to keep track of it
+                                ti = MVHSTableau{T}(   # Fake node (always true)
+                                    true,
+                                    (⊤, ⊤),
+                                    en.interval,
+                                    l.constraintsystem,
+                                    l
+                                )
+                                push!(metricheaps, ti)
+                            end
+                        end
+                    end
+                    !newnodes && l == node && push!(metricheaps, node)
                 end
             elseif !en.judgement && token(φ) isa NamedConnective{:∨} && !istop(β)
                 # F∨
-                verbose && println("F∨")
+                (ψ, ε) = children(φ)
+                # Search for support tuples
+                pairs = Set{NTuple{2,T}}()
+                for βi ∈ getdomain(a)
+                    for γi ∈ getdomain(a)
+                        if !precedeq(a, a.join(βi, γi), β)
+                            push!(pairs, (βi, γi))
+                        end
+                    end
+                end
+                for p in pairs
+                    for q in pairs
+                        if precedeq(a, q[1], p[1]) && precedeq(a, q[2], p[2]) && p != q
+                            delete!(pairs, p)
+                        end
+                    end
+                end
                 for l ∈ findleaves(en)
-                    # verbose && println(l)
-                    t1 = MVHSTableau{T}(
-                        false,
-                        (φ.children[1], β),
-                        en.interval,
-                        l.constraintsystem,
-                        l
-                    )
-                    push!(metricheaps, t1)
-                    # verbose && println(t1)
-                    t2 = MVHSTableau{T}(
-                        false,
-                        (φ.children[2], β),
-                        en.interval,
-                        l.constraintsystem,
-                        l
-                    )
-                    push!(metricheaps, t2)
-                    # verbose && println(t2)
-                    # verbose && println()
+                    newnodes = false
+                    for pair in pairs
+                        newnodes = true
+                        if !findtableau(l, true, (pair[1], ψ), en.interval)
+                            t1 = MVHSTableau{T}(
+                                true,
+                                (pair[1], ψ),
+                                en.interval,
+                                l.constraintsystem,
+                                l
+                            )
+                            push!(metricheaps, t1)
+                            if !findtableau(l, true, (pair[2], ε), en.interval)
+                                t2 = MVHSTableau{T}(
+                                    true,
+                                    (pair[2], ε),
+                                    en.interval,
+                                    t1.constraintsystem,
+                                    t1
+                                )
+                                push!(metricheaps, t2)
+                            end
+                        else
+                            if !findtableau(l, true, (pair[2], ε), en.interval)
+                                t2 = MVHSTableau{T}(
+                                    true,
+                                    (pair[2], ε),
+                                    en.interval,
+                                    l.constraintsystem,
+                                    l
+                                )
+                                push!(metricheaps, t2)
+                            else  # Here there should be a branch and I need to keep track of it
+                                ti = MVHSTableau{T}(   # Fake node (always true)
+                                    true,
+                                    (⊤, ⊤),
+                                    en.interval,
+                                    l.constraintsystem,
+                                    l
+                                )
+                                push!(metricheaps, ti)
+                            end
+                        end
+                    end
+                    !newnodes && l == node && push!(metricheaps, node)
                 end
             elseif en.judgement && token(φ) isa DiamondRelationalConnective
                 # T◊"
                 verbose && println("T◊")
                 for l ∈ findleaves(en)
-                    # verbose && println(l)
                     r = SoleLogics.relation(token(φ))
                     (x, y) = (en.interval.x, en.interval.y)
                     cB = l.constraintsystem
@@ -1200,7 +1306,6 @@ function mvhsalphasat(
                 # F◊
                 verbose && println("F◊")
                 for l ∈ findleaves(en)
-                    # verbose && println(l)
                     r = SoleLogics.relation(token(φ))
                     (x, y) = (en.interval.x, en.interval.y)
                     cB0 = l.constraintsystem
@@ -1219,24 +1324,9 @@ function mvhsalphasat(
                                     l
                                 )
                                 push!(metricheaps, tj)
-                                # verbose && println(tj)
                             end
                         end
                     end
-
-                    # # cB1 = o(cB) ∪ {z}
-                    # z = Point(Char(Int(last(cB0.domain).label)+1))
-                    # cB1 = AFSLOS(
-                    #     vcat(cB0.domain, z),
-                    #     cB0.algebra,
-                    #     Dict(cB0.mvlt),
-                    #     Dict(cB0.mveq)
-                    # )
-                    # cB1.mvlt[(z,z)] = ⊥
-                    # cB1.mveq[(z,z)] = ⊤
-
-                    # # cB2 = cB1 ∪ {t} = o(cB) ∪ {z,t}
-                    # t = Point(Char(Int(last(cB1.domain).label)+1))
 
                     u = Threads.SpinLock();
 
@@ -1291,7 +1381,6 @@ function mvhsalphasat(
                                                 )
                                                 push!(metricheaps, tj)
                                             end
-                                            # verbose && println(tj)
                                         end
                                     end
                                     for ti ∈ cB0.domain
@@ -1308,7 +1397,6 @@ function mvhsalphasat(
                                                 )
                                                 push!(metricheaps, tj)
                                             end
-                                            # verbose && println(tj)
                                         end
                                     end
 
@@ -1358,7 +1446,6 @@ function mvhsalphasat(
                                                                 )
                                                                 push!(metricheaps, tj)
                                                             end
-                                                            # verbose && println(tj)
                                                         end
                                                     else    # <(t,z) ≻ 0
                                                         βi = mveval(r, (x,y), (t,z), cB2)
@@ -1373,29 +1460,25 @@ function mvhsalphasat(
                                                                 )
                                                                 push!(metricheaps, tj)
                                                             end
-                                                            # verbose && println(tj)
                                                         end
                                                     end
                                                 catch err2
-                                                    #verbose && println(sprint(showerror, err2))
+                                                    verbose && println(sprint(showerror, err2))
                                                 end
                                             end
                                         end
                                     end
                                 catch err1
-                                    # verbose && println(sprint(showerror, err1))
-                                    # return
+                                    verbose && println(sprint(showerror, err1))
                                 end
                             end
                         end
                     end
-                    # verbose && println()
                 end
             elseif en.judgement && !istop(β)
                 # T⪯
                 verbose && println("T⪯")
                 for l ∈ findleaves(en)
-                    # verbose && println(l)
                     ti = l
                     newnodes = false
                     for γ in minimalmembers(a, β)
@@ -1409,17 +1492,14 @@ function mvhsalphasat(
                                 ti
                             )
                             push!(metricheaps, ti)
-                            # verbose && println(ti)
                         end
                     end
                     !newnodes && l == node && push!(metricheaps, node)
-                    # verbose && println()
                 end
             elseif !en.judgement && !istop(β)
                 # F⪯
                 verbose && println("F⪯")
                 for l ∈ findleaves(en)
-                    # verbose && println(l)
                     newnodes = false
                     for βi in minimalmembers(a, β)
                         newnodes = true
@@ -1432,7 +1512,6 @@ function mvhsalphasat(
                                 l
                             )
                             push!(metricheaps, ti)
-                            # verbose && println(ti)
                         else  # Here there should be a branch and I need to keep track of it
                             ti = MVHSTableau{T}(   # Fake node (always true)
                                 true,
@@ -1445,7 +1524,6 @@ function mvhsalphasat(
                         end
                     end
                     !newnodes && l == node && push!(metricheaps, node)
-                    # verbose && println()
                 end
             else
                 # No condition matched, pushing node back into metricheaps
@@ -1552,7 +1630,6 @@ function mvhsalphasat(
                 # T∧
                 verbose && println("T∧")
                 for l ∈ findleaves(en)
-                    # verbose && println(l)
                     t1 = MVHSTableau{T}(
                         true,
                         (β, φ.children[1]),
@@ -1561,7 +1638,6 @@ function mvhsalphasat(
                         l
                     )
                     push!(metricheaps, t1)
-                    # verbose && println(t1)
                     t2 = MVHSTableau{T}(
                         true,
                         (β, φ.children[2]),
@@ -1570,14 +1646,11 @@ function mvhsalphasat(
                         t1
                     )
                     push!(metricheaps, t2)
-                    # verbose && println(t2)
-                    # verbose && println()
                 end
             elseif !en.judgement && token(φ) isa NamedConnective{:∧} && !isbot(β)
                 # F∧
                 verbose && println("F∧")
                 for l ∈ findleaves(en)
-                    # verbose && println(l)
                     t1 = MVHSTableau{T}(
                         false,
                         (β, φ.children[1]),
@@ -1586,7 +1659,6 @@ function mvhsalphasat(
                         l
                     )
                     push!(metricheaps, t1)
-                    # verbose && println(t1)
                     t2 = MVHSTableau{T}(
                         false,
                         (β, φ.children[2]),
@@ -1595,8 +1667,6 @@ function mvhsalphasat(
                         l
                     )
                     push!(metricheaps, t2)
-                    # verbose && println(t2)
-                    # verbose && println()
                 end
             elseif en.judgement && token(φ) isa NamedConnective{:→} && !isbot(β)
                 # T→
@@ -1612,7 +1682,6 @@ function mvhsalphasat(
                             l
                         )
                         push!(metricheaps, t1)
-                        # verbose && println(t1)
                         t2 = MVHSTableau{T}(
                             true,
                             (γ, φ.children[2]),
@@ -1621,8 +1690,6 @@ function mvhsalphasat(
                             l
                         )
                         push!(metricheaps, t2)
-                        # verbose && println(t2)
-                        # verbose && println()
                     end
                 end
             elseif !en.judgement && token(φ) isa NamedConnective{:→} && !isbot(β)
@@ -1639,7 +1706,6 @@ function mvhsalphasat(
                             l
                         )
                         push!(metricheaps, t1)
-                        # verbose && println(t1)
                         t2 = MVHSTableau{T}(
                             false,
                             (βi, φ.children[2]),
@@ -1648,15 +1714,12 @@ function mvhsalphasat(
                             t1
                         )
                         push!(metricheaps, t2)
-                        # verbose && println(t2)
-                        # verbose && println()
                     end
                 end
             elseif en.judgement && token(φ) isa BoxRelationalConnective
                 # T□"
                 verbose && println("T□")
                 for l ∈ findleaves(en)
-                    # verbose && println(l)
                     r = SoleLogics.relation(token(φ))
                     (x, y) = (en.interval.x, en.interval.y)
                     cB = l.constraintsystem
@@ -1699,7 +1762,6 @@ function mvhsalphasat(
                 # F□"
                 verbose && println("F□")
                 for l ∈ findleaves(en)
-                    # verbose && println(l)
                     r = SoleLogics.relation(token(φ))
                     (x, y) = (en.interval.x, en.interval.y)
                     cB0 = l.constraintsystem
@@ -1718,24 +1780,9 @@ function mvhsalphasat(
                                     l
                                 )
                                 push!(metricheaps, tj)
-                                # verbose && println(tj)
                             end
                         end
                     end
-
-                    # # cB1 = o(cB) ∪ {z}
-                    # z = Point(Char(Int(last(cB0.domain).label)+1))
-                    # cB1 = AFSLOS(
-                    #     vcat(cB0.domain, z),
-                    #     cB0.algebra,
-                    #     Dict(cB0.mvlt),
-                    #     Dict(cB0.mveq)
-                    # )
-                    # cB1.mvlt[(z,z)] = ⊥
-                    # cB1.mveq[(z,z)] = ⊤
-
-                    # # cB2 = cB1 ∪ {t} = o(cB) ∪ {z,t}
-                    # t = Point(Char(Int(last(cB1.domain).label)+1))
 
                     u = Threads.SpinLock();
 
@@ -1790,7 +1837,6 @@ function mvhsalphasat(
                                                 )
                                                 push!(metricheaps, tj)
                                             end
-                                            # verbose && println(tj)
                                         end
                                     end
                                     for ti ∈ cB0.domain
@@ -1807,7 +1853,6 @@ function mvhsalphasat(
                                                 )
                                                 push!(metricheaps, tj)
                                             end
-                                            # verbose && println(tj)
                                         end
                                     end
 
@@ -1857,7 +1902,6 @@ function mvhsalphasat(
                                                                 )
                                                                 push!(metricheaps, tj)
                                                             end
-                                                            # verbose && println(tj)
                                                         end
                                                     else    # <(t,z) ≻ 0
                                                         βi = mveval(r, (x,y), (t,z), cB2)
@@ -1872,29 +1916,25 @@ function mvhsalphasat(
                                                                 )
                                                                 push!(metricheaps, tj)
                                                             end
-                                                            # verbose && println(tj)
                                                         end
                                                     end
                                                 catch err2
-                                                    #verbose && println(sprint(showerror, err2))
+                                                    verbose && println(sprint(showerror, err2))
                                                 end
                                             end
                                         end
                                     end
                                 catch err1
-                                    # verbose && println(sprint(showerror, err1))
-                                    # return
+                                    verbose && println(sprint(showerror, err1))
                                 end
                             end
                         end
                     end
-                    # verbose && println()
                 end
             elseif en.judgement && !isbot(β)
                 # T⪰
                 verbose && println("T⪰")
                 for l ∈ findleaves(en)
-                    # verbose && println(l)
                     ti = l
                     newnodes = false
                     for γ in maximalmembers(a, β)
@@ -1908,17 +1948,14 @@ function mvhsalphasat(
                                 ti
                             )
                             push!(metricheaps, ti)
-                            # verbose && println(ti)
                         end
                     end
                     !newnodes && l == node && push!(metricheaps, node)
-                    # verbose && println()
                 end
             elseif !en.judgement && !isbot(β)
                 # F⪰
                 verbose && println("F⪰")
                 for l ∈ findleaves(en)
-                    # verbose && println(l)
                     newnodes = false
                     for βi in maximalmembers(a, β)
                         newnodes = true
@@ -1931,7 +1968,6 @@ function mvhsalphasat(
                                 l
                             )
                             push!(metricheaps, ti)
-                            # verbose && println(ti)
                         else  # Here there should be a branch and I need to keep track of it
                             ti = MVHSTableau{T}(   # Fake node (always true)
                                 true,
@@ -1944,7 +1980,6 @@ function mvhsalphasat(
                         end
                     end
                     !newnodes && l == node && push!(metricheaps, node)
-                    # verbose && println()
                 end
             else
                 # No condition matched, pushing node back into metricheaps
@@ -1961,7 +1996,6 @@ function mvhsalphasat(
                 # T∨
                 verbose && println("T∨")
                 for l ∈ findleaves(en)
-                    # verbose && println(l)
                     t1 = MVHSTableau{T}(
                         true,
                         (φ.children[1], β),
@@ -1970,7 +2004,6 @@ function mvhsalphasat(
                         l
                     )
                     push!(metricheaps, t1)
-                    # verbose && println(t1)
                     t2 = MVHSTableau{T}(
                         true,
                         (φ.children[2], β),
@@ -1979,14 +2012,11 @@ function mvhsalphasat(
                         t1
                     )
                     push!(metricheaps, t2)
-                    # verbose && println(t2)
-                    # verbose && println()
                 end
             elseif !en.judgement && token(φ) isa NamedConnective{:∨} && !istop(β)
                 # F∨
                 verbose && println("F∨")
                 for l ∈ findleaves(en)
-                    # verbose && println(l)
                     t1 = MVHSTableau{T}(
                         false,
                         (φ.children[1], β),
@@ -1995,7 +2025,6 @@ function mvhsalphasat(
                         l
                     )
                     push!(metricheaps, t1)
-                    # verbose && println(t1)
                     t2 = MVHSTableau{T}(
                         false,
                         (φ.children[2], β),
@@ -2004,14 +2033,11 @@ function mvhsalphasat(
                         l
                     )
                     push!(metricheaps, t2)
-                    # verbose && println(t2)
-                    # verbose && println()
                 end
             elseif en.judgement && token(φ) isa DiamondRelationalConnective
                 # T◊"
                 verbose && println("T◊")
                 for l ∈ findleaves(en)
-                    # verbose && println(l)
                     r = SoleLogics.relation(token(φ))
                     (x, y) = (en.interval.x, en.interval.y)
                     cB = l.constraintsystem
@@ -2054,7 +2080,6 @@ function mvhsalphasat(
                 # F◊
                 verbose && println("F◊")
                 for l ∈ findleaves(en)
-                    # verbose && println(l)
                     r = SoleLogics.relation(token(φ))
                     (x, y) = (en.interval.x, en.interval.y)
                     cB0 = l.constraintsystem
@@ -2073,24 +2098,9 @@ function mvhsalphasat(
                                     l
                                 )
                                 push!(metricheaps, tj)
-                                # verbose && println(tj)
                             end
                         end
                     end
-
-                    # # cB1 = o(cB) ∪ {z}
-                    # z = Point(Char(Int(last(cB0.domain).label)+1))
-                    # cB1 = AFSLOS(
-                    #     vcat(cB0.domain, z),
-                    #     cB0.algebra,
-                    #     Dict(cB0.mvlt),
-                    #     Dict(cB0.mveq)
-                    # )
-                    # cB1.mvlt[(z,z)] = ⊥
-                    # cB1.mveq[(z,z)] = ⊤
-
-                    # # cB2 = cB1 ∪ {t} = o(cB) ∪ {z,t}
-                    # t = Point(Char(Int(last(cB1.domain).label)+1))
 
                     u = Threads.SpinLock();
 
@@ -2145,7 +2155,6 @@ function mvhsalphasat(
                                                 )
                                                 push!(metricheaps, tj)
                                             end
-                                            # verbose && println(tj)
                                         end
                                     end
                                     for ti ∈ cB0.domain
@@ -2162,7 +2171,6 @@ function mvhsalphasat(
                                                 )
                                                 push!(metricheaps, tj)
                                             end
-                                            # verbose && println(tj)
                                         end
                                     end
 
@@ -2212,7 +2220,6 @@ function mvhsalphasat(
                                                                 )
                                                                 push!(metricheaps, tj)
                                                             end
-                                                            # verbose && println(tj)
                                                         end
                                                     else    # <(t,z) ≻ 0
                                                         βi = mveval(r, (x,y), (t,z), cB2)
@@ -2227,29 +2234,25 @@ function mvhsalphasat(
                                                                 )
                                                                 push!(metricheaps, tj)
                                                             end
-                                                            # verbose && println(tj)
                                                         end
                                                     end
                                                 catch err2
-                                                    #verbose && println(sprint(showerror, err2))
+                                                    verbose && println(sprint(showerror, err2))
                                                 end
                                             end
                                         end
                                     end
                                 catch err1
-                                    # verbose && println(sprint(showerror, err1))
-                                    # return
+                                    verbose && println(sprint(showerror, err1))
                                 end
                             end
                         end
                     end
-                    # verbose && println()
                 end
             elseif en.judgement && !istop(β)
                 # T⪯
                 verbose && println("T⪯")
                 for l ∈ findleaves(en)
-                    # verbose && println(l)
                     ti = l
                     newnodes = false
                     for γ in minimalmembers(a, β)
@@ -2263,17 +2266,14 @@ function mvhsalphasat(
                                 ti
                             )
                             push!(metricheaps, ti)
-                            # verbose && println(ti)
                         end
                     end
                     !newnodes && l == node && push!(metricheaps, node)
-                    # verbose && println()
                 end
             elseif !en.judgement && !istop(β)
                 # F⪯
                 verbose && println("F⪯")
                 for l ∈ findleaves(en)
-                    # verbose && println(l)
                     newnodes = false
                     for βi in minimalmembers(a, β)
                         newnodes = true
@@ -2286,7 +2286,6 @@ function mvhsalphasat(
                                 l
                             )
                             push!(metricheaps, ti)
-                            # verbose && println(ti)
                         else  # Here there should be a branch and I need to keep track of it
                             ti = MVHSTableau{T}(   # Fake node (always true)
                                 true,
@@ -2299,7 +2298,6 @@ function mvhsalphasat(
                         end
                     end
                     !newnodes && l == node && push!(metricheaps, node)
-                    # verbose && println()
                 end
             else
                 # No condition matched, pushing node back into metricheaps
