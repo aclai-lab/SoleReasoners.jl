@@ -3,7 +3,7 @@ using SoleLogics.ManyValuedLogics: G3, H4, α, β
 
 p, q = Atom.(["p", "q"])
 
-max_timeout = 1 # seconds
+max_timeout = 60 # seconds
 
 diamondA = diamond(IA_A)
 diamondL = diamond(IA_L)

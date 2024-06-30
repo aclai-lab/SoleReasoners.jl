@@ -67,7 +67,7 @@ min_height = 1
 max_height = 5
 max_it = 999
 max_avg = 100
-max_timeout = 10 # seconds
+max_timeout = 30 # seconds
 
 using SoleLogics.ManyValuedLogics: booleanalgebra
 myoperators2 = []
@@ -102,9 +102,9 @@ opweights6 = [8, 8, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
 algebras = [
     ("BA",   booleanalgebra, myoperators2, opweights2),
     ("G3",   G3,             myoperators3, opweights3),
-    # ("Ł3",   Ł3,             myoperators3, opweights3),
+    ("Ł3",   Ł3,             myoperators3, opweights3),
     ("G4",   G4,             myoperators4, opweights4),
-    # ("Ł4",   Ł4,             myoperators4, opweights4),
+    ("Ł4",   Ł4,             myoperators4, opweights4),
     ("H4",   H4,             myoperators4, opweights4),
     # ("G5",   G5,             myoperators5, opweights5),
     # ("G6",   G6,             myoperators6, opweights6),
@@ -136,9 +136,9 @@ for a in algebras
                 brng = MersenneTwister(i)
                 t0 = time_ns()
                 r = mvhsalphasat(
-                    convert(FiniteTruth,t),
+                    t,
                     f,
-                    FiniteHeytingAlgebra(a[2]),
+                    a[2],
                     rng=brng,
                     timeout=max_timeout
                 )
