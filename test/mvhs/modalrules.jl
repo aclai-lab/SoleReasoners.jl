@@ -4,6 +4,7 @@ using SoleLogics.ManyValuedLogics: G3, H4, α, β
 p, q = Atom.(["p", "q"])
 
 max_timeout = 60 # seconds
+diamondexpansion = 0.1 # 10%
 
 diamondA = diamond(IA_A)
 diamondL = diamond(IA_L)
@@ -39,7 +40,8 @@ boxOi = box(IA_Oi)
     ∧(diamondA(p), boxA(→(p, ⊥))),
     FiniteHeytingAlgebra(G3),
     verbose=false,
-    timeout=max_timeout
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
 ) == true
 
 @test mvhsalphasat(
@@ -47,7 +49,8 @@ boxOi = box(IA_Oi)
     ∧(diamondA(p), boxA(→(p, ⊥))),
     FiniteHeytingAlgebra(G3),
     verbose=false,
-    timeout=max_timeout
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
 ) == false
 
 @test mvhsalphasat(
@@ -55,7 +58,8 @@ boxOi = box(IA_Oi)
     ∧(diamondA(p), boxA(→(p, ⊥))),
     FiniteHeytingAlgebra(G3),
     verbose=false,
-    timeout=max_timeout
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
 ) == false
 
 ###################################################
@@ -68,7 +72,8 @@ f, b = Atom.(["f", "b"])
     ∧(f,diamondA(b)),
     FiniteHeytingAlgebra(H4),
     verbose=false,
-    timeout=max_timeout
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
 ) == true
 
 ###################################################
@@ -139,7 +144,8 @@ end
         diamondD(p)
     ),
     FiniteHeytingAlgebra(H4),
-    timeout=max_timeout
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
 ) == true
 for diamondX in [
     diamondB,
@@ -168,7 +174,8 @@ end
         diamondA(diamondA(p))
     ),
     FiniteHeytingAlgebra(H4),
-    timeout=max_timeout
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
 ) == true
 @test mvhsalphaprove(
     ⊤,
@@ -177,7 +184,8 @@ end
         diamondB(diamondE(p))
     ),
     FiniteHeytingAlgebra(H4),
-    timeout=max_timeout
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
 ) == true
 @test mvhsalphaprove(
     ⊤,
@@ -186,7 +194,8 @@ end
         diamondE(diamondB(p))
     ),
     FiniteHeytingAlgebra(H4),
-    timeout=max_timeout
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
 ) == true
 @test mvhsalphaprove(
     ⊤,
@@ -195,7 +204,8 @@ end
         diamondE(diamondBi(p))
     ),
     FiniteHeytingAlgebra(H4),
-    timeout=max_timeout
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
 ) == true
 @test mvhsalphaprove(
     ⊤,
@@ -204,7 +214,8 @@ end
         diamondL(p)
     ),
     FiniteHeytingAlgebra(H4),
-    timeout=max_timeout
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
 ) == false
 @test mvhsalphaprove(
     ⊤,
@@ -213,7 +224,8 @@ end
         diamondD(p)
     ),
     FiniteHeytingAlgebra(H4),
-    timeout=max_timeout
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
 ) == false
 @test mvhsalphaprove(
     ⊤,
@@ -222,7 +234,8 @@ end
         diamondD(p)
     ),
     FiniteHeytingAlgebra(H4),
-    timeout=max_timeout
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
 ) == false
 @test mvhsalphaprove(
     ⊤,
@@ -231,7 +244,8 @@ end
         diamondO(p)
     ),
     FiniteHeytingAlgebra(H4),
-    timeout=max_timeout
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
 ) == false
 @test mvhsalphaprove(
     ⊤,
@@ -240,7 +254,8 @@ end
         diamondBi(boxE(diamondBi(diamondE(p))))
     ),
     FiniteHeytingAlgebra(H4),
-    timeout=max_timeout
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
 ) == false
 @test mvhsalphaprove(
     ⊤,
@@ -249,7 +264,8 @@ end
         diamondL(p)
     ),
     FiniteHeytingAlgebra(H4),
-    timeout=max_timeout
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
 ) == false
 
 ############################################################################################
@@ -265,7 +281,8 @@ end
     ∧(diamondA(p), boxA(→(p, ⊥))),
     G3,
     verbose=false,
-    timeout=max_timeout
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
 ) == true
 
 @test mvhsalphasat(
@@ -273,7 +290,8 @@ end
     ∧(diamondA(p), boxA(→(p, ⊥))),
     G3,
     verbose=false,
-    timeout=max_timeout
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
 ) == false
 
 @test mvhsalphasat(
@@ -281,7 +299,8 @@ end
     ∧(diamondA(p), boxA(→(p, ⊥))),
     G3,
     verbose=false,
-    timeout=max_timeout
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
 ) == false
 
 ###################################################
@@ -294,7 +313,8 @@ f, b = Atom.(["f", "b"])
     ∧(f,diamondA(b)),
     H4,
     verbose=false,
-    timeout=max_timeout
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
 ) == true
 
 ###################################################
@@ -365,7 +385,8 @@ end
         diamondD(p)
     ),
     H4,
-    timeout=max_timeout
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
 ) == true
 for diamondX in [
     diamondB,
@@ -394,7 +415,8 @@ end
         diamondA(diamondA(p))
     ),
     H4,
-    timeout=max_timeout
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
 ) == true
 @test mvhsalphaprove(
     ⊤,
@@ -403,7 +425,8 @@ end
         diamondB(diamondE(p))
     ),
     H4,
-    timeout=max_timeout
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
 ) == true
 @test mvhsalphaprove(
     ⊤,
@@ -412,7 +435,8 @@ end
         diamondE(diamondB(p))
     ),
     H4,
-    timeout=max_timeout
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
 ) == true
 @test mvhsalphaprove(
     ⊤,
@@ -421,7 +445,8 @@ end
         diamondE(diamondBi(p))
     ),
     H4,
-    timeout=max_timeout
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
 ) == true
 @test mvhsalphaprove(
     ⊤,
@@ -430,7 +455,8 @@ end
         diamondL(p)
     ),
     H4,
-    timeout=max_timeout
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
 ) == false
 @test mvhsalphaprove(
     ⊤,
@@ -439,7 +465,8 @@ end
         diamondD(p)
     ),
     H4,
-    timeout=max_timeout
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
 ) == false
 @test mvhsalphaprove(
     ⊤,
@@ -448,7 +475,8 @@ end
         diamondD(p)
     ),
     H4,
-    timeout=max_timeout
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
 ) == false
 @test mvhsalphaprove(
     ⊤,
@@ -457,7 +485,8 @@ end
         diamondO(p)
     ),
     H4,
-    timeout=max_timeout
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
 ) == false
 @test mvhsalphaprove(
     ⊤,
@@ -466,7 +495,8 @@ end
         diamondBi(boxE(diamondBi(diamondE(p))))
     ),
     H4,
-    timeout=max_timeout
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
 ) == false
 @test mvhsalphaprove(
     ⊤,
@@ -475,5 +505,6 @@ end
         diamondL(p)
     ),
     H4,
-    timeout=max_timeout
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
 ) == false

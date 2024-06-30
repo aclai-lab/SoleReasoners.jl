@@ -501,7 +501,8 @@ function mvhsalphasat(
     a::FiniteFLewAlgebra{T,D},
     roots::Vector{MVHSTableau};
     verbose::Bool=false,
-    timeout::Union{Nothing,Int}=nothing
+    timeout::Union{Nothing,Int}=nothing,
+    diamondexpansion::Float64=1.0
 ) where {
     T<:Truth,
     D<:AbstractVector{T}
@@ -922,19 +923,16 @@ function mvhsalphasat(
 
                     u = Threads.SpinLock();
 
-                    # All possible combinations of values for new tuples
-                    Threads.@threads for ltzcombs ∈ reshape(
+                    # All possible combinations of values for new tuples (+ % d.e. opt.)
+                    # TODO: fully expand first cycle
+                    combs = reshape(
                         collect(Iterators.product((getdomain(a) for p ∈ cB0.domain)...)),
                         (1,:)
                     )
-                        for gtzcombs ∈ reshape(
-                            collect(Iterators.product((getdomain(a) for p ∈ cB0.domain)...)),
-                            (1,:)
-                        )
-                            for eqzcombs ∈ reshape(
-                                collect(Iterators.product((getdomain(a) for p ∈ cB0.domain)...)),
-                                (1,:)
-                            )
+                    ncombs = length(combs)
+                    Threads.@threads for ltzcombs ∈ shuffle(combs)[1:floor(Int, ncombs*diamondexpansion)]
+                        for gtzcombs ∈ shuffle(combs)[1:floor(Int, ncombs*diamondexpansion)]
+                            for eqzcombs ∈ shuffle(combs)[1:floor(Int, ncombs*diamondexpansion)]
                                 # Must initialize at every (parallel) cycle!
                                 # cB1 = o(cB) ∪ {z}
                                 z = Point(Char(Int(last(cB0.domain).label)+1))
@@ -1330,19 +1328,15 @@ function mvhsalphasat(
 
                     u = Threads.SpinLock();
 
-                    # All possible combinations of values for new tuples
-                    Threads.@threads for ltzcombs ∈ reshape(
+                    # All possible combinations of values for new tuples (+ % d.e. opt.)
+                    combs = reshape(
                         collect(Iterators.product((getdomain(a) for p ∈ cB0.domain)...)),
                         (1,:)
                     )
-                        for gtzcombs ∈ reshape(
-                            collect(Iterators.product((getdomain(a) for p ∈ cB0.domain)...)),
-                            (1,:)
-                        )
-                            for eqzcombs ∈ reshape(
-                                collect(Iterators.product((getdomain(a) for p ∈ cB0.domain)...)),
-                                (1,:)
-                            )
+                    ncombs = length(combs)
+                    Threads.@threads for ltzcombs ∈ shuffle(combs)[1:floor(Int, ncombs*diamondexpansion)]
+                        for gtzcombs ∈ shuffle(combs)[1:floor(Int, ncombs*diamondexpansion)]
+                            for eqzcombs ∈ shuffle(combs)[1:floor(Int, ncombs*diamondexpansion)]
                                 # Must initialize at every (parallel) cycle!
                                 # cB1 = o(cB) ∪ {z}
                                 z = Point(Char(Int(last(cB0.domain).label)+1))
@@ -1540,7 +1534,8 @@ function mvhsalphasat(
     a::FiniteHeytingAlgebra{T,D},
     roots::Vector{MVHSTableau};
     verbose::Bool=false,
-    timeout::Union{Nothing,Int}=nothing
+    timeout::Union{Nothing,Int}=nothing,
+    diamondexpansion::Float64=1.0
 ) where {
     T<:Truth,
     D<:AbstractVector{T}
@@ -1786,19 +1781,15 @@ function mvhsalphasat(
 
                     u = Threads.SpinLock();
 
-                    # All possible combinations of values for new tuples
-                    Threads.@threads for ltzcombs ∈ reshape(
+                    # All possible combinations of values for new tuples (+ % d.e. opt.)
+                    combs = reshape(
                         collect(Iterators.product((getdomain(a) for p ∈ cB0.domain)...)),
                         (1,:)
                     )
-                        for gtzcombs ∈ reshape(
-                            collect(Iterators.product((getdomain(a) for p ∈ cB0.domain)...)),
-                            (1,:)
-                        )
-                            for eqzcombs ∈ reshape(
-                                collect(Iterators.product((getdomain(a) for p ∈ cB0.domain)...)),
-                                (1,:)
-                            )
+                    ncombs = length(combs)
+                    Threads.@threads for ltzcombs ∈ shuffle(combs)[1:floor(Int, ncombs*diamondexpansion)]
+                        for gtzcombs ∈ shuffle(combs)[1:floor(Int, ncombs*diamondexpansion)]
+                            for eqzcombs ∈ shuffle(combs)[1:floor(Int, ncombs*diamondexpansion)]
                                 # Must initialize at every (parallel) cycle!
                                 # cB1 = o(cB) ∪ {z}
                                 z = Point(Char(Int(last(cB0.domain).label)+1))
@@ -2104,19 +2095,15 @@ function mvhsalphasat(
 
                     u = Threads.SpinLock();
 
-                    # All possible combinations of values for new tuples
-                    Threads.@threads for ltzcombs ∈ reshape(
+                    # All possible combinations of values for new tuples (+ % d.e. opt.)
+                    combs = reshape(
                         collect(Iterators.product((getdomain(a) for p ∈ cB0.domain)...)),
                         (1,:)
                     )
-                        for gtzcombs ∈ reshape(
-                            collect(Iterators.product((getdomain(a) for p ∈ cB0.domain)...)),
-                            (1,:)
-                        )
-                            for eqzcombs ∈ reshape(
-                                collect(Iterators.product((getdomain(a) for p ∈ cB0.domain)...)),
-                                (1,:)
-                            )
+                    ncombs = length(combs)
+                    Threads.@threads for ltzcombs ∈ shuffle(combs)[1:floor(Int, ncombs*diamondexpansion)]
+                        for gtzcombs ∈ shuffle(combs)[1:floor(Int, ncombs*diamondexpansion)]
+                            for eqzcombs ∈ shuffle(combs)[1:floor(Int, ncombs*diamondexpansion)]
                                 # Must initialize at every (parallel) cycle!
                                 # cB1 = o(cB) ∪ {z}
                                 z = Point(Char(Int(last(cB0.domain).label)+1))
@@ -2315,13 +2302,17 @@ function mvhsalphasat(
     choosenode::Function,
     metrics::Function...;
     verbose::Bool=false,
-    timeout::Union{Nothing,Int}=nothing
+    timeout::Union{Nothing,Int}=nothing,
+    diamondexpansion::Float64=1.0
 ) where {
     T<:Truth,
     D<:AbstractVector{T},
     A<:FiniteAlgebra{T,D},
     T1<:Truth
 }
+    if diamondexpansion < 0.0 || diamondexpansion > 1.0
+        error("% diamond expansion must be between 0.0 and 1.0")
+    end
     if !isa(α, T) α = convert(T, α) end
     tableaux = Vector{MVHSTableau}()
     x, y = Point.(['A', 'B'])
@@ -2369,7 +2360,13 @@ function mvhsalphasat(
             push!(heap(metricheap), MetricHeapNode(metric(metricheap), tableau))
         end
     end
-    mvhsalphasat(metricheaps, choosenode, a, tableaux; verbose, timeout)
+    r = mvhsalphasat(metricheaps, choosenode, a, tableaux; verbose, timeout, diamondexpansion)
+    if isnothing(r) || r || diamondexpansion == 1.0
+        return r
+    else
+        @warn "WARNING: α-sat returned false with % diamond expansion set to $diamondexpansion"
+        return r
+    end
 end
 
 function mvhsalphasat(
@@ -2378,14 +2375,15 @@ function mvhsalphasat(
     a::A,
     metric::Function;
     verbose::Bool=false,
-    timeout::Union{Nothing,Int}=nothing
+    timeout::Union{Nothing,Int}=nothing,
+    diamondexpansion::Float64=1.0
 ) where {
     T<:Truth,
     D<:AbstractVector{T},
     A<:FiniteAlgebra{T,D},
     T1<:Truth
 }
-    mvhsalphasat(α, φ, a, roundrobin, metric; verbose, timeout)
+    mvhsalphasat(α, φ, a, roundrobin, metric; verbose, timeout, diamondexpansion)
 end
 
 function mvhsalphasat(
@@ -2394,7 +2392,8 @@ function mvhsalphasat(
     a::A;
     rng = Random.GLOBAL_RNG,
     verbose::Bool=false,
-    timeout::Union{Nothing,Int}=nothing
+    timeout::Union{Nothing,Int}=nothing,
+    diamondexpansion::Float64=1.0
 ) where {
     T<:Truth,
     D<:AbstractVector{T},
@@ -2402,7 +2401,7 @@ function mvhsalphasat(
     T1<:Truth
 }
     randombranch(_::MVHSTableau) = rand(rng, Int)
-    mvhsalphasat(α, φ, a, randombranch; verbose, timeout)
+    mvhsalphasat(α, φ, a, randombranch; verbose, timeout, diamondexpansion)
 end
 
 function mvhsalphaprove(
@@ -2412,13 +2411,17 @@ function mvhsalphaprove(
     choosenode::Function,
     metrics::Function...;
     verbose::Bool=false,
-    timeout::Union{Nothing,Int}=nothing
+    timeout::Union{Nothing,Int}=nothing,
+    diamondexpansion::Float64=1.0
 ) where {
     T<:Truth,
     D<:AbstractVector{T},
     A<:FiniteAlgebra{T,D},
     T1<:Truth
 }
+    if diamondexpansion < 0.0 || diamondexpansion > 1.0
+        error("% diamond expansion must be between 0.0 and 1.0")
+    end
     if !isa(α, T) α = convert(T, α) end
     tableaux = Vector{MVHSTableau}()
     x, y = Point.(['A', 'B'])
@@ -2466,8 +2469,15 @@ function mvhsalphaprove(
             push!(heap(metricheap), MetricHeapNode(metric(metricheap), tableau))
         end
     end
-    r = mvhsalphasat(metricheaps, choosenode, a, tableaux; verbose, timeout)
-    isnothing(r) ? r : !r
+    r = mvhsalphasat(metricheaps, choosenode, a, tableaux; verbose, timeout, diamondexpansion)
+    if isnothing(r)
+        return r
+    elseif r || diamondexpansion == 1.0
+        return !r
+    else
+        warning("WARNING: α-sat returned false with % diamond expansion set to $diamondexpansion")
+        return !r
+    end
 end
 
 function mvhsalphaprove(
@@ -2477,13 +2487,14 @@ function mvhsalphaprove(
     metric::Function;
     verbose::Bool=false,
     timeout::Union{Nothing,Int}=nothing,
+    diamondexpansion::Float64=1.0
 ) where {
     T<:Truth,
     D<:AbstractVector{T},
     A<:FiniteAlgebra{T,D},
     T1<:Truth
 }
-    mvhsalphaprove(α, φ, a, roundrobin, metric; verbose, timeout)
+    mvhsalphaprove(α, φ, a, roundrobin, metric; verbose, timeout, diamondexpansion)
 end
 
 function mvhsalphaprove(
@@ -2492,7 +2503,8 @@ function mvhsalphaprove(
     a::A;
     rng = Random.GLOBAL_RNG,
     verbose::Bool=false,
-    timeout::Union{Nothing,Int}=nothing
+    timeout::Union{Nothing,Int}=nothing,
+    diamondexpansion::Float64=1.0
 ) where {
     T<:Truth,
     D<:AbstractVector{T},
@@ -2500,5 +2512,5 @@ function mvhsalphaprove(
     T1<:Truth
 }
     randombranch(_::MVHSTableau) = rand(rng, Int)
-    mvhsalphaprove(α, φ, a, randombranch; verbose, timeout)
+    mvhsalphaprove(α, φ, a, randombranch; verbose, timeout, diamondexpansion)
 end
