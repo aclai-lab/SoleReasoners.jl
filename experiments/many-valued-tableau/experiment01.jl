@@ -1,23 +1,22 @@
-using BenchmarkTools
 using Random
+using SoleReasoners
 using SoleLogics
 using SoleLogics.ManyValuedLogics
-using SoleReasoners
-using Test
 
-BASE_MANY_VALUED_CONNECTIVES = [∨, ∧, →]
+BASE_MANY_VALUED_CONNECTIVES = [
+    ∨,
+    ∧,
+    →
+]
 BaseManyValuedConnectives = Union{typeof.(BASE_MANY_VALUED_CONNECTIVES)...}
 
 myalphabet = Atom.(["p", "q", "r"])
 
-max_height = 10
+min_height = 1
+max_height = 7
 max_it = 20000
-max_avg = 5000
-max_timeout = 1 # seconds
-
-############################################################################################
-#### BooleanAlgebra ########################################################################
-############################################################################################
+max_avg = 1000
+max_timeout = 10 # seconds
 
 using SoleLogics.ManyValuedLogics: booleanalgebra
 myoperators2 = []
@@ -25,280 +24,99 @@ append!(myoperators2, BASE_MANY_VALUED_CONNECTIVES)
 append!(myoperators2, getdomain(booleanalgebra))
 opweights2 = [10, 10, 10, 1, 1]
 
-for height in 1:max_height
-    println("Alphasat on booleanalgebra formulas of height " * string(height))
-    timeouts = 0
-    j = 0
-    for i in 1:max_it
-        t = rand(MersenneTwister(i), getdomain(booleanalgebra))
-        f = randformula(
-            MersenneTwister(i),
-            height,
-            myalphabet,
-            myoperators2,
-            opweights=opweights2
-        )
-        if !isbot(t) && SoleLogics.height(f) == height
-            j += 1
-            brng = MersenneTwister(i)
-            r = alphasat(
-                t,
-                f,
-                booleanalgebra,
-                rng=brng,
-                timeout=max_timeout
-            )
-            if isnothing(r)
-                timeouts += 1
-            end
-            if j == max_avg
-                break
-            end
-            if i == max_it
-                println("Warning: maximum iterations reached")
-            end
-        end
-    end
-    println(string(timeouts) * " formulas over " * string(max_avg) * " timeout\n")
-end
-println()
-
-############################################################################################
-#### G3 ####################################################################################
-############################################################################################
-
-using SoleLogics.ManyValuedLogics: G3
+using SoleLogics.ManyValuedLogics: G3, Ł3
 myoperators3 = []
 append!(myoperators3, BASE_MANY_VALUED_CONNECTIVES)
 append!(myoperators3, getdomain(G3))
 opweights3 = [10, 10, 10, 1, 1, 1]
 
-for height in 1:max_height
-    println("Alphasat on G3 formulas of height " * string(height))
-    timeouts = 0
-    j = 0
-    for i in 1:max_it
-        t = rand(MersenneTwister(i), getdomain(G3))
-        f = randformula(
-            MersenneTwister(i),
-            height,
-            myalphabet,
-            myoperators3,
-            opweights=opweights3
-        )
-        if !isbot(t) && SoleLogics.height(f) == height
-            j += 1
-            brng = MersenneTwister(i)
-            r = alphasat(
-                t,
-                f,
-                G3,
-                rng=brng,
-                timeout=max_timeout
-            )
-            if isnothing(r)
-                timeouts += 1
-            end
-            if j == max_avg
-                break
-            end
-            if i == max_it
-                println("Warning: maximum iterations reached")
-            end
-        end
-    end
-    println(string(timeouts) * " formulas over " * string(max_avg) * " timeout\n")
-end
-println()
-
-############################################################################################
-#### Ł3 ####################################################################################
-############################################################################################
-
-using SoleLogics.ManyValuedLogics: Ł3
-myoperators3 = []
-append!(myoperators3, BASE_MANY_VALUED_CONNECTIVES)
-append!(myoperators3, getdomain(Ł3))
-opweights3 = [10, 10, 10, 1, 1, 1]
-
-for height in 1:max_height
-    println("Alphasat on Ł3 formulas of height " * string(height))
-    timeouts = 0
-    j = 0
-    for i in 1:max_it
-        t = rand(MersenneTwister(i), getdomain(Ł3))
-        f = randformula(
-            MersenneTwister(i),
-            height,
-            myalphabet,
-            myoperators3,
-            opweights=opweights3
-        )
-        if !isbot(t) && SoleLogics.height(f) == height
-            j += 1
-            brng = MersenneTwister(i)
-            r = alphasat(
-                t,
-                f,
-                Ł3,
-                rng=brng,
-                timeout=max_timeout
-            )
-            if isnothing(r)
-                timeouts += 1
-            end
-            if j == max_avg
-                break
-            end
-            if i == max_it
-                println("Warning: maximum iterations reached")
-            end
-        end
-    end
-    println(string(timeouts) * " formulas over " * string(max_avg) * " timeout\n")
-end
-println()
-
-############################################################################################
-#### G4 ####################################################################################
-############################################################################################
-
-using SoleLogics.ManyValuedLogics: G4
+using SoleLogics.ManyValuedLogics: G4, Ł4, H4
 myoperators4 = []
 append!(myoperators4, BASE_MANY_VALUED_CONNECTIVES)
 append!(myoperators4, getdomain(G4))
 opweights4 = [10, 10, 10, 1, 1, 1, 1]
 
-for height in 1:max_height
-    println("Alphasat on G4 formulas of height " * string(height))
-    timeouts = 0
-    j = 0
-    for i in 1:max_it
-        t = rand(MersenneTwister(i), getdomain(G4))
-        f = randformula(
-            MersenneTwister(i),
-            height,
-            myalphabet,
-            myoperators4,
-            opweights=opweights4
-        )
-        if !isbot(t) && SoleLogics.height(f) == height
-            j += 1
-            brng = MersenneTwister(i)
-            r = alphasat(
-                t,
-                f,
-                G4,
-                rng=brng,
-                timeout=max_timeout
+using SoleLogics.ManyValuedLogics: G5
+myoperators5 = []
+append!(myoperators5, BASE_MANY_VALUED_CONNECTIVES)
+append!(myoperators5, getdomain(G5))
+opweights5 = [10, 10, 10, 1, 1, 1, 1, 1]
+
+using SoleLogics.ManyValuedLogics: G6, H6_1, H6_2, H6_3, H6
+myoperators6 = []
+append!(myoperators6, BASE_MANY_VALUED_CONNECTIVES)
+append!(myoperators6, getdomain(G6))
+opweights6 = [10, 10, 10, 1, 1, 1, 1, 1, 1]
+
+algebras = [
+    ("BA",   booleanalgebra, myoperators2, opweights2),
+    ("G3",   G3,             myoperators3, opweights3),
+    ("Ł3",   Ł3,             myoperators3, opweights3),
+    ("G4",   G4,             myoperators4, opweights4),
+    ("Ł4",   Ł4,             myoperators4, opweights4),
+    ("H4",   H4,             myoperators4, opweights4),
+    ("G5",   G5,             myoperators5, opweights5),
+    ("G6",   G6,             myoperators6, opweights6),
+    ("H6_1", H6_1,           myoperators6, opweights6),
+    ("H6_2", H6_2,           myoperators6, opweights6),
+    ("H6_3", H6_3,           myoperators6, opweights6),
+    ("H6",   H6,             myoperators6, opweights6)
+]
+
+for a in algebras
+    for height in min_height:max_height
+        println("MVHS Alphasat on " * a[1] * " formulas of height " * string(height))
+        e_time = 0
+        j = 0
+        sat = 0
+        unsat = 0
+        timeouts = 0
+        for i in 1:max_it
+            t = rand(MersenneTwister(i), getdomain(a[2]))
+            f = randformula(
+                MersenneTwister(i),
+                height,
+                myalphabet,
+                a[3],
+                opweights=a[4]
             )
-            if isnothing(r)
-                timeouts += 1
-            end
-            if j == max_avg
-                break
+            if !isbot(t) && SoleLogics.height(f) == height
+                j += 1
+                brng = MersenneTwister(i)
+                t0 = time_ns()
+                r = mvhsalphasat(
+                    t,
+                    f,
+                    a[2],
+                    rng=brng,
+                    timeout=max_timeout
+                )
+                t1 = time_ns()
+                if isnothing(r)
+                    timeouts += 1
+                else
+                    e_time += t1-t0
+                    if r
+                        sat += 1
+                    else
+                        unsat +=1
+                    end
+                end
+                if j == max_avg
+                    break
+                end
             end
             if i == max_it
                 println("Warning: maximum iterations reached")
             end
         end
+        println(string(timeouts) * " formulas over " * string(max_avg) * " timeout.")
+        println("(" * string(max_avg - timeouts) * " didn't.)")
+        print("Average execution time (over " * string(max_avg - timeouts) * " formulas): ")
+        println(string((e_time/1e6)/(max_avg - timeouts)) * " ms\n")
+        println("$sat/$(max_avg - timeouts) formulas were α-sat, " *
+                "$unsat/$(max_avg - timeouts) formulas were not α-sat\n")
+        println()
     end
-    println(string(timeouts) * " formulas over " * string(max_avg) * " timeout\n")
+    println()
 end
-println()
-
-############################################################################################
-#### Ł4 ####################################################################################
-############################################################################################
-
-using SoleLogics.ManyValuedLogics: Ł4
-myoperators4 = []
-append!(myoperators4, BASE_MANY_VALUED_CONNECTIVES)
-append!(myoperators4, getdomain(Ł4))
-opweights4 = [10, 10, 10, 1, 1, 1, 1]
-
-for height in 1:max_height
-    println("Alphasat on Ł4 formulas of height " * string(height))
-    timeouts = 0
-    j = 0
-    for i in 1:max_it
-        t = rand(MersenneTwister(i), getdomain(Ł4))
-        f = randformula(
-            MersenneTwister(i),
-            height,
-            myalphabet,
-            myoperators4,
-            opweights=opweights4
-        )
-        if !isbot(t) && SoleLogics.height(f) == height
-            j += 1
-            brng = MersenneTwister(i)
-            r = alphasat(
-                t,
-                f,
-                Ł4,
-                rng=brng,
-                timeout=max_timeout
-            )
-            if isnothing(r)
-                timeouts += 1
-            end
-            if j == max_avg
-                break
-            end
-            if i == max_it
-                println("Warning: maximum iterations reached")
-            end
-        end
-    end
-    println(string(timeouts) * " formulas over " * string(max_avg) * " timeout\n")
-end
-println()
-
-############################################################################################
-#### H4 ####################################################################################
-############################################################################################
-
-using SoleLogics.ManyValuedLogics: H4
-myoperators4 = []
-append!(myoperators4, BASE_MANY_VALUED_CONNECTIVES)
-append!(myoperators4, getdomain(H4))
-opweights4 = [10, 10, 10, 1, 1, 1, 1]
-
-for height in 1:max_height
-    println("Alphasat on H4 formulas of height " * string(height))
-    timeouts = 0
-    j = 0
-    for i in 1:max_it
-        t = rand(MersenneTwister(i), getdomain(H4))
-        f = randformula(
-            MersenneTwister(i),
-            height,
-            myalphabet,
-            myoperators4,
-            opweights=opweights4
-        )
-        if !isbot(t) && SoleLogics.height(f) == height
-            j += 1
-            brng = MersenneTwister(i)
-            r = alphasat(
-                t,
-                f,
-                H4,
-                rng=brng,
-                timeout=max_timeout
-            )
-            if isnothing(r)
-                timeouts += 1
-            end
-            if j == max_avg
-                break
-            end
-            if i == max_it
-                println("Warning: maximum iterations reached")
-            end
-        end
-    end
-    println(string(timeouts) * " formulas over " * string(max_avg) * " timeout\n")
-end
-println()
