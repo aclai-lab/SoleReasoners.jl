@@ -3,6 +3,7 @@ using Documenter
 
 DocMeta.setdocmeta!(SoleReasoners, :DocTestSetup, :(using SoleReasoners); recursive = true)
 
+
 makedocs(;
     modules = [SoleReasoners],
     authors = "Alberto Paparella",
@@ -30,5 +31,5 @@ deploydocs(;
     repo = "github.com/aclai-lab/SoleReasoners.jl",
     target = "build",
     branch = "gh-pages",
-    versions = ["main" => "main"],
+    versions=["main" => "main", "stable" => "v^", "v#.#", "dev" => "dev"],
 )
