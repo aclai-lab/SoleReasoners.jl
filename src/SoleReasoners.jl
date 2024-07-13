@@ -9,8 +9,6 @@ using StatsBase
 
 @reexport using SoleLogics
 
-top = SoleLogics.top
-
 include("core.jl")
 
 export naivechoosenode, roundrobin, sat
