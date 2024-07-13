@@ -11,10 +11,10 @@ BaseManyValuedConnectives = Union{typeof.(BASE_MANY_VALUED_CONNECTIVES)...}
 
 myalphabet = Atom.(["p", "q", "r"])
 
-max_height = 10
-max_it = 7000
-max_avg = 5000
-max_timeout = 1 # seconds
+min_height = 1
+max_height = 7
+max_it = 20000
+max_avg = 1000
 
 using SoleLogics.ManyValuedLogics: booleanalgebra
 myoperators2 = []
@@ -56,7 +56,7 @@ algebras = [
 
 for a in algebras
     mkdir(a[5])
-    for height in 1:max_height
+    for height in min_height:max_height
         # Open file in append mode and then write to it
         file =  open(a[5] * "/height" * string(height) * ".txt","a")
         j = 0

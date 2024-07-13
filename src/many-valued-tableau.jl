@@ -843,7 +843,6 @@ function sat(
                 # F(t→(A→B)) case
                 (a, b) = children(z[2])
                 lvs = lesservalues(h, z[1])
-                push!(lvs, z[1])
                 for l ∈ findleaves(en)
                     newnodes = false
                     for ti ∈ lvs
@@ -862,7 +861,6 @@ function sat(
                     # (OLD) T(t→(A→B)) case
                     (a, b) = children(z[2])
                     lvs = lesservalues(h, z[1])
-                    push!(lvs, z[1])
                     newnodes = false
                     for ti in lvs
                         if !isbot(ti)
@@ -1131,6 +1129,7 @@ function sat(
     randombranch(_::ManyValuedTableau{T}) where {T<:Truth} = rand(rng, Int)
     return sat(SignedFormula(true, (⊤, z)), h, roundrobin, randombranch; verbose, timeout, kwargs...)
 end
+
 """
     prove(
         z::Formula,
