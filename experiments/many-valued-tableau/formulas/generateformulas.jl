@@ -91,8 +91,9 @@ for a in algebras
                 myalphabet,
                 a[3],
                 opweights=a[4],
-                basecase=aotpicker
-                # basecase=leafpicker
+                basecase=aotpicker,
+                # basecase=leafpicker,
+                balanced=true
             )
             # if SoleLogics.height(f) == height
                 write(file, syntaxstring(f) * "\n");
