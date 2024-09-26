@@ -59,47 +59,69 @@ Return the formula of a tableau.
 formula(tableau::Tableau) = tableau.formula
 
 """
-    father(tableau::Tableau)
+    father(tableau::T) where {T<:AbstractTableau}
 
 Return the father of a tableau.
 """
-function father(tableau::Tableau)
+function father(tableau::T) where {T<:AbstractTableau}
     return tableau.father
 end
 
 """
-    children(tableau::Tableau)
+    children(tableau::T) where {T<:AbstractTableau}
 
 Return the children of a tableau.
 """
-children(tableau::Tableau) = tableau.children
+children(tableau::T) where {T<:AbstractTableau} = tableau.children
 
 """
-    isexpanded(tableau::Tableau)
+    isexpanded(tableau::T) where {T<:AbstractTableau}
 
 Return true if the tableau has been expanded, false otherwise.
 """
-isexpanded(tableau::Tableau) = tableau.expanded
+isexpanded(tableau::T) where {T<:AbstractTableau} = tableau.expanded
 
 """
-    isclosed(tableau::Tableau)
+    isclosed(tableau::T) where {T<:AbstractTableau}
 
 Return true if the tableau has been closed, false otherwise.
 """
-isclosed(tableau::Tableau) = tableau.closed
+isclosed(tableau::T) where {T<:AbstractTableau} = tableau.closed
 
 """
+    expand!(tableau::T) where {T<:AbstractTableau}
+
+Set expanded flag to true.
+"""
+expand!(tableau::T) where {T<:AbstractTableau} = tableau.expanded = true
 
 """
-expand!(tableau::Tableau) = tableau.expanded = true
-close!(tableau::Tableau) = tableau.closed = true
+    close!(tableau::T) where {T<:AbstractTableau}
 
-isroot(tableau::Tableau) = isnothing(father(tableau))
+Set closed flag to true (also for descendants).
+"""
+function close!(tableau::T) where {T<:AbstractTableau}
+    tableau.closed = true
+    while !isempty(tableau.children)
+        c = pop!(tableau.children)
+        close!(c)
+    end
+end
 
-function findexpansionnode(tableau::Tableau)
-    if isexpanded(tableau)
-        return nothing
-    elseif isroot(tableau) || isexpanded(father(tableau))
+"""
+    isroot(tableau::T) where {T<:AbstractTableau}
+
+Return true if `tableau` is the root of the tableau.
+"""
+isroot(tableau::T) where {T<:AbstractTableau} = isnothing(father(tableau))
+
+"""
+    findexpansionnode(tableau::T) where {T<:AbstractTableau}
+
+Return the expansion node related to the branch.
+"""
+function findexpansionnode(tableau::T) where {T<:AbstractTableau}
+    if isroot(tableau) || isexpanded(father(tableau))
         return tableau
     else
         findexpansionnode(father(tableau))
@@ -107,11 +129,11 @@ function findexpansionnode(tableau::Tableau)
 end
 
 """
-    leaves(leavesset::Vector{Tableau}, tableau::Tableau)
+    leaves(leavesset::Vector{T}, tableau::T) where {T<:AbstractTableau}
 
 Getter for the leaves of a tableau.
 """
-function leaves(leavesset::Vector{Tableau}, tableau::Tableau)
+function leaves(leavesset::Vector{T}, tableau::T) where {T<:AbstractTableau}
     if isempty(children(tableau))
         push!(leavesset, tableau)
     else
@@ -123,29 +145,29 @@ function leaves(leavesset::Vector{Tableau}, tableau::Tableau)
 end
 
 """
-    leaves(tableau::Tableau)
+    leaves(tableau::T) where {T<:AbstractTableau}
 
 Getter for the leaves of a tableau.
 """
-function leaves(tableau::Tableau)
-    leaves(Vector{Tableau}(), tableau)
+function leaves(tableau::T) where {T<:AbstractTableau}
+    leaves(Vector{T}(), tableau)
 end
 
 """
-    pushchild!(tableau::Tableau, newchild::Tableau...)
+    pushchild!(tableau::T, newchild::T) where {T<:AbstractTableau}
 
 Push new child to a tableau.
 """
-function pushchild!(tableau::Tableau, newchild::Tableau)
+function pushchild!(tableau::T, newchild::T) where {T<:AbstractTableau}
     push!(children(tableau), newchild)
 end
 
 """
-    isleaf(tableau::Tableau)
+    isleaf(tableau::T) where {T<:AbstractTableau}
 
 Return true if the tableau is still a leaf, false otherwise.
 """
-isleaf(tableau::Tableau) = isempty(children(tableau)) ? true : false
+isleaf(tableau::T) where {T<:AbstractTableau} = isempty(children(tableau)) ? true : false
 
 ############################################################################################
 #### MetricHeapNode ########################################################################
@@ -439,8 +461,8 @@ function sat(metricheaps::Vector{MetricHeap}, choosenode::F) where {F<:Function}
         
         leaf = choosenode(metricheaps, cycle)
         isnothing(leaf) && return false # all branches are closed
+        isexpanded(leaf) && return true # found a satisfiable branch
         en = findexpansionnode(leaf)
-        isnothing(en) && return true    # found a satisfiable branch
         isclosed(en) && continue
 
         φ = formula(en)

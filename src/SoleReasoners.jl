@@ -20,11 +20,13 @@ using SoleLogics.ManyValuedLogics: FiniteTruth, FiniteAlgebra
 using SoleLogics.ManyValuedLogics: lesservalues, maximalmembers, minimalmembers
 
 include("many-valued-tableau.jl")
-
 export alphasat, prove, alphaprove
 
 include("mvhs.jl")
 export mvhsalphasat, mvhsalphaprove
+
+include("hybrid-tableau.jl")
+export alphahybridsat, alphahybridprove
 
 include("utils.jl")
 
