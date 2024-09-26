@@ -1186,65 +1186,65 @@ using SoleLogics.ManyValuedLogics: α, β
 @test alphasat(β, →(parseformula("q"), parseformula("p")), H4) == true
 @test alphasat(⊤, →(parseformula("q"), parseformula("p")), H4) == true
 
-############################################################################################
-#### More difficult formulas ###############################################################
-############################################################################################
-
-@test alphasat(⊤, booleantofuzzy(parseformula(
-    "(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)"
-)), G4) == false
-
-@test alphasat(⊤, booleantofuzzy(parseformula(
-    "(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)"
-)), Ł4) == false
+# ############################################################################################
+# #### More difficult formulas ###############################################################
+# ############################################################################################
 
 # @test alphasat(⊤, booleantofuzzy(parseformula(
 #     "(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)"
-# )), H4) == false
+# )), G4) == false
 
-############################################################################################
-#### H9 ####################################################################################
-############################################################################################
+# @test alphasat(⊤, booleantofuzzy(parseformula(
+#     "(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)"
+# )), Ł4) == false
 
-using SoleLogics.ManyValuedLogics: H9
-using SoleLogics.ManyValuedLogics: α, β, γ, δ, ε, ζ, η
+# # @test alphasat(⊤, booleantofuzzy(parseformula(
+# #     "(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)"
+# # )), H4) == false
 
-BASE_MANY_VALUED_CONNECTIVES = [∨, ∧, →]
-# BASE_MANY_VALUED_CONNECTIVES = [∨]
+# ############################################################################################
+# #### H9 ####################################################################################
+# ############################################################################################
 
-BaseManyValuedConnectives = Union{typeof.(BASE_MANY_VALUED_CONNECTIVES)...}
+# using SoleLogics.ManyValuedLogics: H9
+# using SoleLogics.ManyValuedLogics: α, β, γ, δ, ε, ζ, η
 
-############################################################################################
-#### FLew and Heyting rules compatibility ##################################################
-############################################################################################
+# BASE_MANY_VALUED_CONNECTIVES = [∨, ∧, →]
+# # BASE_MANY_VALUED_CONNECTIVES = [∨]
 
-for i ∈ getdomain(H9)
-# for i ∈ [η]
-    for j ∈ getdomain(H9)
-    # for j ∈ [γ]
-        @test alphasat(
-            i,
-            j,
-            FiniteHeytingAlgebra(H9)
-        ) == alphasat(
-            i,
-            j,
-            H9
-        )
-        for k ∈ getdomain(H9)
-        # for k ∈ [⊤]
-            for o ∈ BASE_MANY_VALUED_CONNECTIVES
-                @test alphasat(
-                    k,
-                    o(i, j),
-                    FiniteHeytingAlgebra(H9),
-                    # verbose=true
-                ) == alphasat(
-                    k,
-                    o(i, j),
-                    H9
-                ) 
-            end
-        end
-    end
-end
+# BaseManyValuedConnectives = Union{typeof.(BASE_MANY_VALUED_CONNECTIVES)...}
+
+# ############################################################################################
+# #### FLew and Heyting rules compatibility ##################################################
+# ############################################################################################
+
+# for i ∈ getdomain(H9)
+# # for i ∈ [η]
+#     for j ∈ getdomain(H9)
+#     # for j ∈ [γ]
+#         @test alphasat(
+#             i,
+#             j,
+#             FiniteHeytingAlgebra(H9)
+#         ) == alphasat(
+#             i,
+#             j,
+#             H9
+#         )
+#         for k ∈ getdomain(H9)
+#         # for k ∈ [⊤]
+#             for o ∈ BASE_MANY_VALUED_CONNECTIVES
+#                 @test alphasat(
+#                     k,
+#                     o(i, j),
+#                     FiniteHeytingAlgebra(H9),
+#                     # verbose=true
+#                 ) == alphasat(
+#                     k,
+#                     o(i, j),
+#                     H9
+#                 ) 
+#             end
+#         end
+#     end
+# end

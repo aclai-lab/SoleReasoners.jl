@@ -89,6 +89,8 @@ mutable struct HybridTableau{T<:Truth} <: AbstractTableau
     end
 end
 
+addconstraint!(ft::HybridTableau, c::String) = push!(ft.smtconstraints, c)
+
 function findsimilar(
     ft::HybridTableau,
     h::A
@@ -178,39 +180,48 @@ function hybridsat(
 
         node = choosenode(metricheaps, cycle)
         isnothing(node) && return false # all branches are closed
-        if isexpanded(node) # found a satisfiable branch
-            verbose && println(node) # print satisfiable branch
-            
-            ## check smtconstraints
-            smtfile = "(declare-sort A)\n"
-            for i ∈ 1:length(getdomain(h))
-                smtfile *= "(declare-const a$i A)\n"
-            end
-            smtfile *= "(assert (distrinct"
-            for i ∈ 1:length(getdomain(h))
-                smtfile *= " a$i"
-            end
-            smtfile *= "))\n"
-            for i ∈ 1:length(getdomain(h))
-                for j ∈ 1:length(getdomain(h))
-                    smtfile *= "(assert (= (join a$i a$j) $(findfirst(item -> item == h.join(getdomain(h)[i], getdomain(h)[j]), getdomain(h)))))\n"
-                    smtfile *= "(assert (= (meet a$i a$j) $(findfirst(item -> item == h.meet(getdomain(h)[i], getdomain(h)[j]), getdomain(h)))))\n"
+        if isexpanded(node) # found a (possibly) satisfiable branch
+            if isempty(node.smtconstraints)
+                verbose && println(node) # print satisfiable branch
+                return true
+            else
+                ## check smtconstraints
+                smtfile = "(declare-sort A)\n"
+                for i ∈ 1:length(getdomain(h))
+                    smtfile *= "(declare-const a$i A)\n"
+                end
+                smtfile *= "(assert (distinct"
+                for i ∈ 1:length(getdomain(h))
+                    smtfile *= " a$i"
+                end
+                smtfile *= "))\n(declare-fun join (A A) A)\n(declare-fun meet (A A) A)\n(declare-fun monoid (A A) A)\n(declare-fun implication (A A) A)\n"
+                for i ∈ 1:length(getdomain(h))
+                    for j ∈ 1:length(getdomain(h))
+                        smtfile *= "(assert (= (join a$i a$j) a$(findfirst(item -> item == h.join(getdomain(h)[i], getdomain(h)[j]), getdomain(h)))))\n"
+                        smtfile *= "(assert (= (meet a$i a$j) a$(findfirst(item -> item == h.meet(getdomain(h)[i], getdomain(h)[j]), getdomain(h)))))\n"
+                        smtfile *= "(assert (= (monoid a$i a$j) a$(findfirst(item -> item == h.monoid(getdomain(h)[i], getdomain(h)[j]), getdomain(h)))))\n"
+                        smtfile *= "(assert (= (implication a$i a$j) a$(findfirst(item -> item == h.implication(getdomain(h)[i], getdomain(h)[j]), getdomain(h)))))\n"
+                    end
+                end
+                smtfile *= "(define-fun precedeq ((x A) (y A)) Bool (= (meet x y) x))\n"
+                for str ∈ node.smtconstraints
+                    smtfile *= str * "\n"
+                end
+                smtfile *= "(check-sat)"
+                b = IOBuffer()
+                touch("temp.smt2")
+                open("temp.smt2", "w") do file
+                    write(file, smtfile)
+                end
+                run(pipeline(`z3 temp.smt2`, stdout = b))
+                rm("temp.smt2")
+                if take!(b) == UInt8[0x73, 0x61, 0x74, 0x0a]
+                    verbose && println(node) # print satisfiable branch
+                    return true
+                else
+                    return false
                 end
             end
-            smtfile *= "(define-fun precedeq ((x A) (y A)) Bool (= (meet x y) x))\n"
-            for str ∈ node.smtconstraints
-                smtfile *= str * "\n"
-            end
-
-            b = IOBuffer()
-            touch("temp.smt2")
-            open("temp.smt2", "w") do file
-                write(file, smtfile)
-            end
-            run(pipeline(`z3 temp.smt2`, stdout = b))
-            String(take!(b))
-            println(b)
-            return true
         end
         en = findexpansionnode(node)
         expand!(en)
@@ -226,10 +237,27 @@ function hybridsat(
 
         if z isa Tuple{Truth, Truth}
             # Branch Closure Conditions
-            if s && !precedeq(h, z[1], z[2])
-                # T(a→b) where a≰b case
-                close!(en)
-            elseif !s && precedeq(h, z[1], z[2]) && !isbot(z[1]) && !istop(z[2])
+            if s 
+                if convert(FiniteTruth, z[1]) ∉ getdomain(h)
+                    if convert(FiniteTruth, z[2]) ∉ getdomain(h)
+                        for l ∈ leaves(en)
+                            addconstraint!(l, "(assert (precedeq $(z[1].label) $(z[2].label)))\n")
+                        end
+                    else
+                        for l ∈ leaves(en)
+                            addconstraint!(l, "(assert (precedeq $(z[1].label) a$(findfirst(item -> item == convert(FiniteTruth, z[2]), getdomain(h)))))\n")
+                        end
+                    end
+                elseif convert(FiniteTruth, z[2]) ∉ getdomain(h)
+                    for l ∈ leaves(en)
+                        addconstraint!(l, "(assert (precedeq a$(findfirst(item -> item == convert(FiniteTruth, z[1]), getdomain(h))) $(z[2].label)))\n")
+                    end
+                elseif !precedeq(h, z[1], z[2])
+                    # T(a→b) where a≰b case
+                    close!(en)
+                end
+            end
+            if !s && precedeq(h, z[1], z[2]) && !isbot(z[1]) && !istop(z[2])
                 # F(a→b) where a≤b and a≠⊥ and b≠⊤ case
                 close!(en)
             elseif !s && isbot(z[1])
@@ -238,7 +266,7 @@ function hybridsat(
             elseif !s && istop(z[2])
                 # F(X→⊤) case
                 close!(en)
-            elseif findsimilar(en, h)
+            elseif findsimilar(en, h)   # TODO: check
                 # T(b→X) and F(a→X) where a ≤ b case
                 close!(en)
             # Base case
@@ -254,176 +282,110 @@ function hybridsat(
             elseif findsimilar(en, h)
                 # T(b→X) and F(a→X) where a ≤ b case
                 close!(en)
-
+            elseif isa(z[2], Atom)
+                push!(metricheaps, node)
             # Strong conjunction Rules
             elseif s && token(z[2]) isa NamedConnective{:∧} && !isbot(z[1])
                 # T(t→(A∧B)) case
                 (a, b) = children(z[2])
-                for l in leaves(en)
-                    x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
-                    xsmtc = "(assert (or "
-                    ysmtc = "(assert (or "
-                    for value in 0:length(getdomain(h))-1
-                        xsmtc = xsmtc*"(= x$(string(cycle)) a$(string(value))"
-                        ysmtc = ysmtc*"(= y$(string(cycle)) a$(string(value))"
-                    end
-                    xsmtc = "))"
-                    ysmtc = "))"
-                    newsmtc = [
-                        "(declare-const x$(string(cycle)))",
-                        "(declare-const y$(string(cycle)))",
-                        xsmtc,
-                        ysmtc,
-                        "(assert (precedeq $(findfirst(item -> item == z[1], getdomain(h))) (meet x$(string(cycle)) y$(string(cycle)))"
-                    ]
-                    fta = HybridTableau(SignedFormula(true, (x, a)), l, newsmtc)    # opt: newsmtc needed only in leaf
+                x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
+                xsmtc = "(assert (or"
+                ysmtc = "(assert (or"
+                for value in 1:length(getdomain(h))
+                    xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
+                    ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
+                end
+                xsmtc *= "))"
+                ysmtc *= "))"
+                newsmtc = [
+                    "(declare-const x$(string(cycle)) A)",
+                    "(declare-const y$(string(cycle)) A)",
+                    xsmtc,
+                    ysmtc,
+                    "(assert (precedeq a$(findfirst(item -> item == z[1], getdomain(h))) (monoid x$(string(cycle)) y$(string(cycle)))))"
+                ]
+                for l in leaves(en)                    
+                    fta = HybridTableau(SignedFormula(true, (x, a)), l)
                     push!(metricheaps, fta)
                     ftb = HybridTableau(SignedFormula(true, (y, b)), fta, newsmtc)
                     push!(metricheaps, ftb)
-                end
-                
+                end                
             elseif !s && token(z[2]) isa NamedConnective{:∧} && !isbot(z[1])
                 # F(t→(A∧B)) case
                 (a, b) = children(z[2])
-                # Search for support tuples
-                pairs = Set{NTuple{2,T}}()
-                for ti ∈ getdomain(h)
-                    for si ∈ getdomain(h)
-                        if !precedeq(h, z[1], h.monoid(ti, si))
-                            push!(pairs, (ti, si))
-                        end
-                    end
+                x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
+                xsmtc = "(assert (or"
+                ysmtc = "(assert (or"
+                for value in 1:length(getdomain(h))
+                    xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
+                    ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
                 end
-                for p in pairs
-                    for q in pairs
-                        if precedeq(h, p[1], q[1]) && precedeq(h, p[2], q[2]) && p != q
-                            delete!(pairs, p)
-                        end
-                    end
-                end
-                for l ∈ leaves(en)
-                    newnodes = false
-                    for pair in pairs
-                        newnodes = true
-                        sy = SignedFormula(true, (a, pair[1]))
-                        if !findformula(l, sy)
-                            fta = HybridTableau(sy, l)
-                            push!(metricheaps, fta)
-                            sy = SignedFormula(true, (b, pair[2]))
-                            if !findformula(fta, sy)
-                                ftb = HybridTableau(sy, fta)
-                                push!(metricheaps, ftb)
-                            end
-                        else
-                            sy = SignedFormula(true, (b, pair[2]))
-                            if !findformula(l, sy)
-                                newnodes = true
-                                ftb = HybridTableau(sy, l)
-                                push!(metricheaps, ftb)
-                            else  # Here there should be a branch and I need to keep track of it
-                                sy = SignedFormula(true, (⊤, ⊤))    # Fake node (always true)
-                                fti = HybridTableau(sy, l)
-                                push!(metricheaps, fti)
-                            end
-                        end
-                    end
-                    !newnodes && l == node && push!(metricheaps, node)
-                end
+                xsmtc *= "))"
+                ysmtc *= "))"
+                newsmtc = [
+                    "(declare-const x$(string(cycle)) A)",
+                    "(declare-const y$(string(cycle)) A)",
+                    xsmtc,
+                    ysmtc,
+                    "(assert (not (precedeq a$(findfirst(item -> item == z[1], getdomain(h))) (monoid x$(string(cycle)) y$(string(cycle))))))"
+                ]
+                for l in leaves(en)                    
+                    fta = HybridTableau(SignedFormula(true, (a, x)), l)
+                    push!(metricheaps, fta)
+                    ftb = HybridTableau(SignedFormula(true, (b, y)), fta, newsmtc)
+                    push!(metricheaps, ftb)
+                end        
             # Implication Rules
-            elseif !s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
-                # F(t→(A→B)) case
-                (a, b) = children(z[2])
-                # Search for support tuples
-                pairs = Set{NTuple{2,T}}()
-                for ti ∈ getdomain(h)
-                    for si ∈ getdomain(h)
-                        if !precedeq(h, z[1], h.implication(ti, si))
-                            push!(pairs, (ti, si))
-                        end
-                    end
-                end
-                for p in pairs
-                    for q in pairs
-                        if precedeq(h, q[1], p[1]) && precedeq(h, p[2], q[2]) && p != q
-                            delete!(pairs, p)
-                        end
-                    end
-                end
-                for l ∈ leaves(en)
-                    newnodes = false
-                    for pair in pairs
-                        newnodes = true
-                        sy = SignedFormula(true, (pair[1], a))
-                        if !findformula(l, sy)
-                            fta = HybridTableau(sy, l)
-                            push!(metricheaps, fta)
-                            sy = SignedFormula(true, (b, pair[2]))
-                            if !findformula(fta, sy)
-                                ftb = HybridTableau(sy, fta)
-                                push!(metricheaps, ftb)
-                            end
-                        else
-                            sy = SignedFormula(true, (b, pair[2]))
-                            if !findformula(l, sy)
-                                newnodes = true
-                                ftb = HybridTableau(sy, l)
-                                push!(metricheaps, ftb)
-                            else  # Here there should be a branch and I need to keep track of it
-                                sy = SignedFormula(true, (⊤, ⊤))    # Fake node (always true)
-                                fti = HybridTableau(sy, l)
-                                push!(metricheaps, fti)
-                            end
-                        end
-                    end
-                    !newnodes && l == node && push!(metricheaps, node)
-                end
             elseif s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
                 # T(t→(A→B)) case
                 (a, b) = children(z[2])
-                # Search for support tuples
-                pairs = Set{NTuple{2,T}}()
-                for ti ∈ getdomain(h)
-                    for si ∈ getdomain(h)
-                        if precedeq(h, z[1], h.implication(ti, si))
-                            push!(pairs, (ti, si))
-                        end
-                    end
+                x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
+                xsmtc = "(assert (or"
+                ysmtc = "(assert (or"
+                for value in 1:length(getdomain(h))
+                    xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
+                    ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
                 end
-                for p in pairs
-                    for q in pairs
-                        if precedeq(h, p[1], q[1]) && precedeq(h, q[2], p[2]) && p != q
-                            delete!(pairs, p)
-                        end
-                    end
+                xsmtc *= "))"
+                ysmtc *= "))"
+                newsmtc = [
+                    "(declare-const x$(string(cycle)) A)",
+                    "(declare-const y$(string(cycle)) A)",
+                    xsmtc,
+                    ysmtc,
+                    "(assert (precedeq a$(findfirst(item -> item == z[1], getdomain(h))) (implication x$(string(cycle)) y$(string(cycle)))))"
+                ]
+                for l in leaves(en)                    
+                    fta = HybridTableau(SignedFormula(true, (a, x)), l)
+                    push!(metricheaps, fta)
+                    ftb = HybridTableau(SignedFormula(true, (y, b)), fta, newsmtc)
+                    push!(metricheaps, ftb)
+                end       
+            elseif !s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
+                # F(t→(A→B)) case
+                (a, b) = children(z[2])
+                x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
+                xsmtc = "(assert (or"
+                ysmtc = "(assert (or"
+                for value in 1:length(getdomain(h))
+                    xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
+                    ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
                 end
-                for l ∈ leaves(en)
-                    newnodes = false
-                    for pair in pairs
-                        newnodes = true
-                        sy = SignedFormula(true, (a, pair[1]))
-                        if !findformula(l, sy)
-                            fta = HybridTableau(sy, l)
-                            push!(metricheaps, fta)
-                            sy = SignedFormula(true, (pair[2], b))
-                            if !findformula(fta, sy)
-                                ftb = HybridTableau(sy, fta)
-                                push!(metricheaps, ftb)
-                            end
-                        else
-                            sy = SignedFormula(true, (pair[2], b))
-                            if !findformula(l, sy)
-                                newnodes = true
-                                ftb = HybridTableau(sy, l)
-                                push!(metricheaps, ftb)
-                            else  # Here there should be a branch and I need to keep track of it
-                                sy = SignedFormula(true, (⊤, ⊤))    # Fake node (always true)
-                                fti = HybridTableau(sy, l)
-                                push!(metricheaps, fti)
-                            end
-                        end
-                    end
-                    !newnodes && l == node && push!(metricheaps, node)
-                end
+                xsmtc *= "))"
+                ysmtc *= "))"
+                newsmtc = [
+                    "(declare-const x$(string(cycle)) A)",
+                    "(declare-const y$(string(cycle)) A)",
+                    xsmtc,
+                    ysmtc,
+                    "(assert (not (precedeq a$(findfirst(item -> item == z[1], getdomain(h))) (implication x$(string(cycle)) y$(string(cycle))))))"
+                ]
+                for l in leaves(en)                    
+                    fta = HybridTableau(SignedFormula(true, (x, a)), l)
+                    push!(metricheaps, fta)
+                    ftb = HybridTableau(SignedFormula(true, (b, y)), fta, newsmtc)
+                    push!(metricheaps, ftb)
+                end       
             # Reversal Rules
             elseif !s && !isbot(z[1])
                 # F(a→X) case
@@ -472,101 +434,59 @@ function hybridsat(
             if !s && istop(z[2])
                 # F(X→⊤) case
                 close!(en)
+            elseif isa(z[1], Atom)
+                push!(metricheaps, node)
             # Strong disjunction rules
             elseif s && token(z[1]) isa NamedConnective{:∨} && !istop(z[2])
                 # T((A∨B)→t) case
                 (a, b) = children(z[1])
-                # Search for support tuples
-                pairs = Set{NTuple{2,T}}()
-                for ti ∈ getdomain(h)
-                    for si ∈ getdomain(h)
-                        if precedeq(h, h.join(ti, si), z[2])
-                            push!(pairs, (ti, si))
-                        end
-                    end
+                x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
+                xsmtc = "(assert (or"
+                ysmtc = "(assert (or"
+                for value in 1:length(getdomain(h))
+                    xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
+                    ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
                 end
-                for p in pairs
-                    for q in pairs
-                        if precedeq(h, p[1], q[1]) && precedeq(h, p[2], q[2]) && p != q
-                            delete!(pairs, p)
-                        end
-                    end
-                end
-                for l ∈ leaves(en)
-                    newnodes = false
-                    for pair in pairs
-                        newnodes = true
-                        sy = SignedFormula(true, (a, pair[1]))
-                        if !findformula(l, sy)
-                            fta = HybridTableau(sy, l)
-                            push!(metricheaps, fta)
-                            sy = SignedFormula(true, (b, pair[2]))
-                            if !findformula(fta, sy)
-                                ftb = HybridTableau(sy, fta)
-                                push!(metricheaps, ftb)
-                            end
-                        else
-                            sy = SignedFormula(true, (b, pair[2]))
-                            if !findformula(l, sy)
-                                newnodes = true
-                                ftb = HybridTableau(sy, l)
-                                push!(metricheaps, ftb)
-                            else  # Here there should be a branch and I need to keep track of it
-                                sy = SignedFormula(true, (⊤, ⊤))    # Fake node (always true)
-                                fti = HybridTableau(sy, l)
-                                push!(metricheaps, fti)
-                            end
-                        end
-                    end
-                    !newnodes && l == node && push!(metricheaps, node)
-                end
+                xsmtc *= "))"
+                ysmtc *= "))"
+                newsmtc = [
+                    "(declare-const x$(string(cycle)) A)",
+                    "(declare-const y$(string(cycle)) A)",
+                    xsmtc,
+                    ysmtc,
+                    "(assert (precedeq (join x$(string(cycle)) y$(string(cycle))) a$(findfirst(item -> item == z[2], getdomain(h)))))"
+                ]
+                for l in leaves(en)                    
+                    fta = HybridTableau(SignedFormula(true, (a, x)), l)
+                    push!(metricheaps, fta)
+                    ftb = HybridTableau(SignedFormula(true, (b, y)), fta, newsmtc)
+                    push!(metricheaps, ftb)
+                end       
             elseif !s && token(z[1]) isa NamedConnective{:∨} && !istop(z[2])
                 # F((A∨B)→t) case
                 (a, b) = children(z[1])
-                # Search for support tuples
-                pairs = Set{NTuple{2,T}}()
-                for ti ∈ getdomain(h)
-                    for si ∈ getdomain(h)
-                        if !precedeq(h, h.join(ti, si), z[2])
-                            push!(pairs, (ti, si))
-                        end
-                    end
+                x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
+                xsmtc = "(assert (or"
+                ysmtc = "(assert (or"
+                for value in 1:length(getdomain(h))
+                    xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
+                    ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
                 end
-                for p in pairs
-                    for q in pairs
-                        if precedeq(h, q[1], p[1]) && precedeq(h, q[2], p[2]) && p != q
-                            delete!(pairs, p)
-                        end
-                    end
-                end
-                for l ∈ leaves(en)
-                    newnodes = false
-                    for pair in pairs
-                        newnodes = true
-                        sy = SignedFormula(true, (pair[1], a))
-                        if !findformula(l, sy)
-                            fta = HybridTableau(sy, l)
-                            push!(metricheaps, fta)
-                            sy = SignedFormula(true, (pair[2], b))
-                            if !findformula(fta, sy)
-                                ftb = HybridTableau(sy, fta)
-                                push!(metricheaps, ftb)
-                            end
-                        else
-                            sy = SignedFormula(true, (pair[2], b))
-                            if !findformula(l, sy)
-                                newnodes = true
-                                ftb = HybridTableau(sy, l)
-                                push!(metricheaps, ftb)
-                            else  # Here there should be a branch and I need to keep track of it
-                                sy = SignedFormula(true, (⊤, ⊤))    # Fake node (always true)
-                                fti = HybridTableau(sy, l)
-                                push!(metricheaps, fti)
-                            end
-                        end
-                    end
-                    !newnodes && l == node && push!(metricheaps, node)
-                end
+                xsmtc *= "))"
+                ysmtc *= "))"
+                newsmtc = [
+                    "(declare-const x$(string(cycle)) A)",
+                    "(declare-const y$(string(cycle)) A)",
+                    xsmtc,
+                    ysmtc,
+                    "(assert (not (precedeq (join x$(string(cycle)) y$(string(cycle))) a$(findfirst(item -> item == z[2], getdomain(h))))))"
+                ]
+                for l in leaves(en)                    
+                    fta = HybridTableau(SignedFormula(true, (x, a)), l)
+                    push!(metricheaps, fta)
+                    ftb = HybridTableau(SignedFormula(true, (y, b)), fta, newsmtc)
+                    push!(metricheaps, ftb)
+                end       
             # Reversal Rules
             elseif !s && !istop(z[2])
                 # F(X→a) case
@@ -745,7 +665,7 @@ function hybridprove(
 end
 
 """
-    alphahybridsat(
+    hybridalphasat(
         α::T1,
         z::Formula,
         a::A;
@@ -764,7 +684,7 @@ Given a formula, return true if it is α-satisfiable, i.e., there is an interpre
 that the formula assumes value of at least α, nothing in case of timeout or out-of-memory
 error, false otherwise.
 """
-function alphahybridsat(
+function hybridalphasat(
     α::T1,
     z::Formula,
     a::A;
@@ -779,7 +699,7 @@ function alphahybridsat(
     T1<:Truth
 }
     if verbose
-        println("Solving alphahybridsat for: " * syntaxstring(α) * " ⪯ " * syntaxstring(z))
+        println("Solving hybridalphasat for: " * syntaxstring(α) * " ⪯ " * syntaxstring(z))
         println("Height: " * string(height(z)))
         println("Tokens: " * string(ntokens(z)))
         println()
@@ -789,7 +709,7 @@ function alphahybridsat(
 end
 
 """
-    alphahybridprove(
+    hybridalphaprove(
         α::T1,
         z::Formula,
         a::A;
@@ -808,7 +728,7 @@ Given a formula, return true if it is α-valid, i.e., there is not an interpreta
 that the formula does not assume value of at least α, nothing in case of timeout or
 out-of-memory error, false otherwise.
 """
-function alphahybridprove(
+function hybridalphaprove(
     α::T1,
     z::Formula,
     a::A;
@@ -823,7 +743,7 @@ function alphahybridprove(
     T1<:Truth
 }
     if verbose
-        println("Solving alphahybridprove for: " * syntaxstring(α) * " ⪯ " * syntaxstring(z, remove_redundant_parentheses=false))
+        println("Solving hybridalphaprove for: " * syntaxstring(α) * " ⪯ " * syntaxstring(z, remove_redundant_parentheses=false))
         println("Height: " * string(height(z)))
         println("Tokens: " * string(ntokens(z)))
         println()

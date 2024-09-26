@@ -26,7 +26,7 @@ include("mvhs.jl")
 export mvhsalphasat, mvhsalphaprove
 
 include("hybrid-tableau.jl")
-export alphahybridsat, alphahybridprove
+export hybridalphasat, hybridalphaprove
 
 include("utils.jl")
 
