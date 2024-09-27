@@ -1,5 +1,5 @@
-mutable struct HybridTableau{T<:Truth} <: AbstractTableau
-    const signedformula::SignedFormula{T}
+mutable struct HybridTableau{T<:Truth, T1<:Truth} <: AbstractTableau
+    const signedformula::SignedFormula{T1}
     const father::Union{HybridTableau{T}, Nothing}
     children::Vector{HybridTableau{T}}
     expanded::Bool
@@ -7,29 +7,31 @@ mutable struct HybridTableau{T<:Truth} <: AbstractTableau
     smtconstraints::Vector{String}
 
     function HybridTableau(
-        signedformula::SignedFormula{T},
+        signedformula::SignedFormula{T1},
         father::HybridTableau{T},
         children::Vector{HybridTableau{T}},
         expanded::Bool,
         closed::Bool,
         smtconstraints::Vector{String}
     ) where {
-        T<:Truth
+        T<:Truth,
+        T1<:Truth
     }
-        return new{T}(signedformula, father, children, expanded, closed, smtconstraints)
+        return new{T,T1}(signedformula, father, children, expanded, closed, smtconstraints)
     end
 
     function HybridTableau(
-        signedformula::SignedFormula{T},
+        signedformula::SignedFormula{T1},
         _::Nothing,
         children::Vector{HybridTableau{T}},
         expanded::Bool,
         closed::Bool,
         smtconstraints::Vector{String}
     ) where {
-        T<:Truth
+        T<:Truth,
+        T1<:Truth
     }
-        return new{T}(signedformula, nothing, children, expanded, closed, smtconstraints)
+        return new{T,T1}(signedformula, nothing, children, expanded, closed, smtconstraints)
     end
 
     function HybridTableau(
@@ -39,9 +41,9 @@ mutable struct HybridTableau{T<:Truth} <: AbstractTableau
         T1<:Truth,
         T<:Truth
     }
-        if !isa(signedformula, SignedFormula{T})
-            signedformula = convert(SignedFormula{T}, signedformula)::SignedFormula{T}
-        end
+        # if !isa(signedformula, SignedFormula{T})
+        #     signedformula = convert(SignedFormula{T}, signedformula)::SignedFormula{T}
+        # end
         ft = HybridTableau(
             signedformula,
             father,
@@ -62,9 +64,9 @@ mutable struct HybridTableau{T<:Truth} <: AbstractTableau
         T1<:Truth,
         T<:Truth
     }
-        if !isa(signedformula, SignedFormula{T})
-            signedformula = convert(SignedFormula{T}, signedformula)::SignedFormula{T}
-        end
+        # if !isa(signedformula, SignedFormula{T})
+        #     signedformula = convert(SignedFormula{T}, signedformula)::SignedFormula{T}
+        # end
         ft = HybridTableau(
             signedformula,
             father,
@@ -87,6 +89,25 @@ mutable struct HybridTableau{T<:Truth} <: AbstractTableau
             Vector{String}()
         )
     end
+end
+
+function pushchild!(tableau::HybridTableau, newchild::HybridTableau)
+    push!(children(tableau), newchild)
+end
+
+function leaves(leavesset::Vector{HybridTableau}, tableau::HybridTableau)
+    if isempty(children(tableau))
+        push!(leavesset, tableau)
+    else
+        for child ∈ children(tableau)
+            leaves(leavesset, child)
+        end
+    end
+    return leavesset
+end
+
+function leaves(tableau::HybridTableau)
+    leaves(Vector{HybridTableau}(), tableau)
 end
 
 addconstraint!(ft::HybridTableau, c::String) = push!(ft.smtconstraints, c)
@@ -282,7 +303,7 @@ function hybridsat(
             elseif findsimilar(en, h)
                 # T(b→X) and F(a→X) where a ≤ b case
                 close!(en)
-            elseif isa(z[2], Atom)
+            elseif isa(z[2], Atom)  # TODO temporary (it's not correct)
                 push!(metricheaps, node)
             # Strong conjunction Rules
             elseif s && token(z[2]) isa NamedConnective{:∧} && !isbot(z[1])
@@ -434,7 +455,7 @@ function hybridsat(
             if !s && istop(z[2])
                 # F(X→⊤) case
                 close!(en)
-            elseif isa(z[1], Atom)
+            elseif isa(z[1], Atom)  # TODO temporary (it's not correct)
                 push!(metricheaps, node)
             # Strong disjunction rules
             elseif s && token(z[1]) isa NamedConnective{:∨} && !istop(z[2])
@@ -536,6 +557,42 @@ function hybridsat(
     end
 end
 
+function findsimilar(
+    ft::HybridTableau,
+    h::A
+) where {
+    N,
+    A<:FiniteIndexAlgebra{N}
+}
+    sz = ft.signedformula
+    s = sz.sign
+    z = sz.boundingimplication
+    if z[1] isa Truth
+        if s
+            # Looking for F(a→X) where a≤b or T(X→a) where a<b
+            while !isroot(ft)
+                ft = ft.father
+                sy = ft.signedformula
+                y = sy.boundingimplication
+                if y[1] isa Truth && !sy.sign && z[2] == y[2] && precedeq(h, y[1], z[1])
+                    return true
+                end
+            end
+        else
+            # Looking for T(b→X) or where a≤b F(X→b) where a<b
+            while !isroot(ft)
+                ft = ft.father
+                sy = ft.signedformula
+                y = sy.boundingimplication
+                if y[1] isa Truth && sy.sign && z[2] == y[2] && precedeq(h, z[1], y[1])
+                    return true
+                end
+            end
+        end
+    end
+    return false
+end
+
 function hybridsat(
     metricheaps::Vector{MetricHeap},
     choosenode::Function,
@@ -623,9 +680,9 @@ function hybridsat(
         expand!(en)
 
         sz = en.signedformula
-        if !isa(sz, SignedFormula{T})
-            sz = convert(SignedFormula{T}, sz)::SignedFormula{T}
-        end
+        # if !isa(sz, SignedFormula{FiniteIndexTruth})
+        #     sz = convert(SignedFormula{FiniteIndexTruth}, sz)::SignedFormula{FiniteIndexTruth}
+        # end
         s = sz.sign
         z = sz.boundingimplication
 
@@ -634,17 +691,17 @@ function hybridsat(
         if z isa Tuple{Truth, Truth}
             # Branch Closure Conditions
             if s 
-                if convert(FiniteTruth, z[1]) ∉ getdomain(h)
-                    if convert(FiniteTruth, z[2]) ∉ getdomain(h)
+                if z[1] ∉ getdomain(h)
+                    if z[2] ∉ getdomain(h)
                         for l ∈ leaves(en)
                             addconstraint!(l, "(assert (precedeq $(z[1].label) $(z[2].label)))\n")
                         end
                     else
                         for l ∈ leaves(en)
-                            addconstraint!(l, "(assert (precedeq $(z[1].label) a$(z[2].index))))\n")
+                            addconstraint!(l, "(assert (precedeq $(z[1].label) a$(z[2].index)))\n")
                         end
                     end
-                elseif convert(FiniteTruth, z[2]) ∉ getdomain(h)
+                elseif z[2] ∉ getdomain(h)
                     for l ∈ leaves(en)
                         addconstraint!(l, "(assert (precedeq a$(z[1].index) $(z[2].label)))\n")
                     end
@@ -670,7 +727,7 @@ function hybridsat(
                 # No condition matched, pushing node back into metricheaps
                 push!(metricheaps, node)
             end
-        elseif z isa Tuple{T, Formula}
+        elseif z isa Tuple{Truth, Formula}
             # Branch Closure Conditions
             if !s && isbot(z[1])
                 # F(⊥→X) case
@@ -678,7 +735,7 @@ function hybridsat(
             elseif findsimilar(en, h)
                 # T(b→X) and F(a→X) where a ≤ b case
                 close!(en)
-            elseif isa(z[2], Atom)
+            elseif isa(z[2], Atom)  # TODO temporary (it's not correct)
                 push!(metricheaps, node)
             # Strong conjunction Rules
             elseif s && token(z[2]) isa NamedConnective{:∧} && !isbot(z[1])
@@ -825,12 +882,12 @@ function hybridsat(
                 # No condition matched, pushing node back into metricheaps
                 push!(metricheaps, node)
             end
-        elseif z isa Tuple{Formula, T}
+        elseif z isa Tuple{Formula, Truth}
             # Branch Closure Conditions
             if !s && istop(z[2])
                 # F(X→⊤) case
                 close!(en)
-            elseif isa(z[1], Atom)
+            elseif isa(z[1], Atom)  # TODO temporary (it's not correct)
                 push!(metricheaps, node)
             # Strong disjunction rules
             elseif s && token(z[1]) isa NamedConnective{:∨} && !istop(z[2])
@@ -1309,7 +1366,7 @@ function hybridalphasat(
 ) where {
     T<:Truth,
     N,
-    A<:FiniteAlgebra{N}
+    A<:FiniteIndexAlgebra{N}
 }
     if verbose
         println("Solving hybridalphasat for: " * syntaxstring(α) * " ⪯ " * syntaxstring(z))
@@ -1333,7 +1390,7 @@ end
     ) where {
         T<:Truth,
         N,
-        A<:FiniteAlgebra{N}
+        A<:FiniteIndexAlgebra{N}
     }
 
 Given a formula, return true if it is α-valid, i.e., there is not an interpretation such
@@ -1351,7 +1408,7 @@ function hybridalphaprove(
 ) where {
     T<:Truth,
     N,
-    A<:FiniteAlgebra{N}
+    A<:FiniteIndexAlgebra{N}
 }
     if verbose
         println("Solving hybridalphaprove for: " * syntaxstring(α) * " ⪯ " * syntaxstring(z, remove_redundant_parentheses=false))

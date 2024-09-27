@@ -1637,7 +1637,7 @@ function alphasat(
 end
 
 """
-    alphaprove(
+    alphaprove()
         α::T1,
         z::Formula,
         a::A;
@@ -1645,7 +1645,60 @@ end
         verbose::Bool=false,
         timeout::Union{Nothing,Int}=nothing,
         kwargs...
-    )
+    ) where {
+        T<:Truth,
+        D<:AbstractVector{T},
+        A<:FiniteAlgebra{T,D},
+        T1<:Truth
+    }
+
+Given a formula, return true if it is α-valid, i.e., there is not an interpretation such
+that the formula does not assume value of at least α, nothing in case of timeout or
+out-of-memory error, false otherwise.
+"""
+function alphaprove(
+    α::T1,
+    z::Formula,
+    a::A;
+    rng = Random.GLOBAL_RNG,
+    verbose::Bool=false,
+    timeout::Union{Nothing,Int}=nothing,
+    kwargs...
+) where {
+    T<:Truth,
+    D<:AbstractVector{T},
+    A<:FiniteAlgebra{T,D},
+    T1<:Truth
+}
+    if verbose
+        println("Solving alphaprove for: " * syntaxstring(α) * " ⪯ " * syntaxstring(z, remove_redundant_parentheses=false))
+        println("Height: " * string(height(z)))
+        println("Tokens: " * string(ntokens(z)))
+        println()
+    end
+    randombranch(_::ManyValuedTableau) = rand(rng, Int)
+    r = sat(SignedFormula(false, (α, z)), a, roundrobin, randombranch; verbose, timeout, kwargs...)
+    if isnothing(r)
+        return r
+    else
+        return !r
+    end
+end
+
+"""
+    sat(
+        sz::SignedFormula{T},
+        h::A,
+        choosenode::Function,
+        metrics::Function...;
+        verbose::Bool=false,
+        timeout::Union{Nothing,Int}=nothing,
+        kwargs...
+    ) where {
+        T<:Truth,
+        N,
+        A<:FiniteIndexAlgebra{N}
+    }
 
 Given a formula, return true if it is α-valid, i.e., there is not an interpretation that
 does not satisfy the formula, nothing in case of timeout or out-of-memory error, false
