@@ -61,9 +61,11 @@ test_suites = [
     # ),
     # ("MVHS", ["mvhs.jl"]),
     ("IndexAlphaSat", ["ialphasat.jl",]),
-    # ("AlphaProve", ["alphaprove.jl",]),
+    # ("IndexAlphaProve", ["ialphaprove.jl",]),
     ("HybridAlphaSat", ["hybridalphasat.jl"]),
-    ("HybridAlphaProve", ["hybridalphaprove.jl"])
+    ("HybridAlphaProve", ["hybridalphaprove.jl"]),
+    ("IndexHybridAlphaSat", ["ihybridalphasat.jl"]),
+    # ("IndexHybridAlphaProve", ["ihybridalphaprove.jl"]),
     # ("Utils", ["utils.jl"]),
 ]
 
