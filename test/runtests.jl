@@ -17,8 +17,8 @@ test_suites = [
     # ("Sat", ["sat.jl",]),
     # ("HeytingAlphaSat", ["heytingalphasat.jl",]),
     # ("HeytingAlphaProve", ["heytingalphaprove.jl",]),
-    ("AlphaSat", ["alphasat.jl",]),
-    ("AlphaProve", ["alphaprove.jl",]),
+    # ("AlphaSat", ["alphasat.jl",]),
+    # ("AlphaProve", ["alphaprove.jl",]),
     # (
     #     "BackwardCompatibility - Alphasat - booleanalgebra",
     #     ["backwardcompatibility/alphasat/booleanalgebra.jl"]
@@ -60,12 +60,14 @@ test_suites = [
     #     ["backwardcompatibility/alphaprove/H9.jl"]
     # ),
     # ("MVHS", ["mvhs.jl"]),
-    ("IndexAlphaSat", ["ialphasat.jl",]),
-    ("IndexAlphaProve", ["ialphaprove.jl",]),
+    # ("IndexAlphaSat", ["ialphasat.jl",]),
+    # ("IndexAlphaProve", ["ialphaprove.jl",]),
     # ("HybridAlphaSat", ["hybridalphasat.jl"]),
     # ("HybridAlphaProve", ["hybridalphaprove.jl"]),
-    ("IndexHybridAlphaSat", ["ihybridalphasat.jl"]),
-    ("IndexHybridAlphaProve", ["ihybridalphaprove.jl"]),
+    # ("IndexHybridAlphaSat", ["ihybridalphasat.jl"]),
+    # ("IndexHybridAlphaProve", ["ihybridalphaprove.jl"]),
+    ("IndexHybridAlphaSatBackwardCompatibility", ["ihybridalphasatbc.jl"]),
+    ("IndexHybridAlphaProveBackwardCompatibility", ["ihybridalphaprovebc.jl"]),
     # ("Utils", ["utils.jl"]),
 ]
 

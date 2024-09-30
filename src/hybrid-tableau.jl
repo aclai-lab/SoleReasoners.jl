@@ -249,7 +249,7 @@ function hybridsat(
                     write(file, smtfile)
                 end
                 run(pipeline(`z3 temp.smt2`, stdout = b))
-                # rm("temp.smt2")
+                rm("temp.smt2")
                 if take!(b) == UInt8[0x73, 0x61, 0x74, 0x0a]
                     verbose && println(node) # print satisfiable branch
                     return true
