@@ -15,10 +15,10 @@ BaseManyValuedConnectives = Union{typeof.(BASE_MANY_VALUED_CONNECTIVES)...}
 
 myalphabet = Atom.(["p", "q", "r"])
 
-min_height = 3
-max_height = 5
-max_it = 2000
-max_avg = 100
+min_height = 3 # 1
+max_height = 8
+max_it = 20000
+max_avg = 500 # 1000
 max_timeout = 10 # seconds
 verbose = false
 
@@ -28,9 +28,9 @@ using SoleLogics.ManyValuedLogics: G5, G6, H6_1, H6_2, H6_3, H6
 algebras = [
     ("BA",   booleanalgebra),
     ("G3",   G3),
-    ("Ł3",   Ł3),
+    ("MV3",   Ł3),
     ("G4",   G4),
-    ("Ł4",   Ł4),
+    ("MV4",   Ł4),
     ("H4",   H4),
     ("G5",   G5),
     ("G6",   G6),
@@ -70,6 +70,18 @@ for a in algebras
     leafpickers = [leafpicker1, leafpicker2]
     lpweights = StatsBase.uweights(length(leafpickers))
     leafpicker = (rng)->(StatsBase.sample(rng, leafpickers, lpweights))(rng)
+
+    operatorweights = StatsBase.uweights(length(BASE_MANY_VALUED_CONNECTIVES))
+    operatorpicker = (rng)->SyntaxTree(
+        StatsBase.sample(rng, BASE_MANY_VALUED_CONNECTIVES, operatorweights),
+        StatsBase.sample(rng, aot, aotweights),
+        StatsBase.sample(rng, aot, aotweights)
+    )
+
+    endpickers = [operatorpicker, leafpicker]
+    endweights = StatsBase.uweights(length(endpickers))
+    endpicker = (rng)->(StatsBase.sample(rng, endpickers, endweights))(rng)
+
     for height in min_height:max_height
         verbose && println("Alphaprove on " * a[1] * " formulas of height " * string(height))
         e_time = 0
@@ -85,7 +97,7 @@ for a in algebras
                 myalphabet,
                 BASE_MANY_VALUED_CONNECTIVES,
                 opweights=StatsBase.uweights(length(BASE_MANY_VALUED_CONNECTIVES)),
-                basecase=leafpicker,    # basecase=aotpicker
+                basecase=endpicker, #basecase=leafpicker,    # basecase=aotpicker
                 balanced=true
             )
             if !isbot(t) && SoleLogics.height(f) == height

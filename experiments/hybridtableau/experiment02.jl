@@ -22,7 +22,7 @@ myalphabet = Atom.(["p", "q", "r"])
 min_height = 1
 max_height = 5#8
 max_it = 20000
-max_avg = 5#1000
+max_avg = 100#1000
 max_timeout = 10 # seconds
 verbose = true
 
@@ -158,6 +158,7 @@ for a in algebras
 
                 if !isnothing(r) && !isnothing(r_hybrid)
                     if r != r_hybrid
+                        # @warn "Tableaux don't agree for formula $f, classic says $r, hybrid says $r_hybrid"
                         error("Tableaux don't agree for formula $f")
                     else
                         # Evaluate avg execution time only if both tableaux didn't timeout

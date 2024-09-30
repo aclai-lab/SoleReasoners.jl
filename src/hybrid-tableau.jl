@@ -244,6 +244,7 @@ function hybridsat(
                 end
                 smtfile *= "(check-sat)"
                 b = IOBuffer()
+                
                 touch("temp.smt2")
                 open("temp.smt2", "w") do file
                     write(file, smtfile)
@@ -786,6 +787,8 @@ function findsimilar(
     return false
 end
 
+using UUIDs
+
 function hybridsat(
     metricheaps::Vector{MetricHeap},
     choosenode::Function,
@@ -855,12 +858,13 @@ function hybridsat(
                 end
                 smtfile *= "(check-sat)"
                 b = IOBuffer()
-                touch("temp.smt2")
-                open("temp.smt2", "w") do file
+                uuid = UUIDs.uuid4()
+                touch("temp$uuid.smt2")
+                open("temp$uuid.smt2", "w") do file
                     write(file, smtfile)
                 end
-                run(pipeline(`z3 temp.smt2`, stdout = b))
-                # rm("temp.smt2")
+                run(pipeline(`z3 temp$uuid.smt2`, stdout = b))
+                rm("temp$uuid.smt2")
                 if take!(b) == UInt8[0x73, 0x61, 0x74, 0x0a]
                     verbose && println(node) # print satisfiable branch
                     return true
