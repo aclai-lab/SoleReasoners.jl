@@ -91,6 +91,20 @@ mutable struct HybridTableau{T<:Truth, T1<:Truth} <: AbstractTableau
     end
 end
 
+function Base.show(io::IO, t::HybridTableau)
+    b = []
+    append!(b, [t.signedformula])
+    while !isroot(t)
+        t = t.father
+        append!(b, [t.signedformula])
+    end
+    reverse!(b)
+    println(io, "Satisfiable branch:")
+    for sz in b
+        println(io, string(sz))
+    end
+end
+
 function pushchild!(tableau::HybridTableau, newchild::HybridTableau)
     push!(children(tableau), newchild)
 end
@@ -235,7 +249,7 @@ function hybridsat(
                     write(file, smtfile)
                 end
                 run(pipeline(`z3 temp.smt2`, stdout = b))
-                rm("temp.smt2")
+                # rm("temp.smt2")
                 if take!(b) == UInt8[0x73, 0x61, 0x74, 0x0a]
                     verbose && println(node) # print satisfiable branch
                     return true
@@ -564,28 +578,207 @@ function findsimilar(
     N,
     A<:FiniteIndexAlgebra{N}
 }
+    en = ft
     sz = ft.signedformula
     s = sz.sign
     z = sz.boundingimplication
     if z[1] isa Truth
-        if s
-            # Looking for F(a→X) where a≤b or T(X→a) where a<b
+        if s            
             while !isroot(ft)
                 ft = ft.father
                 sy = ft.signedformula
                 y = sy.boundingimplication
-                if y[1] isa Truth && !sy.sign && z[2] == y[2] && precedeq(h, y[1], z[1])
-                    return true
+                if y[1] isa Truth && !sy.sign && z[2] == y[2]
+                    # X5
+                    if z[1] ∉ getdomain(h)
+                        if y[1] ∉ getdomain(h)
+                            for l ∈ leaves(en)
+                                addconstraint!(l, "(assert (not (precedeq $(y[1].label) $(z[1].label))))\n")
+                            end
+                        else
+                            for l ∈ leaves(en)
+                                addconstraint!(l, "(assert (not (precedeq a$(y[1].index) $(z[1].label))))\n")
+                            end
+                        end
+                    else 
+                        if y[1] ∉ getdomain(h)
+                            for l ∈ leaves(en)
+                                addconstraint!(l, "(assert (not (precedeq $(y[1].label) a$(z[1].index))))\n")
+                            end
+                        elseif precedeq(h, y[1], z[1])
+                            return true
+                        end
+                    end
+                elseif y[2] isa Truth && sy.sign && z[2] == y[1]
+                    # X6
+                    if z[1] ∉ getdomain(h)
+                        if y[2] ∉ getdomain(h)
+                            for l ∈ leaves(en)
+                                addconstraint!(l, "(assert (precedeq $(z[1].label) $(y[2].label)))\n")
+                            end
+                        else
+                            for l ∈ leaves(en)
+                                addconstraint!(l, "(assert (precedeq $(z[1].label) a$(y[2].index)))\n")
+                            end
+                        end
+                    else
+                        if y[2] ∉ getdomain(h)
+                            for l ∈ leaves(en)
+                                addconstraint!(l, "(assert (precedeq a$(z[1].index) $(y[2].label)))\n")
+                            end
+                        elseif !precedeq(h, z[1], y[2])
+                            return true
+                        end
+                    end
+                end
+            end            
+        else
+            while !isroot(ft)
+                ft = ft.father
+                sy = ft.signedformula
+                y = sy.boundingimplication
+                if y[1] isa Truth && sy.sign && z[2] == y[2]
+                    # X5
+                    if z[1] ∉ getdomain(h)
+                        if y[1] ∉ getdomain(h)
+                            for l ∈ leaves(en)
+                                addconstraint!(l, "(assert (not (precedeq $(z[1].label) $(y[1].label))))\n")
+                            end
+                        else
+                            for l ∈ leaves(en)
+                                addconstraint!(l, "(assert (not (precedeq $(z[1].label) a$(y[1].index))))\n")
+                            end
+                        end
+                    else
+                        if y[1] ∉ getdomain(h)
+                            for l ∈ leaves(en)
+                                addconstraint!(l, "(assert (not (precedeq a$(z[1].index) $(y[1].label))))\n")
+                            end
+                        elseif precedeq(h, z[1], y[1])
+                            return true
+                        end
+                    end
+                elseif y[2] isa Truth && !sy.sign && z[2] == y[1]
+                    # X8
+                    if z[1] ∉ getdomain(h)
+                        if y[2] ∉ getdomain(h)
+                            for l ∈ leaves(en)
+                                addconstraint!(l, "(assert (not (precedeq $(z[1].label) $(y[2].label))))\n")
+                            end
+                        else
+                            for l ∈ leaves(en)
+                                addconstraint!(l, "(assert (not (precedeq $(z[1].label) a$(y[2].index))))\n")
+                            end
+                        end
+                    else
+                        if y[2] ∉ getdomain(h)
+                            for l ∈ leaves(en)
+                                addconstraint!(l, "(assert (not (precedeq a$(z[1].index) $(y[2].label))))\n")
+                            end
+                        elseif precedeq(h, z[1], y[2])
+                            return true
+                        end
+                    end
+                end
+            end
+        end
+    elseif z[2] isa Truth
+        if s
+            while !isroot(ft)
+                ft = ft.father
+                sy = ft.signedformula
+                y = sy.boundingimplication
+                if y[1] isa Truth && sy.sign && z[1] == y[2]
+                    # X6
+                    if z[2] ∉ getdomain(h)
+                        if y[1] ∉ getdomain(h)
+                            for l ∈ leaves(en)
+                                addconstraint!(l, "(assert (precedeq $(y[1].label) $(z[2].label)))\n")
+                            end
+                        else
+                            for l ∈ leaves(en)
+                                addconstraint!(l, "(assert (precedeq a$(y[1].index) $(z[2].label)))\n")
+                            end
+                        end
+                    else
+                        if y[1] ∉ getdomain(h)
+                            for l ∈ leaves(en)
+                                addconstraint!(l, "(assert (precedeq $(y[1].label) a$(z[2].index)))\n")
+                            end
+                        elseif !precedeq(h, y[1], z[2])
+                            return true
+                        end
+                    end
+                elseif y[2] isa Truth && !sy.sign && z[1] == y[1]
+                    # X7
+                    if z[2] ∉ getdomain(h)
+                        if y[2] ∉ getdomain(h)
+                            for l ∈ leaves(en)
+                                addconstraint!(l, "(assert (precedeq $(y[2].label) $(z[2].label)))\n")
+                            end
+                        else
+                            for l ∈ leaves(en)
+                                addconstraint!(l, "(assert (precedeq a$(y[2].index) $(z[2].label)))\n")
+                            end
+                        end
+                    else
+                        if y[2] ∉ getdomain(h)
+                            for l ∈ leaves(en)
+                                addconstraint!(l, "(assert (precedeq $(y[2].label) a$(z[2].index)))\n")
+                            end
+                        elseif !precedeq(h, y[2], z[2])
+                            return true
+                        end
+                    end
                 end
             end
         else
-            # Looking for T(b→X) or where a≤b F(X→b) where a<b
             while !isroot(ft)
                 ft = ft.father
                 sy = ft.signedformula
                 y = sy.boundingimplication
-                if y[1] isa Truth && sy.sign && z[2] == y[2] && precedeq(h, z[1], y[1])
-                    return true
+                if y[2] isa Truth && sy.sign && z[1] == y[1]
+                    # X7
+                    if z[2] ∉ getdomain(h)
+                        if y[2] ∉ getdomain(h)
+                            for l ∈ leaves(en)
+                                addconstraint!(l, "(assert (precedeq $(z[2].label) $(y[2].label)))\n")
+                            end
+                        else
+                            for l ∈ leaves(en)
+                                addconstraint!(l, "(assert (precedeq $(z[2].label) a$(y[2].index)))\n")
+                            end
+                        end
+                    else
+                        if y[2] ∉ getdomain(h)
+                            for l ∈ leaves(en)
+                                addconstraint!(l, "(assert (precedeq a$(z[2].index) $(y[2].label)))\n")
+                            end
+                        elseif !precedeq(h, z[2], y[2])
+                            return true
+                        end
+                    end
+                elseif y[1] isa Truth && !sy.sign && z[1] == y[2]
+                    # X8
+                    if z[2] ∉ getdomain(h)
+                        if y[1] ∉ getdomain(h)
+                            for l ∈ leaves(en)
+                                addconstraint!(l, "(assert (not (precedeq $(y[1].label) $(z[2].label))))\n")
+                            end
+                        else
+                            for l ∈ leaves(en)
+                                addconstraint!(l, "(assert (not (precedeq a$(y[1].index) $(z[2].label))))\n")
+                            end
+                        end
+                    else
+                        if y[1] ∉ getdomain(h)
+                            for l ∈ leaves(en)
+                                addconstraint!(l, "(assert (not (precedeq $(y[1].label) a$(z[2].index))))\n")
+                            end
+                        elseif precedeq(h, y[1], z[2])
+                            return true
+                        end
+                    end
                 end
             end
         end
@@ -667,323 +860,575 @@ function hybridsat(
                     write(file, smtfile)
                 end
                 run(pipeline(`z3 temp.smt2`, stdout = b))
-                rm("temp.smt2")
+                # rm("temp.smt2")
                 if take!(b) == UInt8[0x73, 0x61, 0x74, 0x0a]
                     verbose && println(node) # print satisfiable branch
                     return true
                 else
-                    return false
+                    close!(node)
                 end
-            end
-        end
-        en = findexpansionnode(node)
-        expand!(en)
-
-        sz = en.signedformula
-        # if !isa(sz, SignedFormula{FiniteIndexTruth})
-        #     sz = convert(SignedFormula{FiniteIndexTruth}, sz)::SignedFormula{FiniteIndexTruth}
-        # end
-        s = sz.sign
-        z = sz.boundingimplication
-
-        verbose && println(string(s) * "\t" * string(z))
-
-        if z isa Tuple{Truth, Truth}
-            # Branch Closure Conditions
-            if s 
-                if z[1] ∉ getdomain(h)
-                    if z[2] ∉ getdomain(h)
-                        for l ∈ leaves(en)
-                            addconstraint!(l, "(assert (precedeq $(z[1].label) $(z[2].label)))\n")
-                        end
-                    else
-                        for l ∈ leaves(en)
-                            addconstraint!(l, "(assert (precedeq $(z[1].label) a$(z[2].index)))\n")
-                        end
-                    end
-                elseif z[2] ∉ getdomain(h)
-                    for l ∈ leaves(en)
-                        addconstraint!(l, "(assert (precedeq a$(z[1].index) $(z[2].label)))\n")
-                    end
-                elseif !precedeq(h, z[1], z[2])
-                    # T(a→b) where a≰b case
-                    close!(en)
-                end
-            end
-            if !s && precedeq(h, z[1], z[2]) && !isbot(z[1]) && !istop(z[2])
-                # F(a→b) where a≤b and a≠⊥ and b≠⊤ case
-                close!(en)
-            elseif !s && isbot(z[1])
-                # F(⊥→X) case
-                close!(en)
-            elseif !s && istop(z[2])
-                # F(X→⊤) case
-                close!(en)
-            elseif findsimilar(en, h)   # TODO: check
-                # T(b→X) and F(a→X) where a ≤ b case
-                close!(en)
-            # Base case
-            else
-                # No condition matched, pushing node back into metricheaps
-                push!(metricheaps, node)
-            end
-        elseif z isa Tuple{Truth, Formula}
-            # Branch Closure Conditions
-            if !s && isbot(z[1])
-                # F(⊥→X) case
-                close!(en)
-            elseif findsimilar(en, h)
-                # T(b→X) and F(a→X) where a ≤ b case
-                close!(en)
-            elseif isa(z[2], Atom)  # TODO temporary (it's not correct)
-                push!(metricheaps, node)
-            # Strong conjunction Rules
-            elseif s && token(z[2]) isa NamedConnective{:∧} && !isbot(z[1])
-                # T(t→(A∧B)) case
-                (a, b) = children(z[2])
-                x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
-                xsmtc = "(assert (or"
-                ysmtc = "(assert (or"
-                for value in 1:N
-                    xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
-                    ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
-                end
-                xsmtc *= "))"
-                ysmtc *= "))"
-                newsmtc = [
-                    "(declare-const x$(string(cycle)) A)",
-                    "(declare-const y$(string(cycle)) A)",
-                    xsmtc,
-                    ysmtc,
-                    "(assert (precedeq a$(z[1].index) (monoid x$(string(cycle)) y$(string(cycle)))))"
-                ]
-                for l in leaves(en)                    
-                    fta = HybridTableau(SignedFormula(true, (x, a)), l)
-                    push!(metricheaps, fta)
-                    ftb = HybridTableau(SignedFormula(true, (y, b)), fta, newsmtc)
-                    push!(metricheaps, ftb)
-                end                
-            elseif !s && token(z[2]) isa NamedConnective{:∧} && !isbot(z[1])
-                # F(t→(A∧B)) case
-                (a, b) = children(z[2])
-                x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
-                xsmtc = "(assert (or"
-                ysmtc = "(assert (or"
-                for value in 1:N
-                    xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
-                    ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
-                end
-                xsmtc *= "))"
-                ysmtc *= "))"
-                newsmtc = [
-                    "(declare-const x$(string(cycle)) A)",
-                    "(declare-const y$(string(cycle)) A)",
-                    xsmtc,
-                    ysmtc,
-                    "(assert (not (precedeq a$(z[1].index) (monoid x$(string(cycle)) y$(string(cycle))))))"
-                ]
-                for l in leaves(en)                    
-                    fta = HybridTableau(SignedFormula(true, (a, x)), l)
-                    push!(metricheaps, fta)
-                    ftb = HybridTableau(SignedFormula(true, (b, y)), fta, newsmtc)
-                    push!(metricheaps, ftb)
-                end        
-            # Implication Rules
-            elseif s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
-                # T(t→(A→B)) case
-                (a, b) = children(z[2])
-                x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
-                xsmtc = "(assert (or"
-                ysmtc = "(assert (or"
-                for value in 1:N
-                    xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
-                    ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
-                end
-                xsmtc *= "))"
-                ysmtc *= "))"
-                newsmtc = [
-                    "(declare-const x$(string(cycle)) A)",
-                    "(declare-const y$(string(cycle)) A)",
-                    xsmtc,
-                    ysmtc,
-                    "(assert (precedeq a$(z[1].index) (implication x$(string(cycle)) y$(string(cycle)))))"
-                ]
-                for l in leaves(en)                    
-                    fta = HybridTableau(SignedFormula(true, (a, x)), l)
-                    push!(metricheaps, fta)
-                    ftb = HybridTableau(SignedFormula(true, (y, b)), fta, newsmtc)
-                    push!(metricheaps, ftb)
-                end       
-            elseif !s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
-                # F(t→(A→B)) case
-                (a, b) = children(z[2])
-                x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
-                xsmtc = "(assert (or"
-                ysmtc = "(assert (or"
-                for value in 1:N
-                    xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
-                    ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
-                end
-                xsmtc *= "))"
-                ysmtc *= "))"
-                newsmtc = [
-                    "(declare-const x$(string(cycle)) A)",
-                    "(declare-const y$(string(cycle)) A)",
-                    xsmtc,
-                    ysmtc,
-                    "(assert (not (precedeq a$(z[1].index) (implication x$(string(cycle)) y$(string(cycle))))))"
-                ]
-                for l in leaves(en)                    
-                    fta = HybridTableau(SignedFormula(true, (x, a)), l)
-                    push!(metricheaps, fta)
-                    ftb = HybridTableau(SignedFormula(true, (b, y)), fta, newsmtc)
-                    push!(metricheaps, ftb)
-                end       
-            # Reversal Rules
-            elseif !s && !isbot(z[1])
-                # F(a→X) case
-                for l ∈ leaves(en)
-                    newnodes = false
-                    for ti ∈ maximalmembers(h, z[1])
-                        newnodes = true
-                        sy = SignedFormula(true, (z[2], ti))
-                        if !findformula(l, sy)
-                            newnodes = true
-                            fti = HybridTableau(sy, l)
-                            push!(metricheaps, fti)
-                        else  # Here there should be a branch and I need to keep track of it
-                            sy = SignedFormula(true, (⊤, ⊤))    # Fake node (always true)
-                            fti = HybridTableau(sy, l)
-                            push!(metricheaps, fti)
-                        end
-                    end
-                    !newnodes && l == node && push!(metricheaps, node)
-                end
-            elseif s && !isbot(z[1])
-                # T(a→X) case
-                for l ∈ leaves(en)
-                    newnodes = false
-                    fti = l
-                    for ti in maximalmembers(h, z[1])
-                        sy = SignedFormula(false, (z[2], ti))
-                        if !findformula(fti, sy)
-                            newnodes = true
-                            fti = HybridTableau(sy, fti)
-                            push!(metricheaps, fti)
-                        end
-                    end
-                    !newnodes && l == node && push!(metricheaps, node)
-                end
-            # Error
-            elseif !isa(z[2], Atom) && token(z[2]) ∉ [∧, ∨, →]
-                error("Unrecognized operator $(token(z[2])).")
-            # Base case
-            else
-                # No condition matched, pushing node back into metricheaps
-                push!(metricheaps, node)
-            end
-        elseif z isa Tuple{Formula, Truth}
-            # Branch Closure Conditions
-            if !s && istop(z[2])
-                # F(X→⊤) case
-                close!(en)
-            elseif isa(z[1], Atom)  # TODO temporary (it's not correct)
-                push!(metricheaps, node)
-            # Strong disjunction rules
-            elseif s && token(z[1]) isa NamedConnective{:∨} && !istop(z[2])
-                # T((A∨B)→t) case
-                (a, b) = children(z[1])
-                x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
-                xsmtc = "(assert (or"
-                ysmtc = "(assert (or"
-                for value in 1:N
-                    xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
-                    ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
-                end
-                xsmtc *= "))"
-                ysmtc *= "))"
-                newsmtc = [
-                    "(declare-const x$(string(cycle)) A)",
-                    "(declare-const y$(string(cycle)) A)",
-                    xsmtc,
-                    ysmtc,
-                    "(assert (precedeq (join x$(string(cycle)) y$(string(cycle))) a$(z[2].index)))"
-                ]
-                for l in leaves(en)                    
-                    fta = HybridTableau(SignedFormula(true, (a, x)), l)
-                    push!(metricheaps, fta)
-                    ftb = HybridTableau(SignedFormula(true, (b, y)), fta, newsmtc)
-                    push!(metricheaps, ftb)
-                end       
-            elseif !s && token(z[1]) isa NamedConnective{:∨} && !istop(z[2])
-                # F((A∨B)→t) case
-                (a, b) = children(z[1])
-                x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
-                xsmtc = "(assert (or"
-                ysmtc = "(assert (or"
-                for value in 1:N
-                    xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
-                    ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
-                end
-                xsmtc *= "))"
-                ysmtc *= "))"
-                newsmtc = [
-                    "(declare-const x$(string(cycle)) A)",
-                    "(declare-const y$(string(cycle)) A)",
-                    xsmtc,
-                    ysmtc,
-                    "(assert (not (precedeq (join x$(string(cycle)) y$(string(cycle))) a$(z[2].index))))"
-                ]
-                for l in leaves(en)                    
-                    fta = HybridTableau(SignedFormula(true, (x, a)), l)
-                    push!(metricheaps, fta)
-                    ftb = HybridTableau(SignedFormula(true, (y, b)), fta, newsmtc)
-                    push!(metricheaps, ftb)
-                end       
-            # Reversal Rules
-            elseif !s && !istop(z[2])
-                # F(X→a) case
-                for l ∈ leaves(en)
-                    newnodes = false
-                    for ui ∈ minimalmembers(h, z[2])
-                        newnodes = true
-                        sy = SignedFormula(true, (ui, z[1]))
-                        if !findformula(l, sy)
-                            fui = HybridTableau(sy, l)
-                            push!(metricheaps, fui)
-                        else  # Here there should be a branch and I need to keep track of it
-                            sy = SignedFormula(true, (⊤, ⊤))    # Fake node (always true)
-                            fti = HybridTableau(sy, l)
-                            push!(metricheaps, fti)
-                        end
-                    end
-                    !newnodes && l == node && push!(metricheaps, node)
-                end
-            elseif s && !istop(z[2])
-                # T(X→A) case
-                for l ∈ leaves(en)
-                    newnodes = false
-                    fui = l
-                    for ui in minimalmembers(h, z[2])
-                        sy = SignedFormula(false, (ui, z[1]))
-                        if !findformula(fui, sy)
-                            newnodes = true
-                            fui = HybridTableau(sy, fui)
-                            push!(metricheaps, fui)
-                        end
-                    end
-                    !newnodes && l == node && push!(metricheaps, node)
-                end
-            # Error
-            elseif !isa(z[1], Atom) && token(z[1]) ∉ [∧, ∨, →]
-                error("Unrecognized operator $(token(z[1])).")
-            # Base case
-            else
-                # No condition matched, pushing node back into metricheaps
-                push!(metricheaps, node)
             end
         else
-            error("Something went wrong with tuple $(z) of type $(typeof(z))")
+            en = findexpansionnode(node)
+            expand!(en)
+
+            sz = en.signedformula
+            # if !isa(sz, SignedFormula{FiniteIndexTruth})
+            #     sz = convert(SignedFormula{FiniteIndexTruth}, sz)::SignedFormula{FiniteIndexTruth}
+            # end
+            s = sz.sign
+            z = sz.boundingimplication
+
+            verbose && println(string(s) * "\t" * string(z))
+
+            if z isa Tuple{Truth, Truth}
+                # Branch Closure Conditions
+                if s 
+                    if z[1] ∉ getdomain(h)
+                        if z[2] ∉ getdomain(h)
+                            for l ∈ leaves(en)
+                                addconstraint!(l, "(assert (precedeq $(z[1].label) $(z[2].label)))\n")
+                            end
+                        else
+                            for l ∈ leaves(en)
+                                addconstraint!(l, "(assert (precedeq $(z[1].label) a$(z[2].index)))\n")
+                            end
+                        end
+                    elseif z[2] ∉ getdomain(h)
+                        for l ∈ leaves(en)
+                            addconstraint!(l, "(assert (precedeq a$(z[1].index) $(z[2].label)))\n")
+                        end
+                    elseif !precedeq(h, z[1], z[2])
+                        # T(a→b) where a≰b case
+                        close!(en)
+                    end
+                else
+                    if z[1] ∉ getdomain(h)
+                        if z[2] ∉ getdomain(h)
+                            for l ∈ leaves(en)
+                                addconstraint!(l, "(assert (not (precedeq $(z[1].label) $(z[2].label))))\n")
+                            end
+                        elseif !istop(z[2])
+                            for l ∈ leaves(en)
+                                addconstraint!(l, "(assert (not (precedeq $(z[1].label) a$(z[2].index))))\n")
+                            end
+                        else
+                            # F(X→⊤) case
+                            close!(en)
+                        end
+                    elseif z[2] ∉ getdomain(h)
+                        if !isbot(z[1])
+                            for l ∈ leaves(en)
+                                addconstraint!(l, "(assert (not (precedeq a$(z[1].index) $(z[2].label))))\n")
+                            end
+                        else
+                            # F(⊥→X) case
+                            close!(en)
+                        end
+                    elseif precedeq(h, z[1], z[2]) && !isbot(z[1]) && !istop(z[2])
+                        # F(a→b) where a≤b and a≠⊥ and b≠⊤ case
+                        close!(en)
+                    elseif !s && isbot(z[1])
+                        # F(⊥→X) case
+                        close!(en)
+                    elseif !s && istop(z[2])
+                        # F(X→⊤) case
+                        close!(en)
+                    end
+                end
+                if findsimilar(en, h)
+                    # T(b→X) and F(a→X) where a ≤ b case
+                    close!(en)
+                # Base case
+                else
+                    # No condition matched, pushing node back into metricheaps
+                    push!(metricheaps, node)
+                end
+            elseif z isa Tuple{Truth, Formula}
+                # Branch Closure Conditions
+                if !s && isbot(z[1])
+                    # F(⊥→X) case
+                    close!(en)
+                elseif findsimilar(en, h)
+                    # T(b→X) and F(a→X) where a ≤ b case
+                    close!(en)
+                # elseif isa(z[2], Atom)  # TODO temporary (it's not correct)
+                #     push!(metricheaps, node)
+                # Strong conjunction Rules 1
+                elseif s && token(z[2]) isa NamedConnective{:∧} && !isbot(z[1])
+                    # T(t→(A∧B)) case
+                    (a, b) = children(z[2])
+                    x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
+                    xsmtc = "(assert (or"
+                    ysmtc = "(assert (or"
+                    for value in 1:N
+                        xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
+                        ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
+                    end
+                    xsmtc *= "))"
+                    ysmtc *= "))"
+                    newsmtc = [
+                        "(declare-const x$(string(cycle)) A)",
+                        "(declare-const y$(string(cycle)) A)",
+                        xsmtc,
+                        ysmtc
+                    ]
+                    if isa(z[1], FiniteIndexTruth)
+                        push!(newsmtc,"(assert (precedeq a$(z[1].index) (monoid x$(string(cycle)) y$(string(cycle)))))")
+                    elseif isa(z[1], FiniteTruth)
+                        push!(newsmtc,"(assert (precedeq $(z[1].label) (monoid x$(string(cycle)) y$(string(cycle)))))")
+                    else
+                        error("Wrong truth type")
+                    end                
+                    for l in leaves(en)                    
+                        fta = HybridTableau(SignedFormula(true, (x, a)), l)
+                        push!(metricheaps, fta)
+                        ftb = HybridTableau(SignedFormula(true, (y, b)), fta, newsmtc)
+                        push!(metricheaps, ftb)
+                    end                
+                elseif !s && token(z[2]) isa NamedConnective{:∧} && !isbot(z[1])
+                    # F(t→(A∧B)) case
+                    (a, b) = children(z[2])
+                    x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
+                    xsmtc = "(assert (or"
+                    ysmtc = "(assert (or"
+                    for value in 1:N
+                        xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
+                        ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
+                    end
+                    xsmtc *= "))"
+                    ysmtc *= "))"
+                    newsmtc = [
+                        "(declare-const x$(string(cycle)) A)",
+                        "(declare-const y$(string(cycle)) A)",
+                        xsmtc,
+                        ysmtc
+                    ]
+                    if isa(z[1], FiniteIndexTruth)
+                        push!(newsmtc,"(assert (not (precedeq a$(z[1].index) (monoid x$(string(cycle)) y$(string(cycle))))))")
+                    elseif isa(z[1], FiniteTruth)
+                        push!(newsmtc,"(assert (not (precedeq $(z[1].label) (monoid x$(string(cycle)) y$(string(cycle))))))")
+                    else
+                        error("Wrong truth type")
+                    end
+                    for l in leaves(en)                    
+                        fta = HybridTableau(SignedFormula(true, (a, x)), l)
+                        push!(metricheaps, fta)
+                        ftb = HybridTableau(SignedFormula(true, (b, y)), fta, newsmtc)
+                        push!(metricheaps, ftb)
+                    end
+                # Strong disjunction rules 2
+                elseif s && token(z[2]) isa NamedConnective{:∨} && !isbot(z[1])
+                    # T(t→(A∨B)) case
+                    (a, b) = children(z[2])
+                    x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
+                    xsmtc = "(assert (or"
+                    ysmtc = "(assert (or"
+                    for value in 1:N
+                        xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
+                        ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
+                    end
+                    xsmtc *= "))"
+                    ysmtc *= "))"
+                    newsmtc = [
+                        "(declare-const x$(string(cycle)) A)",
+                        "(declare-const y$(string(cycle)) A)",
+                        xsmtc,
+                        ysmtc                    
+                    ]
+                    if isa(z[1], FiniteIndexTruth)
+                        push!(newsmtc,"(assert (precedeq a$(z[1].index) (join x$(string(cycle)) y$(string(cycle)))))")
+                    elseif isa(z[1], FiniteTruth)
+                        push!(newsmtc,"(assert (precedeq $(z[1].label) (join x$(string(cycle)) y$(string(cycle)))))")
+                    else
+                        error("Wrong truth type")
+                    end
+                    for l in leaves(en)                    
+                        fta = HybridTableau(SignedFormula(true, (x, a)), l)
+                        push!(metricheaps, fta)
+                        ftb = HybridTableau(SignedFormula(true, (y, b)), fta, newsmtc)
+                        push!(metricheaps, ftb)
+                    end       
+                elseif !s && token(z[2]) isa NamedConnective{:∨} && !isbot(z[1])
+                    # F(t→(A∨B)) case
+                    (a, b) = children(z[2])
+                    x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
+                    xsmtc = "(assert (or"
+                    ysmtc = "(assert (or"
+                    for value in 1:N
+                        xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
+                        ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
+                    end
+                    xsmtc *= "))"
+                    ysmtc *= "))"
+                    newsmtc = [
+                        "(declare-const x$(string(cycle)) A)",
+                        "(declare-const y$(string(cycle)) A)",
+                        xsmtc,
+                        ysmtc                    
+                    ]
+                    if isa(z[1], FiniteIndexTruth)
+                        push!(newsmtc,"(assert (not (precedeq a$(z[1].index) (join x$(string(cycle)) y$(string(cycle))))))")
+                    elseif isa(z[1], FiniteTruth)
+                        push!(newsmtc,"(assert (not (precedeq $(z[1].label) (join x$(string(cycle)) y$(string(cycle))))))")
+                    else
+                        error("Wrong truth type")
+                    end
+                    for l in leaves(en)                    
+                        fta = HybridTableau(SignedFormula(true, (a, x)), l)
+                        push!(metricheaps, fta)
+                        ftb = HybridTableau(SignedFormula(true, (b, y)), fta, newsmtc)
+                        push!(metricheaps, ftb)
+                    end   
+                # Implication Rules 1
+                elseif s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
+                    # T(t→(A→B)) case
+                    (a, b) = children(z[2])
+                    x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
+                    xsmtc = "(assert (or"
+                    ysmtc = "(assert (or"
+                    for value in 1:N
+                        xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
+                        ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
+                    end
+                    xsmtc *= "))"
+                    ysmtc *= "))"
+                    newsmtc = [
+                        "(declare-const x$(string(cycle)) A)",
+                        "(declare-const y$(string(cycle)) A)",
+                        xsmtc,
+                        ysmtc                    
+                    ]
+                    if isa(z[1], FiniteIndexTruth)
+                        push!(newsmtc,"(assert (precedeq a$(z[1].index) (implication x$(string(cycle)) y$(string(cycle)))))")
+                    elseif isa(z[1], FiniteTruth)
+                        push!(newsmtc,"(assert (precedeq $(z[1].label) (implication x$(string(cycle)) y$(string(cycle)))))")
+                    else
+                        error("Wrong truth type")
+                    end
+                    for l in leaves(en)                    
+                        fta = HybridTableau(SignedFormula(true, (a, x)), l)
+                        push!(metricheaps, fta)
+                        ftb = HybridTableau(SignedFormula(true, (y, b)), fta, newsmtc)
+                        push!(metricheaps, ftb)
+                    end       
+                elseif !s && token(z[2]) isa NamedConnective{:→} && !isbot(z[1])
+                    # F(t→(A→B)) case
+                    (a, b) = children(z[2])
+                    x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
+                    xsmtc = "(assert (or"
+                    ysmtc = "(assert (or"
+                    for value in 1:N
+                        xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
+                        ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
+                    end
+                    xsmtc *= "))"
+                    ysmtc *= "))"
+                    newsmtc = [
+                        "(declare-const x$(string(cycle)) A)",
+                        "(declare-const y$(string(cycle)) A)",
+                        xsmtc,
+                        ysmtc                    
+                    ]
+                    if isa(z[1], FiniteIndexTruth)
+                        push!(newsmtc,"(assert (not (precedeq a$(z[1].index) (implication x$(string(cycle)) y$(string(cycle))))))")
+                    elseif isa(z[1], FiniteTruth)
+                        push!(newsmtc,"(assert (not (precedeq $(z[1].label) (implication x$(string(cycle)) y$(string(cycle))))))")
+                    else
+                        error("Wrong truth type")
+                    end
+                    for l in leaves(en)                    
+                        fta = HybridTableau(SignedFormula(true, (x, a)), l)
+                        push!(metricheaps, fta)
+                        ftb = HybridTableau(SignedFormula(true, (b, y)), fta, newsmtc)
+                        push!(metricheaps, ftb)
+                    end       
+                # # Reversal Rules
+                # elseif !s && !isbot(z[1])
+                #     # F(a→X) case
+                #     for l ∈ leaves(en)
+                #         newnodes = false
+                #         for ti ∈ maximalmembers(h, z[1])
+                #             newnodes = true
+                #             sy = SignedFormula(true, (z[2], ti))
+                #             if !findformula(l, sy)
+                #                 newnodes = true
+                #                 fti = HybridTableau(sy, l)
+                #                 push!(metricheaps, fti)
+                #             else  # Here there should be a branch and I need to keep track of it
+                #                 sy = SignedFormula(true, (⊤, ⊤))    # Fake node (always true)
+                #                 fti = HybridTableau(sy, l)
+                #                 push!(metricheaps, fti)
+                #             end
+                #         end
+                #         !newnodes && l == node && push!(metricheaps, node)
+                #     end
+                # elseif s && !isbot(z[1])
+                #     # T(a→X) case
+                #     for l ∈ leaves(en)
+                #         newnodes = false
+                #         fti = l
+                #         for ti in maximalmembers(h, z[1])
+                #             sy = SignedFormula(false, (z[2], ti))
+                #             if !findformula(fti, sy)
+                #                 newnodes = true
+                #                 fti = HybridTableau(sy, fti)
+                #                 push!(metricheaps, fti)
+                #             end
+                #         end
+                #         !newnodes && l == node && push!(metricheaps, node)
+                #     end
+                # Error
+                elseif !isa(z[2], Atom) && token(z[2]) ∉ [∧, ∨, →]
+                    error("Unrecognized operator $(token(z[2])).")
+                # Base case
+                else
+                    # No condition matched, pushing node back into metricheaps
+                    push!(metricheaps, node)
+                end
+            elseif z isa Tuple{Formula, Truth}
+                # Branch Closure Conditions
+                if !s && istop(z[2])
+                    # F(X→⊤) case
+                    close!(en)
+                elseif findsimilar(en, h)
+                    close!(en)
+                # elseif isa(z[1], Atom)  # TODO temporary (it's not correct)
+                #     push!(metricheaps, node)
+                # Strong conjunction Rules 2
+                elseif s && token(z[1]) isa NamedConnective{:∧} && !istop(z[2])
+                    # T((A∧B)→t) case
+                    (a, b) = children(z[1])
+                    x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
+                    xsmtc = "(assert (or"
+                    ysmtc = "(assert (or"
+                    for value in 1:N
+                        xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
+                        ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
+                    end
+                    xsmtc *= "))"
+                    ysmtc *= "))"
+                    newsmtc = [
+                        "(declare-const x$(string(cycle)) A)",
+                        "(declare-const y$(string(cycle)) A)",
+                        xsmtc,
+                        ysmtc                
+                    ]
+                    if isa(z[2], FiniteIndexTruth)
+                        push!(newsmtc,"(assert (precedeq (monoid x$(string(cycle)) y$(string(cycle))) a$(z[2].index)))")
+                    elseif isa(z[2], FiniteTruth)
+                        push!(newsmtc,"(assert (precedeq (monoid x$(string(cycle)) y$(string(cycle))) $(z[2].label)))")
+                    else
+                        error("Wrong truth type")
+                    end
+                    for l in leaves(en)                    
+                        fta = HybridTableau(SignedFormula(true, (a, x)), l)
+                        push!(metricheaps, fta)
+                        ftb = HybridTableau(SignedFormula(true, (b, y)), fta, newsmtc)
+                        push!(metricheaps, ftb)
+                    end                
+                elseif !s && token(z[1]) isa NamedConnective{:∧} && !istop(z[2])
+                    # F((A∧B)→t) case
+                    (a, b) = children(z[1])
+                    x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
+                    xsmtc = "(assert (or"
+                    ysmtc = "(assert (or"
+                    for value in 1:N
+                        xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
+                        ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
+                    end
+                    xsmtc *= "))"
+                    ysmtc *= "))"
+                    newsmtc = [
+                        "(declare-const x$(string(cycle)) A)",
+                        "(declare-const y$(string(cycle)) A)",
+                        xsmtc,
+                        ysmtc                
+                    ]
+                    if isa(z[2], FiniteIndexTruth)
+                        push!(newsmtc,"(assert (not (precedeq (monoid x$(string(cycle)) y$(string(cycle))) a$(z[2].index))))")
+                    elseif isa(z[2], FiniteTruth)
+                        push!(newsmtc,"(assert (not (precedeq (monoid x$(string(cycle)) y$(string(cycle))) $(z[2].label))))")
+                    else
+                        error("Wrong truth type")
+                    end
+                    for l in leaves(en)                    
+                        fta = HybridTableau(SignedFormula(true, (x, a)), l)
+                        push!(metricheaps, fta)
+                        ftb = HybridTableau(SignedFormula(true, (y, b)), fta, newsmtc)
+                        push!(metricheaps, ftb)
+                    end         
+                # Strong disjunction rules 1
+                elseif s && token(z[1]) isa NamedConnective{:∨} && !istop(z[2])
+                    # T((A∨B)→t) case
+                    (a, b) = children(z[1])
+                    x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
+                    xsmtc = "(assert (or"
+                    ysmtc = "(assert (or"
+                    for value in 1:N
+                        xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
+                        ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
+                    end
+                    xsmtc *= "))"
+                    ysmtc *= "))"
+                    newsmtc = [
+                        "(declare-const x$(string(cycle)) A)",
+                        "(declare-const y$(string(cycle)) A)",
+                        xsmtc,
+                        ysmtc                    
+                    ]
+                    if isa(z[2], FiniteIndexTruth)
+                        push!(newsmtc,"(assert (precedeq (join x$(string(cycle)) y$(string(cycle))) a$(z[2].index)))")
+                    elseif isa(z[2], FiniteTruth)
+                        push!(newsmtc,"(assert (precedeq (join x$(string(cycle)) y$(string(cycle))) $(z[2].label)))")
+                    else
+                        error("Wrong truth type")
+                    end
+                    for l in leaves(en)                    
+                        fta = HybridTableau(SignedFormula(true, (a, x)), l)
+                        push!(metricheaps, fta)
+                        ftb = HybridTableau(SignedFormula(true, (b, y)), fta, newsmtc)
+                        push!(metricheaps, ftb)
+                    end       
+                elseif !s && token(z[1]) isa NamedConnective{:∨} && !istop(z[2])
+                    # F((A∨B)→t) case
+                    (a, b) = children(z[1])
+                    x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
+                    xsmtc = "(assert (or"
+                    ysmtc = "(assert (or"
+                    for value in 1:N
+                        xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
+                        ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
+                    end
+                    xsmtc *= "))"
+                    ysmtc *= "))"
+                    newsmtc = [
+                        "(declare-const x$(string(cycle)) A)",
+                        "(declare-const y$(string(cycle)) A)",
+                        xsmtc,
+                        ysmtc                    
+                    ]
+                    if isa(z[2], FiniteIndexTruth)
+                        push!(newsmtc,"(assert (not (precedeq (join x$(string(cycle)) y$(string(cycle))) a$(z[2].index))))")
+                    elseif isa(z[2], FiniteTruth)
+                        push!(newsmtc,"(assert (not (precedeq (join x$(string(cycle)) y$(string(cycle))) $(z[2].label))))")
+                    else
+                        error("Wrong truth type")
+                    end
+                    for l in leaves(en)                    
+                        fta = HybridTableau(SignedFormula(true, (x, a)), l)
+                        push!(metricheaps, fta)
+                        ftb = HybridTableau(SignedFormula(true, (y, b)), fta, newsmtc)
+                        push!(metricheaps, ftb)
+                    end    
+                # Implication Rules 2
+                elseif s && token(z[1]) isa NamedConnective{:→} && !istop(z[2])
+                    # T((A→B)→t) case
+                    (a, b) = children(z[1])
+                    x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
+                    xsmtc = "(assert (or"
+                    ysmtc = "(assert (or"
+                    for value in 1:N
+                        xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
+                        ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
+                    end
+                    xsmtc *= "))"
+                    ysmtc *= "))"
+                    newsmtc = [
+                        "(declare-const x$(string(cycle)) A)",
+                        "(declare-const y$(string(cycle)) A)",
+                        xsmtc,
+                        ysmtc                    
+                    ]
+                    if isa(z[2], FiniteIndexTruth)
+                        push!(newsmtc,"(assert (precedeq (implication x$(string(cycle)) y$(string(cycle))) a$(z[2].index)))")
+                    elseif isa(z[2], FiniteTruth)
+                        push!(newsmtc,"(assert (precedeq (implication x$(string(cycle)) y$(string(cycle))) $(z[2].label)))")
+                    else
+                        error("Wrong truth type")
+                    end
+                    for l in leaves(en)                    
+                        fta = HybridTableau(SignedFormula(true, (x, a)), l)
+                        push!(metricheaps, fta)
+                        ftb = HybridTableau(SignedFormula(true, (b, y)), fta, newsmtc)
+                        push!(metricheaps, ftb)
+                    end       
+                elseif !s && token(z[1]) isa NamedConnective{:→} && !istop(z[2])
+                    # F((A→B)→t) case
+                    (a, b) = children(z[1])
+                    x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
+                    xsmtc = "(assert (or"
+                    ysmtc = "(assert (or"
+                    for value in 1:N
+                        xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
+                        ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
+                    end
+                    xsmtc *= "))"
+                    ysmtc *= "))"
+                    newsmtc = [
+                        "(declare-const x$(string(cycle)) A)",
+                        "(declare-const y$(string(cycle)) A)",
+                        xsmtc,
+                        ysmtc                    
+                    ]
+                    if isa(z[2], FiniteIndexTruth)
+                        push!(newsmtc,"(assert (not (precedeq (implication x$(string(cycle)) y$(string(cycle))) a$(z[2].index))))")
+                    elseif isa(z[2], FiniteTruth)
+                        push!(newsmtc,"(assert (not (precedeq (implication x$(string(cycle)) y$(string(cycle))) $(z[2].label))))")
+                    else
+                        error("Wrong truth type")
+                    end
+                    for l in leaves(en)                    
+                        fta = HybridTableau(SignedFormula(true, (a, x)), l)
+                        push!(metricheaps, fta)
+                        ftb = HybridTableau(SignedFormula(true, (y, b)), fta, newsmtc)
+                        push!(metricheaps, ftb)
+                    end     
+                # # Reversal Rules
+                # elseif !s && !istop(z[2])
+                #     # F(X→a) case
+                #     for l ∈ leaves(en)
+                #         newnodes = false
+                #         for ui ∈ minimalmembers(h, z[2])
+                #             newnodes = true
+                #             sy = SignedFormula(true, (ui, z[1]))
+                #             if !findformula(l, sy)
+                #                 fui = HybridTableau(sy, l)
+                #                 push!(metricheaps, fui)
+                #             else  # Here there should be a branch and I need to keep track of it
+                #                 sy = SignedFormula(true, (⊤, ⊤))    # Fake node (always true)
+                #                 fti = HybridTableau(sy, l)
+                #                 push!(metricheaps, fti)
+                #             end
+                #         end
+                #         !newnodes && l == node && push!(metricheaps, node)
+                #     end
+                # elseif s && !istop(z[2])
+                #     # T(X→A) case
+                #     for l ∈ leaves(en)
+                #         newnodes = false
+                #         fui = l
+                #         for ui in minimalmembers(h, z[2])
+                #             sy = SignedFormula(false, (ui, z[1]))
+                #             if !findformula(fui, sy)
+                #                 newnodes = true
+                #                 fui = HybridTableau(sy, fui)
+                #                 push!(metricheaps, fui)
+                #             end
+                #         end
+                #         !newnodes && l == node && push!(metricheaps, node)
+                #     end
+                # Error
+                elseif !isa(z[1], Atom) && token(z[1]) ∉ [∧, ∨, →]
+                    error("Unrecognized operator $(token(z[1])).")
+                # Base case
+                else
+                    # No condition matched, pushing node back into metricheaps
+                    push!(metricheaps, node)
+                end
+            else
+                error("Something went wrong with tuple $(z) of type $(typeof(z))")
+            end
         end
         cycle += 1
     end
