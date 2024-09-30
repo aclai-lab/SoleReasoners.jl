@@ -100,6 +100,7 @@ for a in algebras
         j = 0
         for i in 1:max_it
             t = rand(MersenneTwister(i), getdomain(a[2]))
+            t_hybrid = convert(FiniteIndexTruth, t)
             f = randformula(
                 MersenneTwister(i),
                 height-1,   # height,
@@ -109,7 +110,7 @@ for a in algebras
                 basecase=leafpicker,    # basecase=aotpicker
                 balanced=true
             )
-            f1 = getidxformula(f)
+            f_hybrid = getidxformula(f)
 
             if !isbot(t) && SoleLogics.height(f) == height
                 j += 1
@@ -137,8 +138,8 @@ for a in algebras
 
                 t2 = time_ns()
                 r_hybrid = hybridalphasat(
-                    convert(FiniteIndexTruth, t),
-                    f1,
+                    t_hybrid,
+                    f_hybrid,
                     a[3],
                     rng=brng,
                     timeout=max_timeout
@@ -160,8 +161,8 @@ for a in algebras
                         error("Tableaux don't agree for formula $f")
                     else
                         # Evaluate avg execution time only if both tableaux didn't timeout
-                        e_time = t1-t0
-                        e_time_hybrid = t3-t2
+                        e_time += t1-t0
+                        e_time_hybrid += t3-t2
                     end
                 else
                     timeouts+=1
