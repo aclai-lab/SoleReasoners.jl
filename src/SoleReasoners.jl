@@ -28,6 +28,9 @@ export mvhsalphasat, mvhsalphaprove
 include("hybrid-tableau.jl")
 export hybridalphasat, hybridalphaprove
 
+include("hybrid-modal-tableau.jl")
+export hybridmvhsalphasat, hybridmvhsalphaprove
+
 include("utils.jl")
 
 export dimacstosole, booleantofuzzy
