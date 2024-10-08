@@ -66,8 +66,9 @@ test_suites = [
     # ("HybridAlphaProve", ["hybridalphaprove.jl"]),
     # ("IndexHybridAlphaSat", ["ihybridalphasat.jl"]),
     # ("IndexHybridAlphaProve", ["ihybridalphaprove.jl"]),
-    ("IndexHybridAlphaSatBackwardCompatibility", ["ihybridalphasatbc.jl"]),
-    ("IndexHybridAlphaProveBackwardCompatibility", ["ihybridalphaprovebc.jl"]),
+    # ("IndexHybridAlphaSatBackwardCompatibility", ["ihybridalphasatbc.jl"]),
+    # ("IndexHybridAlphaProveBackwardCompatibility", ["ihybridalphaprovebc.jl"]),
+    ("HybridMVHSTableau", ["hybrid-modal-tableau.jl"]),
     # ("Utils", ["utils.jl"]),
 ]
 

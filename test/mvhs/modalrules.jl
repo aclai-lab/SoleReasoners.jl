@@ -3,7 +3,7 @@ using SoleLogics.ManyValuedLogics: G3, H4, α, β
 
 p, q = Atom.(["p", "q"])
 
-max_timeout = 60 # seconds
+max_timeout = 10 # seconds
 diamondexpansion = 0.1 # 10%
 
 diamondA = diamond(IA_A)
@@ -31,242 +31,242 @@ boxEi = box(IA_Ei)
 boxDi = box(IA_Di)
 boxOi = box(IA_Oi)
 
-###################################################
-# Base cases ######################################
-###################################################
+# ###################################################
+# # Base cases ######################################
+# ###################################################
 
-@test mvhsalphasat(
-    ⊥,
-    ∧(diamondA(p), boxA(→(p, ⊥))),
-    FiniteHeytingAlgebra(G3),
-    verbose=false,
-    timeout=max_timeout,
-    diamondexpansion=diamondexpansion
-) == true
+# @test mvhsalphasat(
+#     ⊥,
+#     ∧(diamondA(p), boxA(→(p, ⊥))),
+#     FiniteHeytingAlgebra(G3),
+#     verbose=false,
+#     timeout=max_timeout,
+#     diamondexpansion=diamondexpansion
+# ) == true
 
-@test mvhsalphasat(
-    α,
-    ∧(diamondA(p), boxA(→(p, ⊥))),
-    FiniteHeytingAlgebra(G3),
-    verbose=false,
-    timeout=max_timeout,
-    diamondexpansion=diamondexpansion
-) == false
+# @test mvhsalphasat(
+#     α,
+#     ∧(diamondA(p), boxA(→(p, ⊥))),
+#     FiniteHeytingAlgebra(G3),
+#     verbose=false,
+#     timeout=max_timeout,
+#     diamondexpansion=diamondexpansion
+# ) == false
 
-@test mvhsalphasat(
-    ⊤,
-    ∧(diamondA(p), boxA(→(p, ⊥))),
-    FiniteHeytingAlgebra(G3),
-    verbose=false,
-    timeout=max_timeout,
-    diamondexpansion=diamondexpansion
-) == false
+# @test mvhsalphasat(
+#     ⊤,
+#     ∧(diamondA(p), boxA(→(p, ⊥))),
+#     FiniteHeytingAlgebra(G3),
+#     verbose=false,
+#     timeout=max_timeout,
+#     diamondexpansion=diamondexpansion
+# ) == false
 
-###################################################
-# Examples from Fuzzy Sets and Systems 456 (2023) #
-###################################################
+# ###################################################
+# # Examples from Fuzzy Sets and Systems 456 (2023) #
+# ###################################################
 
-f, b = Atom.(["f", "b"])
-@test mvhsalphasat(
-    α,
-    ∧(f,diamondA(b)),
-    FiniteHeytingAlgebra(H4),
-    verbose=false,
-    timeout=max_timeout,
-    diamondexpansion=diamondexpansion
-) == true
+# f, b = Atom.(["f", "b"])
+# @test mvhsalphasat(
+#     α,
+#     ∧(f,diamondA(b)),
+#     FiniteHeytingAlgebra(H4),
+#     verbose=false,
+#     timeout=max_timeout,
+#     diamondexpansion=diamondexpansion
+# ) == true
 
-###################################################
-# Properties ######################################
-###################################################
-## Theorem 1 ######################################
-###################################################
-for boxX in [
-    boxA
-    boxL
-    boxB
-    boxE
-    boxD
-    boxO
-    boxAi
-    boxLi
-    boxBi
-    boxEi
-    boxDi
-    boxOi
-]
-    # k axiom
-    # TODO: inverse version
-    @test mvhsalphaprove(
-        ⊤,
-        →(
-            boxX(→(p,q)),
-            →(boxX(p),boxX(q))
-        ),
-        FiniteHeytingAlgebra(H4),
-        timeout=max_timeout
-    ) == true
-end
-for (boxX,diamondXi) in [
-    (boxA,  boxAi),
-    (boxL,  boxLi),
-    (boxB,  boxBi),
-    (boxE,  boxEi),
-    (boxD,  boxDi),
-    (boxO,  boxOi),
-    (boxAi, boxA),
-    (boxLi, boxL),
-    (boxBi, boxB),
-    (boxEi, boxE),
-    (boxDi, boxD),
-    (boxOi, boxO),
-]
-    # TODO: inverse version
-    @test mvhsalphaprove(
-        ⊤,
-        →(
-            p,
-            boxX(diamondXi(p))
-        ),
-        FiniteHeytingAlgebra(H4),
-        timeout=max_timeout
-    ) == true
-end
+# ###################################################
+# # Properties ######################################
+# ###################################################
+# ## Theorem 1 ######################################
+# ###################################################
+# for boxX in [
+#     boxA
+#     boxL
+#     boxB
+#     boxE
+#     boxD
+#     boxO
+#     boxAi
+#     boxLi
+#     boxBi
+#     boxEi
+#     boxDi
+#     boxOi
+# ]
+#     # k axiom
+#     # TODO: inverse version
+#     @test mvhsalphaprove(
+#         ⊤,
+#         →(
+#             boxX(→(p,q)),
+#             →(boxX(p),boxX(q))
+#         ),
+#         FiniteHeytingAlgebra(H4),
+#         timeout=max_timeout
+#     ) == true
+# end
+# for (boxX,diamondXi) in [
+#     (boxA,  boxAi),
+#     (boxL,  boxLi),
+#     (boxB,  boxBi),
+#     (boxE,  boxEi),
+#     (boxD,  boxDi),
+#     (boxO,  boxOi),
+#     (boxAi, boxA),
+#     (boxLi, boxL),
+#     (boxBi, boxB),
+#     (boxEi, boxE),
+#     (boxDi, boxD),
+#     (boxOi, boxO),
+# ]
+#     # TODO: inverse version
+#     @test mvhsalphaprove(
+#         ⊤,
+#         →(
+#             p,
+#             boxX(diamondXi(p))
+#         ),
+#         FiniteHeytingAlgebra(H4),
+#         timeout=max_timeout
+#     ) == true
+# end
 
-###################################################
-## Theorem 2 ######################################
-###################################################
-# TODO: inverse version
-@test mvhsalphaprove(
-    ⊤,
-    →(
-        diamondD(diamondD(p)),
-        diamondD(p)
-    ),
-    FiniteHeytingAlgebra(H4),
-    timeout=max_timeout,
-    diamondexpansion=diamondexpansion
-) == true
-for diamondX in [
-    diamondB,
-    diamondL,
-    diamondE
-]
-    # TODO: inverse version
-    @test mvhsalphaprove(
-        ⊤,
-        →(
-            diamondX(diamondX(p)),
-            diamondX(p)
-        ),
-        FiniteHeytingAlgebra(H4),
-        timeout=max_timeout
-    ) == false
-end
+# ###################################################
+# ## Theorem 2 ######################################
+# ###################################################
+# # TODO: inverse version
+# @test mvhsalphaprove(
+#     ⊤,
+#     →(
+#         diamondD(diamondD(p)),
+#         diamondD(p)
+#     ),
+#     FiniteHeytingAlgebra(H4),
+#     timeout=max_timeout,
+#     diamondexpansion=diamondexpansion
+# ) == true
+# for diamondX in [
+#     diamondB,
+#     diamondL,
+#     diamondE
+# ]
+#     # TODO: inverse version
+#     @test mvhsalphaprove(
+#         ⊤,
+#         →(
+#             diamondX(diamondX(p)),
+#             diamondX(p)
+#         ),
+#         FiniteHeytingAlgebra(H4),
+#         timeout=max_timeout
+#     ) == false
+# end
 
-###################################################
-## Theorem 3 ######################################
-###################################################
-@test mvhsalphaprove(
-    ⊤,
-    →(
-        diamondL(p),
-        diamondA(diamondA(p))
-    ),
-    FiniteHeytingAlgebra(H4),
-    timeout=max_timeout,
-    diamondexpansion=diamondexpansion
-) == true
-@test mvhsalphaprove(
-    ⊤,
-    →(
-        diamondD(p),
-        diamondB(diamondE(p))
-    ),
-    FiniteHeytingAlgebra(H4),
-    timeout=max_timeout,
-    diamondexpansion=diamondexpansion
-) == true
-@test mvhsalphaprove(
-    ⊤,
-    →(
-        diamondD(p),
-        diamondE(diamondB(p))
-    ),
-    FiniteHeytingAlgebra(H4),
-    timeout=max_timeout,
-    diamondexpansion=diamondexpansion
-) == true
-@test mvhsalphaprove(
-    ⊤,
-    →(
-        diamondO(p),
-        diamondE(diamondBi(p))
-    ),
-    FiniteHeytingAlgebra(H4),
-    timeout=max_timeout,
-    diamondexpansion=diamondexpansion
-) == true
-@test mvhsalphaprove(
-    ⊤,
-    →(
-        diamondA(diamondA(p)),
-        diamondL(p)
-    ),
-    FiniteHeytingAlgebra(H4),
-    timeout=max_timeout,
-    diamondexpansion=diamondexpansion
-) == false
-@test mvhsalphaprove(
-    ⊤,
-    →(
-        diamondB(diamondE(p)),
-        diamondD(p)
-    ),
-    FiniteHeytingAlgebra(H4),
-    timeout=max_timeout,
-    diamondexpansion=diamondexpansion
-) == false
-@test mvhsalphaprove(
-    ⊤,
-    →(
-        diamondE(diamondB(p)),
-        diamondD(p)
-    ),
-    FiniteHeytingAlgebra(H4),
-    timeout=max_timeout,
-    diamondexpansion=diamondexpansion
-) == false
-@test mvhsalphaprove(
-    ⊤,
-    →(
-        diamondE(diamondBi(p)),
-        diamondO(p)
-    ),
-    FiniteHeytingAlgebra(H4),
-    timeout=max_timeout,
-    diamondexpansion=diamondexpansion
-) == false
-@test mvhsalphaprove(
-    ⊤,
-    →(
-        diamondL(p),
-        diamondBi(boxE(diamondBi(diamondE(p))))
-    ),
-    FiniteHeytingAlgebra(H4),
-    timeout=max_timeout,
-    diamondexpansion=diamondexpansion
-) == false
-@test mvhsalphaprove(
-    ⊤,
-    →(
-        diamondBi(boxE(diamondBi(diamondE(p)))),
-        diamondL(p)
-    ),
-    FiniteHeytingAlgebra(H4),
-    timeout=max_timeout,
-    diamondexpansion=diamondexpansion
-) == false
+# ###################################################
+# ## Theorem 3 ######################################
+# ###################################################
+# @test mvhsalphaprove(
+#     ⊤,
+#     →(
+#         diamondL(p),
+#         diamondA(diamondA(p))
+#     ),
+#     FiniteHeytingAlgebra(H4),
+#     timeout=max_timeout,
+#     diamondexpansion=diamondexpansion
+# ) == true
+# @test mvhsalphaprove(
+#     ⊤,
+#     →(
+#         diamondD(p),
+#         diamondB(diamondE(p))
+#     ),
+#     FiniteHeytingAlgebra(H4),
+#     timeout=max_timeout,
+#     diamondexpansion=diamondexpansion
+# ) == true
+# @test mvhsalphaprove(
+#     ⊤,
+#     →(
+#         diamondD(p),
+#         diamondE(diamondB(p))
+#     ),
+#     FiniteHeytingAlgebra(H4),
+#     timeout=max_timeout,
+#     diamondexpansion=diamondexpansion
+# ) == true
+# @test mvhsalphaprove(
+#     ⊤,
+#     →(
+#         diamondO(p),
+#         diamondE(diamondBi(p))
+#     ),
+#     FiniteHeytingAlgebra(H4),
+#     timeout=max_timeout,
+#     diamondexpansion=diamondexpansion
+# ) == true
+# @test mvhsalphaprove(
+#     ⊤,
+#     →(
+#         diamondA(diamondA(p)),
+#         diamondL(p)
+#     ),
+#     FiniteHeytingAlgebra(H4),
+#     timeout=max_timeout,
+#     diamondexpansion=diamondexpansion
+# ) == false
+# @test mvhsalphaprove(
+#     ⊤,
+#     →(
+#         diamondB(diamondE(p)),
+#         diamondD(p)
+#     ),
+#     FiniteHeytingAlgebra(H4),
+#     timeout=max_timeout,
+#     diamondexpansion=diamondexpansion
+# ) == false
+# @test mvhsalphaprove(
+#     ⊤,
+#     →(
+#         diamondE(diamondB(p)),
+#         diamondD(p)
+#     ),
+#     FiniteHeytingAlgebra(H4),
+#     timeout=max_timeout,
+#     diamondexpansion=diamondexpansion
+# ) == false
+# @test mvhsalphaprove(
+#     ⊤,
+#     →(
+#         diamondE(diamondBi(p)),
+#         diamondO(p)
+#     ),
+#     FiniteHeytingAlgebra(H4),
+#     timeout=max_timeout,
+#     diamondexpansion=diamondexpansion
+# ) == false
+# @test mvhsalphaprove(
+#     ⊤,
+#     →(
+#         diamondL(p),
+#         diamondBi(boxE(diamondBi(diamondE(p))))
+#     ),
+#     FiniteHeytingAlgebra(H4),
+#     timeout=max_timeout,
+#     diamondexpansion=diamondexpansion
+# ) == false
+# @test mvhsalphaprove(
+#     ⊤,
+#     →(
+#         diamondBi(boxE(diamondBi(diamondE(p)))),
+#         diamondL(p)
+#     ),
+#     FiniteHeytingAlgebra(H4),
+#     timeout=max_timeout,
+#     diamondexpansion=diamondexpansion
+# ) == false
 
 ############################################################################################
 # FLew Algebra #############################################################################

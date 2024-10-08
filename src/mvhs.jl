@@ -32,7 +32,7 @@ struct AFSLOS{T<:Truth,D<:AbstractVector{T},A<:FiniteAlgebra{T,D}}
         if !isa(mvlt, Dict{Tuple{Point,Point},T})
             mvlt = convert(Dict{Tuple{Point,Point},T}, mvlt)
         end
-        if !isa(mvlt, Dict{Tuple{Point,Point},T})
+        if !isa(mveq, Dict{Tuple{Point,Point},T})
             mveq = convert(Dict{Tuple{Point,Point},T}, mveq)
         end
         new{T,D,A}(domain, algebra, mvlt, mveq)
@@ -2361,12 +2361,8 @@ function mvhsalphasat(
         end
     end
     r = mvhsalphasat(metricheaps, choosenode, a, tableaux; verbose, timeout, diamondexpansion)
-    if isnothing(r) || r || diamondexpansion == 1.0
-        return r
-    else
-        @warn "WARNING: α-sat returned false with % diamond expansion set to $diamondexpansion"
-        return r
-    end
+    !isnothing(r) && diamondexpansion < 1.0 && @warn "WARNING: α-sat returned $r with % diamond expansion set to $diamondexpansion"
+    return r
 end
 
 function mvhsalphasat(
@@ -2472,10 +2468,8 @@ function mvhsalphaprove(
     r = mvhsalphasat(metricheaps, choosenode, a, tableaux; verbose, timeout, diamondexpansion)
     if isnothing(r)
         return r
-    elseif !r || diamondexpansion == 1.0
-        return !r
     else
-        @warn "WARNING: α-val returned true with % diamond expansion set to $diamondexpansion"
+        diamondexpansion < 1.0 && @warn "WARNING: α-val returned $(!r) with % diamond expansion set to $diamondexpansion"
         return !r
     end
 end
