@@ -814,7 +814,7 @@ function hybridmvhsalphasat(
                     end
                     !newnodes && l == node && push!(metricheaps, node)
                 end
-            elseif en.judgement && token(φ) isa BoxRelationalConnective
+            elseif en.judgement && token(φ) isa BoxRelationalConnective && !isbot(β)
                 # T□"
                 verbose && println("T□")
                 for l ∈ findleaves(en)
@@ -856,10 +856,13 @@ function hybridmvhsalphasat(
                         push!(metricheaps, tj)
                     end
                 end
-            elseif !en.judgement && token(φ) isa BoxRelationalConnective
+            elseif !en.judgement && token(φ) isa BoxRelationalConnective && !isbot(β)
                 # F□"
                 verbose && println("F□")
                 for l ∈ findleaves(en)
+
+                    newleaves = false
+
                     r = SoleLogics.relation(token(φ))
                     (x, y) = (en.interval.x, en.interval.y)
                     cB0 = l.constraintsystem
@@ -878,6 +881,7 @@ function hybridmvhsalphasat(
                                     l
                                 )
                                 push!(metricheaps, tj)
+                                newleaves = true
                             end
                         end
                     end
@@ -891,9 +895,9 @@ function hybridmvhsalphasat(
                         (1,:)
                     )
                     ncombs = length(combs)
-                    Threads.@threads for ltzcombs ∈ shuffle(combs)[1:floor(Int, ncombs*diamondexpansion)]
-                        for gtzcombs ∈ shuffle(combs)[1:floor(Int, ncombs*diamondexpansion)]
-                            for eqzcombs ∈ shuffle(combs)[1:floor(Int, ncombs*diamondexpansion)]
+                    Threads.@threads for ltzcombs ∈ shuffle(combs)[1:ceil(Int, ncombs*diamondexpansion)]    # ceil and not floor!! (at least one)
+                        for gtzcombs ∈ shuffle(combs)[1:ceil(Int, ncombs*diamondexpansion)]
+                            for eqzcombs ∈ shuffle(combs)[1:ceil(Int, ncombs*diamondexpansion)]
                                 # Must initialize at every (parallel) cycle!
                                 # cB1 = o(cB) ∪ {z}
                                 z = Point(Char(Int(last(cB0.domain).label)+1))
@@ -931,6 +935,7 @@ function hybridmvhsalphasat(
                                                     l
                                                 )
                                                 push!(metricheaps, tj)
+                                                newleaves = true
                                             end
                                         end
                                     end
@@ -947,6 +952,7 @@ function hybridmvhsalphasat(
                                                     l
                                                 )
                                                 push!(metricheaps, tj)
+                                                newleaves = true
                                             end
                                         end
                                     end
@@ -996,6 +1002,7 @@ function hybridmvhsalphasat(
                                                                     l
                                                                 )
                                                                 push!(metricheaps, tj)
+                                                                newleaves = true
                                                             end
                                                         end
                                                     else    # <(t,z) ≻ 0
@@ -1010,6 +1017,7 @@ function hybridmvhsalphasat(
                                                                     l
                                                                 )
                                                                 push!(metricheaps, tj)
+                                                                newleaves = true
                                                             end
                                                         end
                                                     end
@@ -1025,6 +1033,7 @@ function hybridmvhsalphasat(
                             end
                         end
                     end
+                    !newleaves && close!(l)
                 end
             elseif en.judgement && !isbot(β)
                 # T⪰
@@ -1219,7 +1228,7 @@ function hybridmvhsalphasat(
                     end
                     !newnodes && l == node && push!(metricheaps, node)
                 end
-            elseif en.judgement && token(φ) isa DiamondRelationalConnective
+            elseif en.judgement && token(φ) isa DiamondRelationalConnective && !istop(β)
                 # T◊"
                 verbose && println("T◊")
                 for l ∈ findleaves(en)
@@ -1231,7 +1240,7 @@ function hybridmvhsalphasat(
                         for ti ∈ cB.domain
                             isbot(cB.mvlt[(zi,ti)]) && continue # <(zi,ti) ≻ 0
                             βi = mveval(r, (x,y), (zi,ti), cB)
-                            if !isbot(βi) && precedeq(a, a.implication(βi, β), β)
+                            if !istop(βi) && precedeq(a, a.implication(βi, β), β)
                                 # Optimization 1 (int. node)
                                 if !findtableau(tj,true,(φ.children[1], a.implication(βi, β)),Interval(zi,ti))
                                     tj = HybridMVHSTableau{FiniteIndexTruth}(
@@ -1261,10 +1270,13 @@ function hybridmvhsalphasat(
                         push!(metricheaps, tj)
                     end
                 end
-            elseif !en.judgement && token(φ) isa DiamondRelationalConnective
+            elseif !en.judgement && token(φ) isa DiamondRelationalConnective && !istop(β)
                 # F◊
                 verbose && println("F◊")
                 for l ∈ findleaves(en)
+
+                    newleaves = false
+
                     r = SoleLogics.relation(token(φ))
                     (x, y) = (en.interval.x, en.interval.y)
                     cB0 = l.constraintsystem
@@ -1274,7 +1286,7 @@ function hybridmvhsalphasat(
                         for ti ∈ cB0.domain
                             isbot(cB0.mvlt[(zi,ti)]) && continue # <(zi,ti) ≻ 0
                             βi = mveval(r, (x,y), (zi,ti), cB0)
-                            if !isbot(βi) && precedeq(a, a.implication(βi, β), β)
+                            if !istop(βi) && precedeq(a, a.implication(βi, β), β)
                                 tj = HybridMVHSTableau{FiniteIndexTruth}(
                                     false,
                                     (φ.children[1], a.implication(βi, β)),
@@ -1283,6 +1295,7 @@ function hybridmvhsalphasat(
                                     l
                                 )
                                 push!(metricheaps, tj)
+                                newleaves = true
                             end
                         end
                     end
@@ -1295,9 +1308,9 @@ function hybridmvhsalphasat(
                         (1,:)
                     )
                     ncombs = length(combs)
-                    Threads.@threads for ltzcombs ∈ shuffle(combs)[1:floor(Int, ncombs*diamondexpansion)]
-                        for gtzcombs ∈ shuffle(combs)[1:floor(Int, ncombs*diamondexpansion)]
-                            for eqzcombs ∈ shuffle(combs)[1:floor(Int, ncombs*diamondexpansion)]
+                    Threads.@threads for ltzcombs ∈ shuffle(combs)[1:ceil(Int, ncombs*diamondexpansion)]    # ceil and not floor!! (at least one)
+                        for gtzcombs ∈ shuffle(combs)[1:ceil(Int, ncombs*diamondexpansion)]
+                            for eqzcombs ∈ shuffle(combs)[1:ceil(Int, ncombs*diamondexpansion)]
                                 # Must initialize at every (parallel) cycle!
                                 # cB1 = o(cB) ∪ {z}
                                 z = Point(Char(Int(last(cB0.domain).label)+1))
@@ -1325,7 +1338,7 @@ function hybridmvhsalphasat(
                                     for zi ∈ cB0.domain
                                         isbot(cB1.mvlt[(zi,z)]) && continue # <(zi,z) ≻ 0
                                         βi = mveval(r, (x,y), (zi,z), cB1)
-                                        if !isbot(βi) && precedeq(a, a.implication(βi, β), β)
+                                        if !istop(βi) && precedeq(a, a.implication(βi, β), β)
                                             Threads.lock(u) do
                                                 tj = HybridMVHSTableau{FiniteIndexTruth}(
                                                     false,
@@ -1335,13 +1348,14 @@ function hybridmvhsalphasat(
                                                     l
                                                 )
                                                 push!(metricheaps, tj)
+                                                newleaves = true
                                             end
                                         end
                                     end
                                     for ti ∈ cB0.domain
                                         isbot(cB1.mvlt[(z,ti)]) && continue # <(z,ti) ≻ 0
                                         βi = mveval(r, (x,y), (z,ti), cB1)
-                                        if !isbot(βi) && precedeq(a, a.implication(βi, β), β)
+                                        if !istop(βi) && precedeq(a, a.implication(βi, β), β)
                                             Threads.lock(u) do
                                                 tj = HybridMVHSTableau{FiniteIndexTruth}(
                                                     false,
@@ -1351,6 +1365,7 @@ function hybridmvhsalphasat(
                                                     l
                                                 )
                                                 push!(metricheaps, tj)
+                                                newleaves = true
                                             end
                                         end
                                     end
@@ -1390,7 +1405,7 @@ function hybridmvhsalphasat(
                                                     # in general, < is not commutative!
                                                     if !isbot(cB2.mvlt[(z,t)])  # <(z,t) ≻ 0
                                                         βi = mveval(r, (x,y), (z,t), cB2)
-                                                        if !isbot(βi) && precedeq(a, a.implication(βi, β), β)
+                                                        if !istop(βi) && precedeq(a, a.implication(βi, β), β)
                                                             Threads.lock(u) do
                                                                 tj = HybridMVHSTableau{FiniteIndexTruth}(
                                                                     false,
@@ -1400,11 +1415,12 @@ function hybridmvhsalphasat(
                                                                     l
                                                                 )
                                                                 push!(metricheaps, tj)
+                                                                newleaves = true
                                                             end
                                                         end
                                                     else    # <(t,z) ≻ 0
                                                         βi = mveval(r, (x,y), (t,z), cB2)
-                                                        if !isbot(βi) && precedeq(a, a.implication(βi, β), β)
+                                                        if !istop(βi) && precedeq(a, a.implication(βi, β), β)
                                                             Threads.lock(u) do
                                                                 tj = HybridMVHSTableau{FiniteIndexTruth}(
                                                                     false,
@@ -1414,6 +1430,7 @@ function hybridmvhsalphasat(
                                                                     l
                                                                 )
                                                                 push!(metricheaps, tj)
+                                                                newleaves = true
                                                             end
                                                         end
                                                     end
@@ -1429,6 +1446,7 @@ function hybridmvhsalphasat(
                             end
                         end
                     end
+                    !newleaves && close!(l)
                 end
             elseif en.judgement && !istop(β)
                 # T⪯
@@ -1554,7 +1572,8 @@ function hybridmvhsalphasat(
         end
     end
     r = hybridmvhsalphasat(metricheaps, choosenode, a, tableaux; verbose, timeout, diamondexpansion)
-    !isnothing(r) && diamondexpansion < 1.0 && @warn "WARNING: α-sat returned $r with % diamond expansion set to $diamondexpansion"
+    
+    !isnothing(r) && !r && diamondexpansion < 1.0 && @warn "WARNING: α-sat returned $r with % diamond expansion set to $diamondexpansion"
     return r
 end
 
@@ -1659,7 +1678,7 @@ function hybridmvhsalphaprove(
     if isnothing(r)
         return r
     else
-        diamondexpansion < 1.0 && @warn "WARNING: α-val returned $(!r) with % diamond expansion set to $diamondexpansion"
+        r && diamondexpansion < 1.0 && @warn "WARNING: α-val returned $(!r) with % diamond expansion set to $diamondexpansion"
         return !r
     end
 end

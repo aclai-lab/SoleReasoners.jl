@@ -36,9 +36,9 @@ boxEi = box(IA_Ei)
 boxDi = box(IA_Di)
 boxOi = box(IA_Oi)
 
-# ###################################################
-# # Base cases ######################################
-# ###################################################
+###################################################
+# Base cases ######################################
+###################################################
 
 @test hybridmvhsalphasat(
     FiniteIndexTruth(2),
@@ -62,213 +62,213 @@ boxOi = box(IA_Oi)
     FiniteIndexTruth(1),
     ∧(diamondA(p), boxA(→(p, FiniteIndexTruth(2)))),
     IG3,
-    verbose=true,
+    verbose=false,
     timeout=max_timeout,
     diamondexpansion=diamondexpansion
 ) == false
 
-# ###################################################
-# # Examples from Fuzzy Sets and Systems 456 (2023) #
-# ###################################################
+###################################################
+# Examples from Fuzzy Sets and Systems 456 (2023) #
+###################################################
 
-# f, b = Atom.(["f", "b"])
-# @test hybridmvhsalphasat(
-#     FiniteIndexTruth(3),
-#     ∧(f,diamondA(b)),
-#     IH4,
-#     verbose=false,
-#     timeout=max_timeout,
-#     diamondexpansion=diamondexpansion
-# ) == true
+f, b = Atom.(["f", "b"])
+@test hybridmvhsalphasat(
+    FiniteIndexTruth(3),
+    ∧(f,diamondA(b)),
+    IH4,
+    verbose=false,
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
+) == true
 
-# ###################################################
-# # Properties ######################################
-# ###################################################
-# ## Theorem 1 ######################################
-# ###################################################
-# for boxX in [
-#     boxA
-#     boxL
-#     boxB
-#     boxE
-#     boxD
-#     boxO
-#     boxAi
-#     boxLi
-#     boxBi
-#     boxEi
-#     boxDi
-#     boxOi
-# ]
-#     # k axiom
-#     # TODO: inverse version
-#     @test hybridmvhsalphaprove(
-#         FiniteIndexTruth(1),
-#         →(
-#             boxX(→(p,q)),
-#             →(boxX(p),boxX(q))
-#         ),
-#         IH4,
-#         timeout=max_timeout
-#     ) == true
-# end
-# for (boxX,diamondXi) in [
-#     (boxA,  boxAi),
-#     (boxL,  boxLi),
-#     (boxB,  boxBi),
-#     (boxE,  boxEi),
-#     (boxD,  boxDi),
-#     (boxO,  boxOi),
-#     (boxAi, boxA),
-#     (boxLi, boxL),
-#     (boxBi, boxB),
-#     (boxEi, boxE),
-#     (boxDi, boxD),
-#     (boxOi, boxO),
-# ]
-#     # TODO: inverse version
-#     @test hybridmvhsalphaprove(
-#         FiniteIndexTruth(1),
-#         →(
-#             p,
-#             boxX(diamondXi(p))
-#         ),
-#         IH4,
-#         timeout=max_timeout
-#     ) == true
-# end
+###################################################
+# Properties ######################################
+###################################################
+## Theorem 1 ######################################
+###################################################
+for boxX in [
+    boxA
+    boxL
+    boxB
+    boxE
+    boxD
+    boxO
+    boxAi
+    boxLi
+    boxBi
+    boxEi
+    boxDi
+    boxOi
+]
+    # k axiom
+    # TODO: inverse version
+    @test hybridmvhsalphaprove(
+        FiniteIndexTruth(1),
+        →(
+            boxX(→(p,q)),
+            →(boxX(p),boxX(q))
+        ),
+        IH4,
+        timeout=max_timeout
+    ) == true
+end
+for (boxX,diamondXi) in [
+    (boxA,  boxAi),
+    (boxL,  boxLi),
+    (boxB,  boxBi),
+    (boxE,  boxEi),
+    (boxD,  boxDi),
+    (boxO,  boxOi),
+    (boxAi, boxA),
+    (boxLi, boxL),
+    (boxBi, boxB),
+    (boxEi, boxE),
+    (boxDi, boxD),
+    (boxOi, boxO),
+]
+    # TODO: inverse version
+    @test hybridmvhsalphaprove(
+        FiniteIndexTruth(1),
+        →(
+            p,
+            boxX(diamondXi(p))
+        ),
+        IH4,
+        timeout=max_timeout
+    ) == true
+end
 
-# ###################################################
-# ## Theorem 2 ######################################
-# ###################################################
-# # TODO: inverse version
-# @test hybridmvhsalphaprove(
-#     FiniteIndexTruth(1),
-#     →(
-#         diamondD(diamondD(p)),
-#         diamondD(p)
-#     ),
-#     IH4,
-#     timeout=max_timeout,
-#     diamondexpansion=diamondexpansion
-# ) == true
-# for diamondX in [
-#     diamondB,
-#     diamondL,
-#     diamondE
-# ]
-#     # TODO: inverse version
-#     @test hybridmvhsalphaprove(
-#         FiniteIndexTruth(1),
-#         →(
-#             diamondX(diamondX(p)),
-#             diamondX(p)
-#         ),
-#         IH4,
-#         timeout=max_timeout
-#     ) == false
-# end
+###################################################
+## Theorem 2 ######################################
+###################################################
+# TODO: inverse version
+@test hybridmvhsalphaprove(
+    FiniteIndexTruth(1),
+    →(
+        diamondD(diamondD(p)),
+        diamondD(p)
+    ),
+    IH4,
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
+) == true
+for diamondX in [
+    diamondB,
+    diamondL,
+    diamondE
+]
+    # TODO: inverse version
+    @test hybridmvhsalphaprove(
+        FiniteIndexTruth(1),
+        →(
+            diamondX(diamondX(p)),
+            diamondX(p)
+        ),
+        IH4,
+        timeout=max_timeout
+    ) == false
+end
 
-# ###################################################
-# ## Theorem 3 ######################################
-# ###################################################
-# @test hybridmvhsalphaprove(
-#     FiniteIndexTruth(1),
-#     →(
-#         diamondL(p),
-#         diamondA(diamondA(p))
-#     ),
-#     IH4,
-#     timeout=max_timeout,
-#     diamondexpansion=diamondexpansion
-# ) == true
-# @test hybridmvhsalphaprove(
-#     FiniteIndexTruth(1),
-#     →(
-#         diamondD(p),
-#         diamondB(diamondE(p))
-#     ),
-#     IH4,
-#     timeout=max_timeout,
-#     diamondexpansion=diamondexpansion
-# ) == true
-# @test hybridmvhsalphaprove(
-#     FiniteIndexTruth(1),
-#     →(
-#         diamondD(p),
-#         diamondE(diamondB(p))
-#     ),
-#     IH4,
-#     timeout=max_timeout,
-#     diamondexpansion=diamondexpansion
-# ) == true
-# @test hybridmvhsalphaprove(
-#     FiniteIndexTruth(1),
-#     →(
-#         diamondO(p),
-#         diamondE(diamondBi(p))
-#     ),
-#     IH4,
-#     timeout=max_timeout,
-#     diamondexpansion=diamondexpansion
-# ) == true
-# @test hybridmvhsalphaprove(
-#     FiniteIndexTruth(1),
-#     →(
-#         diamondA(diamondA(p)),
-#         diamondL(p)
-#     ),
-#     IH4,
-#     timeout=max_timeout,
-#     diamondexpansion=diamondexpansion
-# ) == false
-# @test hybridmvhsalphaprove(
-#     FiniteIndexTruth(1),
-#     →(
-#         diamondB(diamondE(p)),
-#         diamondD(p)
-#     ),
-#     IH4,
-#     timeout=max_timeout,
-#     diamondexpansion=diamondexpansion
-# ) == false
-# @test hybridmvhsalphaprove(
-#     FiniteIndexTruth(1),
-#     →(
-#         diamondE(diamondB(p)),
-#         diamondD(p)
-#     ),
-#     IH4,
-#     timeout=max_timeout,
-#     diamondexpansion=diamondexpansion
-# ) == false
-# @test hybridmvhsalphaprove(
-#     FiniteIndexTruth(1),
-#     →(
-#         diamondE(diamondBi(p)),
-#         diamondO(p)
-#     ),
-#     IH4,
-#     timeout=max_timeout,
-#     diamondexpansion=diamondexpansion
-# ) == false
-# @test hybridmvhsalphaprove(
-#     FiniteIndexTruth(1),
-#     →(
-#         diamondL(p),
-#         diamondBi(boxE(diamondBi(diamondE(p))))
-#     ),
-#     IH4,
-#     timeout=max_timeout,
-#     diamondexpansion=diamondexpansion
-# ) == false
-# @test hybridmvhsalphaprove(
-#     FiniteIndexTruth(1),
-#     →(
-#         diamondBi(boxE(diamondBi(diamondE(p)))),
-#         diamondL(p)
-#     ),
-#     IH4,
-#     timeout=max_timeout,
-#     diamondexpansion=diamondexpansion
-# ) == false
+###################################################
+## Theorem 3 ######################################
+###################################################
+@test hybridmvhsalphaprove(
+    FiniteIndexTruth(1),
+    →(
+        diamondL(p),
+        diamondA(diamondA(p))
+    ),
+    IH4,
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
+) == true
+@test hybridmvhsalphaprove(
+    FiniteIndexTruth(1),
+    →(
+        diamondD(p),
+        diamondB(diamondE(p))
+    ),
+    IH4,
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
+) == true
+@test hybridmvhsalphaprove(
+    FiniteIndexTruth(1),
+    →(
+        diamondD(p),
+        diamondE(diamondB(p))
+    ),
+    IH4,
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
+) == true
+@test hybridmvhsalphaprove(
+    FiniteIndexTruth(1),
+    →(
+        diamondO(p),
+        diamondE(diamondBi(p))
+    ),
+    IH4,
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
+) == true
+@test hybridmvhsalphaprove(
+    FiniteIndexTruth(1),
+    →(
+        diamondA(diamondA(p)),
+        diamondL(p)
+    ),
+    IH4,
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
+) == false
+@test hybridmvhsalphaprove(
+    FiniteIndexTruth(1),
+    →(
+        diamondB(diamondE(p)),
+        diamondD(p)
+    ),
+    IH4,
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
+) == false
+@test hybridmvhsalphaprove(
+    FiniteIndexTruth(1),
+    →(
+        diamondE(diamondB(p)),
+        diamondD(p)
+    ),
+    IH4,
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
+) == false
+@test hybridmvhsalphaprove(
+    FiniteIndexTruth(1),
+    →(
+        diamondE(diamondBi(p)),
+        diamondO(p)
+    ),
+    IH4,
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
+) == false
+@test hybridmvhsalphaprove(
+    FiniteIndexTruth(1),
+    →(
+        diamondL(p),
+        diamondBi(boxE(diamondBi(diamondE(p))))
+    ),
+    IH4,
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
+) == false
+@test hybridmvhsalphaprove(
+    FiniteIndexTruth(1),
+    →(
+        diamondBi(boxE(diamondBi(diamondE(p)))),
+        diamondL(p)
+    ),
+    IH4,
+    timeout=max_timeout,
+    diamondexpansion=diamondexpansion
+) == false
