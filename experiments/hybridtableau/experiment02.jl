@@ -20,9 +20,9 @@ BaseManyValuedConnectives = Union{typeof.(BASE_MANY_VALUED_CONNECTIVES)...}
 myalphabet = Atom.(["p", "q", "r"])
 
 min_height = 1
-max_height = 5#8
+max_height = 8
 max_it = 20000
-max_avg = 100#1000
+max_avg = 1000
 max_timeout = 10 # seconds
 verbose = true
 
@@ -47,12 +47,12 @@ algebras = [
 
 # Latex
 tot_timeouts = zeros(Int64, length(algebras))   # tot timeouts_classic for each algebra
-tot_sat = zeros(Int64, length(algebras))        # tot sat for each algebra
-tot_unsat = zeros(Int64, length(algebras))      # tot unsat for each algebra
+tot_val = zeros(Int64, length(algebras))        # tot val for each algebra
+tot_unval = zeros(Int64, length(algebras))      # tot unval for each algebra
 
 tot_timeouts_hybrid = zeros(Int64, length(algebras))   # tot timeouts_classic for each algebra
-tot_sat_hybrid = zeros(Int64, length(algebras))        # tot sat for each algebra
-tot_unsat_hybrid = zeros(Int64, length(algebras))      # tot unsat for each algebra
+tot_val_hybrid = zeros(Int64, length(algebras))        # tot val for each algebra
+tot_unval_hybrid = zeros(Int64, length(algebras))      # tot unval for each algebra
 
 for a in algebras
     # Latex
@@ -83,16 +83,16 @@ for a in algebras
     leafpicker = (rng)->(StatsBase.sample(rng, leafpickers, lpweights))(rng)
 
     for height in min_height:max_height
-        verbose && println("alphasat on " * a[1] * " formulas of height " * string(height))
+        verbose && println("alphaprove on " * a[1] * " formulas of height " * string(height))
 
         e_time = 0
-        sat = 0
-        unsat = 0
+        val = 0
+        unval = 0
         timeouts_classic = 0
 
         e_time_hybrid = 0
-        sat_hybrid = 0
-        unsat_hybrid = 0
+        val_hybrid = 0
+        unval_hybrid = 0
         timeouts_hybrid = 0
 
         timeouts = 0
@@ -117,7 +117,7 @@ for a in algebras
                 brng = MersenneTwister(i)
 
                 t0 = time_ns()
-                r = alphasat(
+                r = alphaprove(
                     t,
                     f,
                     a[2],
@@ -130,14 +130,14 @@ for a in algebras
                     timeouts_classic += 1
                 else
                     if r
-                        sat += 1
+                        val += 1
                     else
-                        unsat +=1
+                        unval +=1
                     end
                 end
 
                 t2 = time_ns()
-                r_hybrid = hybridalphasat(
+                r_hybrid = hybridalphaprove(
                     t_hybrid,
                     f_hybrid,
                     a[3],
@@ -150,9 +150,9 @@ for a in algebras
                     timeouts_hybrid += 1
                 else
                     if r_hybrid
-                        sat_hybrid += 1
+                        val_hybrid += 1
                     else
-                        unsat_hybrid +=1
+                        unval_hybrid +=1
                     end
                 end
 
@@ -184,27 +184,27 @@ for a in algebras
         verbose && println("(" * string(max_avg - timeouts_classic) * " didn't.)")
         verbose && print("Average execution time (over " * string(max_avg - timeouts) * " formulas): ")
         verbose && println(string((e_time/1e6)/(max_avg - timeouts)) * " ms")
-        verbose && println("$sat/$(max_avg - timeouts_classic) formulas were α-sat, " *
-                "$unsat/$(max_avg - timeouts_classic) formulas were not α-sat\n")
+        verbose && println("$val/$(max_avg - timeouts_classic) formulas were α-val, " *
+                "$unval/$(max_avg - timeouts_classic) formulas were not α-val\n")
 
         verbose && println("\nHybrid Tableau")
         verbose && println(string(timeouts_hybrid) * " formulas over " * string(max_avg) * " timeout.")
         verbose && println("(" * string(max_avg - timeouts_hybrid) * " didn't.)")
         verbose && print("Average execution time (over " * string(max_avg - timeouts) * " formulas): ")
         verbose && println(string((e_time_hybrid/1e6)/(max_avg - timeouts_hybrid)) * " ms")
-        verbose && println("$sat_hybrid/$(max_avg - timeouts) formulas were α-sat, " *
-                "$unsat_hybrid/$(max_avg - timeouts_hybrid) formulas were not α-sat\n")
+        verbose && println("$val_hybrid/$(max_avg - timeouts) formulas were α-val, " *
+                "$unval_hybrid/$(max_avg - timeouts_hybrid) formulas were not α-val\n")
 
         # Latex
         ntos[height-min_height+1] = max_avg - timeouts_classic
         tot_timeouts[findall(x->x==a, algebras)...] += timeouts_classic
-        tot_sat[findall(x->x==a, algebras)...] += sat
-        tot_unsat[findall(x->x==a, algebras)...] += unsat
+        tot_val[findall(x->x==a, algebras)...] += val
+        tot_unval[findall(x->x==a, algebras)...] += unval
 
         ntos_hybrid[height-min_height+1] = max_avg - timeouts_hybrid
         tot_timeouts_hybrid[findall(x->x==a, algebras)...] += timeouts_hybrid
-        tot_sat_hybrid[findall(x->x==a, algebras)...] += sat_hybrid
-        tot_unsat_hybrid[findall(x->x==a, algebras)...] += unsat_hybrid
+        tot_val_hybrid[findall(x->x==a, algebras)...] += val_hybrid
+        tot_unval_hybrid[findall(x->x==a, algebras)...] += unval_hybrid
     end
 
     # Latex
@@ -227,25 +227,25 @@ println("\n\nTimeouts")
 for i in 1:length(tot_timeouts)
     print("({$(algebras[i][1])},$(tot_timeouts[i]))")
 end
-println("\n\nalphasat")
-for i in 1:length(tot_sat)
-    print("({$(algebras[i][1])},$(tot_sat[i]))")
+println("\n\nalphaprove")
+for i in 1:length(tot_val)
+    print("({$(algebras[i][1])},$(tot_val[i]))")
 end
-println("\n\nNot alphasat")
-for i in 1:length(tot_unsat)
-    print("({$(algebras[i][1])},$(tot_unsat[i]))")
+println("\n\nNot alphaprove")
+for i in 1:length(tot_unval)
+    print("({$(algebras[i][1])},$(tot_unval[i]))")
 end
 println("\n\nHybrid Tableau")
 println("\n\nTimeouts")
 for i in 1:length(tot_timeouts_hybrid)
     print("({$(algebras[i][1])},$(tot_timeouts_hybrid[i]))")
 end
-println("\n\nalphasat")
-for i in 1:length(tot_sat_hybrid)
-    print("({$(algebras[i][1])},$(tot_sat_hybrid[i]))")
+println("\n\nalphaprove")
+for i in 1:length(tot_val_hybrid)
+    print("({$(algebras[i][1])},$(tot_val_hybrid[i]))")
 end
-println("\n\nNot alphasat")
-for i in 1:length(tot_unsat_hybrid)
-    print("({$(algebras[i][1])},$(tot_unsat_hybrid[i]))")
+println("\n\nNot alphaprove")
+for i in 1:length(tot_unval_hybrid)
+    print("({$(algebras[i][1])},$(tot_unval_hybrid[i]))")
 end
 println()
