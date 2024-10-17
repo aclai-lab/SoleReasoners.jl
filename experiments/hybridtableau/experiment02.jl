@@ -5,6 +5,8 @@ using SoleReasoners
 using StatsBase
 import SoleBase: initrng
 import SoleLogics: sample
+using SoleLogics.ManyValuedLogics: booleanalgebra, G3, Ł3, G4, Ł4, H4, G5, G6, H6_1, H6_2, H6_3, H6
+using SoleLogics.ManyValuedLogics: FiniteIndexFLewAlgebra, FiniteIndexTruth
 
 getidxformula(φ::Atom) = φ
 getidxformula(φ::T) where {T<:Truth} = convert(FiniteIndexTruth, φ)
@@ -24,11 +26,7 @@ max_height = 8
 max_it = 20000
 max_avg = 1000
 max_timeout = 10 # seconds
-verbose = true
-
-using SoleLogics.ManyValuedLogics: booleanalgebra, G3, Ł3, G4, Ł4, H4
-using SoleLogics.ManyValuedLogics: G5, G6, H6_1, H6_2, H6_3, H6
-using SoleLogics.ManyValuedLogics: FiniteIndexFLewAlgebra, FiniteIndexTruth
+verbose = false
 
 algebras = [
     ("BA",   booleanalgebra, convert(FiniteIndexFLewAlgebra, booleanalgebra)),
@@ -39,32 +37,35 @@ algebras = [
     ("H4",   H4, convert(FiniteIndexFLewAlgebra, H4)),
     ("G5",   G5, convert(FiniteIndexFLewAlgebra, G5)),
     ("G6",   G6, convert(FiniteIndexFLewAlgebra, G6)),
-    ("H6_1", H6_1, convert(FiniteIndexFLewAlgebra, H6_1)),
-    ("H6_2", H6_2, convert(FiniteIndexFLewAlgebra, H6_2)),
-    ("H6_3", H6_3, convert(FiniteIndexFLewAlgebra, H6_3)),
+    ("H6\$_1\$", H6_1, convert(FiniteIndexFLewAlgebra, H6_1)),
+    ("H6\$_2\$", H6_2, convert(FiniteIndexFLewAlgebra, H6_2)),
+    ("H6\$_3\$", H6_3, convert(FiniteIndexFLewAlgebra, H6_3)),
     ("H6",   H6, convert(FiniteIndexFLewAlgebra, H6))
 ]
 
 # Latex
-tot_timeouts = zeros(Int64, length(algebras))   # tot timeouts_classic for each algebra
-tot_val = zeros(Int64, length(algebras))        # tot val for each algebra
-tot_unval = zeros(Int64, length(algebras))      # tot unval for each algebra
-
-tot_timeouts_hybrid = zeros(Int64, length(algebras))   # tot timeouts_classic for each algebra
-tot_val_hybrid = zeros(Int64, length(algebras))        # tot val for each algebra
-tot_unval_hybrid = zeros(Int64, length(algebras))      # tot unval for each algebra
-
+tot_val = zeros(Int64, length(algebras))                # tot val for each algebra
+tot_unval = zeros(Int64, length(algebras))              # tot unval for each algebra
+tot_timeouts = zeros(Int64, length(algebras))           # tot timeouts_classic for each algebra
+tot_val_hybrid = zeros(Int64, length(algebras))         # tot val for each algebra
+tot_unval_hybrid = zeros(Int64, length(algebras))       # tot unval for each algebra
+tot_timeouts_hybrid = zeros(Int64, length(algebras))    # tot timeouts_classic for each algebra
+# Experiment (for each algebra)
 for a in algebras
     # Latex
-    ntos = zeros(Int64, max_height-min_height+1)   # not timeout for each height    
-    ntos_hybrid = zeros(Int64, max_height-min_height+1)   # not timeout for each height    
-
+    avg_exc_times = zeros(Float64, max_height-min_height+1)         # avg execution time for each height (CT)
+    avg_exc_times_hybrid = zeros(Float64, max_height-min_height+1)  # avg execution time for each height (HT)
+    val = zeros(Int64, max_height-min_height+1)                     # val formulas for each height (CT)
+    val_hybrid = zeros(Int64, max_height-min_height+1)              # val formulas for each height (HT)
+    unval = zeros(Int64, max_height-min_height+1)                   # unval formulas for each height (CT)
+    unval_hybrid = zeros(Int64, max_height-min_height+1)            # unval formulas for each height (HT)
+    timeouts = zeros(Int64, max_height-min_height+1)                # timeouts for each height (CT)
+    timeouts_hybrid = zeros(Int64, max_height-min_height+1)         # timeouts for each height (HT)    
     # Formula generation
     rng = initrng(Random.GLOBAL_RNG)
     aot = vcat(myalphabet,getdomain(a[2])) # atoms or truths
     aotweights = StatsBase.uweights(length(myalphabet)+length(getdomain(a[2])))
     aotpicker = (rng)->StatsBase.sample(rng, aot, aotweights)
-
     atomweights = StatsBase.uweights(length(myalphabet))
     truthweights = StatsBase.uweights(length(getdomain(a[2])))
     leafpicker1 = (rng)->SyntaxTree(
@@ -72,7 +73,6 @@ for a in algebras
         (StatsBase.sample(rng, myalphabet, atomweights)),
         (StatsBase.sample(rng, getdomain(a[2]), truthweights))
     )
-
     leafpicker2 = (rng)->SyntaxTree(
         →,
         (StatsBase.sample(rng, getdomain(a[2]), truthweights)),
@@ -81,22 +81,9 @@ for a in algebras
     leafpickers = [leafpicker1, leafpicker2]
     lpweights = StatsBase.uweights(length(leafpickers))
     leafpicker = (rng)->(StatsBase.sample(rng, leafpickers, lpweights))(rng)
-
+    # Experiment (for each height)
     for height in min_height:max_height
         verbose && println("alphaprove on " * a[1] * " formulas of height " * string(height))
-
-        e_time = 0
-        val = 0
-        unval = 0
-        timeouts_classic = 0
-
-        e_time_hybrid = 0
-        val_hybrid = 0
-        unval_hybrid = 0
-        timeouts_hybrid = 0
-
-        timeouts = 0
-
         j = 0
         for i in 1:max_it
             t = rand(MersenneTwister(i), getdomain(a[2]))
@@ -111,7 +98,6 @@ for a in algebras
                 balanced=true
             )
             f_hybrid = getidxformula(f)
-
             if !isbot(t) && SoleLogics.height(f) == height
                 j += 1
                 brng = MersenneTwister(i)
@@ -125,18 +111,18 @@ for a in algebras
                     timeout=max_timeout
                 )
                 t1 = time_ns()
-
                 if isnothing(r)
-                    timeouts_classic += 1
+                    timeouts[height] += 1
+                    avg_exc_times[height] += max_timeout*1e3
                 else
+                    avg_exc_times[height] += (t1-t0)/1e6
                     if r
-                        val += 1
+                        val[height] += 1
                     else
-                        unval +=1
+                        unval[height] +=1
                     end
                 end
-
-                t2 = time_ns()
+                t0 = time_ns()
                 r_hybrid = hybridalphaprove(
                     t_hybrid,
                     f_hybrid,
@@ -144,31 +130,21 @@ for a in algebras
                     rng=brng,
                     timeout=max_timeout
                 )
-                t3 = time_ns()
-
+                t1 = time_ns()
                 if isnothing(r_hybrid)
-                    timeouts_hybrid += 1
+                    timeouts_hybrid[height] += 1
+                    avg_exc_times_hybrid[height] += max_timeout*1e3
                 else
+                    avg_exc_times_hybrid[height] += (t1-t0)/1e6
                     if r_hybrid
-                        val_hybrid += 1
+                        val_hybrid[height] += 1
                     else
-                        unval_hybrid +=1
+                        unval_hybrid[height] +=1
                     end
                 end
-
-                if !isnothing(r) && !isnothing(r_hybrid)
-                    if r != r_hybrid
-                        # @warn "Tableaux don't agree for formula $f, classic says $r, hybrid says $r_hybrid"
-                        error("Tableaux don't agree for formula $f")
-                    else
-                        # Evaluate avg execution time only if both tableaux didn't timeout
-                        e_time += t1-t0
-                        e_time_hybrid += t3-t2
-                    end
-                else
-                    timeouts+=1
+                if !isnothing(r) && !isnothing(r_hybrid) && r != r_hybrid
+                    error("Tableaux don't agree for formula $f, classic says $r, hybrid says $r_hybrid")
                 end
-
                 if j == max_avg
                     break
                 end
@@ -177,56 +153,58 @@ for a in algebras
                 @warn "Warning: maximum iterations reached"
             end
         end
-
-        # Verbose
-        verbose && println("\nClassic Tableau")
-        verbose && println(string(timeouts_classic) * " formulas over " * string(max_avg) * " timeout.")
-        verbose && println("(" * string(max_avg - timeouts_classic) * " didn't.)")
-        verbose && print("Average execution time (over " * string(max_avg - timeouts) * " formulas): ")
-        verbose && println(string((e_time/1e6)/(max_avg - timeouts)) * " ms")
-        verbose && println("$val/$(max_avg - timeouts_classic) formulas were α-val, " *
-                "$unval/$(max_avg - timeouts_classic) formulas were not α-val\n")
-
-        verbose && println("\nHybrid Tableau")
-        verbose && println(string(timeouts_hybrid) * " formulas over " * string(max_avg) * " timeout.")
-        verbose && println("(" * string(max_avg - timeouts_hybrid) * " didn't.)")
-        verbose && print("Average execution time (over " * string(max_avg - timeouts) * " formulas): ")
-        verbose && println(string((e_time_hybrid/1e6)/(max_avg - timeouts_hybrid)) * " ms")
-        verbose && println("$val_hybrid/$(max_avg - timeouts) formulas were α-val, " *
-                "$unval_hybrid/$(max_avg - timeouts_hybrid) formulas were not α-val\n")
-
         # Latex
-        ntos[height-min_height+1] = max_avg - timeouts_classic
-        tot_timeouts[findall(x->x==a, algebras)...] += timeouts_classic
-        tot_val[findall(x->x==a, algebras)...] += val
-        tot_unval[findall(x->x==a, algebras)...] += unval
+        avg_exc_times[height] = (avg_exc_times[height])/max_avg
+        tot_val[findall(x->x==a, algebras)...] += val[height]
+        tot_unval[findall(x->x==a, algebras)...] += unval[height]
+        tot_timeouts[findall(x->x==a, algebras)...] += timeouts[height]
 
-        ntos_hybrid[height-min_height+1] = max_avg - timeouts_hybrid
-        tot_timeouts_hybrid[findall(x->x==a, algebras)...] += timeouts_hybrid
-        tot_val_hybrid[findall(x->x==a, algebras)...] += val_hybrid
-        tot_unval_hybrid[findall(x->x==a, algebras)...] += unval_hybrid
+        avg_exc_times_hybrid[height] = (avg_exc_times_hybrid[height])/max_avg
+        tot_val_hybrid[findall(x->x==a, algebras)...] += val_hybrid[height]
+        tot_unval_hybrid[findall(x->x==a, algebras)...] += unval_hybrid[height]
+        tot_timeouts_hybrid[findall(x->x==a, algebras)...] += timeouts_hybrid[height]
     end
-
     # Latex
-    println("\n\nCLassic Tableau")
-    println("$(a[1])")
-    for i in 1:length(ntos)
-        print("($(i+min_height-1),$(ntos[i]))")
+    println("Results for $(a[1])")
+    println("\nCLassic Tableau")
+    println("\nAverage execution time for each height")
+    for i in 1:length(avg_exc_times)
+        print("($(i+min_height-1),$(avg_exc_times[i]))")
+    end
+    println("\nVal formulas for each height")
+    for i in 1:length(val)
+        print("($(i+min_height-1),$(val[i]))")
+    end
+    println("\nUnval formulas for each height")
+    for i in 1:length(unval)
+        print("($(i+min_height-1),$(unval[i]))")
+    end
+    println("\nTimeouts for each height")
+    for i in 1:length(timeouts)
+        print("($(i+min_height-1),$(timeouts[i]))")
     end
     println("\n\nHybrid Tableau")
-    println("$(a[1])")
-    for i in 1:length(ntos_hybrid)
-        print("($(i+min_height-1),$(ntos_hybrid[i]))")
+    println("\nAverage execution time for each height")
+    for i in 1:length(avg_exc_times_hybrid)
+        print("($(i+min_height-1),$(avg_exc_times_hybrid[i]))")
+    end
+    println("\nVal formulas for each height")
+    for i in 1:length(val_hybrid)
+        print("($(i+min_height-1),$(val_hybrid[i]))")
+    end
+    println("\nUnval formulas for each height")
+    for i in 1:length(unval_hybrid)
+        print("($(i+min_height-1),$(unval_hybrid[i]))")
+    end
+    println("\nTimeouts for each height")
+    for i in 1:length(timeouts_hybrid)
+        print("($(i+min_height-1),$(timeouts_hybrid[i]))")
     end
     println("\n\n")
 end
 
 # Latex
 println("\n\nClassic Tableau")
-println("\n\nTimeouts")
-for i in 1:length(tot_timeouts)
-    print("({$(algebras[i][1])},$(tot_timeouts[i]))")
-end
 println("\n\nalphaprove")
 for i in 1:length(tot_val)
     print("({$(algebras[i][1])},$(tot_val[i]))")
@@ -235,11 +213,11 @@ println("\n\nNot alphaprove")
 for i in 1:length(tot_unval)
     print("({$(algebras[i][1])},$(tot_unval[i]))")
 end
-println("\n\nHybrid Tableau")
 println("\n\nTimeouts")
-for i in 1:length(tot_timeouts_hybrid)
-    print("({$(algebras[i][1])},$(tot_timeouts_hybrid[i]))")
+for i in 1:length(tot_timeouts)
+    print("({$(algebras[i][1])},$(tot_timeouts[i]))")
 end
+println("\n\n\n\nHybrid Tableau")
 println("\n\nalphaprove")
 for i in 1:length(tot_val_hybrid)
     print("({$(algebras[i][1])},$(tot_val_hybrid[i]))")
@@ -247,5 +225,9 @@ end
 println("\n\nNot alphaprove")
 for i in 1:length(tot_unval_hybrid)
     print("({$(algebras[i][1])},$(tot_unval_hybrid[i]))")
+end
+println("\n\nTimeouts")
+for i in 1:length(tot_timeouts_hybrid)
+    print("({$(algebras[i][1])},$(tot_timeouts_hybrid[i]))")
 end
 println()
