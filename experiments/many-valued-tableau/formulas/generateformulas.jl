@@ -28,7 +28,7 @@ algebras = [
 ]
 
 for a in algebras
-    mkdir(a[5])
+    mkdir(a[3])
     rng = initrng(Random.GLOBAL_RNG)
     aot = vcat(myalphabet,getdomain(a[2])) # atoms or truths
     aotweights = StatsBase.uweights(length(myalphabet)+length(getdomain(a[2])))
