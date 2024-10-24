@@ -1,76 +1,3 @@
-struct HAFSLOS{N,A<:FiniteIndexAlgebra{N}}
-    domain::Vector{Point}
-    algebra::A
-    mvlt::Dict{Tuple{Point,Point},FiniteIndexTruth}
-    mveq::Dict{Tuple{Point,Point},FiniteIndexTruth}
-
-    function HAFSLOS(
-        domain::Vector{Point},
-        algebra::A,
-        mvlt::Dict{Tuple{Point,Point},FiniteIndexTruth},
-        mveq::Dict{Tuple{Point,Point},FiniteIndexTruth}
-    ) where {
-        N,
-        A<:FiniteIndexAlgebra{N}
-    }
-        if !isa(mvlt, Dict{Tuple{Point,Point},FiniteIndexTruth})
-            mvlt = convert(Dict{Tuple{Point,Point},FiniteIndexTruth}, mvlt)
-        end
-        if !isa(mveq, Dict{Tuple{Point,Point},FiniteIndexTruth})
-            mveq = convert(Dict{Tuple{Point,Point},FiniteIndexTruth}, mveq)
-        end
-        new{N,A}(domain, algebra, mvlt, mveq)
-    end
-end
-
-function equal(a1::HAFSLOS, a2::HAFSLOS)
-     if a1.domain == a2.domain && a1.algebra == a2.algebra &&
-        a1.mvlt == a2.mvlt && a1.mveq == a2.mveq 
-        return true
-     else
-        return false
-     end
-end
-
-"""
-Check if a structure (D, <, =) is a adequate fuzzy strictly linearly ordered set.
-
-1. =(x,y) = 1 iff x = y
-2. =(x,y) = =(y,x)
-3. <(x,x) = 0
-4. <(x,z) ⪰ <(x,y) ⋅ <(y,z)
-5. if <(x,y) ≻ 0 and <(y,z) ≻ 0 then <(x,z) ≻ 0
-6. if <(x,y) = 0 and <(y,x) = 0 then =(x,y) = 1
-7. if =(x,y) ≻ 0 then <(x,y) ≺ 1
-"""
-function checkhafslos(hafslos::HAFSLOS)
-    # check axioms 1...7
-    for x ∈ hafslos.domain
-        !istop(hafslos.mveq[(x,x)]) && error("(D,<,=) is not a HAFSLOS (1)")
-        !isbot(hafslos.mvlt[(x,x)]) && error("(D,<,=) is not a HAFSLOS (3)")
-        for y ∈ hafslos.domain
-            istop(hafslos.mveq[(x,y)]) && x != y && error("(D,<,=) is not a HAFSLOS (1)")
-            hafslos.mveq[(x,y)] != hafslos.mveq[(y,x)] && error("(D,<,=) is not a HAFSLOS (2)")
-            if isbot(hafslos.mvlt[(x,y)]) && isbot(hafslos.mvlt[(y,x)])
-                !istop(hafslos.mveq[(x,y)]) && error("(D,<,=) is not a HAFSLOS (6)")
-            end
-            if !isbot(hafslos.mveq[(x,y)])
-                istop(hafslos.mvlt[(x,y)]) && error("(D,<,=) is not a HAFSLOS (7)")
-            end
-            for z ∈ hafslos.domain
-                !succeedeq(
-                    hafslos.algebra,
-                    hafslos.mvlt[(x,z)],
-                    hafslos.algebra.meet(hafslos.mvlt[(x,y)], hafslos.mvlt[(y,z)])
-                ) && error("(D,<,=) is not a HAFSLOS (4)")
-                if !isbot(hafslos.mvlt[(x,y)]) && !isbot(hafslos.mvlt[(y,z)])
-                    isbot(hafslos.mvlt[(x,z)]) && error("(D,<,=) is not a HAFSLOS (5)")
-                end
-            end
-        end
-    end
-end
-
 """
 The natural definition of many-valued Allen's relations. 
 For every X ∈ {A, Ai, L, Li, B, Bi, E, Ei, D, Di, O, Oi} we have RX: I(D)×I(D)→H defined by:
@@ -94,35 +21,34 @@ and similarly for the inverse relations:
 function mveval(
     r::R,
     (x,y)::Tuple{Point,Point},
-    (z,t)::Tuple{Point,Point},
-    c::HAFSLOS
+    (z,t)::Tuple{Point,Point}
 ) where {
     R<:AbstractRelation
 }
     if r == SoleLogics.IA_A
-        return c.mveq[(y,z)]
+        "(mveq $(y.label) $(z.label))"
     elseif r == SoleLogics.IA_L
-        return c.mvlt[(y,z)]
+        "(mvlt $(y.label) $(z.label))"
     elseif r == SoleLogics.IA_B
-        return c.algebra.meet(c.mveq[(x,z)], c.mvlt[(t,y)])
+        "(meet (mveq $(x.label) $(z.label)) (mvlt $(t.label) $(y.label)))"
     elseif r == SoleLogics.IA_E
-        return c.algebra.meet(c.mvlt[(x,z)], c.mveq[(y,t)])
+        "(meet (mvlt $(x.label) $(z.label)) (mveq $(y.label) $(t.label)))"
     elseif r == SoleLogics.IA_D
-        return c.algebra.meet(c.mvlt[(x,z)], c.mvlt[(t,y)])
+        "(meet (mvlt $(x.label) $(z.label)) (mvlt $(t.label) $(y.label)))"
     elseif r == SoleLogics.IA_O
-        return c.algebra.meet(c.algebra.meet(c.mvlt[(x,z)], c.mvlt[(z,y)]), c.mvlt[(y,t)])
+        "(meet (meet (mvlt $(x.label) $(z.label)) (mvlt $(z.label) $(y.label))) (mvlt $(y.label) $(t.label))"
     elseif r == SoleLogics.IA_Ai
-        return c.mveq[(t,x)]
+        "(mveq $(t.label) $(x.label))"
     elseif r == SoleLogics.IA_Li
-        return c.mvlt[(t,x)]
+        "(mvlt $(t.label) $(x.label))"
     elseif r == SoleLogics.IA_Bi
-        return c.algebra.meet(c.mveq[(z,x)], c.mvlt[(y,t)])
+        "(meet (mveq $(z.label) $(x.label)) (mvlt $(y.label) $(t.label)))"
     elseif r == SoleLogics.IA_Ei
-        return c.algebra.meet(c.mvlt[(z,x)], c.mveq[(t,y)])
+        "(meet (mvlt $(z.label) $(x.label)) (mveq $(t.label) $(y.label)))"
     elseif r == SoleLogics.IA_Di
-        return c.algebra.meet(c.mvlt[(z,x)], c.mvlt[(y,t)])
+        "(meet (mvlt $(z.label) $(x.label)) (mvlt $(y.label) $(t.label)))"
     elseif r == SoleLogics.IA_Oi
-        return c.algebra.meet(c.algebra.meet(c.mvlt[(z,x)], c.mvlt[(x,t)]), c.mvlt[(t,y)])
+        "(meet (meet (mvlt $(z.label) $(x.label)) (mvlt $(x.label) $(t.label))) (mvlt $(t.label) $(y.label))"
     else
         error("Relation $r not in HS")
     end
@@ -131,12 +57,12 @@ end
 mutable struct HybridMVHSTableau{T<:Truth} <: AbstractTableau
     const judgement::Bool
     const boundingimplication::Union{
-        Tuple{T,Formula},
-        Tuple{Formula,T},
-        Tuple{T,T}
+        Tuple{Truth,Formula},
+        Tuple{Formula,Truth},
+        Tuple{Truth,Truth}
     }
-    const interval::Interval
-    constraintsystem::Union{HAFSLOS,Nothing}
+    const interval::Tuple{Point,Point}
+    const constraintsystem::Vector{Point}
     const father::Union{HybridMVHSTableau,Nothing}
     children::Vector{HybridMVHSTableau}
     expanded::Bool
@@ -150,36 +76,13 @@ mutable struct HybridMVHSTableau{T<:Truth} <: AbstractTableau
             Tuple{Formula,T1},
             Tuple{T1,T2}
         },
-        interval::Interval
+        interval::Tuple{Point,Point},
+        newsmtconstraints::Vector{String}
     ) where {
         T<:Truth,
         T1<:Truth,
         T2<:Truth
     }
-        # if isa(boundingimplication, Tuple{T1,Formula})
-        #     if !isa(boundingimplication, Tuple{T,Formula})
-        #         boundingimplication = (
-        #             convert(T, boundingimplication[1]),
-        #             boundingimplication[2]
-        #         )
-        #     end
-        # elseif isa(boundingimplication, Tuple{Formula,T1})
-        #     if !isa(boundingimplication, Tuple{Formula,T})
-        #         boundingimplication = (
-        #             boundingimplication[1],
-        #             convert(T, boundingimplication[2]),
-        #         )
-        #     end
-        # elseif isa(boundingimplication, Tuple{T1,T2})
-        #     if !isa(boundingimplication, Tuple{T,T})
-        #         boundingimplication = (
-        #             convert(T, boundingimplication[1]),
-        #             convert(T, boundingimplication[2]),
-        #         )
-        #     end
-        # else
-        #     error("Unexpected error")
-        # end
         return new{T}(
             judgement,
             boundingimplication,
@@ -189,7 +92,7 @@ mutable struct HybridMVHSTableau{T<:Truth} <: AbstractTableau
             Vector{HybridMVHSTableau}(),
             false,
             false,
-            Vector{String}()
+            newsmtconstraints
         )
     end
 
@@ -200,37 +103,14 @@ mutable struct HybridMVHSTableau{T<:Truth} <: AbstractTableau
             Tuple{Formula,T1},
             Tuple{T1,T2}
         },
-        interval::Interval,
-        constraintsystem::HAFSLOS
+        interval::Tuple{Point,Point},
+        constraintsystem::Vector{Point},
+        newsmtconstraints::Vector{String}
     ) where{
         T<:Truth,
         T1<:Truth,
         T2<:Truth
     }
-        # if isa(boundingimplication, Tuple{T1,Formula})
-        #     if !isa(boundingimplication, Tuple{T,Formula})
-        #         boundingimplication = (
-        #             convert(T, boundingimplication[1]),
-        #             boundingimplication[2]
-        #         )
-        #     end
-        # elseif isa(boundingimplication, Tuple{Formula,T1})
-        #     if !isa(boundingimplication, Tuple{Formula,T})
-        #         boundingimplication = (
-        #             boundingimplication[1],
-        #             convert(T, boundingimplication[2]),
-        #         )
-        #     end
-        # elseif isa(boundingimplication, Tuple{T1,T2})
-        #     if !isa(boundingimplication, Tuple{T,T})
-        #         boundingimplication = (
-        #             convert(T, boundingimplication[1]),
-        #             convert(T, boundingimplication[2]),
-        #         )
-        #     end
-        # else
-        #     error("Unexpected error")
-        # end
         return new{T}(
             judgement,
             boundingimplication,
@@ -240,7 +120,7 @@ mutable struct HybridMVHSTableau{T<:Truth} <: AbstractTableau
             Vector{HybridMVHSTableau}(),
             false,
             false,
-            Vector{String}()
+            newsmtconstraints
         )
     end
 
@@ -251,38 +131,14 @@ mutable struct HybridMVHSTableau{T<:Truth} <: AbstractTableau
             Tuple{Formula,T1},
             Tuple{T1,T2}
         },
-        interval::Interval,
-        constraintsystem::HAFSLOS,
-        father::HybridMVHSTableau
+        interval::Tuple{Point,Point},
+        constraintsystem::Vector{Point},
+        father::HybridMVHSTableau,
     ) where{
         T<:Truth,
         T1<:Truth,
         T2<:Truth
     }
-        # if isa(boundingimplication, Tuple{T1,Formula})
-        #     if !isa(boundingimplication, Tuple{T,Formula})
-        #         boundingimplication = (
-        #             convert(T, boundingimplication[1]),
-        #             boundingimplication[2]
-        #         )
-        #     end
-        # elseif isa(boundingimplication, Tuple{Formula,T1})
-        #     if !isa(boundingimplication, Tuple{Formula,T})
-        #         boundingimplication = (
-        #             boundingimplication[1],
-        #             convert(T, boundingimplication[2]),
-        #         )
-        #     end
-        # elseif isa(boundingimplication, Tuple{T1,T2})
-        #     if !isa(boundingimplication, Tuple{T,T})
-        #         boundingimplication = (
-        #             convert(T, boundingimplication[1]),
-        #             convert(T, boundingimplication[2]),
-        #         )
-        #     end
-        # else
-        #     error("Unexpected error")
-        # end
         t = new{T}(
             judgement,
             boundingimplication,
@@ -305,8 +161,8 @@ mutable struct HybridMVHSTableau{T<:Truth} <: AbstractTableau
             Tuple{Formula,T1},
             Tuple{T1,T2}
         },
-        interval::Interval,
-        constraintsystem::HAFSLOS,
+        interval::Tuple{Point,Point},
+        constraintsystem::Vector{Point},
         father::HybridMVHSTableau,
         newsmtconstraints::Vector{String}
     ) where{
@@ -314,30 +170,6 @@ mutable struct HybridMVHSTableau{T<:Truth} <: AbstractTableau
         T1<:Truth,
         T2<:Truth
     }
-        # if isa(boundingimplication, Tuple{T1,Formula})
-        #     if !isa(boundingimplication, Tuple{T,Formula})
-        #         boundingimplication = (
-        #             convert(T, boundingimplication[1]),
-        #             boundingimplication[2]
-        #         )
-        #     end
-        # elseif isa(boundingimplication, Tuple{Formula,T1})
-        #     if !isa(boundingimplication, Tuple{Formula,T})
-        #         boundingimplication = (
-        #             boundingimplication[1],
-        #             convert(T, boundingimplication[2]),
-        #         )
-        #     end
-        # elseif isa(boundingimplication, Tuple{T1,T2})
-        #     if !isa(boundingimplication, Tuple{T,T})
-        #         boundingimplication = (
-        #             convert(T, boundingimplication[1]),
-        #             convert(T, boundingimplication[2]),
-        #         )
-        #     end
-        # else
-        #     error("Unexpected error")
-        # end
         t = new{T}(
             judgement,
             boundingimplication,
@@ -415,6 +247,8 @@ function Base.show(io::IO, t::HybridMVHSTableau)
         )
     end
 end
+
+addconstraint!(ft::HybridMVHSTableau, c::String) = push!(ft.smtconstraints, c)
 
 function findsimilar(
     ft::HybridMVHSTableau,
@@ -529,7 +363,7 @@ function findsimilar(
             while !isroot(ft)
                 ft = ft.father
                 y = ft.boundingimplication
-                if y[1] isa Truth && ft.sign && z[1] == y[2]
+                if y[1] isa Truth && ft.judgement && z[1] == y[2]
                     # X6
                     if z[2] ∉ getdomain(a)
                         if y[1] ∉ getdomain(a)
@@ -550,7 +384,7 @@ function findsimilar(
                             return true
                         end
                     end
-                elseif y[2] isa Truth && !ft.sign && z[1] == y[1]
+                elseif y[2] isa Truth && !ft.judgement && z[1] == y[1]
                     # X7
                     if z[2] ∉ getdomain(a)
                         if y[2] ∉ getdomain(a)
@@ -577,7 +411,7 @@ function findsimilar(
             while !isroot(ft)
                 ft = ft.father
                 y = ft.boundingimplication
-                if y[2] isa Truth && ft.sign && z[1] == y[1]
+                if y[2] isa Truth && ft.judgement && z[1] == y[1]
                     # X7
                     if z[2] ∉ getdomain(a)
                         if y[2] ∉ getdomain(a)
@@ -598,7 +432,7 @@ function findsimilar(
                             return true
                         end
                     end
-                elseif y[1] isa Truth && !ft.sign && z[1] == y[2]
+                elseif y[1] isa Truth && !ft.judgement && z[1] == y[2]
                     # X8
                     if z[2] ∉ getdomain(a)
                         if y[1] ∉ getdomain(a)
@@ -658,16 +492,13 @@ function findtableau(
         Tuple{Formula,T},
         Tuple{T,T}
     },
-    i::Interval,
-    # c::HAFSLOS
+    i::Interval
 ) where {
     T<:Truth
 }
-    # t.judgement == j && t.boundingimplication == φ && t.interval == i && equal(t.constraintsystem,c) && return true
     t.judgement == j && t.boundingimplication == φ && t.interval == i && return true
     while !isroot(t)
         t = t.father
-        # t.judgement == j && t.boundingimplication == φ && t.interval == i && equal(t.constraintsystem,c) && return true
         t.judgement == j && t.boundingimplication == φ && t.interval == i && return true
     end
     return false
@@ -704,8 +535,7 @@ end
 function hybridmvhsalphasat(
     metricheaps::Vector{MetricHeap},
     choosenode::Function,
-    a::A,
-    roots::Vector{HybridMVHSTableau};
+    algebra::A;
     verbose::Bool=false,
     timeout::Union{Nothing,Int}=nothing,
     diamondexpansion::Float64=1.0
@@ -719,7 +549,6 @@ function hybridmvhsalphasat(
         
         if cycle%1e2==0
             cleanheaps!(metricheaps)
-            # cleancss!(roots)
         end
 
         # if timeout, return false with a warning
@@ -758,10 +587,10 @@ function hybridmvhsalphasat(
                 smtfile *= "))\n(declare-fun join (A1 A1) A1)\n(declare-fun meet (A1 A1) A1)\n(declare-fun monoid (A1 A1) A1)\n(declare-fun implication (A1 A1) A1)\n"
                 for i ∈ 1:N
                     for j ∈ 1:N
-                        smtfile *= "(assert (= (join a$i a$j) a$(a.join(UInt8(i), UInt8(j)).index)))\n"
-                        smtfile *= "(assert (= (meet a$i a$j) a$(a.meet(UInt8(i), UInt8(j)).index)))\n"
-                        smtfile *= "(assert (= (monoid a$i a$j) a$(a.monoid(UInt8(i), UInt8(j)).index)))\n"
-                        smtfile *= "(assert (= (implication a$i a$j) a$(a.implication(UInt8(i), UInt8(j)).index)))\n"
+                        smtfile *= "(assert (= (join a$i a$j) a$(algebra.join(UInt8(i), UInt8(j)).index)))\n"
+                        smtfile *= "(assert (= (meet a$i a$j) a$(algebra.meet(UInt8(i), UInt8(j)).index)))\n"
+                        smtfile *= "(assert (= (monoid a$i a$j) a$(algebra.monoid(UInt8(i), UInt8(j)).index)))\n"
+                        smtfile *= "(assert (= (implication a$i a$j) a$(algebra.implication(UInt8(i), UInt8(j)).index)))\n"
                     end
                 end
                 smtfile *= "(define-fun precedeq ((x A1) (y A1)) Bool (= (meet x y) x))\n"
@@ -776,7 +605,7 @@ function hybridmvhsalphasat(
                 smtfile *= "(assert (precedeq (meet (mvlt x y) (mvlt y z)) (mvlt x z)))\n"                                      # <(x,z) ⪰ <(x,y) ⋅ <(y,z)
                 smtfile *= "(assert (=> (and (distinct (mvlt x y) a2) (distinct (mvlt y z) a2)) (distinct (mvlt x z) a2)))\n"   # if <(x,y) ≻ 0 and <(y,z) ≻ 0 then <(x,z) ≻ 0
                 smtfile *= "(assert (=> (and (= (mvlt x y) a2) (= (mvlt y x) a2)) (= (mveq x y) a1)))\n"                        # if <(x,y) = 0 and <(y,x) = 0 then =(x,y) = 1
-                smtfile *= "(assert (=> (distinct (mveq x y) a2) (distinct (mvlt x y) a1)))"                                    # if =(x,y) ≻ 0 then <(x,y) ≺ 1
+                smtfile *= "(assert (=> (distinct (mveq x y) a2) (distinct (mvlt x y) a1)))\n"                                  # if =(x,y) ≻ 0 then <(x,y) ≺ 1
                 # check smtconstraints
                 for str ∈ node.smtconstraints
                     smtfile *= str * "\n"
@@ -784,12 +613,12 @@ function hybridmvhsalphasat(
                 smtfile *= "(check-sat)"
                 b = IOBuffer()
                 uuid = UUIDs.uuid4()
-                touch("temp$uuid.smt2")
-                open("temp$uuid.smt2", "w") do file
+                touch("$(tempdir())/temp$uuid.smt2")
+                open("$(tempdir())/temp$uuid.smt2", "w") do file
                     write(file, smtfile)
                 end
-                run(pipeline(`z3 temp$uuid.smt2`, stdout = b))
-                rm("temp$uuid.smt2")
+                run(pipeline(`z3 $(tempdir())/temp$uuid.smt2`, stdout = b))
+                # rm("$(tempdir())/temp$uuid.smt2")
                 if take!(b) == UInt8[0x73, 0x61, 0x74, 0x0a]
                     verbose && println(node) # print satisfiable branch
                     return true
@@ -807,8 +636,8 @@ function hybridmvhsalphasat(
                 γ = en.boundingimplication[2]
                 # Branch Closure Conditions
                 if en.judgement 
-                    if β ∉ getdomain(a)
-                        if γ ∉ getdomain(a)
+                    if β ∉ getdomain(algebra)
+                        if γ ∉ getdomain(algebra)
                             for l ∈ leaves(en)
                                 addconstraint!(l, "(assert (precedeq $(β.label) $(γ.label)))\n")
                             end
@@ -817,17 +646,17 @@ function hybridmvhsalphasat(
                                 addconstraint!(l, "(assert (precedeq $(β.label) a$(γ.index)))\n")
                             end
                         end
-                    elseif γ ∉ getdomain(a)
+                    elseif γ ∉ getdomain(algebra)
                         for l ∈ leaves(en)
                             addconstraint!(l, "(assert (precedeq a$(β.index) $(γ.label)))\n")
                         end
-                    elseif !precedeq(a, β, γ)
+                    elseif !precedeq(algebra, β, γ)
                         # T(a→b) where a≰b case
                         close!(en)
                     end
                 else
-                    if β ∉ getdomain(a)
-                        if γ ∉ getdomain(a)
+                    if β ∉ getdomain(algebra)
+                        if γ ∉ getdomain(algebra)
                             for l ∈ leaves(en)
                                 addconstraint!(l, "(assert (not (precedeq $(β.label) $(γ.label))))\n")
                             end
@@ -839,7 +668,7 @@ function hybridmvhsalphasat(
                             # F(X→⊤) case
                             close!(en)
                         end
-                    elseif γ ∉ getdomain(a)
+                    elseif γ ∉ getdomain(algebra)
                         if !isbot(β)
                             for l ∈ leaves(en)
                                 addconstraint!(l, "(assert (not (precedeq a$(β.index) $(γ.label))))\n")
@@ -848,32 +677,22 @@ function hybridmvhsalphasat(
                             # F(⊥→X) case
                             close!(en)
                         end
-                    elseif precedeq(a, β, γ) && !isbot(β) && !istop(γ)
+                    elseif precedeq(algebra, β, γ) && !isbot(β) && !istop(γ)
                         # F(a→b) where a≤b and a≠⊥ and b≠⊤ case
                         close!(en)
-                    elseif !s && isbot(β)
+                    elseif !en.judgement && isbot(β)
                         # F(⊥→X) case
                         close!(en)
-                    elseif !s && istop(γ)
+                    elseif !en.judgement && istop(γ)
                         # F(X→⊤) case
                         close!(en)
                     end
                 end
-                if findsimilar(en, a)
+                if findsimilar(en, algebra)
                     # T(b→X) and F(a→X) where a ≤ b case
                     close!(en)
                 # Base case
                 else
-                    # let err
-                    #     try
-                    #         checkhafslos(en.constraintsystem)
-                    #     catch err
-                    #         # X6
-                    #         verbose && println(sprint(showerror, err))
-                    #         verbose && println("X6")
-                    #         close!(en)
-                    #     end
-                    # end
                     # No condition matched, pushing node back into metricheaps
                     push!(metricheaps, node)
                 end
@@ -884,275 +703,201 @@ function hybridmvhsalphasat(
                     # X3
                     verbose && println("X3")
                     close!(en)                
-                elseif findsimilar(en, a)
+                elseif findsimilar(en, algebra)
                     # X5
                     verbose && println("X5")
                     close!(en)
+
+                # Strong conjunction Rules 1
                 elseif en.judgement && token(φ) isa NamedConnective{:∧} && !isbot(β)
-                    # T∧                
-                    (ψ, ε) = children(φ)
-                    # Search for support tuples
-                    pairs = Set{NTuple{2,FiniteIndexTruth}}()
-                    for βi ∈ 1:N
-                        for γi ∈ 1:N
-                            if precedeq(a, β, a.monoid(FiniteIndexTruth(βi), FiniteIndexTruth(γi)))
-                                push!(pairs, (FiniteIndexTruth(βi), FiniteIndexTruth(γi)))
-                            end
-                        end
+                    # T(t→(A∧B)) case
+                    (a, b) = children(φ)
+                    x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
+                    xsmtc = "(assert (or"
+                    ysmtc = "(assert (or"
+                    for value in 1:N
+                        xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
+                        ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
                     end
-                    for p ∈ pairs
-                        for q ∈ pairs
-                            if precedeq(a, q[1], p[1]) && precedeq(a, q[2], p[2]) && p != q
-                                delete!(pairs, p)
-                            end
-                        end
-                    end
-                    for l ∈ findleaves(en)
-                        newnodes = false
-                        for pair ∈ pairs
-                            newnodes = true
-                            if !findtableau(l, true, (pair[1], ψ), en.interval)
-                                t1 = HybridMVHSTableau{FiniteIndexTruth}(
-                                true,
-                                (pair[1], ψ),
-                                en.interval,
-                                l.constraintsystem,
-                                l
-                            )
-                                push!(metricheaps, t1)
-                                if !findtableau(t1, true, (pair[2], ε), en.interval)
-                                        t2 = HybridMVHSTableau{FiniteIndexTruth}(
-                                        true,
-                                        (pair[2], ε),
-                                        en.interval,
-                                        t1.constraintsystem,
-                                        t1
-                                    )
-                                    push!(metricheaps, t2)
-                                end
-                            else
-                                if !findtableau(l, true, (pair[2], ε), en.interval)
-                                    newnodes = true
-                                    t2 = HybridMVHSTableau{FiniteIndexTruth}(
-                                        true,
-                                        (pair[2], ε),
-                                        en.interval,
-                                        l.constraintsystem,
-                                        l
-                                    )
-                                    push!(metricheaps, t2)
-                                else  # Here there should be a branch and I need to keep track of it
-                                    ti = HybridMVHSTableau{FiniteIndexTruth}(   # Fake node (always true)
-                                        true,
-                                        (FiniteIndexTruth(1), FiniteIndexTruth(1)),
-                                        en.interval,
-                                        l.constraintsystem,
-                                        l
-                                    )
-                                    push!(metricheaps, ti)
-                                end
-                            end
-                        end
-                        !newnodes && l == node && push!(metricheaps, node)
-                    end
+                    xsmtc *= "))"
+                    ysmtc *= "))"
+                    newsmtc = [
+                        "(declare-const x$(string(cycle)) A1)",
+                        "(declare-const y$(string(cycle)) A1)",
+                        xsmtc,
+                        ysmtc
+                    ]
+                    if isa(β, FiniteIndexTruth)
+                        push!(newsmtc,"(assert (precedeq a$(β.index) (monoid x$(string(cycle)) y$(string(cycle)))))")
+                    elseif isa(β, FiniteTruth)
+                        push!(newsmtc,"(assert (precedeq $(β.label) (monoid x$(string(cycle)) y$(string(cycle)))))")
+                    else
+                        error("Wrong truth type")
+                    end                
+                    for l in leaves(en)                    
+                        fta = HybridMVHSTableau{FiniteIndexTruth}(true, (x, a), en.interval, l.constraintsystem, l)
+                        push!(metricheaps, fta)
+                        ftb = HybridMVHSTableau{FiniteIndexTruth}(true, (y, b), en.interval, fta.constraintsystem, fta, newsmtc)
+                        push!(metricheaps, ftb)
+                    end                
                 elseif !en.judgement && token(φ) isa NamedConnective{:∧} && !isbot(β)
-                    # F∧
-                    (ψ, ε) = children(φ)
-                    # Search for support tuples
-                    pairs = Set{NTuple{2,FiniteIndexTruth}}()
-                    for βi ∈ 1:N
-                        for γi ∈ 1:N
-                            if !precedeq(a, β, a.monoid(FiniteIndexTruth(βi), FiniteIndexTruth(γi)))
-                                push!(pairs, (FiniteIndexTruth(βi), FiniteIndexTruth(γi)))
-                            end
-                        end
+                    # F(t→(A∧B)) case
+                    (a, b) = children(φ)
+                    x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
+                    xsmtc = "(assert (or"
+                    ysmtc = "(assert (or"
+                    for value in 1:N
+                        xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
+                        ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
                     end
-                    for p in pairs
-                        for q in pairs
-                            if precedeq(a, p[1], q[1]) && precedeq(a, p[2], q[2]) && p != q
-                                delete!(pairs, p)
-                            end
-                        end
+                    xsmtc *= "))"
+                    ysmtc *= "))"
+                    newsmtc = [
+                        "(declare-const x$(string(cycle)) A1)",
+                        "(declare-const y$(string(cycle)) A1)",
+                        xsmtc,
+                        ysmtc
+                    ]
+                    if isa(β, FiniteIndexTruth)
+                        push!(newsmtc,"(assert (not (precedeq a$(β.index) (monoid x$(string(cycle)) y$(string(cycle))))))")
+                    elseif isa(β, FiniteTruth)
+                        push!(newsmtc,"(assert (not (precedeq $(β.label) (monoid x$(string(cycle)) y$(string(cycle))))))")
+                    else
+                        error("Wrong truth type")
                     end
-                    for l ∈ findleaves(en)
-                        newnodes = false
-                        for pair in pairs
-                            newnodes = true
-                            if !findtableau(l, true, (ψ, pair[1]), en.interval)
-                                t1 = HybridMVHSTableau{FiniteIndexTruth}(
-                                    true,
-                                    (ψ, pair[1]),
-                                    en.interval,
-                                    l.constraintsystem,
-                                    l
-                                )
-                                push!(metricheaps, t1)
-                                if !findtableau(t1, true, (ε, pair[2]), en.interval)
-                                    t2 = HybridMVHSTableau{FiniteIndexTruth}(
-                                        true,
-                                        (ε, pair[2]),
-                                        en.interval,
-                                        t1.constraintsystem,
-                                        t1
-                                    )
-                                    push!(metricheaps, t2)
-                                end
-                            else
-                                if !findtableau(l, true, (ε, pair[2]), en.interval)
-                                    t2 = HybridMVHSTableau{FiniteIndexTruth}(
-                                        true,
-                                        (ε, pair[2]),
-                                        en.interval,
-                                        l.constraintsystem,
-                                        l
-                                    )
-                                    push!(metricheaps, t2)
-                                else  # Here there should be a branch and I need to keep track of it
-                                    ti = HybridMVHSTableau{FiniteIndexTruth}(   # Fake node (always true)
-                                        true,
-                                        (FiniteIndexTruth(1), FiniteIndexTruth(1)),
-                                        en.interval,
-                                        l.constraintsystem,
-                                        l
-                                    )
-                                    push!(metricheaps, ti)
-                                end
-                            end
-                        end
-                        !newnodes && l == node && push!(metricheaps, node)
+                    for l in leaves(en)                    
+                        fta = HybridMVHSTableau{FiniteIndexTruth}(true, (a, x), en.interval, l.constraintsystem, l)
+                        push!(metricheaps, fta)
+                        ftb = HybridMVHSTableau{FiniteIndexTruth}(true, (b, y), en.interval, fta.constraintsystem, fta, newsmtc)
+                        push!(metricheaps, ftb)
                     end
+                # Strong disjunction rules 2
+                elseif en.judgement && token(φ) isa NamedConnective{:∨} && !isbot(β)
+                    # T(t→(A∨B)) case
+                    (a, b) = children(φ)
+                    x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
+                    xsmtc = "(assert (or"
+                    ysmtc = "(assert (or"
+                    for value in 1:N
+                        xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
+                        ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
+                    end
+                    xsmtc *= "))"
+                    ysmtc *= "))"
+                    newsmtc = [
+                        "(declare-const x$(string(cycle)) A1)",
+                        "(declare-const y$(string(cycle)) A1)",
+                        xsmtc,
+                        ysmtc                    
+                    ]
+                    if isa(β, FiniteIndexTruth)
+                        push!(newsmtc,"(assert (precedeq a$(β.index) (join x$(string(cycle)) y$(string(cycle)))))")
+                    elseif isa(β, FiniteTruth)
+                        push!(newsmtc,"(assert (precedeq $(β.label) (join x$(string(cycle)) y$(string(cycle)))))")
+                    else
+                        error("Wrong truth type")
+                    end
+                    for l in leaves(en)                    
+                        fta = HybridMVHSTableau{FiniteIndexTruth}(true, (x, a), en.interval, l.constraintsystem, l)
+                        push!(metricheaps, fta)
+                        ftb = HybridMVHSTableau{FiniteIndexTruth}(true, (y, b), en.interval, fta.constraintsystem, fta, newsmtc)
+                        push!(metricheaps, ftb)
+                    end       
+                elseif !en.judgement && token(φ) isa NamedConnective{:∨} && !isbot(β)
+                    # F(t→(A∨B)) case
+                    (a, b) = children(φ)
+                    x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
+                    xsmtc = "(assert (or"
+                    ysmtc = "(assert (or"
+                    for value in 1:N
+                        xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
+                        ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
+                    end
+                    xsmtc *= "))"
+                    ysmtc *= "))"
+                    newsmtc = [
+                        "(declare-const x$(string(cycle)) A1)",
+                        "(declare-const y$(string(cycle)) A1)",
+                        xsmtc,
+                        ysmtc                    
+                    ]
+                    if isa(β, FiniteIndexTruth)
+                        push!(newsmtc,"(assert (not (precedeq a$(β.index) (join x$(string(cycle)) y$(string(cycle))))))")
+                    elseif isa(β, FiniteTruth)
+                        push!(newsmtc,"(assert (not (precedeq $(β.label) (join x$(string(cycle)) y$(string(cycle))))))")
+                    else
+                        error("Wrong truth type")
+                    end
+                    for l in leaves(en)                    
+                        fta = HybridMVHSTableau{FiniteIndexTruth}(true, (a, x), en.interval, l.constraintsystem, l)
+                        push!(metricheaps, fta)
+                        ftb = HybridMVHSTableau{FiniteIndexTruth}(true, (b, y), en.interval, fta.constraintsystem, fta, newsmtc)
+                        push!(metricheaps, ftb)
+                    end   
+                # Implication Rules 1
                 elseif en.judgement && token(φ) isa NamedConnective{:→} && !isbot(β)
-                    # T→
-                    (ψ, ε) = children(φ)
-                    # Search for support tuples
-                    pairs = Set{NTuple{2,FiniteIndexTruth}}()
-                    for βi ∈ 1:N
-                        for γi ∈ 1:N
-                            if precedeq(a, β, a.implication(FiniteIndexTruth(βi), FiniteIndexTruth(γi)))
-                                push!(pairs, (FiniteIndexTruth(βi), FiniteIndexTruth(γi)))
-                            end
-                        end
+                    # T(t→(A→B)) case
+                    (a, b) = children(φ)
+                    x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
+                    xsmtc = "(assert (or"
+                    ysmtc = "(assert (or"
+                    for value in 1:N
+                        xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
+                        ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
                     end
-                    for p in pairs
-                        for q in pairs
-                            if precedeq(a, p[1], q[1]) && precedeq(a, q[2], p[2]) && p != q
-                                delete!(pairs, p)
-                            end
-                        end
+                    xsmtc *= "))"
+                    ysmtc *= "))"
+                    newsmtc = [
+                        "(declare-const x$(string(cycle)) A1)",
+                        "(declare-const y$(string(cycle)) A1)",
+                        xsmtc,
+                        ysmtc                    
+                    ]
+                    if isa(β, FiniteIndexTruth)
+                        push!(newsmtc,"(assert (precedeq a$(β.index) (implication x$(string(cycle)) y$(string(cycle)))))")
+                    elseif isa(β, FiniteTruth)
+                        push!(newsmtc,"(assert (precedeq $(β.label) (implication x$(string(cycle)) y$(string(cycle)))))")
+                    else
+                        error("Wrong truth type")
                     end
-                    for l ∈ findleaves(en)
-                        newnodes = false
-                        for pair in pairs
-                            newnodes = true
-                            if !findtableau(l, true, (ψ, pair[1]), en.interval)
-                                t1 = HybridMVHSTableau{FiniteIndexTruth}(
-                                    true,
-                                    (ψ, pair[1]),
-                                    en.interval,
-                                    l.constraintsystem,
-                                    l
-                                )
-                                push!(metricheaps, t1)
-                                if !findtableau(t1, true, (pair[2], ε), en.interval)
-                                        t2 = HybridMVHSTableau{FiniteIndexTruth}(
-                                        true,
-                                        (pair[2], ε),
-                                        en.interval,
-                                        t1.constraintsystem,
-                                        t1
-                                    )
-                                    push!(metricheaps, t2)
-                                end
-                            else
-                                if !findtableau(l, true, (pair[2], ε), en.interval)
-                                    t2 = HybridMVHSTableau{FiniteIndexTruth}(
-                                        true,
-                                        (pair[2], ε),
-                                        en.interval,
-                                        l.constraintsystem,
-                                        l
-                                    )
-                                    push!(metricheaps, t2)
-                                else  # Here there should be a branch and I need to keep track of it
-                                    ti = HybridMVHSTableau{FiniteIndexTruth}(   # Fake node (always true)
-                                        true,
-                                        (FiniteIndexTruth(1), FiniteIndexTruth(1)),
-                                        en.interval,
-                                        l.constraintsystem,
-                                        l
-                                    )
-                                    push!(metricheaps, ti)
-                                end
-                            end
-                        end
-                        !newnodes && l == node && push!(metricheaps, node)
-                    end
+                    for l in leaves(en)                    
+                        fta = HybridMVHSTableau{FiniteIndexTruth}(true, (a, x), en.interval, l.constraintsystem, l)
+                        push!(metricheaps, fta)
+                        ftb = HybridMVHSTableau{FiniteIndexTruth}(true, (y, b), en.interval, fta.constraintsystem, fta, newsmtc)
+                        push!(metricheaps, ftb)
+                    end       
                 elseif !en.judgement && token(φ) isa NamedConnective{:→} && !isbot(β)
-                    # F→
-                    (ψ, ε) = children(φ)
-                    # Search for support tuples
-                    pairs = Set{NTuple{2,FiniteIndexTruth}}()
-                    for βi ∈ 1:N
-                        for γi ∈ 1:N
-                            if !precedeq(a, β, a.implication(FiniteIndexTruth(βi), FiniteIndexTruth(γi)))
-                                push!(pairs, (FiniteIndexTruth(βi), FiniteIndexTruth(γi)))
-                            end
-                        end
+                    # F(t→(A→B)) case
+                    (a, b) = children(φ)
+                    x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
+                    xsmtc = "(assert (or"
+                    ysmtc = "(assert (or"
+                    for value in 1:N
+                        xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
+                        ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
                     end
-                    for p in pairs
-                        for q in pairs
-                            if precedeq(a, q[1], p[1]) && precedeq(a, p[2], q[2]) && p != q
-                                delete!(pairs, p)
-                            end
-                        end
+                    xsmtc *= "))"
+                    ysmtc *= "))"
+                    newsmtc = [
+                        "(declare-const x$(string(cycle)) A1)",
+                        "(declare-const y$(string(cycle)) A1)",
+                        xsmtc,
+                        ysmtc                    
+                    ]
+                    if isa(β, FiniteIndexTruth)
+                        push!(newsmtc,"(assert (not (precedeq a$(β.index) (implication x$(string(cycle)) y$(string(cycle))))))")
+                    elseif isa(β, FiniteTruth)
+                        push!(newsmtc,"(assert (not (precedeq $(β.label) (implication x$(string(cycle)) y$(string(cycle))))))")
+                    else
+                        error("Wrong truth type")
                     end
-                    for l ∈ findleaves(en)
-                        newnodes = false
-                        for pair in pairs
-                            newnodes = true
-                            if !findtableau(l, true, (pair[1], ψ), en.interval)
-                                t1 = HybridMVHSTableau{FiniteIndexTruth}(
-                                    true,
-                                    (pair[1], ψ),
-                                    en.interval,
-                                    l.constraintsystem,
-                                    l
-                                )
-                                push!(metricheaps, t1)
-                                if !findtableau(t1, true, (ε, pair[2]), en.interval)
-                                    t2 = HybridMVHSTableau{FiniteIndexTruth}(
-                                        true,
-                                        (ε, pair[2]),
-                                        en.interval,
-                                        t1.constraintsystem,
-                                        t1
-                                    )
-                                    push!(metricheaps, t2)
-                                end
-                            else
-                                if !findtableau(l, true, (ε, pair[2]), en.interval)
-                                    t2 = HybridMVHSTableau{FiniteIndexTruth}(
-                                        true,
-                                        (ε, pair[2]),
-                                        en.interval,
-                                        l.constraintsystem,
-                                        l
-                                    )
-                                    push!(metricheaps, t2)
-                                else  # Here there should be a branch and I need to keep track of it
-                                    ti = HybridMVHSTableau{FiniteIndexTruth}(   # Fake node (always true)
-                                        true,
-                                        (FiniteIndexTruth(1), FiniteIndexTruth(1)),
-                                        en.interval,
-                                        l.constraintsystem,
-                                        l
-                                    )
-                                    push!(metricheaps, ti)
-                                end
-                            end
-                        end
-                        !newnodes && l == node && push!(metricheaps, node)
+                    for l in leaves(en)                    
+                        fta = HybridMVHSTableau{FiniteIndexTruth}(true, (x, a), en.interval, l.constraintsystem, l)
+                        push!(metricheaps, fta)
+                        ftb = HybridMVHSTableau{FiniteIndexTruth}(true, (b, y), en.interval, fta.constraintsystem, fta, newsmtc)
+                        push!(metricheaps, ftb)
                     end
+
                 elseif en.judgement && token(φ) isa BoxRelationalConnective && !isbot(β)
                     # T□"
                     verbose && println("T□")
@@ -1230,7 +975,7 @@ function hybridmvhsalphasat(
                         # All possible combinations of values for new tuples (+ % d.e. opt.)
                         # TODO: fully expand first cycle
                         combs = reshape(
-                            collect(Iterators.product((getdomain(a) for p ∈ cB0.domain)...)),
+                            collect(Iterators.product((getdomain(algebra) for p ∈ cB0.domain)...)),
                             (1,:)
                         )
                         ncombs = length(combs)
@@ -1264,11 +1009,11 @@ function hybridmvhsalphasat(
                                         for zi ∈ cB0.domain
                                             isbot(cB1.mvlt[(zi,z)]) && continue # <(zi,z) ≻ 0
                                             βi = mveval(r, (x,y), (zi,z), cB1)
-                                            if !isbot(βi) && !isbot(a.meet(β, βi))
+                                            if !isbot(βi) && !isbot(algebra.meet(β, βi))
                                                 Threads.lock(u) do
                                                     tj = HybridMVHSTableau{FiniteIndexTruth}(
                                                         false,
-                                                        (a.meet(βi, β), φ.children[1]),
+                                                        (algebra.meet(βi, β), φ.children[1]),
                                                         Interval(zi,z),
                                                         cB1,
                                                         l
@@ -1281,11 +1026,11 @@ function hybridmvhsalphasat(
                                         for ti ∈ cB0.domain
                                             isbot(cB1.mvlt[(z,ti)]) && continue # <(z,ti) ≻ 0
                                             βi = mveval(r, (x,y), (z,ti), cB1)
-                                            if !isbot(βi) && !isbot(a.meet(β, βi))
+                                            if !isbot(βi) && !isbot(algebra.meet(β, βi))
                                                 Threads.lock(u) do
                                                     tj = HybridMVHSTableau{FiniteIndexTruth}(
                                                         false,
-                                                        (a.meet(βi, β), φ.children[1]),
+                                                        (algebra.meet(βi, β), φ.children[1]),
                                                         Interval(z,ti),
                                                         cB1,
                                                         l
@@ -1308,15 +1053,15 @@ function hybridmvhsalphasat(
 
                                         # All possible combinations of values for new tuples
                                         for lttcombs ∈ reshape(
-                                            collect(Iterators.product((getdomain(a) for p ∈ cB1.domain)...)),
+                                            collect(Iterators.product((getdomain(algebra) for p ∈ cB1.domain)...)),
                                             (1,:)
                                         )
                                             for gttcombs ∈ reshape(
-                                                collect(Iterators.product((getdomain(a) for p ∈ cB1.domain)...)),
+                                                collect(Iterators.product((getdomain(algebra) for p ∈ cB1.domain)...)),
                                                 (1,:)
                                             )
                                                 for eqtcombs ∈ reshape(
-                                                    collect(Iterators.product((getdomain(a) for p ∈ cB1.domain)...)),
+                                                    collect(Iterators.product((getdomain(algebra) for p ∈ cB1.domain)...)),
                                                     (1,:)
                                                 )
                                                     for i ∈ 1:length(cB1.domain)
@@ -1331,11 +1076,11 @@ function hybridmvhsalphasat(
                                                         # in general, < is not commutative!
                                                         if !isbot(cB2.mvlt[(z,t)])  # <(z,t) ≻ 0
                                                             βi = mveval(r, (x,y), (z,t), cB2)
-                                                            if !isbot(βi) && !isbot(a.meet(β, βi))
+                                                            if !isbot(βi) && !isbot(algebra.meet(β, βi))
                                                                 Threads.lock(u) do
                                                                     tj = HybridMVHSTableau{FiniteIndexTruth}(
                                                                         false,
-                                                                        (a.meet(βi, β), φ.children[1]),
+                                                                        (algebra.meet(βi, β), φ.children[1]),
                                                                         Interval(z,t),
                                                                         cB2,
                                                                         l
@@ -1346,11 +1091,11 @@ function hybridmvhsalphasat(
                                                             end
                                                         else    # <(t,z) ≻ 0
                                                             βi = mveval(r, (x,y), (t,z), cB2)
-                                                            if !isbot(βi) && !isbot(a.meet(β, βi))
+                                                            if !isbot(βi) && !isbot(algebra.meet(β, βi))
                                                                 Threads.lock(u) do
                                                                     tj = HybridMVHSTableau{FiniteIndexTruth}(
                                                                         false,
-                                                                        (a.meet(βi, β), φ.children[1]),
+                                                                        (algebra.meet(βi, β), φ.children[1]),
                                                                         Interval(t,z),
                                                                         cB2,
                                                                         l
@@ -1374,56 +1119,60 @@ function hybridmvhsalphasat(
                         end
                         !newleaves && close!(l)
                     end
-                elseif en.judgement && !isbot(β)
-                    # T⪰
-                    verbose && println("T⪰")
-                    for l ∈ findleaves(en)
-                        ti = l
-                        newnodes = false
-                        for γ in maximalmembers(a, β)
-                            if !findtableau(ti, false, (φ, γ), en.interval)
-                                newnodes = true
-                                ti = HybridMVHSTableau{FiniteIndexTruth}(
-                                    false,
-                                    (φ, γ),
-                                    en.interval,
-                                    l.constraintsystem,
-                                    ti
-                                )
-                                push!(metricheaps, ti)
-                            end
-                        end
-                        !newnodes && l == node && push!(metricheaps, node)
-                    end
-                elseif !en.judgement && !isbot(β)
-                    # F⪰
-                    verbose && println("F⪰")
-                    for l ∈ findleaves(en)
-                        newnodes = false
-                        for βi in maximalmembers(a, β)
-                            newnodes = true
-                            if !findtableau(l, true, (φ, βi), en.interval)
-                                ti = HybridMVHSTableau{FiniteIndexTruth}(
-                                    true,
-                                    (φ, βi),
-                                    en.interval,
-                                    l.constraintsystem,
-                                    l
-                                )
-                                push!(metricheaps, ti)
-                            else  # Here there should be a branch and I need to keep track of it
-                                ti = HybridMVHSTableau{FiniteIndexTruth}(   # Fake node (always true)
-                                    true,
-                                    (FiniteIndexTruth(1), FiniteIndexTruth(1)),
-                                    en.interval,
-                                    l.constraintsystem,
-                                    l
-                                )
-                                push!(metricheaps, ti)
-                            end
-                        end
-                        !newnodes && l == node && push!(metricheaps, node)
-                    end
+                # elseif en.judgement && !isbot(β)
+                #     # T⪰
+                #     verbose && println("T⪰")
+                #     for l ∈ findleaves(en)
+                #         ti = l
+                #         newnodes = false
+                #         for γ in maximalmembers(a, β)
+                #             if !findtableau(ti, false, (φ, γ), en.interval)
+                #                 newnodes = true
+                #                 ti = HybridMVHSTableau{FiniteIndexTruth}(
+                #                     false,
+                #                     (φ, γ),
+                #                     en.interval,
+                #                     l.constraintsystem,
+                #                     ti
+                #                 )
+                #                 push!(metricheaps, ti)
+                #             end
+                #         end
+                #         !newnodes && l == node && push!(metricheaps, node)
+                #     end
+                # elseif !en.judgement && !isbot(β)
+                #     # F⪰
+                #     verbose && println("F⪰")
+                #     for l ∈ findleaves(en)
+                #         newnodes = false
+                #         for βi in maximalmembers(a, β)
+                #             newnodes = true
+                #             if !findtableau(l, true, (φ, βi), en.interval)
+                #                 ti = HybridMVHSTableau{FiniteIndexTruth}(
+                #                     true,
+                #                     (φ, βi),
+                #                     en.interval,
+                #                     l.constraintsystem,
+                #                     l
+                #                 )
+                #                 push!(metricheaps, ti)
+                #             else  # Here there should be a branch and I need to keep track of it
+                #                 ti = HybridMVHSTableau{FiniteIndexTruth}(   # Fake node (always true)
+                #                     true,
+                #                     (FiniteIndexTruth(1), FiniteIndexTruth(1)),
+                #                     en.interval,
+                #                     l.constraintsystem,
+                #                     l
+                #                 )
+                #                 push!(metricheaps, ti)
+                #             end
+                #         end
+                #         !newnodes && l == node && push!(metricheaps, node)
+                #     end
+                # Error
+                elseif !isa(φ, Atom) && token(β) ∉ [∧, ∨, →]
+                    error("Unrecognized operator $(token(φ)).")
+                # Base case
                 else
                     # No condition matched, pushing node back into metricheaps
                     push!(metricheaps, node)
@@ -1431,142 +1180,203 @@ function hybridmvhsalphasat(
             elseif en.boundingimplication isa Tuple{Formula, Truth}
                 φ = en.boundingimplication[1]
                 β = en.boundingimplication[2]
+                # Branch Closure Conditions
                 if !en.judgement && istop(β)
                     # X4
                     verbose && println("X4")
                     close!(en)
-                elseif en.judgement && token(φ) isa NamedConnective{:∨} && !istop(β)
-                    # T∨
-                    (ψ, ε) = children(φ)
-                    # Search for support tuples
-                    pairs = Set{NTuple{2,FiniteIndexTruth}}()
-                    for βi ∈ 1:N
-                        for γi ∈ 1:N
-                            if precedeq(a, a.join(FiniteIndexTruth(βi), FiniteIndexTruth(γi)), β)
-                                push!(pairs, (FiniteIndexTruth(βi), FiniteIndexTruth(γi)))
-                            end
-                        end
-                    end
-                    for p in pairs
-                        for q in pairs
-                            if precedeq(a, p[1], q[1]) && precedeq(a, p[2], q[2]) && p != q
-                                delete!(pairs, p)
-                            end
-                        end
-                    end
-                    for l ∈ findleaves(en)
-                        newnodes = false
-                        for pair in pairs
-                            newnodes = true
-                            if !findtableau(l, true, (ψ, pair[1]), en.interval)
-                                t1 = HybridMVHSTableau{FiniteIndexTruth}(
-                                    true,
-                                    (ψ, pair[1]),
-                                    en.interval,
-                                    l.constraintsystem,
-                                    l
-                                )
-                                push!(metricheaps, t1)
-                                if !findtableau(t1, true, (ε, pair[2]), en.interval)
-                                    t2 = HybridMVHSTableau{FiniteIndexTruth}(
-                                        true,
-                                        (ε, pair[2]),
-                                        en.interval,
-                                        t1.constraintsystem,
-                                        t1
-                                    )
-                                    push!(metricheaps, t2)
-                                end
-                            else
-                                if !findtableau(l, true, (ε, pair[2]), en.interval)
-                                    t2 = HybridMVHSTableau{FiniteIndexTruth}(
-                                        true,
-                                        (ε, pair[2]),
-                                        en.interval,
-                                        l.constraintsystem,
-                                        l
-                                    )
-                                    push!(metricheaps, t2)
-                                else  # Here there should be a branch and I need to keep track of it
-                                    ti = HybridMVHSTableau{FiniteIndexTruth}(   # Fake node (always true)
-                                        true,
-                                        (FiniteIndexTruth(1), FiniteIndexTruth(1)),
-                                        en.interval,
-                                        l.constraintsystem,
-                                        l
-                                    )
-                                    push!(metricheaps, ti)
-                                end
-                            end
-                        end
-                        !newnodes && l == node && push!(metricheaps, node)
-                    end
-                elseif !en.judgement && token(φ) isa NamedConnective{:∨} && !istop(β)
-                    # F∨
-                    (ψ, ε) = children(φ)
-                    # Search for support tuples
-                    pairs = Set{NTuple{2,FiniteIndexTruth}}()
-                    for βi ∈ 1:N
-                        for γi ∈ 1:N
-                            if !precedeq(a, a.join(FiniteIndexTruth(βi), FiniteIndexTruth(γi)), β)
-                                push!(pairs, (FiniteIndexTruth(βi), FiniteIndexTruth(γi)))
-                            end
-                        end
-                    end
-                    for p in pairs
-                        for q in pairs
-                            if precedeq(a, q[1], p[1]) && precedeq(a, q[2], p[2]) && p != q
-                                delete!(pairs, p)
-                            end
-                        end
-                    end
-                    for l ∈ findleaves(en)
-                        newnodes = false
-                        for pair in pairs
-                            newnodes = true
-                            if !findtableau(l, true, (pair[1], ψ), en.interval)
-                                t1 = HybridMVHSTableau{FiniteIndexTruth}(
-                                    true,
-                                    (pair[1], ψ),
-                                    en.interval,
-                                    l.constraintsystem,
-                                    l
-                                )
-                                push!(metricheaps, t1)
-                                if !findtableau(l, true, (pair[2], ε), en.interval)
-                                    t2 = HybridMVHSTableau{FiniteIndexTruth}(
-                                        true,
-                                        (pair[2], ε),
-                                        en.interval,
-                                        t1.constraintsystem,
-                                        t1
-                                    )
-                                    push!(metricheaps, t2)
-                                end
-                            else
-                                if !findtableau(l, true, (pair[2], ε), en.interval)
-                                    t2 = HybridMVHSTableau{FiniteIndexTruth}(
-                                        true,
-                                        (pair[2], ε),
-                                        en.interval,
-                                        l.constraintsystem,
-                                        l
-                                    )
-                                    push!(metricheaps, t2)
-                                else  # Here there should be a branch and I need to keep track of it
-                                    ti = HybridMVHSTableau{FiniteIndexTruth}(   # Fake node (always true)
-                                        true,
-                                        (FiniteIndexTruth(1), FiniteIndexTruth(1)),
-                                        en.interval,
-                                        l.constraintsystem,
-                                        l
-                                    )
-                                    push!(metricheaps, ti)
-                                end
-                            end
-                        end
-                        !newnodes && l == node && push!(metricheaps, node)
-                    end
+                elseif findsimilar(en, algebra)
+                    close!(en)
+               # Strong conjunction Rules 2
+            elseif en.judgement && token(φ) isa NamedConnective{:∧} && !istop(β)
+                # T((A∧B)→t) case
+                (a, b) = children(φ)
+                x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
+                xsmtc = "(assert (or"
+                ysmtc = "(assert (or"
+                for value in 1:N
+                    xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
+                    ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
+                end
+                xsmtc *= "))"
+                ysmtc *= "))"
+                newsmtc = [
+                    "(declare-const x$(string(cycle)) A1)",
+                    "(declare-const y$(string(cycle)) A1)",
+                    xsmtc,
+                    ysmtc                
+                ]
+                if isa(β, FiniteIndexTruth)
+                    push!(newsmtc,"(assert (precedeq (monoid x$(string(cycle)) y$(string(cycle))) a$(β.index)))")
+                elseif isa(β, FiniteTruth)
+                    push!(newsmtc,"(assert (precedeq (monoid x$(string(cycle)) y$(string(cycle))) $(β.label)))")
+                else
+                    error("Wrong truth type")
+                end
+                for l in leaves(en)                    
+                    fta = HybridTableau(SignedFormula(true, (a, x)), l)
+                    push!(metricheaps, fta)
+                    ftb = HybridTableau(SignedFormula(true, (b, y)), fta, newsmtc)
+                    push!(metricheaps, ftb)
+                end                
+            elseif !en.judgement && token(φ) isa NamedConnective{:∧} && !istop(β)
+                # F((A∧B)→t) case
+                (a, b) = children(φ)
+                x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
+                xsmtc = "(assert (or"
+                ysmtc = "(assert (or"
+                for value in 1:N
+                    xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
+                    ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
+                end
+                xsmtc *= "))"
+                ysmtc *= "))"
+                newsmtc = [
+                    "(declare-const x$(string(cycle)) A1)",
+                    "(declare-const y$(string(cycle)) A1)",
+                    xsmtc,
+                    ysmtc                
+                ]
+                if isa(β, FiniteIndexTruth)
+                    push!(newsmtc,"(assert (not (precedeq (monoid x$(string(cycle)) y$(string(cycle))) a$(β.index))))")
+                elseif isa(β, FiniteTruth)
+                    push!(newsmtc,"(assert (not (precedeq (monoid x$(string(cycle)) y$(string(cycle))) $(β.label))))")
+                else
+                    error("Wrong truth type")
+                end
+                for l in leaves(en)                    
+                    fta = HybridTableau(SignedFormula(true, (x, a)), l)
+                    push!(metricheaps, fta)
+                    ftb = HybridTableau(SignedFormula(true, (y, b)), fta, newsmtc)
+                    push!(metricheaps, ftb)
+                end         
+            # Strong disjunction rules 1
+            elseif en.judgement && token(φ) isa NamedConnective{:∨} && !istop(β)
+                # T((A∨B)→t) case
+                (a, b) = children(φ)
+                x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
+                xsmtc = "(assert (or"
+                ysmtc = "(assert (or"
+                for value in 1:N
+                    xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
+                    ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
+                end
+                xsmtc *= "))"
+                ysmtc *= "))"
+                newsmtc = [
+                    "(declare-const x$(string(cycle)) A1)",
+                    "(declare-const y$(string(cycle)) A1)",
+                    xsmtc,
+                    ysmtc                    
+                ]
+                if isa(β, FiniteIndexTruth)
+                    push!(newsmtc,"(assert (precedeq (join x$(string(cycle)) y$(string(cycle))) a$(β.index)))")
+                elseif isa(β, FiniteTruth)
+                    push!(newsmtc,"(assert (precedeq (join x$(string(cycle)) y$(string(cycle))) $(β.label)))")
+                else
+                    error("Wrong truth type")
+                end
+                for l in leaves(en)                    
+                    fta = HybridTableau(SignedFormula(true, (a, x)), l)
+                    push!(metricheaps, fta)
+                    ftb = HybridTableau(SignedFormula(true, (b, y)), fta, newsmtc)
+                    push!(metricheaps, ftb)
+                end       
+            elseif !en.judgement && token(φ) isa NamedConnective{:∨} && !istop(β)
+                # F((A∨B)→t) case
+                (a, b) = children(φ)
+                x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
+                xsmtc = "(assert (or"
+                ysmtc = "(assert (or"
+                for value in 1:N
+                    xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
+                    ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
+                end
+                xsmtc *= "))"
+                ysmtc *= "))"
+                newsmtc = [
+                    "(declare-const x$(string(cycle)) A1)",
+                    "(declare-const y$(string(cycle)) A1)",
+                    xsmtc,
+                    ysmtc                    
+                ]
+                if isa(β, FiniteIndexTruth)
+                    push!(newsmtc,"(assert (not (precedeq (join x$(string(cycle)) y$(string(cycle))) a$(β.index))))")
+                elseif isa(β, FiniteTruth)
+                    push!(newsmtc,"(assert (not (precedeq (join x$(string(cycle)) y$(string(cycle))) $(β.label))))")
+                else
+                    error("Wrong truth type")
+                end
+                for l in leaves(en)                    
+                    fta = HybridTableau(SignedFormula(true, (x, a)), l)
+                    push!(metricheaps, fta)
+                    ftb = HybridTableau(SignedFormula(true, (y, b)), fta, newsmtc)
+                    push!(metricheaps, ftb)
+                end    
+            # Implication Rules 2
+            elseif en.judgement && token(φ) isa NamedConnective{:→} && !istop(β)
+                # T((A→B)→t) case
+                (a, b) = children(φ)
+                x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
+                xsmtc = "(assert (or"
+                ysmtc = "(assert (or"
+                for value in 1:N
+                    xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
+                    ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
+                end
+                xsmtc *= "))"
+                ysmtc *= "))"
+                newsmtc = [
+                    "(declare-const x$(string(cycle)) A1)",
+                    "(declare-const y$(string(cycle)) A1)",
+                    xsmtc,
+                    ysmtc                    
+                ]
+                if isa(β, FiniteIndexTruth)
+                    push!(newsmtc,"(assert (precedeq (implication x$(string(cycle)) y$(string(cycle))) a$(β.index)))")
+                elseif isa(β, FiniteTruth)
+                    push!(newsmtc,"(assert (precedeq (implication x$(string(cycle)) y$(string(cycle))) $(β.label)))")
+                else
+                    error("Wrong truth type")
+                end
+                for l in leaves(en)                    
+                    fta = HybridTableau(SignedFormula(true, (x, a)), l)
+                    push!(metricheaps, fta)
+                    ftb = HybridTableau(SignedFormula(true, (b, y)), fta, newsmtc)
+                    push!(metricheaps, ftb)
+                end       
+            elseif !en.judgement && token(φ) isa NamedConnective{:→} && !istop(β)
+                # F((A→B)→t) case
+                (a, b) = children(φ)
+                x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
+                xsmtc = "(assert (or"
+                ysmtc = "(assert (or"
+                for value in 1:N
+                    xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
+                    ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
+                end
+                xsmtc *= "))"
+                ysmtc *= "))"
+                newsmtc = [
+                    "(declare-const x$(string(cycle)) A1)",
+                    "(declare-const y$(string(cycle)) A1)",
+                    xsmtc,
+                    ysmtc                    
+                ]
+                if isa(β, FiniteIndexTruth)
+                    push!(newsmtc,"(assert (not (precedeq (implication x$(string(cycle)) y$(string(cycle))) a$(β.index))))")
+                elseif isa(β, FiniteTruth)
+                    push!(newsmtc,"(assert (not (precedeq (implication x$(string(cycle)) y$(string(cycle))) $(β.label))))")
+                else
+                    error("Wrong truth type")
+                end
+                for l in leaves(en)                    
+                    fta = HybridTableau(SignedFormula(true, (a, x)), l)
+                    push!(metricheaps, fta)
+                    ftb = HybridTableau(SignedFormula(true, (y, b)), fta, newsmtc)
+                    push!(metricheaps, ftb)
+                end
+
                 elseif en.judgement && token(φ) isa DiamondRelationalConnective && !istop(β)
                     # T◊"
                     verbose && println("T◊")
@@ -1579,12 +1389,12 @@ function hybridmvhsalphasat(
                             for ti ∈ cB.domain
                                 isbot(cB.mvlt[(zi,ti)]) && continue # <(zi,ti) ≻ 0
                                 βi = mveval(r, (x,y), (zi,ti), cB)
-                                if !istop(βi) && !istop(a.implication(βi, β))
+                                if !istop(βi) && !istop(algebra.implication(βi, β))
                                     # Optimization 1 (int. node)
-                                    if !findtableau(tj,true,(φ.children[1], a.implication(βi, β)),Interval(zi,ti))
+                                    if !findtableau(tj,true,(φ.children[1], algebra.implication(βi, β)),Interval(zi,ti))
                                         tj = HybridMVHSTableau{FiniteIndexTruth}(
                                             true,
-                                            (φ.children[1], a.implication(βi, β)),
+                                            (φ.children[1], algebra.implication(βi, β)),
                                             Interval(zi,ti),
                                             cB,
                                             tj
@@ -1625,10 +1435,10 @@ function hybridmvhsalphasat(
                             for ti ∈ cB0.domain
                                 isbot(cB0.mvlt[(zi,ti)]) && continue # <(zi,ti) ≻ 0
                                 βi = mveval(r, (x,y), (zi,ti), cB0)
-                                if !istop(βi) && !istop(a.implication(βi, β))
+                                if !istop(βi) && !istop(algebra.implication(βi, β))
                                     tj = HybridMVHSTableau{FiniteIndexTruth}(
                                         false,
-                                        (φ.children[1], a.implication(βi, β)),
+                                        (φ.children[1], algebra.implication(βi, β)),
                                         Interval(zi,ti),
                                         cB0,
                                         l
@@ -1643,7 +1453,7 @@ function hybridmvhsalphasat(
 
                         # All possible combinations of values for new tuples (+ % d.e. opt.)
                         combs = reshape(
-                            collect(Iterators.product((getdomain(a) for p ∈ cB0.domain)...)),
+                            collect(Iterators.product((getdomain(algebra) for p ∈ cB0.domain)...)),
                             (1,:)
                         )
                         ncombs = length(combs)
@@ -1677,11 +1487,11 @@ function hybridmvhsalphasat(
                                         for zi ∈ cB0.domain
                                             isbot(cB1.mvlt[(zi,z)]) && continue # <(zi,z) ≻ 0
                                             βi = mveval(r, (x,y), (zi,z), cB1)
-                                            if !istop(βi) && !istop(a.implication(βi, β))
+                                            if !istop(βi) && !istop(algebra.implication(βi, β))
                                                 Threads.lock(u) do
                                                     tj = HybridMVHSTableau{FiniteIndexTruth}(
                                                         false,
-                                                        (φ.children[1], a.implication(βi, β)),
+                                                        (φ.children[1], algebra.implication(βi, β)),
                                                         Interval(zi,z),
                                                         cB1,
                                                         l
@@ -1694,11 +1504,11 @@ function hybridmvhsalphasat(
                                         for ti ∈ cB0.domain
                                             isbot(cB1.mvlt[(z,ti)]) && continue # <(z,ti) ≻ 0
                                             βi = mveval(r, (x,y), (z,ti), cB1)
-                                            if !istop(βi) && !istop(a.implication(βi, β))
+                                            if !istop(βi) && !istop(algebra.implication(βi, β))
                                                 Threads.lock(u) do
                                                     tj = HybridMVHSTableau{FiniteIndexTruth}(
                                                         false,
-                                                        (φ.children[1], a.implication(βi, β)),
+                                                        (φ.children[1], algebra.implication(βi, β)),
                                                         Interval(z,ti),
                                                         cB1,
                                                         l
@@ -1721,15 +1531,15 @@ function hybridmvhsalphasat(
 
                                         # All possible combinations of values for new tuples
                                         for lttcombs ∈ reshape(
-                                            collect(Iterators.product((getdomain(a) for p ∈ cB1.domain)...)),
+                                            collect(Iterators.product((getdomain(algebra) for p ∈ cB1.domain)...)),
                                             (1,:)
                                         )
                                             for gttcombs ∈ reshape(
-                                                collect(Iterators.product((getdomain(a) for p ∈ cB1.domain)...)),
+                                                collect(Iterators.product((getdomain(algebra) for p ∈ cB1.domain)...)),
                                                 (1,:)
                                             )
                                                 for eqtcombs ∈ reshape(
-                                                    collect(Iterators.product((getdomain(a) for p ∈ cB1.domain)...)),
+                                                    collect(Iterators.product((getdomain(algebra) for p ∈ cB1.domain)...)),
                                                     (1,:)
                                                 )
                                                     for i ∈ 1:length(cB1.domain)
@@ -1744,11 +1554,11 @@ function hybridmvhsalphasat(
                                                         # in general, < is not commutative!
                                                         if !isbot(cB2.mvlt[(z,t)])  # <(z,t) ≻ 0
                                                             βi = mveval(r, (x,y), (z,t), cB2)
-                                                            if !istop(βi) && !istop(a.implication(βi, β))
+                                                            if !istop(βi) && !istop(algebra.implication(βi, β))
                                                                 Threads.lock(u) do
                                                                     tj = HybridMVHSTableau{FiniteIndexTruth}(
                                                                         false,
-                                                                        (φ.children[1], a.implication(βi, β)),
+                                                                        (φ.children[1], algebra.implication(βi, β)),
                                                                         Interval(z,t),
                                                                         cB2,
                                                                         l
@@ -1759,11 +1569,11 @@ function hybridmvhsalphasat(
                                                             end
                                                         else    # <(t,z) ≻ 0
                                                             βi = mveval(r, (x,y), (t,z), cB2)
-                                                            if !istop(βi) && !istop(a.implication(βi, β))
+                                                            if !istop(βi) && !istop(algebra.implication(βi, β))
                                                                 Threads.lock(u) do
                                                                     tj = HybridMVHSTableau{FiniteIndexTruth}(
                                                                         false,
-                                                                        (φ.children[1], a.implication(βi, β)),
+                                                                        (φ.children[1], algebra.implication(βi, β)),
                                                                         Interval(t,z),
                                                                         cB2,
                                                                         l
@@ -1787,56 +1597,59 @@ function hybridmvhsalphasat(
                         end
                         !newleaves && close!(l)
                     end
-                elseif en.judgement && !istop(β)
-                    # T⪯
-                    verbose && println("T⪯")
-                    for l ∈ findleaves(en)
-                        ti = l
-                        newnodes = false
-                        for γ in minimalmembers(a, β)
-                            if !findtableau(ti, false, (γ, φ), en.interval)
-                                newnodes = true
-                                ti = HybridMVHSTableau{FiniteIndexTruth}(
-                                    false,
-                                    (γ, φ),
-                                    en.interval,
-                                    l.constraintsystem,
-                                    ti
-                                )
-                                push!(metricheaps, ti)
-                            end
-                        end
-                        !newnodes && l == node && push!(metricheaps, node)
-                    end
-                elseif !en.judgement && !istop(β)
-                    # F⪯
-                    verbose && println("F⪯")
-                    for l ∈ findleaves(en)
-                        newnodes = false
-                        for βi in minimalmembers(a, β)
-                            newnodes = true
-                            if !findtableau(l, true, (βi, φ), en.interval)
-                                ti = HybridMVHSTableau{FiniteIndexTruth}(
-                                    true,
-                                    (βi, φ),
-                                    en.interval,
-                                    l.constraintsystem,
-                                    l
-                                )
-                                push!(metricheaps, ti)
-                            else  # Here there should be a branch and I need to keep track of it
-                                ti = HybridMVHSTableau{FiniteIndexTruth}(   # Fake node (always true)
-                                    true,
-                                    (FiniteIndexTruth(1), FiniteIndexTruth(1)),
-                                    en.interval,
-                                    l.constraintsystem,
-                                    l
-                                )
-                                push!(metricheaps, ti)
-                            end
-                        end
-                        !newnodes && l == node && push!(metricheaps, node)
-                    end
+                # elseif en.judgement && !istop(β)
+                #     # T⪯
+                #     verbose && println("T⪯")
+                #     for l ∈ findleaves(en)
+                #         ti = l
+                #         newnodes = false
+                #         for γ in minimalmembers(a, β)
+                #             if !findtableau(ti, false, (γ, φ), en.interval)
+                #                 newnodes = true
+                #                 ti = HybridMVHSTableau{FiniteIndexTruth}(
+                #                     false,
+                #                     (γ, φ),
+                #                     en.interval,
+                #                     l.constraintsystem,
+                #                     ti
+                #                 )
+                #                 push!(metricheaps, ti)
+                #             end
+                #         end
+                #         !newnodes && l == node && push!(metricheaps, node)
+                #     end
+                # elseif !en.judgement && !istop(β)
+                #     # F⪯
+                #     verbose && println("F⪯")
+                #     for l ∈ findleaves(en)
+                #         newnodes = false
+                #         for βi in minimalmembers(a, β)
+                #             newnodes = true
+                #             if !findtableau(l, true, (βi, φ), en.interval)
+                #                 ti = HybridMVHSTableau{FiniteIndexTruth}(
+                #                     true,
+                #                     (βi, φ),
+                #                     en.interval,
+                #                     l.constraintsystem,
+                #                     l
+                #                 )
+                #                 push!(metricheaps, ti)
+                #             else  # Here there should be a branch and I need to keep track of it
+                #                 ti = HybridMVHSTableau{FiniteIndexTruth}(   # Fake node (always true)
+                #                     true,
+                #                     (FiniteIndexTruth(1), FiniteIndexTruth(1)),
+                #                     en.interval,
+                #                     l.constraintsystem,
+                #                     l
+                #                 )
+                #                 push!(metricheaps, ti)
+                #             end
+                #         end
+                #         !newnodes && l == node && push!(metricheaps, node)
+                #     end
+                # Error
+                elseif !isa(φ, Atom) && token(z[1]) ∉ [∧, ∨, →]
+                    error("Unrecognized operator $(token(φ)).")
                 else
                     # No condition matched, pushing node back into metricheaps
                     push!(metricheaps, node)
@@ -1864,54 +1677,26 @@ function hybridmvhsalphasat(
     if diamondexpansion < 0.0 || diamondexpansion > 1.0
         error("% diamond expansion must be between 0.0 and 1.0")
     end
-    # if !isa(α, T) α = convert(T, α) end
-    tableaux = Vector{HybridMVHSTableau}()
-    x, y = Point.(['A', 'B'])
-    for δ ∈ 1:N
-        δ == 1 && continue    # (1), δ == 1 act as istop(δ)
-        for β ∈ 1:N
-            β == 2 && continue    # <(x,y) ≻ 0, β == 2 act as isbot(β)
-            for γ ∈ 1:N
-                hafslos = HAFSLOS(
-                    [x, y],
-                    a,
-                    Dict(
-                        (x,x) => FiniteIndexTruth(2), (x,y) => FiniteIndexTruth(β),
-                        (y,x) => FiniteIndexTruth(γ), (y,y) => FiniteIndexTruth(2)
-                    ),
-                    Dict(
-                        (x,x) => FiniteIndexTruth(1), (x,y) => FiniteIndexTruth(δ),
-                        (y,x) => FiniteIndexTruth(δ), (y,y) => FiniteIndexTruth(1)
-                    )
-                )
-                try
-                    checkhafslos(hafslos)
-                    push!(
-                        tableaux,
-                        HybridMVHSTableau{FiniteIndexTruth}(
-                            true,
-                            (α, φ),
-                            Interval(x, y),
-                            hafslos
-                        )
-                    )
-                catch err
-                    verbose && println(sprint(showerror, err))
-                end
-            end
-        end
-    end
-    verbose && println("Starting with $(length(tableaux)) tableaux")
+    p1, p2 = Point.(["p1", "p2"])
+    constraintsystem = [p1, p2]
+    newsmtc = ""
+    newsmtc *= "(declare-const p1 A2)\n(declare-const p2 A2)\n"
+    newsmtc *= "(assert (distinct (mvlt p1 p2) a2))\n"
+    tableau = HybridMVHSTableau{FiniteIndexTruth}(
+        true,
+        (α, φ),
+        (p1, p2),
+        constraintsystem,
+        [newsmtc]
+    )
     metricheaps = Vector{MetricHeap}()   # Heaps to be used for node selection
     for metric ∈ metrics
         push!(metricheaps, MetricHeap(metric))
     end
-    for tableau ∈ tableaux
-        for metricheap ∈ metricheaps
-            push!(heap(metricheap), MetricHeapNode(metric(metricheap), tableau))
-        end
+    for metricheap ∈ metricheaps
+        push!(heap(metricheap), MetricHeapNode(metric(metricheap), tableau))
     end
-    r = hybridmvhsalphasat(metricheaps, choosenode, a, tableaux; verbose, timeout, diamondexpansion)
+    r = hybridmvhsalphasat(metricheaps, choosenode, a; verbose, timeout, diamondexpansion)
     
     !isnothing(r) && !r && diamondexpansion < 1.0 && @warn "WARNING: α-sat returned $r with % diamond expansion set to $diamondexpansion"
     return r

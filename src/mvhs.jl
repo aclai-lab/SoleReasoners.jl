@@ -1,5 +1,5 @@
 struct Point
-    label::Char
+    label::String
 end
 
 Base.show(io::IO, x::Point) = print(io, x.label)
