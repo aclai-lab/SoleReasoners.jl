@@ -342,6 +342,12 @@ expand!(t::MVHSTableau) = t.expanded = true
 
 function close!(t::MVHSTableau)
     t.closed = true
+    if !isroot(t)
+        filter!(e->e≠t,t.father.children)
+        if isempty(t.father.children)
+            close!(t.father)
+        end
+    end
     while !isempty(t.children)
         c = pop!(t.children)
         close!(c)
