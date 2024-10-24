@@ -38,7 +38,7 @@ Check if a structure (D, <, =) is a adequate fuzzy strictly linearly ordered set
 1. =(x,y) = 1 iff x = y
 2. =(x,y) = =(y,x)
 3. <(x,x) = 0
-4. <(x,z) ⪰ <(x,y)∩<(y,z)
+4. <(x,z) ⪰ <(x,y) ⋅ <(y,z)
 5. if <(x,y) ≻ 0 and <(y,z) ≻ 0 then <(x,z) ≻ 0
 6. if <(x,y) = 0 and <(y,x) = 0 then =(x,y) = 1
 7. if =(x,y) ≻ 0 then <(x,y) ≺ 1
@@ -740,16 +740,16 @@ function hybridmvhsalphasat(
                 verbose && println(node) # print satisfiable branch
                 return true
             else
-                ## check smtconstraints
-                smtfile = "(declare-sort A)\n"
+                # algebra
+                smtfile = "(declare-sort A1)\n"
                 for i ∈ 1:N
-                    smtfile *= "(declare-const a$i A)\n"
+                    smtfile *= "(declare-const a$i A1)\n"
                 end
                 smtfile *= "(assert (distinct"
                 for i ∈ 1:N
                     smtfile *= " a$i"
                 end
-                smtfile *= "))\n(declare-fun join (A A) A)\n(declare-fun meet (A A) A)\n(declare-fun monoid (A A) A)\n(declare-fun implication (A A) A)\n"
+                smtfile *= "))\n(declare-fun join (A1 A1) A1)\n(declare-fun meet (A1 A1) A1)\n(declare-fun monoid (A1 A1) A1)\n(declare-fun implication (A1 A1) A1)\n"
                 for i ∈ 1:N
                     for j ∈ 1:N
                         smtfile *= "(assert (= (join a$i a$j) a$(a.join(UInt8(i), UInt8(j)).index)))\n"
@@ -758,7 +758,20 @@ function hybridmvhsalphasat(
                         smtfile *= "(assert (= (implication a$i a$j) a$(a.implication(UInt8(i), UInt8(j)).index)))\n"
                     end
                 end
-                smtfile *= "(define-fun precedeq ((x A) (y A)) Bool (= (meet x y) x))\n"
+                smtfile *= "(define-fun precedeq ((x A1) (y A1)) Bool (= (meet x y) x))\n"
+                # order
+                smtfile *= "(declare-sort A2)\n"
+                smtfile *= "(declare-fun mveq (A2 A2) A1)\n"
+                smtfile *= "(declare-fun mvlt (A2 A2) A1)\n"
+                smtfile *= "(declare-const x A2)\n(declare-const y A2)\n(declare-const z A2)\n"
+                smtfile *= "(assert (= (= (mveq x y) a1) (= x y)))\n"                                                           # =(x,y) = 1 iff x = y
+                smtfile *= "(assert (= (mveq x y) (mveq y x)))\n"                                                               # =(x,y) = =(y,x)
+                smtfile *= "(assert (= (mvlt x x) a2))\n"                                                                       # <(x,x) = 0
+                smtfile *= "(assert (precedeq (meet (mvlt x y) (mvlt y z)) (mvlt x z)))\n"                                      # <(x,z) ⪰ <(x,y) ⋅ <(y,z)
+                smtfile *= "(assert (=> (and (distinct (mvlt x y) a2) (distinct (mvlt y z) a2)) (distinct (mvlt x z) a2)))\n"   # if <(x,y) ≻ 0 and <(y,z) ≻ 0 then <(x,z) ≻ 0
+                smtfile *= "(assert (=> (and (= (mvlt x y) a2) (= (mvlt y x) a2)) (= (mveq x y) a1)))\n"                        # if <(x,y) = 0 and <(y,x) = 0 then =(x,y) = 1
+                smtfile *= "(assert (=> (distinct (mveq x y) a2) (distinct (mvlt x y) a1)))"                                    # if =(x,y) ≻ 0 then <(x,y) ≺ 1
+                # check smtconstraints
                 for str ∈ node.smtconstraints
                     smtfile *= str * "\n"
                 end
