@@ -492,7 +492,7 @@ function findtableau(
         Tuple{Formula,T},
         Tuple{T,T}
     },
-    i::Interval
+    i::Tuple{Point,Point}
 ) where {
     T<:Truth
 }
@@ -598,14 +598,13 @@ function hybridmvhsalphasat(
                 smtfile *= "(declare-sort A2)\n"
                 smtfile *= "(declare-fun mveq (A2 A2) A1)\n"
                 smtfile *= "(declare-fun mvlt (A2 A2) A1)\n"
-                smtfile *= "(declare-const x A2)\n(declare-const y A2)\n(declare-const z A2)\n"
-                smtfile *= "(assert (= (= (mveq x y) a1) (= x y)))\n"                                                           # =(x,y) = 1 iff x = y
-                smtfile *= "(assert (= (mveq x y) (mveq y x)))\n"                                                               # =(x,y) = =(y,x)
-                smtfile *= "(assert (= (mvlt x x) a2))\n"                                                                       # <(x,x) = 0
-                smtfile *= "(assert (precedeq (meet (mvlt x y) (mvlt y z)) (mvlt x z)))\n"                                      # <(x,z) ⪰ <(x,y) ⋅ <(y,z)
-                smtfile *= "(assert (=> (and (distinct (mvlt x y) a2) (distinct (mvlt y z) a2)) (distinct (mvlt x z) a2)))\n"   # if <(x,y) ≻ 0 and <(y,z) ≻ 0 then <(x,z) ≻ 0
-                smtfile *= "(assert (=> (and (= (mvlt x y) a2) (= (mvlt y x) a2)) (= (mveq x y) a1)))\n"                        # if <(x,y) = 0 and <(y,x) = 0 then =(x,y) = 1
-                smtfile *= "(assert (=> (distinct (mveq x y) a2) (distinct (mvlt x y) a1)))\n"                                  # if =(x,y) ≻ 0 then <(x,y) ≺ 1
+                smtfile *= "(assert (forall ((x A2) (y A2)) (= (= (mveq x y) a1) (= x y))))\n"                                                                   # =(x,y) = 1 iff x = y
+                smtfile *= "(assert (forall ((x A2) (y A2)) (= (mveq x y) (mveq y x))))\n"                                                                       # =(x,y) = =(y,x)
+                smtfile *= "(assert (forall ((x A2)) (= (mvlt x x) a2)))\n"                                                                                      # <(x,x) = 0
+                smtfile *= "(assert (forall ((x A2) (y A2) (z A2)) (precedeq (meet (mvlt x y) (mvlt y z)) (mvlt x z))))\n"                                       # <(x,z) ⪰ <(x,y) ⋅ <(y,z)
+                smtfile *= "(assert (forall ((x A2) (y A2) (z A2)) (=> (and (distinct (mvlt x y) a2) (distinct (mvlt y z) a2)) (distinct (mvlt x z) a2))))\n"    # if <(x,y) ≻ 0 and <(y,z) ≻ 0 then <(x,z) ≻ 0
+                smtfile *= "(assert (forall ((x A2) (y A2)) (=> (and (= (mvlt x y) a2) (= (mvlt y x) a2)) (= (mveq x y) a1))))\n"                                # if <(x,y) = 0 and <(y,x) = 0 then =(x,y) = 1
+                smtfile *= "(assert (forall ((x A2) (y A2)) (=> (distinct (mveq x y) a2) (distinct (mvlt x y) a1))))\n"                                          # if =(x,y) ≻ 0 then <(x,y) ≺ 1
                 # check smtconstraints
                 for str ∈ node.smtconstraints
                     smtfile *= str * "\n"
@@ -719,8 +718,8 @@ function hybridmvhsalphasat(
                         xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
                         ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
                     end
-                    xsmtc *= "))"
-                    ysmtc *= "))"
+                    xsmtc *= "))\n"
+                    ysmtc *= "))\n"
                     newsmtc = [
                         "(declare-const x$(string(cycle)) A1)",
                         "(declare-const y$(string(cycle)) A1)",
@@ -750,8 +749,8 @@ function hybridmvhsalphasat(
                         xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
                         ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
                     end
-                    xsmtc *= "))"
-                    ysmtc *= "))"
+                    xsmtc *= "))\n"
+                    ysmtc *= "))\n"
                     newsmtc = [
                         "(declare-const x$(string(cycle)) A1)",
                         "(declare-const y$(string(cycle)) A1)",
@@ -782,8 +781,8 @@ function hybridmvhsalphasat(
                         xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
                         ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
                     end
-                    xsmtc *= "))"
-                    ysmtc *= "))"
+                    xsmtc *= "))\n"
+                    ysmtc *= "))\n"
                     newsmtc = [
                         "(declare-const x$(string(cycle)) A1)",
                         "(declare-const y$(string(cycle)) A1)",
@@ -813,8 +812,8 @@ function hybridmvhsalphasat(
                         xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
                         ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
                     end
-                    xsmtc *= "))"
-                    ysmtc *= "))"
+                    xsmtc *= "))\n"
+                    ysmtc *= "))\n"
                     newsmtc = [
                         "(declare-const x$(string(cycle)) A1)",
                         "(declare-const y$(string(cycle)) A1)",
@@ -845,8 +844,8 @@ function hybridmvhsalphasat(
                         xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
                         ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
                     end
-                    xsmtc *= "))"
-                    ysmtc *= "))"
+                    xsmtc *= "))\n"
+                    ysmtc *= "))\n"
                     newsmtc = [
                         "(declare-const x$(string(cycle)) A1)",
                         "(declare-const y$(string(cycle)) A1)",
@@ -876,8 +875,8 @@ function hybridmvhsalphasat(
                         xsmtc *= " (= x$(string(cycle)) a$(string(value)))"
                         ysmtc *= " (= y$(string(cycle)) a$(string(value)))"
                     end
-                    xsmtc *= "))"
-                    ysmtc *= "))"
+                    xsmtc *= "))\n"
+                    ysmtc *= "))\n"
                     newsmtc = [
                         "(declare-const x$(string(cycle)) A1)",
                         "(declare-const y$(string(cycle)) A1)",
@@ -901,35 +900,48 @@ function hybridmvhsalphasat(
                 elseif en.judgement && token(φ) isa BoxRelationalConnective && !isbot(β)
                     # T□"
                     verbose && println("T□")
+                    ψ = children(φ)[1]
                     for l ∈ findleaves(en)
                         r = SoleLogics.relation(token(φ))
-                        (x, y) = (en.interval.x, en.interval.y)
+                        (x, y) = en.interval
                         cB = l.constraintsystem
                         tj = l
-                        for zi ∈ cB.domain
-                            for ti ∈ cB.domain
-                                isbot(cB.mvlt[(zi,ti)]) && continue # <(zi,ti) ≻ 0
-                                βi = mveval(r, (x,y), (zi,ti), cB)
-                                if !isbot(βi) && !isbot(a.meet(β, βi))
-                                    # Optimization 1 (int. node)
-                                    if !findtableau(tj,true,(a.meet(β, βi), φ.children[1]),Interval(zi,ti))
-                                        tj = HybridMVHSTableau{FiniteIndexTruth}(
-                                            true,
-                                            (a.meet(β, βi), φ.children[1]),
-                                            Interval(zi,ti),
-                                            cB,
-                                            tj
-                                        )
-                                        push!(metricheaps, tj)
-                                    end                                
+                        for i ∈ eachindex(cB)
+                            for j ∈ i+1:length(cB)
+                                # declare new const for γi = R([x,y,zi,ti])
+                                xi = FiniteTruth("x$(string(cycle))-$(string(i))-$(string(j))")
+                                yi = FiniteTruth("y$(string(cycle))-$(string(i))-$(string(j))")
+                                ysmtc = "(declare-const $(yi.label) A1)\n"
+                                ysmtc *= "(assert (= $(yi.label) $(mveval(r,(x,y),(cB[i],cB[j])))))\n"
+                                xsmtc = "(declare-const $(xi.label) A1)\n"
+                                xsmtc *= "(assert (or"
+                                ysmtc *= "(assert (or"
+                                for value in 1:N
+                                    xsmtc *= " (= $(xi.label) a$(string(value)))"
+                                    ysmtc *= " (= $(yi.label) a$(string(value)))"
                                 end
+                                xsmtc *= "))\n"
+                                ysmtc *= "))\n"
+                                if isa(β, FiniteIndexTruth)
+                                    xsmtc *= "(assert (= $(xi.label) (meet a$(β.index) $(yi.label))))\n"
+                                elseif isa(β, FiniteTruth)
+                                    xsmtc *= "(assert (= $(xi.label) (meet $(β.label) $(yi.label))))\n"
+                                else
+                                    error("Wrong truth type")
+                                end
+                                xsmtc *= "(assert (distinct $(mveval(r,(x,y),(cB[i],cB[j]))) a2))\n"  # R([x,y],[zi,ti]) ≻ 0
+                                tj = HybridMVHSTableau{FiniteIndexTruth}(
+                                    true,
+                                    (xi,ψ),
+                                    (cB[i],cB[j]),
+                                    cB,
+                                    tj,
+                                    [ysmtc, xsmtc]
+                                )
+                                push!(metricheaps, tj)  
                             end
                         end
-                        # Optimization 2 (leaf node)
-                        if en == l == tj
-                            verbose && printsolution(en)
-                            return true # found satisfiable branch
-                        else
+                        if !findtableau(l,true,l.boundingimplication,l.interval)    # TODO: check
                             tj = HybridMVHSTableau{FiniteIndexTruth}(
                                 true,
                                 (β, φ),
@@ -940,6 +952,7 @@ function hybridmvhsalphasat(
                             push!(metricheaps, tj)
                         end
                     end
+
                 elseif !en.judgement && token(φ) isa BoxRelationalConnective && !isbot(β)
                     # F□"
                     verbose && println("F□")
