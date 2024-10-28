@@ -945,7 +945,7 @@ function mvhsalphasat(
                             for eqzcombs ∈ shuffle(combs)[1:ceil(Int, ncombs*diamondexpansion)]
                                 # Must initialize at every (parallel) cycle!
                                 # cB1 = o(cB) ∪ {z}
-                                z = Point(Char(Int(last(cB0.domain).label)+1))
+                                z = Point(""*Char(Int(last(cB0.domain).label[1])+1))
                                 cB1 = AFSLOS(
                                     vcat(cB0.domain, z),
                                     cB0.algebra,
@@ -956,7 +956,7 @@ function mvhsalphasat(
                                 cB1.mveq[(z,z)] = ⊤
             
                                 # cB2 = cB1 ∪ {t} = o(cB) ∪ {z,t}
-                                t = Point(Char(Int(last(cB1.domain).label)+1))
+                                t = Point(""*Char(Int(last(cB1.domain).label[1])+1))
 
                                 for i ∈ 1:length(cB0.domain)
                                     cB1.mvlt[(cB0.domain[i],z)] = ltzcombs[i]
@@ -1078,7 +1078,9 @@ function mvhsalphasat(
                             end
                         end
                     end
-                    !newleaves && close!(l)
+                    Threads.lock(u) do
+                        !newleaves && close!(l)
+                    end
                 end
             elseif en.judgement && !isbot(β)
                 # T⪰
@@ -1273,7 +1275,7 @@ function mvhsalphasat(
                     end
                     !newnodes && l == node && push!(metricheaps, node)
                 end
-            elseif en.judgement && token(φ) isa DiamondRelationalConnective !istop(β)
+            elseif en.judgement && token(φ) isa DiamondRelationalConnective && !istop(β)
                 # T◊"
                 verbose && println("T◊")
                 for l ∈ findleaves(en)
@@ -1285,7 +1287,7 @@ function mvhsalphasat(
                         for ti ∈ cB.domain
                             isbot(cB.mvlt[(zi,ti)]) && continue # <(zi,ti) ≻ 0
                             βi = mveval(r, (x,y), (zi,ti), cB)
-                            if !istop(βi) && !istop(a.implication(βi, β))
+                            if !isbot(βi) && !istop(a.implication(βi, β))
                                 # Optimization 1 (int. node)
                                 if !findtableau(tj,true,(φ.children[1], a.implication(βi, β)),Interval(zi,ti))
                                     tj = MVHSTableau{T}(
@@ -1331,7 +1333,7 @@ function mvhsalphasat(
                         for ti ∈ cB0.domain
                             isbot(cB0.mvlt[(zi,ti)]) && continue # <(zi,ti) ≻ 0
                             βi = mveval(r, (x,y), (zi,ti), cB0)
-                            if !istop(βi) && !istop(a.implication(βi, β))
+                            if !isbot(βi) && !istop(a.implication(βi, β))
                                 tj = MVHSTableau{T}(
                                     false,
                                     (φ.children[1], a.implication(βi, β)),
@@ -1358,7 +1360,7 @@ function mvhsalphasat(
                             for eqzcombs ∈ shuffle(combs)[1:ceil(Int, ncombs*diamondexpansion)]
                                 # Must initialize at every (parallel) cycle!
                                 # cB1 = o(cB) ∪ {z}
-                                z = Point(Char(Int(last(cB0.domain).label)+1))
+                                z = Point(""*Char(Int(last(cB0.domain).label[1])+1))
                                 cB1 = AFSLOS(
                                     vcat(cB0.domain, z),
                                     cB0.algebra,
@@ -1369,7 +1371,7 @@ function mvhsalphasat(
                                 cB1.mveq[(z,z)] = ⊤
 
                                 # cB2 = cB1 ∪ {t} = o(cB) ∪ {z,t}
-                                t = Point(Char(Int(last(cB1.domain).label)+1))
+                                t = Point(""*Char(Int(last(cB1.domain).label[1])+1))
 
                                 for i ∈ 1:length(cB0.domain)
                                     cB1.mvlt[(cB0.domain[i],z)] = ltzcombs[i]
@@ -1383,7 +1385,7 @@ function mvhsalphasat(
                                     for zi ∈ cB0.domain
                                         isbot(cB1.mvlt[(zi,z)]) && continue # <(zi,z) ≻ 0
                                         βi = mveval(r, (x,y), (zi,z), cB1)
-                                        if !istop(βi) && !istop(a.implication(βi, β))
+                                        if !isbot(βi) && !istop(a.implication(βi, β))
                                             Threads.lock(u) do
                                                 tj = MVHSTableau{T}(
                                                     false,
@@ -1400,7 +1402,7 @@ function mvhsalphasat(
                                     for ti ∈ cB0.domain
                                         isbot(cB1.mvlt[(z,ti)]) && continue # <(z,ti) ≻ 0
                                         βi = mveval(r, (x,y), (z,ti), cB1)
-                                        if !istop(βi) && !istop(a.implication(βi, β))
+                                        if !isbot(βi) && !istop(a.implication(βi, β))
                                             Threads.lock(u) do
                                                 tj = MVHSTableau{T}(
                                                     false,
@@ -1450,7 +1452,7 @@ function mvhsalphasat(
                                                     # in general, < is not commutative!
                                                     if !isbot(cB2.mvlt[(z,t)])  # <(z,t) ≻ 0
                                                         βi = mveval(r, (x,y), (z,t), cB2)
-                                                        if !istop(βi) && !istop(a.implication(βi, β))
+                                                        if !isbot(βi) && !istop(a.implication(βi, β))
                                                             Threads.lock(u) do
                                                                 tj = MVHSTableau{T}(
                                                                     false,
@@ -1465,7 +1467,7 @@ function mvhsalphasat(
                                                         end
                                                     else    # <(t,z) ≻ 0
                                                         βi = mveval(r, (x,y), (t,z), cB2)
-                                                        if !istop(βi) && !istop(a.implication(βi, β))
+                                                        if !isbot(βi) && !istop(a.implication(βi, β))
                                                             Threads.lock(u) do
                                                                 tj = MVHSTableau{T}(
                                                                     false,
@@ -1491,7 +1493,9 @@ function mvhsalphasat(
                             end
                         end
                     end
-                    !newleaves && close!(l)
+                    Threads.lock(u) do
+                        !newleaves && close!(l)
+                    end
                 end
             elseif en.judgement && !istop(β)
                 # T⪯
@@ -1820,7 +1824,7 @@ function mvhsalphasat(
                             for eqzcombs ∈ shuffle(combs)[1:ceil(Int, ncombs*diamondexpansion)]
                                 # Must initialize at every (parallel) cycle!
                                 # cB1 = o(cB) ∪ {z}
-                                z = Point(Char(Int(last(cB0.domain).label)+1))
+                                z = Point(""*Char(Int(last(cB0.domain).label[1])+1))
                                 cB1 = AFSLOS(
                                     vcat(cB0.domain, z),
                                     cB0.algebra,
@@ -1831,7 +1835,7 @@ function mvhsalphasat(
                                 cB1.mveq[(z,z)] = ⊤
             
                                 # cB2 = cB1 ∪ {t} = o(cB) ∪ {z,t}
-                                t = Point(Char(Int(last(cB1.domain).label)+1))
+                                t = Point(""*Char(Int(last(cB1.domain).label[1])+1))
 
                                 for i ∈ 1:length(cB0.domain)
                                     cB1.mvlt[(cB0.domain[i],z)] = ltzcombs[i]
@@ -1953,7 +1957,9 @@ function mvhsalphasat(
                             end
                         end
                     end
-                    !newleaves && close!(l)
+                    Threads.lock(u) do
+                        !newleaves && close!(l)
+                    end
                 end
             elseif en.judgement && !isbot(β)
                 # T⪰
@@ -2070,7 +2076,7 @@ function mvhsalphasat(
                         for ti ∈ cB.domain
                             isbot(cB.mvlt[(zi,ti)]) && continue # <(zi,ti) ≻ 0
                             βi = mveval(r, (x,y), (zi,ti), cB)
-                            if !istop(βi) && !istop(a.implication(βi, β))
+                            if !isbot(βi) && !istop(a.implication(βi, β))
                                 # Optimization 1 (int. node)
                                 if !findtableau(tj,true,(φ.children[1], a.implication(βi, β)),Interval(zi,ti))
                                     tj = MVHSTableau{T}(
@@ -2114,7 +2120,7 @@ function mvhsalphasat(
                         for ti ∈ cB0.domain
                             isbot(cB0.mvlt[(zi,ti)]) && continue # <(zi,ti) ≻ 0
                             βi = mveval(r, (x,y), (zi,ti), cB0)
-                            if !istop(βi) && !istop(a.implication(βi, β))
+                            if !isbot(βi) && !istop(a.implication(βi, β))
                                 tj = MVHSTableau{T}(
                                     false,
                                     (φ.children[1], a.implication(βi, β)),
@@ -2141,7 +2147,7 @@ function mvhsalphasat(
                             for eqzcombs ∈ shuffle(combs)[1:ceil(Int, ncombs*diamondexpansion)]
                                 # Must initialize at every (parallel) cycle!
                                 # cB1 = o(cB) ∪ {z}
-                                z = Point(Char(Int(last(cB0.domain).label)+1))
+                                z = Point(""*Char(Int(last(cB0.domain).label[1])+1))
                                 cB1 = AFSLOS(
                                     vcat(cB0.domain, z),
                                     cB0.algebra,
@@ -2152,7 +2158,7 @@ function mvhsalphasat(
                                 cB1.mveq[(z,z)] = ⊤
 
                                 # cB2 = cB1 ∪ {t} = o(cB) ∪ {z,t}
-                                t = Point(Char(Int(last(cB1.domain).label)+1))
+                                t = Point(""*Char(Int(last(cB1.domain).label[1])+1))
 
                                 for i ∈ 1:length(cB0.domain)
                                     cB1.mvlt[(cB0.domain[i],z)] = ltzcombs[i]
@@ -2166,7 +2172,7 @@ function mvhsalphasat(
                                     for zi ∈ cB0.domain
                                         isbot(cB1.mvlt[(zi,z)]) && continue # <(zi,z) ≻ 0
                                         βi = mveval(r, (x,y), (zi,z), cB1)
-                                        if !istop(βi) && !istop(a.implication(βi, β))
+                                        if !isbot(βi) && !istop(a.implication(βi, β))
                                             Threads.lock(u) do
                                                 tj = MVHSTableau{T}(
                                                     false,
@@ -2183,7 +2189,7 @@ function mvhsalphasat(
                                     for ti ∈ cB0.domain
                                         isbot(cB1.mvlt[(z,ti)]) && continue # <(z,ti) ≻ 0
                                         βi = mveval(r, (x,y), (z,ti), cB1)
-                                        if !istop(βi) && !istop(a.implication(βi, β))
+                                        if !isbot(βi) && !istop(a.implication(βi, β))
                                             Threads.lock(u) do
                                                 tj = MVHSTableau{T}(
                                                     false,
@@ -2233,7 +2239,7 @@ function mvhsalphasat(
                                                     # in general, < is not commutative!
                                                     if !isbot(cB2.mvlt[(z,t)])  # <(z,t) ≻ 0
                                                         βi = mveval(r, (x,y), (z,t), cB2)
-                                                        if !istop(βi) && !istop(a.implication(βi, β))
+                                                        if !isbot(βi) && !istop(a.implication(βi, β))
                                                             Threads.lock(u) do
                                                                 tj = MVHSTableau{T}(
                                                                     false,
@@ -2248,7 +2254,7 @@ function mvhsalphasat(
                                                         end
                                                     else    # <(t,z) ≻ 0
                                                         βi = mveval(r, (x,y), (t,z), cB2)
-                                                        if !istop(βi) && !istop(a.implication(βi, β))
+                                                        if !isbot(βi) && !istop(a.implication(βi, β))
                                                             Threads.lock(u) do
                                                                 tj = MVHSTableau{T}(
                                                                     false,
@@ -2274,7 +2280,9 @@ function mvhsalphasat(
                             end
                         end
                     end
-                    !newleaves && close!(l)
+                    Threads.lock(u) do
+                        !newleaves && close!(l)
+                    end
                 end
             elseif en.judgement && !istop(β)
                 # T⪯
@@ -2355,7 +2363,7 @@ function mvhsalphasat(
     end
     if !isa(α, T) α = convert(T, α) end
     tableaux = Vector{MVHSTableau}()
-    x, y = Point.(['A', 'B'])
+    x, y = Point.(["A", "B"])
     for δ ∈ getdomain(a)
         istop(δ) && continue    # (1)
         for β ∈ getdomain(a)
@@ -2460,7 +2468,7 @@ function mvhsalphaprove(
     end
     if !isa(α, T) α = convert(T, α) end
     tableaux = Vector{MVHSTableau}()
-    x, y = Point.(['A', 'B'])
+    x, y = Point.(["A", "B"])
     for δ ∈ getdomain(a)
         istop(δ) && continue    # (1)
         for β ∈ getdomain(a)

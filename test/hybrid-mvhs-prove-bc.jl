@@ -5,11 +5,21 @@ using SoleLogics.ManyValuedLogics
 using SoleLogics: IA_O # momentary fix
 using SoleLogics.ManyValuedLogics: FiniteIndexFLewAlgebra, FiniteIndexTruth
 
+getidxformula(φ::Atom) = φ
+getidxformula(φ::T) where {T<:Truth} = convert(FiniteIndexTruth, φ)
+function getidxformula(φ::SyntaxBranch)
+    if token(φ) isa BoxRelationalConnective || token(φ) isa DiamondRelationalConnective
+        token(φ)(getidxformula(SoleLogics.children(φ)[1]))
+    else
+        token(φ)(getidxformula(SoleLogics.children(φ)[1]), getidxformula(SoleLogics.children(φ)[2]))
+    end
+end
+
 #################################################################################
 min_height = 1
-max_height = 3 # 5
+max_height = 2 # 5
 max_it = 999
-max_avg = 10 # 100
+max_avg = 100
 max_timeout = 30 # seconds
 #################################################################################
 
@@ -137,6 +147,7 @@ for a in algebras
                 a[4],
                 opweights=a[5]
             )
+            println("$t ⪯ $f")
             if !isbot(t) && SoleLogics.height(f) == height
                 j += 1
                 brng = MersenneTwister(i)
@@ -151,7 +162,7 @@ for a in algebras
                 t1 = time_ns()
                 hybrid_r = hybridmvhsalphaprove(
                     convert(FiniteIndexTruth, t),
-                    f,
+                    getidxformula(f),
                     a[3],
                     rng=brng,
                     timeout=max_timeout
