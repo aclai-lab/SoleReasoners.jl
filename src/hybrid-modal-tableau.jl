@@ -446,25 +446,6 @@ end
 
 using UUIDs
 
-function findformula(
-    t::HybridMVHSTableau,
-    j::Bool,
-    φ::Union{
-        Tuple{T,Formula},
-        Tuple{Formula,T},
-        Tuple{T,T}
-    }
-) where {
-    T<:Truth
-}
-    t.judgement == j && t.boundingimplication == φ && return true
-    while !isroot(t)
-        t = t.father
-        t.judgement == j && t.boundingimplication == φ && return true
-    end
-    return false
-end
-
 """
 Return true if there is a HybridMVHSTableau (j,φ,i) is the path from t to the root
 """
@@ -600,8 +581,9 @@ function hybridmvhsalphasat(
                 open("$(tempdir())/temp$uuid.smt2", "w") do file
                     write(file, smtfile)
                 end
+                # println("temp$uuid.smt2")
                 run(pipeline(`z3 $(tempdir())/temp$uuid.smt2`, stdout = b))
-                # rm("$(tempdir())/temp$uuid.smt2")
+                rm("$(tempdir())/temp$uuid.smt2")
                 if take!(b) == UInt8[0x73, 0x61, 0x74, 0x0a]
                     verbose && println(node) # print satisfiable branch
                     return true
@@ -642,10 +624,13 @@ function hybridmvhsalphasat(
                         if γ ∉ getdomain(algebra)
                             for l ∈ leaves(en)
                                 addconstraint!(l, "(assert (not (precedeq $(β.label) $(γ.label))))\n")
+                                addconstraint!(l, "(assert (distinct $(β.label) a2))\n")
+                                addconstraint!(l, "(assert (distinct $(γ.label) a1))\n")
                             end
                         elseif !istop(γ)
                             for l ∈ leaves(en)
                                 addconstraint!(l, "(assert (not (precedeq $(β.label) a$(γ.index))))\n")
+                                addconstraint!(l, "(assert (distinct $(β.label) a2))\n")
                             end
                         else
                             # F(X→⊤) case
@@ -655,6 +640,7 @@ function hybridmvhsalphasat(
                         if !isbot(β)
                             for l ∈ leaves(en)
                                 addconstraint!(l, "(assert (not (precedeq a$(β.index) $(γ.label))))\n")
+                                addconstraint!(l, "(assert (distinct $(γ.label) a1))\n")
                             end
                         else
                             # F(⊥→X) case
@@ -663,10 +649,10 @@ function hybridmvhsalphasat(
                     elseif precedeq(algebra, β, γ) && !isbot(β) && !istop(γ)
                         # F(a→b) where a≤b and a≠⊥ and b≠⊤ case
                         close!(en)
-                    elseif !en.judgement && isbot(β)
+                    elseif isbot(β)
                         # F(⊥→X) case
                         close!(en)
-                    elseif !en.judgement && istop(γ)
+                    elseif istop(γ)
                         # F(X→⊤) case
                         close!(en)
                     end
@@ -682,15 +668,25 @@ function hybridmvhsalphasat(
             elseif en.boundingimplication isa Tuple{Truth, Formula}
                 β = en.boundingimplication[1]
                 φ = en.boundingimplication[2]
-                if !en.judgement && isbot(β)
-                    # X3
-                    verbose && println("X3")
-                    close!(en)                
-                elseif findsimilar(en, algebra)
+                if !en.judgement
+                    if β ∉ getdomain(algebra)
+                        for l ∈ leaves(en)
+                            addconstraint!(l, "(assert (distinct $(β.label) a2))\n")
+                        end
+                    elseif isbot(β)
+                        # X3
+                        verbose && println("X3")
+                        close!(en)
+                        push!(metricheaps, node)
+                        continue
+                    end
+                end
+                if findsimilar(en, algebra)
                     # X5
                     verbose && println("X5")
                     close!(en)
-
+                    push!(metricheaps, node)
+                    continue
                 # Strong conjunction Rules 1
                 elseif en.judgement && token(φ) isa NamedConnective{:∧} && !isbot(β)
                     # T(t→(A∧B)) case
@@ -953,7 +949,7 @@ function hybridmvhsalphasat(
                             for q ∈ 0:length(cB1)
                                 cB2 = [cB1[1:q];p2;cB1[q+1:length(cB1)]]
                                 for i ∈ eachindex(cB2)
-                                    for j ∈ i:length(cB2) # i+1:length(cB2)
+                                    for j ∈ i+1:length(cB2) # i+1:length(cB2)
                                         xi = FiniteTruth("x$(string(cycle))-$(string(i))-$(string(j))")
                                         yi = FiniteTruth("y$(string(cycle))-$(string(i))-$(string(j))")
                                         ysmtc = "(declare-const $(yi.label) A1)\n"
@@ -1050,74 +1046,144 @@ function hybridmvhsalphasat(
                     # F◊2
                     verbose && println("F◊")
                     ψ = children(φ)[1]
+                    zi = FiniteTruth("z$(string(cycle))")
+                    zsmtc = "(declare-const $(zi.label) A1)\n"
+                    zsmtc *= "(assert (or"
+                    for value in 1:N
+                        zsmtc *= " (= $(zi.label) a$(string(value)))"
+                    end
+                    zsmtc *= "))\n"  
+                    if isa(β, FiniteIndexTruth)
+                        zsmtc *= "(assert (not (precedeq a$(β.index) $(zi.label))))\n"
+                    else
+                        zsmtc *= "(assert (not (precedeq $(β.label) $(zi.label))))\n"
+                    end
                     for l ∈ findleaves(en)
+                        addconstraint!(l, zsmtc)
                         r = SoleLogics.relation(token(φ))
                         (x, y) = en.interval
                         cB = l.constraintsystem
-                        p1 = Point("p$(string(cycle))-1")
-                        p2 = Point("p$(string(cycle))-2")
-                        p1smtc = "(declare-const $(p1.label) A2)\n"
-                        p2smtc = "(declare-const $(p2.label) A2)\n"
-                        for p ∈ 0:length(cB)
-                            cB1 = [cB[1:p];p1;cB[p+1:length(cB)]]
-                            for q ∈ 0:length(cB1)
-                                cB2 = [cB1[1:q];p2;cB1[q+1:length(cB1)]]
-                                for i ∈ eachindex(cB2)
-                                    for j ∈ i:length(cB2) # i+1:length(cB2)
-                                        xi = FiniteTruth("x$(string(cycle))-$(string(i))-$(string(j))")
-                                        yi = FiniteTruth("y$(string(cycle))-$(string(i))-$(string(j))")
-                                        ysmtc = "(declare-const $(yi.label) A1)\n"
-                                        xsmtc = "(declare-const $(xi.label) A1)\n"
-                                        xsmtc *= "(assert (or"
-                                        ysmtc *= "(assert (or"
-                                        for value in 1:N
-                                            xsmtc *= " (= $(xi.label) a$(string(value)))"
-                                            ysmtc *= " (= $(yi.label) a$(string(value)))"
-                                        end
-                                        xsmtc *= "))\n"
-                                        ysmtc *= "))\n"
-                                        ysmtc *= "(assert (= $(yi.label) $(mveval(r,(x,y),(cB2[i],cB2[j])))))\n"
-                                        # ysmtc *= "(assert (distinct $(yi.label) a2))\n"   
-                                        if isa(β, FiniteIndexTruth)
-                                            xsmtc *= "(assert (= $(xi.label) (implication a$(β.index) $(yi.label))))\n" #(implication $(yi.label) a$(β.index))))\n"
-                                        elseif isa(β, FiniteTruth)
-                                            xsmtc *= "(assert (= $(xi.label) (implication $(β.label) $(yi.label))))\n" #(implication $(yi.label) $(β.label))))\n"
-                                        else
-                                            error("Wrong truth type")
-                                        end
-                                        xsmtc *= "(assert (distinct $(xi.label) a2))\n"
-                                        tj = HybridMVHSTableau{FiniteIndexTruth}(
-                                            false,
-                                            (xi,ψ),
-                                            (cB2[i],cB2[j]),
-                                            cB2,
-                                            l,
-                                            [p1smtc, p2smtc, ysmtc, xsmtc]
-                                        )
-                                        push!(metricheaps, tj)  
-                                    end
+                        tj = l
+                        for i ∈ eachindex(cB)
+                            for j ∈ i+1:length(cB)
+                                # declare new const for γi = R([x,y,zi,ti])
+                                xi = FiniteTruth("x$(string(cycle))-$(string(i))-$(string(j))")
+                                yi = FiniteTruth("y$(string(cycle))-$(string(i))-$(string(j))")
+                                ysmtc = "(declare-const $(yi.label) A1)\n"
+                                xsmtc = "(declare-const $(xi.label) A1)\n"
+                                xsmtc *= "(assert (or"
+                                ysmtc *= "(assert (or"
+                                for value in 1:N
+                                    xsmtc *= " (= $(xi.label) a$(string(value)))"
+                                    ysmtc *= " (= $(yi.label) a$(string(value)))"
                                 end
+                                xsmtc *= "))\n"
+                                ysmtc *= "))\n"
+                                ysmtc *= "(assert (= $(yi.label) $(mveval(r,(x,y),(cB[i],cB[j])))))\n"
+                                # ysmtc *= "(assert (distinct $(yi.label) a2))\n"
+                                xsmtc *= "(assert (= $(xi.label) (implication $(yi.label) $(zi.label))))\n" #(implication $(yi.label) $(β.label))))\n"
+                                # xsmtc *= "(assert (distinct $(xi.label) a2))\n" 
+                                tj = HybridMVHSTableau{FiniteIndexTruth}(
+                                    true,
+                                    (xi,ψ),
+                                    (cB[i],cB[j]),
+                                    cB,
+                                    tj,
+                                    [ysmtc, xsmtc]
+                                )
+                                push!(metricheaps, tj)  
                             end
                         end
-                    end                            
-                # Error
-                # elseif !isa(φ, Atom) && token(β) ∉ [∧, ∨, →, DiamondRelationalConnective, BoxRelationalConnective]
-                #     error("Unrecognized operator $(token(φ)).")
-                # Base case
-                else
-                    # No condition matched, pushing node back into metricheaps
-                    push!(metricheaps, node)
-                end
-            elseif en.boundingimplication isa Tuple{Formula, Truth}
-                φ = en.boundingimplication[1]
-                β = en.boundingimplication[2]
-                # Branch Closure Conditions
-                if !en.judgement && istop(β)
+                        if !findtableau(l,true,l.boundingimplication,l.interval)    # TODO: check
+                            tj = HybridMVHSTableau{FiniteIndexTruth}(
+                                true,
+                                (zi, φ),
+                                en.interval,
+                                cB,
+                                tj
+                            )
+                            push!(metricheaps, tj)
+                        end
+                    end
+                    # for l ∈ findleaves(en)
+                    #     r = SoleLogics.relation(token(φ))
+                    #     (x, y) = en.interval
+                    #     cB = l.constraintsystem
+                    #     p1 = Point("p$(string(cycle))-1")
+                    #     p2 = Point("p$(string(cycle))-2")
+                    #     p1smtc = "(declare-const $(p1.label) A2)\n"
+                    #     p2smtc = "(declare-const $(p2.label) A2)\n"
+                    #     for p ∈ 0:length(cB)
+                    #         cB1 = [cB[1:p];p1;cB[p+1:length(cB)]]
+                    #         for q ∈ 0:length(cB1)
+                    #             cB2 = [cB1[1:q];p2;cB1[q+1:length(cB1)]]
+                    #             for i ∈ eachindex(cB2)
+                    #                 for j ∈ i+1:length(cB2) # i+1:length(cB2)
+                    #                     xi = FiniteTruth("x$(string(cycle))-$(string(i))-$(string(j))")
+                    #                     yi = FiniteTruth("y$(string(cycle))-$(string(i))-$(string(j))")
+                    #                     ysmtc = "(declare-const $(yi.label) A1)\n"
+                    #                     xsmtc = "(declare-const $(xi.label) A1)\n"
+                    #                     xsmtc *= "(assert (or"
+                    #                     ysmtc *= "(assert (or"
+                    #                     for value in 1:N
+                    #                         xsmtc *= " (= $(xi.label) a$(string(value)))"
+                    #                         ysmtc *= " (= $(yi.label) a$(string(value)))"
+                    #                     end
+                    #                     xsmtc *= "))\n"
+                    #                     ysmtc *= "))\n"
+                    #                     ysmtc *= "(assert (= $(yi.label) $(mveval(r,(x,y),(cB2[i],cB2[j])))))\n"
+                    #                     # ysmtc *= "(assert (distinct $(yi.label) a2))\n"   
+                    #                     if isa(β, FiniteIndexTruth)
+                    #                         xsmtc *= "(assert (= $(xi.label) (implication a$(β.index) $(yi.label))))\n" #(implication $(yi.label) a$(β.index))))\n"
+                    #                     elseif isa(β, FiniteTruth)
+                    #                         xsmtc *= "(assert (= $(xi.label) (implication $(β.label) $(yi.label))))\n" #(implication $(yi.label) $(β.label))))\n"
+                    #                     else
+                    #                         error("Wrong truth type")
+                    #                     end
+                    #                     xsmtc *= "(assert (distinct $(xi.label) a2))\n"
+                    #                     tj = HybridMVHSTableau{FiniteIndexTruth}(
+                    #                         false,
+                    #                         (xi,ψ),
+                    #                         (cB2[i],cB2[j]),
+                    #                         cB2,
+                    #                         l,
+                    #                         [p1smtc, p2smtc, ysmtc, xsmtc]
+                    #                     )
+                    #                     push!(metricheaps, tj)  
+                    #                 end
+                    #             end
+                    #         end
+                    #     end
+                    # end                            
+            # Error
+            # elseif !isa(φ, Atom) && token(β) ∉ [∧, ∨, →, DiamondRelationalConnective, BoxRelationalConnective]
+            #     error("Unrecognized operator $(token(φ)).")
+            # Base case
+            else
+                # No condition matched, pushing node back into metricheaps
+                push!(metricheaps, node)
+            end
+        elseif en.boundingimplication isa Tuple{Formula, Truth}
+            φ = en.boundingimplication[1]
+            β = en.boundingimplication[2]
+            # Branch Closure Conditions
+            if !en.judgement
+                if β ∉ getdomain(algebra)
+                    for l ∈ leaves(en)
+                        addconstraint!(l, "(assert (distinct $(β.label) a1))\n")
+                    end
+                elseif istop(β)
                     # X4
                     verbose && println("X4")
                     close!(en)
-                elseif findsimilar(en, algebra)
-                    close!(en)
+                    push!(metricheaps, node)
+                    continue
+                end
+            end
+            if findsimilar(en, algebra)
+                close!(en)
+                push!(metricheaps, node)
+                continue
                # Strong conjunction Rules 2
             elseif en.judgement && token(φ) isa NamedConnective{:∧} && !istop(β)
                 # T((A∧B)→t) case
@@ -1380,7 +1446,7 @@ function hybridmvhsalphasat(
                         for q ∈ 0:length(cB1)
                             cB2 = [cB1[1:q];p2;cB1[q+1:length(cB1)]]
                             for i ∈ eachindex(cB2)
-                                for j ∈ i:length(cB2) # i+1:length(cB2)
+                                for j ∈ i+1:length(cB2) # i+1:length(cB2)
                                     xi = FiniteTruth("x$(string(cycle))-$(string(i))-$(string(j))")
                                     yi = FiniteTruth("y$(string(cycle))-$(string(i))-$(string(j))")
                                     ysmtc = "(declare-const $(yi.label) A1)\n"
@@ -1490,7 +1556,7 @@ function hybridmvhsalphasat(
                         for q ∈ 0:length(cB1)
                             cB2 = [cB1[1:q];p2;cB1[q+1:length(cB1)]]
                             for i ∈ eachindex(cB2)
-                                for j ∈ i:length(cB2) # i+1:length(cB2)
+                                for j ∈ i+1:length(cB2) # i+1:length(cB2)
                                     xi = FiniteTruth("x$(string(cycle))-$(string(i))-$(string(j))")
                                     yi = FiniteTruth("y$(string(cycle))-$(string(i))-$(string(j))")
                                     ysmtc = "(declare-const $(yi.label) A1)\n"
