@@ -77,7 +77,7 @@ function checkafslos(afslos::AFSLOS)
                 !succeedeq(
                     afslos.algebra,
                     afslos.mvlt[(x,z)],
-                    afslos.algebra.meet(afslos.mvlt[(x,y)], afslos.mvlt[(y,z)])
+                    afslos.algebra.monoid(afslos.mvlt[(x,y)], afslos.mvlt[(y,z)])
                 ) && error("(D,<,=) is not a AFSLOS (4)")
                 if !isbot(afslos.mvlt[(x,y)]) && !isbot(afslos.mvlt[(y,z)])
                     isbot(afslos.mvlt[(x,z)]) && error("(D,<,=) is not a AFSLOS (5)")
@@ -120,25 +120,25 @@ function mveval(
     elseif r == SoleLogics.IA_L
         return c.mvlt[(y,z)]
     elseif r == SoleLogics.IA_B
-        return c.algebra.meet(c.mveq[(x,z)], c.mvlt[(t,y)])
+        return c.algebra.monoid(c.mveq[(x,z)], c.mvlt[(t,y)])
     elseif r == SoleLogics.IA_E
-        return c.algebra.meet(c.mvlt[(x,z)], c.mveq[(y,t)])
+        return c.algebra.monoid(c.mvlt[(x,z)], c.mveq[(y,t)])
     elseif r == SoleLogics.IA_D
-        return c.algebra.meet(c.mvlt[(x,z)], c.mvlt[(t,y)])
+        return c.algebra.monoid(c.mvlt[(x,z)], c.mvlt[(t,y)])
     elseif r == SoleLogics.IA_O
-        return c.algebra.meet(c.algebra.meet(c.mvlt[(x,z)], c.mvlt[(z,y)]), c.mvlt[(y,t)])
+        return c.algebra.monoid(c.algebra.monoid(c.mvlt[(x,z)], c.mvlt[(z,y)]), c.mvlt[(y,t)])
     elseif r == SoleLogics.IA_Ai
         return c.mveq[(t,x)]
     elseif r == SoleLogics.IA_Li
         return c.mvlt[(t,x)]
     elseif r == SoleLogics.IA_Bi
-        return c.algebra.meet(c.mveq[(z,x)], c.mvlt[(y,t)])
+        return c.algebra.monoid(c.mveq[(z,x)], c.mvlt[(y,t)])
     elseif r == SoleLogics.IA_Ei
-        return c.algebra.meet(c.mvlt[(z,x)], c.mveq[(t,y)])
+        return c.algebra.monoid(c.mvlt[(z,x)], c.mveq[(t,y)])
     elseif r == SoleLogics.IA_Di
-        return c.algebra.meet(c.mvlt[(z,x)], c.mvlt[(y,t)])
+        return c.algebra.monoid(c.mvlt[(z,x)], c.mvlt[(y,t)])
     elseif r == SoleLogics.IA_Oi
-        return c.algebra.meet(c.algebra.meet(c.mvlt[(z,x)], c.mvlt[(x,t)]), c.mvlt[(t,y)])
+        return c.algebra.monoid(c.algebra.monoid(c.mvlt[(z,x)], c.mvlt[(x,t)]), c.mvlt[(t,y)])
     else
         error("Relation $r not in HS")
     end
@@ -871,12 +871,12 @@ function mvhsalphasat(
                         for ti ∈ cB.domain
                             isbot(cB.mvlt[(zi,ti)]) && continue # <(zi,ti) ≻ 0
                             βi = mveval(r, (x,y), (zi,ti), cB)
-                            if !isbot(βi) && !isbot(a.meet(β, βi))
+                            if !isbot(βi) && !isbot(a.monoid(β, βi))
                                 # Optimization 1 (int. node)
-                                if !findtableau(tj,true,(a.meet(β, βi), φ.children[1]),Interval(zi,ti))
+                                if !findtableau(tj,true,(a.monoid(β, βi), φ.children[1]),Interval(zi,ti))
                                     tj = MVHSTableau{T}(
                                         true,
-                                        (a.meet(β, βi), φ.children[1]),
+                                        (a.monoid(β, βi), φ.children[1]),
                                         Interval(zi,ti),
                                         cB,
                                         tj
@@ -917,10 +917,10 @@ function mvhsalphasat(
                         for ti ∈ cB0.domain
                             isbot(cB0.mvlt[(zi,ti)]) && continue # <(zi,ti) ≻ 0
                             βi = mveval(r, (x,y), (zi,ti), cB0)
-                            if !isbot(βi) && !isbot(a.meet(β, βi))
+                            if !isbot(βi) && !isbot(a.monoid(β, βi))
                                 tj = MVHSTableau{T}(
                                     false,
-                                    (a.meet(βi, β), φ.children[1]),
+                                    (a.monoid(βi, β), φ.children[1]),
                                     Interval(zi,ti),
                                     cB0,
                                     l
@@ -970,11 +970,11 @@ function mvhsalphasat(
                                     for zi ∈ cB0.domain
                                         isbot(cB1.mvlt[(zi,z)]) && continue # <(zi,z) ≻ 0
                                         βi = mveval(r, (x,y), (zi,z), cB1)
-                                        if !isbot(βi) && !isbot(a.meet(β, βi))
+                                        if !isbot(βi) && !isbot(a.monoid(β, βi))
                                             Threads.lock(u) do
                                                 tj = MVHSTableau{T}(
                                                     false,
-                                                    (a.meet(βi, β), φ.children[1]),
+                                                    (a.monoid(βi, β), φ.children[1]),
                                                     Interval(zi,z),
                                                     cB1,
                                                     l
@@ -987,11 +987,11 @@ function mvhsalphasat(
                                     for ti ∈ cB0.domain
                                         isbot(cB1.mvlt[(z,ti)]) && continue # <(z,ti) ≻ 0
                                         βi = mveval(r, (x,y), (z,ti), cB1)
-                                        if !isbot(βi) && !isbot(a.meet(β, βi))
+                                        if !isbot(βi) && !isbot(a.monoid(β, βi))
                                             Threads.lock(u) do
                                                 tj = MVHSTableau{T}(
                                                     false,
-                                                    (a.meet(βi, β), φ.children[1]),
+                                                    (a.monoid(βi, β), φ.children[1]),
                                                     Interval(z,ti),
                                                     cB1,
                                                     l
@@ -1037,11 +1037,11 @@ function mvhsalphasat(
                                                     # in general, < is not commutative!
                                                     if !isbot(cB2.mvlt[(z,t)])  # <(z,t) ≻ 0
                                                         βi = mveval(r, (x,y), (z,t), cB2)
-                                                        if !isbot(βi) && !isbot(a.meet(β, βi))
+                                                        if !isbot(βi) && !isbot(a.monoid(β, βi))
                                                             Threads.lock(u) do
                                                                 tj = MVHSTableau{T}(
                                                                     false,
-                                                                    (a.meet(βi, β), φ.children[1]),
+                                                                    (a.monoid(βi, β), φ.children[1]),
                                                                     Interval(z,t),
                                                                     cB2,
                                                                     l
@@ -1052,11 +1052,11 @@ function mvhsalphasat(
                                                         end
                                                     else    # <(t,z) ≻ 0
                                                         βi = mveval(r, (x,y), (t,z), cB2)
-                                                        if !isbot(βi) && !isbot(a.meet(β, βi))
+                                                        if !isbot(βi) && !isbot(a.monoid(β, βi))
                                                             Threads.lock(u) do
                                                                 tj = MVHSTableau{T}(
                                                                     false,
-                                                                    (a.meet(βi, β), φ.children[1]),
+                                                                    (a.monoid(βi, β), φ.children[1]),
                                                                     Interval(t,z),
                                                                     cB2,
                                                                     l
@@ -1751,12 +1751,12 @@ function mvhsalphasat(
                         for ti ∈ cB.domain
                             isbot(cB.mvlt[(zi,ti)]) && continue # <(zi,ti) ≻ 0
                             βi = mveval(r, (x,y), (zi,ti), cB)
-                            if !isbot(βi) && !isbot(a.meet(β, βi))
+                            if !isbot(βi) && !isbot(a.monoid(β, βi))
                                 # Optimization 1 (int. node)
-                                if !findtableau(tj,true,(a.meet(β, βi), φ.children[1]),Interval(zi,ti))
+                                if !findtableau(tj,true,(a.monoid(β, βi), φ.children[1]),Interval(zi,ti))
                                     tj = MVHSTableau{T}(
                                         true,
-                                        (a.meet(β, βi), φ.children[1]),
+                                        (a.monoid(β, βi), φ.children[1]),
                                         Interval(zi,ti),
                                         cB,
                                         tj
@@ -1797,10 +1797,10 @@ function mvhsalphasat(
                         for ti ∈ cB0.domain
                             isbot(cB0.mvlt[(zi,ti)]) && continue # <(zi,ti) ≻ 0
                             βi = mveval(r, (x,y), (zi,ti), cB0)
-                            if !isbot(βi) && !isbot(a.meet(β, βi))
+                            if !isbot(βi) && !isbot(a.monoid(β, βi))
                                 tj = MVHSTableau{T}(
                                     false,
-                                    (a.meet(βi, β), φ.children[1]),
+                                    (a.monoid(βi, β), φ.children[1]),
                                     Interval(zi,ti),
                                     cB0,
                                     l
@@ -1849,11 +1849,11 @@ function mvhsalphasat(
                                     for zi ∈ cB0.domain
                                         isbot(cB1.mvlt[(zi,z)]) && continue # <(zi,z) ≻ 0
                                         βi = mveval(r, (x,y), (zi,z), cB1)
-                                        if !isbot(βi) && !isbot(a.meet(β, βi))
+                                        if !isbot(βi) && !isbot(a.monoid(β, βi))
                                             Threads.lock(u) do
                                                 tj = MVHSTableau{T}(
                                                     false,
-                                                    (a.meet(βi, β), φ.children[1]),
+                                                    (a.monoid(βi, β), φ.children[1]),
                                                     Interval(zi,z),
                                                     cB1,
                                                     l
@@ -1866,11 +1866,11 @@ function mvhsalphasat(
                                     for ti ∈ cB0.domain
                                         isbot(cB1.mvlt[(z,ti)]) && continue # <(z,ti) ≻ 0
                                         βi = mveval(r, (x,y), (z,ti), cB1)
-                                        if !isbot(βi) && !isbot(a.meet(β, βi))
+                                        if !isbot(βi) && !isbot(a.monoid(β, βi))
                                             Threads.lock(u) do
                                                 tj = MVHSTableau{T}(
                                                     false,
-                                                    (a.meet(βi, β), φ.children[1]),
+                                                    (a.monoid(βi, β), φ.children[1]),
                                                     Interval(z,ti),
                                                     cB1,
                                                     l
@@ -1916,11 +1916,11 @@ function mvhsalphasat(
                                                     # in general, < is not commutative!
                                                     if !isbot(cB2.mvlt[(z,t)])  # <(z,t) ≻ 0
                                                         βi = mveval(r, (x,y), (z,t), cB2)
-                                                        if !isbot(βi) && !isbot(a.meet(β, βi))
+                                                        if !isbot(βi) && !isbot(a.monoid(β, βi))
                                                             Threads.lock(u) do
                                                                 tj = MVHSTableau{T}(
                                                                     false,
-                                                                    (a.meet(βi, β), φ.children[1]),
+                                                                    (a.monoid(βi, β), φ.children[1]),
                                                                     Interval(z,t),
                                                                     cB2,
                                                                     l
@@ -1931,11 +1931,11 @@ function mvhsalphasat(
                                                         end
                                                     else    # <(t,z) ≻ 0
                                                         βi = mveval(r, (x,y), (t,z), cB2)
-                                                        if !isbot(βi) && !isbot(a.meet(β, βi))
+                                                        if !isbot(βi) && !isbot(a.monoid(β, βi))
                                                             Threads.lock(u) do
                                                                 tj = MVHSTableau{T}(
                                                                     false,
-                                                                    (a.meet(βi, β), φ.children[1]),
+                                                                    (a.monoid(βi, β), φ.children[1]),
                                                                     Interval(t,z),
                                                                     cB2,
                                                                     l

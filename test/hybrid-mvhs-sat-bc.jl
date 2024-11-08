@@ -16,8 +16,8 @@ function getidxformula(φ::SyntaxBranch)
 end
 
 #################################################################################
-min_height = 1
-max_height = 2 # 5
+min_height = 2
+max_height = 3 # 5
 max_it = 999
 max_avg = 100
 max_timeout = 30 # seconds
@@ -113,11 +113,11 @@ opweights6 = [8, 8, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
 
 algebras = [
     ("BA",   booleanalgebra,    convert(FiniteIndexFLewAlgebra, booleanalgebra), myoperators2, opweights2),
-    ("G3",   G3,                convert(FiniteIndexFLewAlgebra, G3),             myoperators3, opweights3),
-    ("Ł3",   Ł3,                convert(FiniteIndexFLewAlgebra, Ł3),             myoperators3, opweights3),
+    # ("G3",   G3,                convert(FiniteIndexFLewAlgebra, G3),             myoperators3, opweights3),
+    # ("Ł3",   Ł3,                convert(FiniteIndexFLewAlgebra, Ł3),             myoperators3, opweights3),
     # ("G4",   G4,                convert(FiniteIndexFLewAlgebra, G4),             myoperators4, opweights4),
     # ("Ł4",   Ł4,                convert(FiniteIndexFLewAlgebra, Ł4),             myoperators4, opweights4),
-    ("H4",   H4,                convert(FiniteIndexFLewAlgebra, H4),             myoperators4, opweights4),
+    # ("H4",   H4,                convert(FiniteIndexFLewAlgebra, H4),             myoperators4, opweights4),
     # ("G5",   G5,                convert(FiniteIndexFLewAlgebra, G5),             myoperators5, opweights5),
     # ("G6",   G6,                convert(FiniteIndexFLewAlgebra, G6),             myoperators6, opweights6),
     # ("H6_1", H6_1,              convert(FiniteIndexFLewAlgebra, H6_1),           myoperators6, opweights6),
@@ -147,7 +147,7 @@ for a in algebras
                 a[4],
                 opweights=a[5]
             )
-            # println("$t ⪯ $f")
+            println("$t ⪯ $f")
             if !isbot(t) && SoleLogics.height(f) == height
                 j += 1
                 brng = MersenneTwister(i)

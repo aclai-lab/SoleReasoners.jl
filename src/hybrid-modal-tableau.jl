@@ -30,25 +30,25 @@ function mveval(
     elseif r == SoleLogics.IA_L
         "(mvlt $(y.label) $(z.label))"
     elseif r == SoleLogics.IA_B
-        "(meet (mveq $(x.label) $(z.label)) (mvlt $(t.label) $(y.label)))"
+        "(monoid (mveq $(x.label) $(z.label)) (mvlt $(t.label) $(y.label)))"
     elseif r == SoleLogics.IA_E
-        "(meet (mvlt $(x.label) $(z.label)) (mveq $(y.label) $(t.label)))"
+        "(monoid (mvlt $(x.label) $(z.label)) (mveq $(y.label) $(t.label)))"
     elseif r == SoleLogics.IA_D
-        "(meet (mvlt $(x.label) $(z.label)) (mvlt $(t.label) $(y.label)))"
+        "(monoid (mvlt $(x.label) $(z.label)) (mvlt $(t.label) $(y.label)))"
     elseif r == SoleLogics.IA_O
-        "(meet (meet (mvlt $(x.label) $(z.label)) (mvlt $(z.label) $(y.label))) (mvlt $(y.label) $(t.label)))"
+        "(monoid (monoid (mvlt $(x.label) $(z.label)) (mvlt $(z.label) $(y.label))) (mvlt $(y.label) $(t.label)))"
     elseif r == SoleLogics.IA_Ai
         "(mveq $(t.label) $(x.label))"
     elseif r == SoleLogics.IA_Li
         "(mvlt $(t.label) $(x.label))"
     elseif r == SoleLogics.IA_Bi
-        "(meet (mveq $(z.label) $(x.label)) (mvlt $(y.label) $(t.label)))"
+        "(monoid (mveq $(z.label) $(x.label)) (mvlt $(y.label) $(t.label)))"
     elseif r == SoleLogics.IA_Ei
-        "(meet (mvlt $(z.label) $(x.label)) (mveq $(t.label) $(y.label)))"
+        "(monoid (mvlt $(z.label) $(x.label)) (mveq $(t.label) $(y.label)))"
     elseif r == SoleLogics.IA_Di
-        "(meet (mvlt $(z.label) $(x.label)) (mvlt $(y.label) $(t.label)))"
+        "(monoid (mvlt $(z.label) $(x.label)) (mvlt $(y.label) $(t.label)))"
     elseif r == SoleLogics.IA_Oi
-        "(meet (meet (mvlt $(z.label) $(x.label)) (mvlt $(x.label) $(t.label))) (mvlt $(t.label) $(y.label)))"
+        "(monoid (monoid (mvlt $(z.label) $(x.label)) (mvlt $(x.label) $(t.label))) (mvlt $(t.label) $(y.label)))"
     else
         error("Relation $r not in HS")
     end
@@ -566,7 +566,7 @@ function hybridmvhsalphasat(
                 smtfile *= "(assert (forall ((x A2) (y A2)) (= (= (mveq x y) a1) (= x y))))\n"                                                                   # =(x,y) = 1 iff x = y
                 smtfile *= "(assert (forall ((x A2) (y A2)) (= (mveq x y) (mveq y x))))\n"                                                                       # =(x,y) = =(y,x)
                 smtfile *= "(assert (forall ((x A2)) (= (mvlt x x) a2)))\n"                                                                                      # <(x,x) = 0
-                smtfile *= "(assert (forall ((x A2) (y A2) (z A2)) (precedeq (meet (mvlt x y) (mvlt y z)) (mvlt x z))))\n"                                       # <(x,z) ⪰ <(x,y) ⋅ <(y,z)
+                smtfile *= "(assert (forall ((x A2) (y A2) (z A2)) (precedeq (monoid (mvlt x y) (mvlt y z)) (mvlt x z))))\n"                                       # <(x,z) ⪰ <(x,y) ⋅ <(y,z)
                 smtfile *= "(assert (forall ((x A2) (y A2) (z A2)) (=> (and (distinct (mvlt x y) a2) (distinct (mvlt y z) a2)) (distinct (mvlt x z) a2))))\n"    # if <(x,y) ≻ 0 and <(y,z) ≻ 0 then <(x,z) ≻ 0
                 smtfile *= "(assert (forall ((x A2) (y A2)) (=> (and (= (mvlt x y) a2) (= (mvlt y x) a2)) (= (mveq x y) a1))))\n"                                # if <(x,y) = 0 and <(y,x) = 0 then =(x,y) = 1
                 smtfile *= "(assert (forall ((x A2) (y A2)) (=> (distinct (mveq x y) a2) (distinct (mvlt x y) a1))))\n"                                          # if =(x,y) ≻ 0 then <(x,y) ≺ 1
@@ -583,7 +583,7 @@ function hybridmvhsalphasat(
                 end
                 # println("temp$uuid.smt2")
                 run(pipeline(`z3 $(tempdir())/temp$uuid.smt2`, stdout = b))
-                rm("$(tempdir())/temp$uuid.smt2")
+                # rm("$(tempdir())/temp$uuid.smt2")
                 if take!(b) == UInt8[0x73, 0x61, 0x74, 0x0a]
                     verbose && println(node) # print satisfiable branch
                     return true
@@ -690,6 +690,7 @@ function hybridmvhsalphasat(
                 # Strong conjunction Rules 1
                 elseif en.judgement && token(φ) isa NamedConnective{:∧} && !isbot(β)
                     # T(t→(A∧B)) case
+                    verbose && println("T∧")
                     (a, b) = children(φ)
                     x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
                     xsmtc = "(assert (or"
@@ -721,6 +722,7 @@ function hybridmvhsalphasat(
                     end                
                 elseif !en.judgement && token(φ) isa NamedConnective{:∧} && !isbot(β)
                     # F(t→(A∧B)) case
+                    verbose && println("F∧")
                     (a, b) = children(φ)
                     x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
                     xsmtc = "(assert (or"
@@ -753,6 +755,7 @@ function hybridmvhsalphasat(
                 # Strong disjunction rules 2
                 elseif en.judgement && token(φ) isa NamedConnective{:∨} && !isbot(β)
                     # T(t→(A∨B)) case
+                    verbose && println("T∨2")
                     (a, b) = children(φ)
                     x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
                     xsmtc = "(assert (or"
@@ -784,6 +787,7 @@ function hybridmvhsalphasat(
                     end       
                 elseif !en.judgement && token(φ) isa NamedConnective{:∨} && !isbot(β)
                     # F(t→(A∨B)) case
+                    verbose && println("F∨2")
                     (a, b) = children(φ)
                     x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
                     xsmtc = "(assert (or"
@@ -816,6 +820,7 @@ function hybridmvhsalphasat(
                 # Implication Rules 1
                 elseif en.judgement && token(φ) isa NamedConnective{:→} && !isbot(β)
                     # T(t→(A→B)) case
+                    verbose && println("T→")
                     (a, b) = children(φ)
                     x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
                     xsmtc = "(assert (or"
@@ -847,6 +852,7 @@ function hybridmvhsalphasat(
                     end       
                 elseif !en.judgement && token(φ) isa NamedConnective{:→} && !isbot(β)
                     # F(t→(A→B)) case
+                    verbose && println("F→")
                     (a, b) = children(φ)
                     x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
                     xsmtc = "(assert (or"
@@ -903,9 +909,9 @@ function hybridmvhsalphasat(
                                 ysmtc *= "(assert (= $(yi.label) $(mveval(r,(x,y),(cB[i],cB[j])))))\n"
                                 # ysmtc *= "(assert (distinct $(yi.label) a2))\n"                              
                                 if isa(β, FiniteIndexTruth)
-                                    xsmtc *= "(assert (= $(xi.label) (meet a$(β.index) $(yi.label))))\n"
+                                    xsmtc *= "(assert (= $(xi.label) (monoid a$(β.index) $(yi.label))))\n"
                                 elseif isa(β, FiniteTruth)
-                                    xsmtc *= "(assert (= $(xi.label) (meet $(β.label) $(yi.label))))\n"
+                                    xsmtc *= "(assert (= $(xi.label) (monoid $(β.label) $(yi.label))))\n"
                                 else
                                     error("Wrong truth type")
                                 end
@@ -965,9 +971,9 @@ function hybridmvhsalphasat(
                                         ysmtc *= "(assert (= $(yi.label) $(mveval(r,(x,y),(cB2[i],cB2[j])))))\n"
                                         # ysmtc *= "(assert (distinct $(yi.label) a2))\n"                   
                                         if isa(β, FiniteIndexTruth)
-                                            xsmtc *= "(assert (= $(xi.label) (meet a$(β.index) $(yi.label))))\n"
+                                            xsmtc *= "(assert (= $(xi.label) (monoid a$(β.index) $(yi.label))))\n"
                                         elseif isa(β, FiniteTruth)
-                                            xsmtc *= "(assert (= $(xi.label) (meet $(β.label) $(yi.label))))\n"
+                                            xsmtc *= "(assert (= $(xi.label) (monoid $(β.label) $(yi.label))))\n"
                                         else
                                             error("Wrong truth type")
                                         end
@@ -988,7 +994,7 @@ function hybridmvhsalphasat(
                     end
                 elseif en.judgement && token(φ) isa DiamondRelationalConnective && !isbot(β)
                     # T◊2"
-                    verbose && println("T◊")
+                    verbose && println("T◊2")
                     ψ = children(φ)[1]
                     for l ∈ findleaves(en)
                         r = SoleLogics.relation(token(φ))
@@ -1044,7 +1050,7 @@ function hybridmvhsalphasat(
                     end
                 elseif !en.judgement && token(φ) isa DiamondRelationalConnective && !isbot(β)
                     # F◊2
-                    verbose && println("F◊")
+                    verbose && println("F◊2")
                     ψ = children(φ)[1]
                     zi = FiniteTruth("z$(string(cycle))")
                     zsmtc = "(declare-const $(zi.label) A1)\n"
@@ -1187,6 +1193,7 @@ function hybridmvhsalphasat(
                # Strong conjunction Rules 2
             elseif en.judgement && token(φ) isa NamedConnective{:∧} && !istop(β)
                 # T((A∧B)→t) case
+                verbose && println("T∧2")
                 (a, b) = children(φ)
                 x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
                 xsmtc = "(assert (or"
@@ -1218,6 +1225,7 @@ function hybridmvhsalphasat(
                 end                
             elseif !en.judgement && token(φ) isa NamedConnective{:∧} && !istop(β)
                 # F((A∧B)→t) case
+                verbose && println("F∧2")
                 (a, b) = children(φ)
                 x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
                 xsmtc = "(assert (or"
@@ -1250,6 +1258,7 @@ function hybridmvhsalphasat(
             # Strong disjunction rules 1
             elseif en.judgement && token(φ) isa NamedConnective{:∨} && !istop(β)
                 # T((A∨B)→t) case
+                verbose && println("T∨")
                 (a, b) = children(φ)
                 x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
                 xsmtc = "(assert (or"
@@ -1281,6 +1290,7 @@ function hybridmvhsalphasat(
                 end       
             elseif !en.judgement && token(φ) isa NamedConnective{:∨} && !istop(β)
                 # F((A∨B)→t) case
+                verbose && println("F∨")
                 (a, b) = children(φ)
                 x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
                 xsmtc = "(assert (or"
@@ -1313,6 +1323,7 @@ function hybridmvhsalphasat(
             # Implication Rules 2
             elseif en.judgement && token(φ) isa NamedConnective{:→} && !istop(β)
                 # T((A→B)→t) case
+                verbose && println("T→2")
                 (a, b) = children(φ)
                 x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
                 xsmtc = "(assert (or"
@@ -1344,6 +1355,7 @@ function hybridmvhsalphasat(
                 end       
             elseif !en.judgement && token(φ) isa NamedConnective{:→} && !istop(β)
                 # F((A→B)→t) case
+                verbose && println("F→2")
                 (a, b) = children(φ)
                 x, y = FiniteTruth.(["x$(string(cycle))", "y$(string(cycle))"])
                 xsmtc = "(assert (or"
@@ -1375,7 +1387,7 @@ function hybridmvhsalphasat(
                 end
             elseif en.judgement && token(φ) isa BoxRelationalConnective && !istop(β)
                 # T□2"
-                verbose && println("T□")
+                verbose && println("T□2")
                 ψ = children(φ)[1]
                 for l ∈ findleaves(en)
                     r = SoleLogics.relation(token(φ))
@@ -1400,9 +1412,9 @@ function hybridmvhsalphasat(
                             ysmtc *= "(assert (= $(yi.label) $(mveval(r,(x,y),(cB[i],cB[j])))))\n"
                             # ysmtc *= "(assert (distinct $(yi.label) a2))"
                             if isa(β, FiniteIndexTruth)
-                                xsmtc *= "(assert (= $(xi.label) (meet a$(β.index) $(yi.label))))\n"
+                                xsmtc *= "(assert (=> (and (distinct (mvlt $(cB[i]) $(cB[j])) a2) (distinct $(yi.label) a2)) (= $(xi.label) (monoid a$(β.index) $(yi.label)))))\n"
                             elseif isa(β, FiniteTruth)
-                                xsmtc *= "(assert (= $(xi.label) (meet $(β.label) $(yi.label))))\n"
+                                xsmtc *= "(assert (=> (and (distinct (mvlt $(cB[i]) $(cB[j])) a2) (distinct $(yi.label) a2)) (= $(xi.label) (monoid $(β.label) $(yi.label)))))\n"
                             else
                                 error("Wrong truth type")
                             end
@@ -1429,58 +1441,191 @@ function hybridmvhsalphasat(
                         push!(metricheaps, tj)
                     end
                 end
+
+                # zi = FiniteTruth("z$(string(cycle))")
+                # for l ∈ findleaves(en)
+                #     r = SoleLogics.relation(token(φ))
+                #     (x, y) = en.interval
+                #     cB = l.constraintsystem
+                #     p1 = Point("p$(string(cycle))-1")
+                #     p2 = Point("p$(string(cycle))-2")
+                #     p1smtc = "(declare-const $(p1.label) A2)\n"
+                #     p2smtc = "(declare-const $(p2.label) A2)\n"
+                #     for p ∈ 0:length(cB)
+                #         cB1 = [cB[1:p];p1;cB[p+1:length(cB)]]
+                #         for q ∈ 0:length(cB1)
+                #             cB2 = [cB1[1:q];p2;cB1[q+1:length(cB1)]]
+                #             for i ∈ eachindex(cB2)
+                #                 for j ∈ i+1:length(cB2)
+                #                     sismtc = "(assert (distinct (mvlt $(cB2[i]) $(cB2[j])) a2))\n"
+                #             # for i ∈ eachindex(cB)
+                #             #     for j ∈ i+1:length(cB)
+
+                #             #         sismtc = "(assert (distinct (mvlt $(cB[i]) $(cB[j])) a2))\n"
+
+                #                     xi = FiniteTruth("x$(string(cycle))-$(string(i))-$(string(j))")
+                #                     yi = FiniteTruth("y$(string(cycle))-$(string(i))-$(string(j))")
+                #                     zi = FiniteTruth("z$(string(cycle))-$(string(i))-$(string(j))")
+                #                     xsmtc = "(declare-const $(xi.label) A1)\n"
+                #                     ysmtc = "(declare-const $(yi.label) A1)\n"
+                #                     zsmtc = "(declare-const $(zi.label) A1)\n"
+                #                     xsmtc *= "(assert (or"
+                #                     ysmtc *= "(assert (or"
+                #                     zsmtc *= "(assert (or"
+                #                     for value in 1:N
+                #                         xsmtc *= " (= $(xi.label) a$(string(value)))"
+                #                         ysmtc *= " (= $(yi.label) a$(string(value)))"
+                #                         zsmtc *= " (= $(zi.label) a$(string(value)))"
+                #                     end
+                #                     xsmtc *= "))\n"
+                #                     ysmtc *= "))\n"
+                #                     zsmtc *= "))\n"
+                #                     if isa(β, FiniteIndexTruth)
+                #                         # zsmtc = "(assert (forall (($(zi.label) A1)) (=> (not (precedeq $(zi.label) a$(β.index))) (and\n"
+                #                         # zsmtc = "(assert (forall (($(zi.label) A1)) (=> (and (distinct $(zi.label) a2) (not (precedeq $(zi.label) a$(β.index))) (not (exists (($(wi.label) A1)) (=> (not (precedeq $(wi.label) a$(β.index))) (not (precedeq $(zi.label) $(wi.label))))))) (and\n"
+                #                         zsmtc *= "(assert (precedeq $(zi.label) a$(β.index)))\n"
+                #                     else
+                #                         # zsmtc = "(assert (forall (($(zi.label) A1)) (=> (not (precedeq $(zi.label) $(β.label))) (and\n"
+                #                         # zsmtc = "(assert (forall (($(zi.label) A1)) (=> (and (distinct $(zi.label) a2) (not (precedeq $(zi.label) $(β.label))) (not (exists (($(wi.label) A1)) (=> (not (precedeq $(wi.label) $(β.label))) (not (precedeq $(zi.label) $(wi.label))))))) (and\n"
+                #                         zsmtc *= "(assert (precedeq $(zi.label) $(β.label)))\n"
+                #                     end
+                #                     ysmtc *= "(assert (= $(yi.label) $(mveval(r,(x,y),(cB2[i],cB2[j])))))\n"
+                #                     # ysmtc *= "(assert (= $(yi.label) $(mveval(r,(x,y),(cB[i],cB[j])))))\n"
+                #                     ysmtc *= "(assert (distinct $(yi.label) a2))"
+                #                     xsmtc *= "(assert (= $(xi.label) (monoid $(zi.label) $(yi.label))))\n"
+                #                     xsmtc *= "(assert (distinct $(xi.label) a1))\n"
+                #                     tj = HybridMVHSTableau{FiniteIndexTruth}(
+                #                         false,
+                #                         (ψ,xi),
+                #                         # (xi,ψ),
+                #                         (cB2[i],cB2[j]),
+                #                         cB2,
+                #                         # (cB[i],cB[j]),
+                #                         # cB,
+                #                         l,
+                #                         [p1smtc, p2smtc, sismtc, zsmtc, ysmtc, xsmtc]
+                #                         # [sismtc, zsmtc, ysmtc, xsmtc]
+                #                     )
+                #                     push!(metricheaps, tj)  
+                #                 end
+                #             end
+                #         end
+                #     end
+                # end
+
+                # zi = FiniteTruth("z$(string(cycle))")
+                # wi = FiniteTruth("w$(string(cycle))")
+                # for l ∈ findleaves(en)
+                #     r = SoleLogics.relation(token(φ))
+                #     (x, y) = en.interval
+                #     cB = l.constraintsystem
+                #     p1 = Point("p$(string(cycle))-1")
+                #     p2 = Point("p$(string(cycle))-2")
+                #     p1smtc = "(declare-const $(p1.label) A2)\n"
+                #     p2smtc = "(declare-const $(p2.label) A2)\n"
+                #     for p ∈ 0:length(cB)
+                #         cB1 = [cB[1:p];p1;cB[p+1:length(cB)]]
+                #         for q ∈ 0:length(cB1)
+                #             cB2 = [cB1[1:q];p2;cB1[q+1:length(cB1)]]
+                #             for i ∈ eachindex(cB2)
+                #                 for j ∈ i+1:length(cB2)
+
+                #                     sismtc = "(assert (distinct (mvlt $(cB2[i]) $(cB2[j])) a2))\n"
+
+                #                     xi = FiniteTruth("x$(string(cycle))-$(string(i))-$(string(j))")
+                #                     yi = FiniteTruth("y$(string(cycle))-$(string(i))-$(string(j))")
+                #                     ysmtc = "(declare-const $(yi.label) A1)\n"
+                #                     xsmtc = "(declare-const $(xi.label) A1)\n"
+                #                     xsmtc *= "(assert (or"
+                #                     ysmtc *= "(assert (or"
+                #                     for value in 1:N
+                #                         xsmtc *= " (= $(xi.label) a$(string(value)))"
+                #                         ysmtc *= " (= $(yi.label) a$(string(value)))"
+                #                     end
+                #                     xsmtc *= "))\n"
+                #                     ysmtc *= "))\n"
+                #                     if isa(β, FiniteIndexTruth)
+                #                         # zsmtc = "(assert (forall (($(zi.label) A1)) (=> (not (precedeq $(zi.label) a$(β.index))) (and\n"
+                #                         zsmtc = "(assert (forall (($(zi.label) A1)) (=> (and (distinct $(zi.label) a2) (not (precedeq $(zi.label) a$(β.index))) (not (exists (($(wi.label) A1)) (=> (not (precedeq $(wi.label) a$(β.index))) (not (precedeq $(zi.label) $(wi.label))))))) (and\n"
+                #                     else
+                #                         # zsmtc = "(assert (forall (($(zi.label) A1)) (=> (not (precedeq $(zi.label) $(β.label))) (and\n"
+                #                         zsmtc = "(assert (forall (($(zi.label) A1)) (=> (and (distinct $(zi.label) a2) (not (precedeq $(zi.label) $(β.label))) (not (exists (($(wi.label) A1)) (=> (not (precedeq $(wi.label) $(β.label))) (not (precedeq $(zi.label) $(wi.label))))))) (and\n"
+                #                     end
+                #                     zsmtc *= "(= $(yi.label) $(mveval(r,(x,y),(cB2[i],cB2[j]))))\n"
+                #                     # ysmtc *= "(assert (distinct $(yi.label) a2))"
+                #                     zsmtc *= "(= $(xi.label) (monoid $(zi.label) $(yi.label)))\n"
+                #                     # zsmtc *= "(distinct $(xi.label) a2)\n"
+                #                     zsmtc *= "))))\n"
+                #                     tj = HybridMVHSTableau{FiniteIndexTruth}(
+                #                         true,
+                #                         (ψ,xi),
+                #                         # (xi,ψ),
+                #                         (cB2[i],cB2[j]),
+                #                         cB2,
+                #                         l,
+                #                         [p1smtc, p2smtc, sismtc, ysmtc, xsmtc, zsmtc]
+                #                     )
+                #                     push!(metricheaps, tj)  
+                #                 end
+                #             end
+                #         end
+                #     end
+                # end
+                
             elseif !en.judgement && token(φ) isa BoxRelationalConnective && !istop(β)
                 # F□2"
-                verbose && println("F□")
+                verbose && println("F□2")
                 ψ = children(φ)[1]
                 for l ∈ findleaves(en)
                     r = SoleLogics.relation(token(φ))
                     (x, y) = en.interval
                     cB = l.constraintsystem
-                    p1 = Point("p$(string(cycle))-1")
-                    p2 = Point("p$(string(cycle))-2")
-                    p1smtc = "(declare-const $(p1.label) A2)\n"
-                    p2smtc = "(declare-const $(p2.label) A2)\n"
-                    for p ∈ 0:length(cB)
-                        cB1 = [cB[1:p];p1;cB[p+1:length(cB)]]
-                        for q ∈ 0:length(cB1)
-                            cB2 = [cB1[1:q];p2;cB1[q+1:length(cB1)]]
-                            for i ∈ eachindex(cB2)
-                                for j ∈ i+1:length(cB2) # i+1:length(cB2)
-                                    xi = FiniteTruth("x$(string(cycle))-$(string(i))-$(string(j))")
-                                    yi = FiniteTruth("y$(string(cycle))-$(string(i))-$(string(j))")
-                                    ysmtc = "(declare-const $(yi.label) A1)\n"
-                                    xsmtc = "(declare-const $(xi.label) A1)\n"
-                                    xsmtc *= "(assert (or"
-                                    ysmtc *= "(assert (or"
-                                    for value in 1:N
-                                        xsmtc *= " (= $(xi.label) a$(string(value)))"
-                                        ysmtc *= " (= $(yi.label) a$(string(value)))"
-                                    end
-                                    xsmtc *= "))\n"
-                                    ysmtc *= "))\n"
-                                    ysmtc *= "(assert (= $(yi.label) $(mveval(r,(x,y),(cB2[i],cB2[j])))))\n"
-                                    # ysmtc *= "(assert (distinct $(yi.label) a2))"
-                                    if isa(β, FiniteIndexTruth)
-                                        xsmtc *= "(assert (= $(xi.label) (meet a$(β.index) $(yi.label))))\n"
-                                    elseif isa(β, FiniteTruth)
-                                        xsmtc *= "(assert (= $(xi.label) (meet $(β.label) $(yi.label))))\n"
-                                    else
-                                        error("Wrong truth type")
-                                    end
-                                    xsmtc *= "(assert (distinct $(xi.label) a1))"
-                                    tj = HybridMVHSTableau{FiniteIndexTruth}(
-                                        false,
-                                        (ψ,xi),
-                                        (cB2[i],cB2[j]),
-                                        cB2,
-                                        l,
-                                        [p1smtc, p2smtc, ysmtc, xsmtc]
-                                    )
-                                    push!(metricheaps, tj)  
-                                end
+                    tj = l
+                    for i ∈ eachindex(cB)
+                        for j ∈ i+1:length(cB)
+                            # declare new const for γi = R([x,y,zi,ti])
+                            xi = FiniteTruth("x$(string(cycle))-$(string(i))-$(string(j))")
+                            yi = FiniteTruth("y$(string(cycle))-$(string(i))-$(string(j))")
+                            ysmtc = "(declare-const $(yi.label) A1)\n"
+                            xsmtc = "(declare-const $(xi.label) A1)\n"
+                            xsmtc *= "(assert (or"
+                            ysmtc *= "(assert (or"
+                            for value in 1:N
+                                xsmtc *= " (= $(xi.label) a$(string(value)))"
+                                ysmtc *= " (= $(yi.label) a$(string(value)))"
                             end
+                            xsmtc *= "))\n"
+                            ysmtc *= "))\n"
+                            ysmtc *= "(assert (= $(yi.label) $(mveval(r,(x,y),(cB[i],cB[j])))))\n"
+                            # ysmtc *= "(assert (distinct $(yi.label) a2))"
+                            if isa(β, FiniteIndexTruth)
+                                xsmtc *= "(assert (= $(xi.label) (monoid a$(β.index) $(yi.label))))\n"
+                            elseif isa(β, FiniteTruth)
+                                xsmtc *= "(assert (= $(xi.label) (monoid $(β.label) $(yi.label))))\n"
+                            else
+                                error("Wrong truth type")
+                            end
+                            # xsmtc *= "(assert (distinct $(xi.label) a1))\n" 
+                            tj = HybridMVHSTableau{FiniteIndexTruth}(
+                                true,
+                                (ψ,xi),
+                                (cB[i],cB[j]),
+                                cB,
+                                tj,
+                                [ysmtc, xsmtc]
+                            )
+                            push!(metricheaps, tj)  
                         end
+                    end
+                    if !findtableau(l,true,l.boundingimplication,l.interval)    # TODO: check
+                        tj = HybridMVHSTableau{FiniteIndexTruth}(
+                            true,
+                            (φ, β),
+                            en.interval,
+                            cB,
+                            tj
+                        )
+                        push!(metricheaps, tj)
                     end
                 end
             elseif en.judgement && token(φ) isa DiamondRelationalConnective && !istop(β)
