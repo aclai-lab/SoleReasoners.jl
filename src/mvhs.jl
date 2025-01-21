@@ -541,7 +541,10 @@ function mvhsalphasat(
 
         node = choosenode(metricheaps, cycle)
         isnothing(node) && return false # all branches are closed
-        isexpanded(node) && return true # found a satisfiable branch
+        if isexpanded(node)
+            verbose && printsolution(node)
+            return true # found a satisfiable branch
+        end
         en = findexpansionnode(node)
         expand!(en)
         verbose && println("expansion node:")
