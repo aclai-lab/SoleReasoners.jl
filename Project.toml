@@ -17,7 +17,7 @@ UUIDs = "cf7118a7-6976-5b1a-9a39-7adc72f591a4"
 DataStructures = "0.18"
 Graphs = "1.8"
 Reexport = "1"
-SoleLogics = "0.9"
+SoleLogics = "0.12.0"
 StatsBase = "0.30 - 0.34"
 
 [extras]
