@@ -62,81 +62,81 @@ Check if a structure (D, <, =) is a adequate fuzzy strictly linearly ordered set
 function checkafslos(afslos::AFSLOS)
     # check axioms 1...7
     # TODO: check if this is wrong
-    # for x ∈ afslos.domain
-    #     !istop(afslos.mveq[(x,x)]) && error("(D,<,=) is not a AFSLOS (1)")
-    #     !isbot(afslos.mvlt[(x,x)]) && error("(D,<,=) is not a AFSLOS (3)")
-    #     for y ∈ afslos.domain
-    #         istop(afslos.mveq[(x,y)]) && x != y && error("(D,<,=) is not a AFSLOS (1)")
-    #         afslos.mveq[(x,y)] != afslos.mveq[(y,x)] && error("(D,<,=) is not a AFSLOS (2)")
-    #         if isbot(afslos.mvlt[(x,y)]) && isbot(afslos.mvlt[(y,x)])
-    #             !istop(afslos.mveq[(x,y)]) && error("(D,<,=) is not a AFSLOS (6)")
-    #         end
-    #         if !isbot(afslos.mveq[(x,y)])
-    #             istop(afslos.mvlt[(x,y)]) && error("(D,<,=) is not a AFSLOS (7)")
-    #         end
-    #         for z ∈ afslos.domain
-    #             !succeedeq(
-    #                 afslos.algebra,
-    #                 afslos.mvlt[(x,z)],
-    #                 afslos.algebra.monoid(afslos.mvlt[(x,y)], afslos.mvlt[(y,z)])
-    #             ) && error("(D,<,=) is not a AFSLOS (4)")
-    #             if !isbot(afslos.mvlt[(x,y)]) && !isbot(afslos.mvlt[(y,z)])
-    #                 isbot(afslos.mvlt[(x,z)]) && error("(D,<,=) is not a AFSLOS (5)")
-    #             end
-    #         end
-    #     end
-    # end
     for x ∈ afslos.domain
+        !istop(afslos.mveq[(x,x)]) && error("(D,<,=) is not a AFSLOS (1)")
+        !isbot(afslos.mvlt[(x,x)]) && error("(D,<,=) is not a AFSLOS (3)")
         for y ∈ afslos.domain
-            # =(x,y) = 1 iff x = y
-            if istop(afslos.mveq[(x,y)])
-                if x != y
-                    error("(D,<,=) is not a AFSLOS (1)")
-                end
+            istop(afslos.mveq[(x,y)]) && x != y && error("(D,<,=) is not a AFSLOS (1)")
+            afslos.mveq[(x,y)] != afslos.mveq[(y,x)] && error("(D,<,=) is not a AFSLOS (2)")
+            if isbot(afslos.mvlt[(x,y)]) && isbot(afslos.mvlt[(y,x)])
+                !istop(afslos.mveq[(x,y)]) && error("(D,<,=) is not a AFSLOS (6)")
             end
-            if x == y
-                if !istop(afslos.mveq[(x,y)])
-                    error("(D,<,=) is not a AFSLOS (1)")
-                end
-            end
-            # =(x,y) = =(y,x)
-            if afslos.mveq[(x,y)] != afslos.mveq[(y,x)]
-                error("(D,<,=) is not a AFSLOS (2)")
-            end
-            # <(x,x) = 0
-            if !isbot(afslos.mvlt[(x,x)])
-                error("(D,<,=) is not a AFSLOS (3)")
+            if !isbot(afslos.mveq[(x,y)])
+                istop(afslos.mvlt[(x,y)]) && error("(D,<,=) is not a AFSLOS (7)")
             end
             for z ∈ afslos.domain
-                # <(x,z) ⪰ <(x,y)⋅<(y,z)
-                if !succeedeq(
+                !succeedeq(
                     afslos.algebra,
                     afslos.mvlt[(x,z)],
                     afslos.algebra.monoid(afslos.mvlt[(x,y)], afslos.mvlt[(y,z)])
-                )
-                    error("(D,<,=) is not a AFSLOS (4)")
-                end
-                # if <(x,y) ≻ 0 and <(y,z) ≻ 0 then <(x,z) ≻ 0
+                ) && error("(D,<,=) is not a AFSLOS (4)")
                 if !isbot(afslos.mvlt[(x,y)]) && !isbot(afslos.mvlt[(y,z)])
-                    if isbot(afslos.mvlt[(x,z)])
-                        error("(D,<,=) is not a AFSLOS (5)")
-                    end
-                end
-            end
-            # if <(x,y) = 0 and <(y,x) = 0 then =(x,y) = 1
-            if isbot(afslos.mvlt[(x,y)]) && isbot(afslos.mvlt[(y,x)])
-                if !istop(afslos.mveq[(x,y)])
-                    error("(D,<,=) is not a AFSLOS (6)")
-                end
-            end
-            # if =(x,y) ≻ 0 then <(x,y) ≺ 1
-            if !isbot(afslos.mveq[(x,y)])
-                if istop(afslos.mvlt[(x,y)])
-                    error("(D,<,=) is not a AFSLOS (7)")
+                    isbot(afslos.mvlt[(x,z)]) && error("(D,<,=) is not a AFSLOS (5)")
                 end
             end
         end
     end
+    # for x ∈ afslos.domain
+    #     for y ∈ afslos.domain
+    #         # =(x,y) = 1 iff x = y
+    #         if istop(afslos.mveq[(x,y)])
+    #             if x != y
+    #                 error("(D,<,=) is not a AFSLOS (1)")
+    #             end
+    #         end
+    #         if x == y
+    #             if !istop(afslos.mveq[(x,y)])
+    #                 error("(D,<,=) is not a AFSLOS (1)")
+    #             end
+    #         end
+    #         # =(x,y) = =(y,x)
+    #         if afslos.mveq[(x,y)] != afslos.mveq[(y,x)]
+    #             error("(D,<,=) is not a AFSLOS (2)")
+    #         end
+    #         # <(x,x) = 0
+    #         if !isbot(afslos.mvlt[(x,x)])
+    #             error("(D,<,=) is not a AFSLOS (3)")
+    #         end
+    #         for z ∈ afslos.domain
+    #             # <(x,z) ⪰ <(x,y)⋅<(y,z)
+    #             if !succeedeq(
+    #                 afslos.algebra,
+    #                 afslos.mvlt[(x,z)],
+    #                 afslos.algebra.monoid(afslos.mvlt[(x,y)], afslos.mvlt[(y,z)])
+    #             )
+    #                 error("(D,<,=) is not a AFSLOS (4)")
+    #             end
+    #             # if <(x,y) ≻ 0 and <(y,z) ≻ 0 then <(x,z) ≻ 0
+    #             if !isbot(afslos.mvlt[(x,y)]) && !isbot(afslos.mvlt[(y,z)])
+    #                 if isbot(afslos.mvlt[(x,z)])
+    #                     error("(D,<,=) is not a AFSLOS (5)")
+    #                 end
+    #             end
+    #         end
+    #         # if <(x,y) = 0 and <(y,x) = 0 then =(x,y) = 1
+    #         if isbot(afslos.mvlt[(x,y)]) && isbot(afslos.mvlt[(y,x)])
+    #             if !istop(afslos.mveq[(x,y)])
+    #                 error("(D,<,=) is not a AFSLOS (6)")
+    #             end
+    #         end
+    #         # if =(x,y) ≻ 0 then <(x,y) ≺ 1
+    #         if !isbot(afslos.mveq[(x,y)])
+    #             if istop(afslos.mvlt[(x,y)])
+    #                 error("(D,<,=) is not a AFSLOS (7)")
+    #             end
+    #         end
+    #     end
+    # end
 end
 
 """
@@ -594,16 +594,16 @@ function mvhsalphasat(
         node = choosenode(metricheaps, cycle)
         isnothing(node) && return false # all branches are closed
         if isexpanded(node)
-            try
-                checkafslos(node.constraintsystem)
+            # try
+            #     checkafslos(node.constraintsystem)
                 verbose && printsolution(node)
                 return true # found a satisfiable branch
-            catch err
-                # X6
-                verbose && println(sprint(showerror, err))
-                verbose && println("X6")
-                close!(node)
-            end
+            # catch err
+            #     # X6
+            #     verbose && println(sprint(showerror, err))
+            #     verbose && println("X6")
+            #     close!(node)
+            # end
         end
         en = findexpansionnode(node)
         expand!(en)
@@ -633,17 +633,17 @@ function mvhsalphasat(
                 verbose && println("X5")
                 close!(en)
             else
-                let err
-                    try
-                        checkafslos(en.constraintsystem)
-                    catch err
-                        # X6
-                        verbose && println(sprint(showerror, err))
-                        println("X6")
-                        println(en.constraintsystem.mvlt)
-                        close!(en)
-                    end
-                end
+                # let err
+                #     try
+                #         checkafslos(en.constraintsystem)
+                #     catch err
+                #         # X6
+                #         verbose && println(sprint(showerror, err))
+                #         println("X6")
+                #         println(en.constraintsystem.mvlt)
+                #         close!(en)
+                #     end
+                # end
                 # No condition matched, pushing node back into metricheaps
                 push!(metricheaps, node)
             end
@@ -978,23 +978,23 @@ function mvhsalphasat(
 
                     # cB0 = o(cB)
 
-                    # for zi ∈ cB0.domain
-                    #     for ti ∈ cB0.domain
-                    #         isbot(cB0.mvlt[(zi,ti)]) && continue # <(zi,ti) ≻ 0
-                    #         βi = mveval(r, (x,y), (zi,ti), cB0)
-                    #         if !isbot(βi) && !isbot(a.monoid(β, βi))
-                    #             tj = MVHSTableau{T}(
-                    #                 false,
-                    #                 (a.monoid(βi, β), φ.children[1]),
-                    #                 Interval(zi,ti),
-                    #                 cB0,
-                    #                 l
-                    #             )
-                    #             push!(metricheaps, tj)
-                    #             newleaves = true
-                    #         end
-                    #     end
-                    # end
+                    for zi ∈ cB0.domain
+                        for ti ∈ cB0.domain
+                            isbot(cB0.mvlt[(zi,ti)]) && continue # <(zi,ti) ≻ 0
+                            βi = mveval(r, (x,y), (zi,ti), cB0)
+                            if !isbot(βi) && !isbot(a.monoid(β, βi))
+                                tj = MVHSTableau{T}(
+                                    false,
+                                    (a.monoid(βi, β), φ.children[1]),
+                                    Interval(zi,ti),
+                                    cB0,
+                                    l
+                                )
+                                push!(metricheaps, tj)
+                                newleaves = true
+                            end
+                        end
+                    end
 
                     u = Threads.SpinLock();
 
@@ -1032,40 +1032,40 @@ function mvhsalphasat(
                                 try
                                     checkafslos(cB1)
                                     # in general, < is not commutative!
-                                    # for zi ∈ cB0.domain
-                                    #     isbot(cB1.mvlt[(zi,z)]) && continue # <(zi,z) ≻ 0
-                                    #     βi = mveval(r, (x,y), (zi,z), cB1)
-                                    #     if !isbot(βi) && !isbot(a.monoid(β, βi))
-                                    #         Threads.lock(u) do
-                                    #             tj = MVHSTableau{T}(
-                                    #                 false,
-                                    #                 (a.monoid(βi, β), φ.children[1]),
-                                    #                 Interval(zi,z),
-                                    #                 cB1,
-                                    #                 l
-                                    #             )
-                                    #             push!(metricheaps, tj)
-                                    #             newleaves = true
-                                    #         end
-                                    #     end
-                                    # end
-                                    # for ti ∈ cB0.domain
-                                    #     isbot(cB1.mvlt[(z,ti)]) && continue # <(z,ti) ≻ 0
-                                    #     βi = mveval(r, (x,y), (z,ti), cB1)
-                                    #     if !isbot(βi) && !isbot(a.monoid(β, βi))
-                                    #         Threads.lock(u) do
-                                    #             tj = MVHSTableau{T}(
-                                    #                 false,
-                                    #                 (a.monoid(βi, β), φ.children[1]),
-                                    #                 Interval(z,ti),
-                                    #                 cB1,
-                                    #                 l
-                                    #             )
-                                    #             push!(metricheaps, tj)
-                                    #             newleaves = true
-                                    #         end
-                                    #     end
-                                    # end
+                                    for zi ∈ cB0.domain
+                                        isbot(cB1.mvlt[(zi,z)]) && continue # <(zi,z) ≻ 0
+                                        βi = mveval(r, (x,y), (zi,z), cB1)
+                                        if !isbot(βi) && !isbot(a.monoid(β, βi))
+                                            Threads.lock(u) do
+                                                tj = MVHSTableau{T}(
+                                                    false,
+                                                    (a.monoid(βi, β), φ.children[1]),
+                                                    Interval(zi,z),
+                                                    cB1,
+                                                    l
+                                                )
+                                                push!(metricheaps, tj)
+                                                newleaves = true
+                                            end
+                                        end
+                                    end
+                                    for ti ∈ cB0.domain
+                                        isbot(cB1.mvlt[(z,ti)]) && continue # <(z,ti) ≻ 0
+                                        βi = mveval(r, (x,y), (z,ti), cB1)
+                                        if !isbot(βi) && !isbot(a.monoid(β, βi))
+                                            Threads.lock(u) do
+                                                tj = MVHSTableau{T}(
+                                                    false,
+                                                    (a.monoid(βi, β), φ.children[1]),
+                                                    Interval(z,ti),
+                                                    cB1,
+                                                    l
+                                                )
+                                                push!(metricheaps, tj)
+                                                newleaves = true
+                                            end
+                                        end
+                                    end
 
                                     # All possible combinations of values for new tuples
                                     for lttcombs ∈ reshape(
@@ -1099,23 +1099,23 @@ function mvhsalphasat(
                                                 try
                                                     checkafslos(cB2)
 
-                                                    for zi ∈ cB2.domain
-                                                        for ti ∈ cB2.domain
-                                                            isbot(cB2.mvlt[(zi,ti)]) && continue # <(zi,ti) ≻ 0
-                                                            βi = mveval(r, (x,y), (zi,ti), cB2)
-                                                            if !isbot(βi) && !isbot(a.monoid(β, βi))
-                                                                tj = MVHSTableau{T}(
-                                                                    false,
-                                                                    (a.monoid(βi, β), φ.children[1]),
-                                                                    Interval(zi,ti),
-                                                                    cB2,
-                                                                    l
-                                                                )
-                                                                push!(metricheaps, tj)
-                                                                newleaves = true
-                                                            end
-                                                        end
-                                                    end
+                                                    # for zi ∈ cB2.domain
+                                                    #     for ti ∈ cB2.domain
+                                                    #         isbot(cB2.mvlt[(zi,ti)]) && continue # <(zi,ti) ≻ 0
+                                                    #         βi = mveval(r, (x,y), (zi,ti), cB2)
+                                                    #         if !isbot(βi) && !isbot(a.monoid(β, βi))
+                                                    #             tj = MVHSTableau{T}(
+                                                    #                 false,
+                                                    #                 (a.monoid(βi, β), φ.children[1]),
+                                                    #                 Interval(zi,ti),
+                                                    #                 cB2,
+                                                    #                 l
+                                                    #             )
+                                                    #             push!(metricheaps, tj)
+                                                    #             newleaves = true
+                                                    #         end
+                                                    #     end
+                                                    # end
 
                                                     # in general, < is not commutative!
                                                     if !isbot(cB2.mvlt[(z,t)])  # <(z,t) ≻ 0
@@ -1414,23 +1414,23 @@ function mvhsalphasat(
 
                     # cB0 = o(cB)
 
-                    # for zi ∈ cB0.domain
-                    #     for ti ∈ cB0.domain
-                    #         isbot(cB0.mvlt[(zi,ti)]) && continue # <(zi,ti) ≻ 0
-                    #         βi = mveval(r, (x,y), (zi,ti), cB0)
-                    #         if !isbot(βi) && !istop(a.implication(βi, β))
-                    #             tj = MVHSTableau{T}(
-                    #                 false,
-                    #                 (φ.children[1], a.implication(βi, β)),
-                    #                 Interval(zi,ti),
-                    #                 cB0,
-                    #                 l
-                    #             )
-                    #             push!(metricheaps, tj)
-                    #             newleaves = true
-                    #         end
-                    #     end
-                    # end
+                    for zi ∈ cB0.domain
+                        for ti ∈ cB0.domain
+                            isbot(cB0.mvlt[(zi,ti)]) && continue # <(zi,ti) ≻ 0
+                            βi = mveval(r, (x,y), (zi,ti), cB0)
+                            if !isbot(βi) && !istop(a.implication(βi, β))
+                                tj = MVHSTableau{T}(
+                                    false,
+                                    (φ.children[1], a.implication(βi, β)),
+                                    Interval(zi,ti),
+                                    cB0,
+                                    l
+                                )
+                                push!(metricheaps, tj)
+                                newleaves = true
+                            end
+                        end
+                    end
 
                     u = Threads.SpinLock();
 
@@ -1468,40 +1468,40 @@ function mvhsalphasat(
                                     checkafslos(cB1)
                                     # in general, < is not commutative!
                                     
-                                    # for zi ∈ cB0.domain
-                                    #     isbot(cB1.mvlt[(zi,z)]) && continue # <(zi,z) ≻ 0
-                                    #     βi = mveval(r, (x,y), (zi,z), cB1)
-                                    #     if !isbot(βi) && !istop(a.implication(βi, β))
-                                    #         Threads.lock(u) do
-                                    #             tj = MVHSTableau{T}(
-                                    #                 false,
-                                    #                 (φ.children[1], a.implication(βi, β)),
-                                    #                 Interval(zi,z),
-                                    #                 cB1,
-                                    #                 l
-                                    #             )
-                                    #             push!(metricheaps, tj)
-                                    #             newleaves = true
-                                    #         end
-                                    #     end
-                                    # end
-                                    # for ti ∈ cB0.domain
-                                    #     isbot(cB1.mvlt[(z,ti)]) && continue # <(z,ti) ≻ 0
-                                    #     βi = mveval(r, (x,y), (z,ti), cB1)
-                                    #     if !isbot(βi) && !istop(a.implication(βi, β))
-                                    #         Threads.lock(u) do
-                                    #             tj = MVHSTableau{T}(
-                                    #                 false,
-                                    #                 (φ.children[1], a.implication(βi, β)),
-                                    #                 Interval(z,ti),
-                                    #                 cB1,
-                                    #                 l
-                                    #             )
-                                    #             push!(metricheaps, tj)
-                                    #             newleaves = true
-                                    #         end
-                                    #     end
-                                    # end
+                                    for zi ∈ cB0.domain
+                                        isbot(cB1.mvlt[(zi,z)]) && continue # <(zi,z) ≻ 0
+                                        βi = mveval(r, (x,y), (zi,z), cB1)
+                                        if !isbot(βi) && !istop(a.implication(βi, β))
+                                            Threads.lock(u) do
+                                                tj = MVHSTableau{T}(
+                                                    false,
+                                                    (φ.children[1], a.implication(βi, β)),
+                                                    Interval(zi,z),
+                                                    cB1,
+                                                    l
+                                                )
+                                                push!(metricheaps, tj)
+                                                newleaves = true
+                                            end
+                                        end
+                                    end
+                                    for ti ∈ cB0.domain
+                                        isbot(cB1.mvlt[(z,ti)]) && continue # <(z,ti) ≻ 0
+                                        βi = mveval(r, (x,y), (z,ti), cB1)
+                                        if !isbot(βi) && !istop(a.implication(βi, β))
+                                            Threads.lock(u) do
+                                                tj = MVHSTableau{T}(
+                                                    false,
+                                                    (φ.children[1], a.implication(βi, β)),
+                                                    Interval(z,ti),
+                                                    cB1,
+                                                    l
+                                                )
+                                                push!(metricheaps, tj)
+                                                newleaves = true
+                                            end
+                                        end
+                                    end
 
                                     # All possible combinations of values for new tuples
                                     for lttcombs ∈ reshape(
@@ -1535,23 +1535,23 @@ function mvhsalphasat(
                                                 try
                                                     checkafslos(cB2)
 
-                                                    for zi ∈ cB2.domain
-                                                        for ti ∈ cB2.domain
-                                                            isbot(cB2.mvlt[(zi,ti)]) && continue # <(zi,ti) ≻ 0
-                                                            βi = mveval(r, (x,y), (zi,ti), cB2)
-                                                            if !isbot(βi) && !istop(a.implication(βi, β))
-                                                                tj = MVHSTableau{T}(
-                                                                    false,
-                                                                    (φ.children[1], a.implication(βi, β)),
-                                                                    Interval(zi,ti),
-                                                                    cB2,
-                                                                    l
-                                                                )
-                                                                push!(metricheaps, tj)
-                                                                newleaves = true
-                                                            end
-                                                        end
-                                                    end
+                                                    # for zi ∈ cB2.domain
+                                                    #     for ti ∈ cB2.domain
+                                                    #         isbot(cB2.mvlt[(zi,ti)]) && continue # <(zi,ti) ≻ 0
+                                                    #         βi = mveval(r, (x,y), (zi,ti), cB2)
+                                                    #         if !isbot(βi) && !istop(a.implication(βi, β))
+                                                    #             tj = MVHSTableau{T}(
+                                                    #                 false,
+                                                    #                 (φ.children[1], a.implication(βi, β)),
+                                                    #                 Interval(zi,ti),
+                                                    #                 cB2,
+                                                    #                 l
+                                                    #             )
+                                                    #             push!(metricheaps, tj)
+                                                    #             newleaves = true
+                                                    #         end
+                                                    #     end
+                                                    # end
 
                                                     # in general, < is not commutative!
                                                     if !isbot(cB2.mvlt[(z,t)])  # <(z,t) ≻ 0
