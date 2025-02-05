@@ -59,7 +59,18 @@ test_suites = [
     #     "BackwardCompatibility - Alphaprove - H9",
     #     ["backwardcompatibility/alphaprove/H9.jl"]
     # ),
-    ("MVHS", ["mvhs.jl"]),
+    # ("MVHS", ["mvhs.jl"]),
+    # ("IndexAlphaSat", ["ialphasat.jl",]),
+    # ("IndexAlphaProve", ["ialphaprove.jl",]),
+    # ("HybridAlphaSat", ["hybridalphasat.jl"]),
+    # ("HybridAlphaProve", ["hybridalphaprove.jl"]),
+    # ("IndexHybridAlphaSat", ["ihybridalphasat.jl"]),
+    # ("IndexHybridAlphaProve", ["ihybridalphaprove.jl"]),
+    # ("IndexHybridAlphaSatBackwardCompatibility", ["ihybridalphasatbc.jl"]),
+    # ("IndexHybridAlphaProveBackwardCompatibility", ["ihybridalphaprovebc.jl"]),
+    # ("HybridMVHSTableau", ["hybrid-modal-tableau.jl"]),
+    # ("HybridMVHSAlphaSat", ["hybrid-mvhs-sat-bc.jl"]),
+    ("HybridMVHSAlphaProve", ["hybrid-mvhs-prove-bc.jl"]),
     # ("Utils", ["utils.jl"]),
 ]
 

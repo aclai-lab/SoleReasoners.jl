@@ -7,3 +7,5 @@
 /experiments/*/formulas/*/
 /experiments/*/results/*
 /test/log.txt
+*.smt2
+*formulas/
