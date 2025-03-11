@@ -70,8 +70,12 @@ test_suites = [
     # ("IndexHybridAlphaProveBackwardCompatibility", ["ihybridalphaprovebc.jl"]),
     # ("HybridMVHSTableau", ["hybrid-modal-tableau.jl"]),
     # ("HybridMVHSAlphaSat", ["hybrid-mvhs-sat-bc.jl"]),
-    ("HybridMVHSAlphaProve", ["hybrid-mvhs-prove-bc.jl"]),
+    # ("HybridMVHSAlphaProve", ["hybrid-mvhs-prove-bc.jl"]),
     # ("Utils", ["utils.jl"]),
+    (
+        "Many-Valued Multi-Modal Logic",
+        ["many-valued-multi-modal-logic/many-valued-multi-modal-logic.jl"]
+    )
 ]
 
 @testset "SoleReasoners.jl" begin

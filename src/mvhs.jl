@@ -1,27 +1,14 @@
-struct Point
-    label::String
-end
-
-Base.show(io::IO, x::Point) = print(io, x.label)
-
-struct Interval
-    x::Point
-    y::Point
-end
-
-Base.show(io::IO, i::Interval) = print(io, "[$(i.x),$(i.y)]")
-
 struct AFSLOS{T<:Truth,D<:AbstractVector{T},A<:FiniteAlgebra{T,D}}
-    domain::Vector{Point}
+    domain::Vector{Point1D}
     algebra::A
-    mvlt::Dict{Tuple{Point,Point},T}
-    mveq::Dict{Tuple{Point,Point},T}
+    mvlt::Dict{Tuple{Point1D,Point1D},T}
+    mveq::Dict{Tuple{Point1D,Point1D},T}
 
     function AFSLOS(
-        domain::Vector{Point},
+        domain::Vector{Point1D},
         algebra::A,
-        mvlt::Dict{Tuple{Point,Point},T1},
-        mveq::Dict{Tuple{Point,Point},T2}
+        mvlt::Dict{Tuple{Point1D,Point1D},T1},
+        mveq::Dict{Tuple{Point1D,Point1D},T2}
     ) where {
         T<:Truth,
         D<:AbstractVector{T},
@@ -29,11 +16,11 @@ struct AFSLOS{T<:Truth,D<:AbstractVector{T},A<:FiniteAlgebra{T,D}}
         T1<:Truth,
         T2<:Truth
     }
-        if !isa(mvlt, Dict{Tuple{Point,Point},T})
-            mvlt = convert(Dict{Tuple{Point,Point},T}, mvlt)
+        if !isa(mvlt, Dict{Tuple{Point1D,Point1D},T})
+            mvlt = convert(Dict{Tuple{Point1D,Point1D},T}, mvlt)
         end
-        if !isa(mveq, Dict{Tuple{Point,Point},T})
-            mveq = convert(Dict{Tuple{Point,Point},T}, mveq)
+        if !isa(mveq, Dict{Tuple{Point1D,Point1D},T})
+            mveq = convert(Dict{Tuple{Point1D,Point1D},T}, mveq)
         end
         new{T,D,A}(domain, algebra, mvlt, mveq)
     end
@@ -161,8 +148,8 @@ and similarly for the inverse relations:
 """
 function mveval(
     r::R,
-    (x,y)::Tuple{Point,Point},
-    (z,t)::Tuple{Point,Point},
+    (x,y)::Tuple{Point1D,Point1D},
+    (z,t)::Tuple{Point1D,Point1D},
     c::AFSLOS
 ) where {
     R<:AbstractRelation
@@ -1010,7 +997,7 @@ function mvhsalphasat(
                             for eqzcombs ∈ shuffle(combs)[1:ceil(Int, ncombs*diamondexpansion)]
                                 # Must initialize at every (parallel) cycle!
                                 # cB1 = o(cB) ∪ {z}
-                                z = Point(""*Char(Int(last(cB0.domain).label[1])+1))
+                                z = Point1D(""*Char(Int(last(cB0.domain).label[1])+1))
                                 cB1 = AFSLOS(
                                     vcat(cB0.domain, z),
                                     cB0.algebra,
@@ -1021,7 +1008,7 @@ function mvhsalphasat(
                                 cB1.mveq[(z,z)] = ⊤
             
                                 # cB2 = cB1 ∪ {t} = o(cB) ∪ {z,t}
-                                t = Point(""*Char(Int(last(cB1.domain).label[1])+1))
+                                t = Point1D(""*Char(Int(last(cB1.domain).label[1])+1))
 
                                 for i ∈ 1:length(cB0.domain)
                                     cB1.mvlt[(cB0.domain[i],z)] = ltzcombs[i]
@@ -1445,7 +1432,7 @@ function mvhsalphasat(
                             for eqzcombs ∈ shuffle(combs)[1:ceil(Int, ncombs*diamondexpansion)]
                                 # Must initialize at every (parallel) cycle!
                                 # cB1 = o(cB) ∪ {z}
-                                z = Point(""*Char(Int(last(cB0.domain).label[1])+1))
+                                z = Point1D(""*Char(Int(last(cB0.domain).label[1])+1))
                                 cB1 = AFSLOS(
                                     vcat(cB0.domain, z),
                                     cB0.algebra,
@@ -1456,7 +1443,7 @@ function mvhsalphasat(
                                 cB1.mveq[(z,z)] = ⊤
 
                                 # cB2 = cB1 ∪ {t} = o(cB) ∪ {z,t}
-                                t = Point(""*Char(Int(last(cB1.domain).label[1])+1))
+                                t = Point1D(""*Char(Int(last(cB1.domain).label[1])+1))
 
                                 for i ∈ 1:length(cB0.domain)
                                     cB1.mvlt[(cB0.domain[i],z)] = ltzcombs[i]
@@ -1929,7 +1916,7 @@ function mvhsalphasat(
                             for eqzcombs ∈ shuffle(combs)[1:ceil(Int, ncombs*diamondexpansion)]
                                 # Must initialize at every (parallel) cycle!
                                 # cB1 = o(cB) ∪ {z}
-                                z = Point(""*Char(Int(last(cB0.domain).label[1])+1))
+                                z = Point1D(""*Char(Int(last(cB0.domain).label[1])+1))
                                 cB1 = AFSLOS(
                                     vcat(cB0.domain, z),
                                     cB0.algebra,
@@ -1940,7 +1927,7 @@ function mvhsalphasat(
                                 cB1.mveq[(z,z)] = ⊤
             
                                 # cB2 = cB1 ∪ {t} = o(cB) ∪ {z,t}
-                                t = Point(""*Char(Int(last(cB1.domain).label[1])+1))
+                                t = Point1D(""*Char(Int(last(cB1.domain).label[1])+1))
 
                                 for i ∈ 1:length(cB0.domain)
                                     cB1.mvlt[(cB0.domain[i],z)] = ltzcombs[i]
@@ -2253,7 +2240,7 @@ function mvhsalphasat(
                             for eqzcombs ∈ shuffle(combs)[1:ceil(Int, ncombs*diamondexpansion)]
                                 # Must initialize at every (parallel) cycle!
                                 # cB1 = o(cB) ∪ {z}
-                                z = Point(""*Char(Int(last(cB0.domain).label[1])+1))
+                                z = Point1D(""*Char(Int(last(cB0.domain).label[1])+1))
                                 cB1 = AFSLOS(
                                     vcat(cB0.domain, z),
                                     cB0.algebra,
@@ -2264,7 +2251,7 @@ function mvhsalphasat(
                                 cB1.mveq[(z,z)] = ⊤
 
                                 # cB2 = cB1 ∪ {t} = o(cB) ∪ {z,t}
-                                t = Point(""*Char(Int(last(cB1.domain).label[1])+1))
+                                t = Point1D(""*Char(Int(last(cB1.domain).label[1])+1))
 
                                 for i ∈ 1:length(cB0.domain)
                                     cB1.mvlt[(cB0.domain[i],z)] = ltzcombs[i]
@@ -2470,7 +2457,7 @@ function mvhsalphasat(
     end
     if !isa(α, T) α = convert(T, α) end
     tableaux = Vector{MVHSTableau}()
-    x, y = Point.(["A", "B"])
+    x, y = Point1D.(["A", "B"])
     for δ ∈ getdomain(a)
         istop(δ) && continue    # (1)
         for β ∈ getdomain(a)
@@ -2575,7 +2562,7 @@ function mvhsalphaprove(
     end
     if !isa(α, T) α = convert(T, α) end
     tableaux = Vector{MVHSTableau}()
-    x, y = Point.(["A", "B"])
+    x, y = Point1D.(["A", "B"])
     for δ ∈ getdomain(a)
         istop(δ) && continue    # (1)
         for β ∈ getdomain(a)

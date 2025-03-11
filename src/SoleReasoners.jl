@@ -17,20 +17,22 @@ using SoleLogics.ManyValuedLogics
 using SoleLogics.ManyValuedLogics: FiniteTruth, FiniteAlgebra
 using SoleLogics.ManyValuedLogics: lesservalues, maximalmembers, minimalmembers
 
-include("many-valued-tableau.jl")
-export alphasat, prove, alphaprove
+# include("many-valued-tableau.jl")
+# export alphasat, prove, alphaprove
 
-include("mvhs.jl")
-export mvhsalphasat, mvhsalphaprove
+include("many-valued-multi-modal-logic/many-valued-multi-modal-logic.jl")
 
-include("hybrid-tableau.jl")
-export hybridalphasat, hybridalphaprove
+# include("mvhs.jl")
+# export mvhsalphasat, mvhsalphaprove
 
-include("hybrid-modal-tableau.jl")
-export hybridmvhsalphasat, hybridmvhsalphaprove
+# include("hybrid-tableau.jl")
+# export hybridalphasat, hybridalphaprove
 
-include("utils.jl")
+# include("hybrid-modal-tableau.jl")
+# export hybridmvhsalphasat, hybridmvhsalphaprove
 
-export dimacstosole, booleantofuzzy
+# include("utils.jl")
+
+# export dimacstosole, booleantofuzzy
 
 end # module SoleReasoners
