@@ -13,13 +13,13 @@ Pages = ["developer-documentation.md"]
 ```@docs
 AbstractTableau
 Tableau
-ManyValuedTableau
+<!-- ManyValuedTableau -->
 ```
 
 ### SignedFormula
 
 ```@docs
-SignedFormula
+<!-- SignedFormula -->
 ```
 
 ## MetrichHeap
