@@ -9,13 +9,13 @@ using StatsBase
 
 @reexport using SoleLogics
 
-include("core.jl")
+# include("core.jl")
 
-export naivechoosenode, roundrobin, sat
+# export naivechoosenode, roundrobin, sat
 
-using SoleLogics.ManyValuedLogics
-using SoleLogics.ManyValuedLogics: FiniteTruth, FiniteAlgebra
-using SoleLogics.ManyValuedLogics: lesservalues, maximalmembers, minimalmembers
+# using SoleLogics.ManyValuedLogics
+# using SoleLogics.ManyValuedLogics: FiniteTruth, FiniteAlgebra
+# using SoleLogics.ManyValuedLogics: lesservalues, maximalmembers, minimalmembers
 
 # include("many-valued-tableau.jl")
 # export alphasat, prove, alphaprove

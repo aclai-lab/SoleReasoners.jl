@@ -1,3 +1,4 @@
+include("many-valued-linear-order.jl")
 include("mvltlfp.jl")
 include("mvcs.jl")
 include("mvhs.jl")
