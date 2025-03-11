@@ -1,4 +1,4 @@
-```@meta
+<!-- ```@meta
 CurrentModule = SoleReasoners
 ```
 
@@ -13,13 +13,13 @@ Pages = ["developer-documentation.md"]
 ```@docs
 AbstractTableau
 Tableau
-<!-- ManyValuedTableau -->
+ManyValuedTableau
 ```
 
 ### SignedFormula
 
 ```@docs
-<!-- SignedFormula -->
+SignedFormula
 ```
 
 ## MetrichHeap
@@ -27,4 +27,4 @@ Tableau
 ```@docs
 MetricHeapNode
 MetricHeap
-```
+``` -->
