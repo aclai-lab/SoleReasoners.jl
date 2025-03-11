@@ -19,7 +19,7 @@ makedocs(;
         "Home" => "index.md",
         "Getting started" => "getting-started.md",
         # "Many-Valued logics" => "many-valued-logics.md",
-        "Developer documentation" => "developer-documentation.md",
+        # "Developer documentation" => "developer-documentation.md",
     ],
     # NOTE: warning
     warnonly = :true,
