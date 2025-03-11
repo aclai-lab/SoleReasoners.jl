@@ -5,7 +5,7 @@ DocMeta.setdocmeta!(SoleReasoners, :DocTestSetup, :(using SoleReasoners); recurs
 
 makedocs(;
     modules = [SoleReasoners],
-    authors = ["Alberto Paparella"],
+    authors = "Alberto Paparella",
     repo=Documenter.Remotes.GitHub("aclai-lab", "SoleReasoners.jl"),
     sitename = "SoleReasoners.jl",
     format = Documenter.HTML(;
@@ -16,9 +16,9 @@ makedocs(;
     ),
     pages = [
         "Home" => "index.md",
-        "Getting started" => "getting-started.md"
-        # "Many-Valued logics" => "many-valued-logics.md",
-        # "Developer documentation" => "developer-documentation.md",
+        "Getting started" => "getting-started.md",
+        "Many-Valued logics" => "many-valued-logics.md",
+        "Developer documentation" => "developer-documentation.md",
     ],
     # NOTE: warning
     warnonly = :true,
