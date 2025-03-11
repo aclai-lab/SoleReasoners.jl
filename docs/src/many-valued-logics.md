@@ -1,4 +1,4 @@
-```@meta
+<!-- ```@meta
 CurrentModule = SoleReasoners
 ```
 
@@ -71,4 +71,4 @@ alphaprove(
         A<:FiniteAlgebra{T,D},
         T1<:Truth
     }
-```
+``` -->
