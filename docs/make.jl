@@ -5,7 +5,7 @@ DocMeta.setdocmeta!(SoleReasoners, :DocTestSetup, :(using SoleReasoners); recurs
 
 makedocs(;
     modules = [SoleReasoners],
-    authors = "Alberto Paparella",
+    authors = ["Alberto Paparella"],
     repo=Documenter.Remotes.GitHub("aclai-lab", "SoleReasoners.jl"),
     sitename = "SoleReasoners.jl",
     format = Documenter.HTML(;
