@@ -3,7 +3,6 @@ using Documenter
 
 DocMeta.setdocmeta!(SoleReasoners, :DocTestSetup, :(using SoleReasoners); recursive = true)
 
-
 makedocs(;
     modules = [SoleReasoners],
     authors = "Alberto Paparella",
@@ -17,7 +16,7 @@ makedocs(;
     ),
     pages = [
         "Home" => "index.md",
-        "Getting started" => "getting-started.md",
+        "Getting started" => "getting-started.md"
         # "Many-Valued logics" => "many-valued-logics.md",
         # "Developer documentation" => "developer-documentation.md",
     ],
