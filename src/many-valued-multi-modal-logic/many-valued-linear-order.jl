@@ -86,8 +86,7 @@ struct ManyValuedLinearOrder{M<:SMatrix}
         N,
         M<:SMatrix{N,N,FiniteTruth}
     }
-        if isaManyValuedLinearOrder(mvlt, mveq, algebra)
-            new{M}(mvlt, mveq)
-        end
+        isaManyValuedLinearOrder(mvlt, mveq, algebra)
+        new{M}(mvlt, mveq)
     end
 end

@@ -49,3 +49,7 @@ mveq = SMatrix{3,3,FiniteTruth}([[⊤ ⊥ ⊥]; [⊥ ⊤ ⊥]; [⊥ ⊥ ⊤]])
 @test_throws ErrorException(
     "(D,̃<,̃=) is not a many-valued linear order (5)"
 ) ManyValuedLinearOrder(mvlt, mveq, H4)
+
+mvlt = SMatrix{1,1,FiniteTruth}([⊥])
+mveq = SMatrix{1,1,FiniteTruth}([⊤])
+@test_nowarn o = ManyValuedLinearOrder(mvlt, mveq, booleanalgebra)
