@@ -7,7 +7,7 @@ using Reexport
 using Base.Threads
 using StatsBase
 
-@reexport using SoleLogics
+# @reexport using SoleLogics
 
 # include("core.jl")
 

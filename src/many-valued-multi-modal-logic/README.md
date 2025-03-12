@@ -1,10 +1,10 @@
 # Many-Valued Multi-Modal Logic
 
 This folder contains the necessary components to reason about many-valued
-multi-modal logic.
+multi-modal logic, such as the definition of a many-valued linear order
+([many-valued-linear-order.jl](many-valued-linear-order.jl)).
 Each file contains the definition of:
  - a data structure representing a world in a specific logic
- - a consistent definition of a Kripke frame through many-valued linear orders
  - the many-valued evaluation functions for the relations in the logic
 
 One should notice how these structures change from the ones in `SoleLogics.jl`,

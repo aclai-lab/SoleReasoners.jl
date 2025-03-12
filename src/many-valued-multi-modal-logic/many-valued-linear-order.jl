@@ -1,3 +1,4 @@
+using SoleLogics: isbot, istop
 using SoleLogics.ManyValuedLogics: FiniteFLewAlgebra, FiniteTruth, succeedeq
 using StaticArrays: SMatrix
 
@@ -61,6 +62,7 @@ end
     struct ManyValuedLinearOrder{N, M<:SMatrix{N,N,FiniteTruth}}
         mvlt::M # ̃<
         mveq::M # ̃=
+        algebra::FiniteFLewAlgebra
     end
 
 Given an `algebra`, a many-valued linear order is a structure of the type
@@ -77,6 +79,7 @@ the following conditions apply for every x, y and z in the domain D:
 struct ManyValuedLinearOrder{M<:SMatrix}
     mvlt::M # ̃<
     mveq::M # ̃=
+    algebra::FiniteFLewAlgebra
 
     function ManyValuedLinearOrder(
         mvlt::M,
@@ -87,6 +90,6 @@ struct ManyValuedLinearOrder{M<:SMatrix}
         M<:SMatrix{N,N,FiniteTruth}
     }
         isaManyValuedLinearOrder(mvlt, mveq, algebra)
-        new{M}(mvlt, mveq)
+        new{M}(mvlt, mveq, algebra)
     end
 end
