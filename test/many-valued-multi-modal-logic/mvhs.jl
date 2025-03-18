@@ -1,9 +1,19 @@
 using SoleReasoners: Interval
 
+################################################################################
+# Constructor ##################################################################
+################################################################################
 x1 = Point1D(1)
 x2 = Point1D(2)
-@test_nowarn i = Interval(x1, x2)
-i = Interval(x1, x2)
+mvlttable = SMatrix{2,2,FiniteTruth}([[⊥ ⊤]; [⊥ ⊥]])
+mveqtable = SMatrix{2,2,FiniteTruth}([[⊤ ⊥]; [⊥ ⊤]])
+o = ManyValuedLinearOrder(mvlttable, mveqtable, booleanalgebra)
+@test_nowarn i1 = Interval(x1, x2, o)
+
+################################################################################
+# Logger #######################################################################
+################################################################################
+i1 = Interval(x1, x2, o)
 b = IOBuffer()
-print(b, i)
+print(b, i1)
 @test String(take!(b)) == "[x1,x2]"

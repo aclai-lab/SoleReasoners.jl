@@ -2,6 +2,9 @@ using SoleLogics.ManyValuedLogics: FiniteTruth, booleanalgebra, G3, H4, α, β
 using SoleReasoners: ManyValuedLinearOrder
 using StaticArrays: SMatrix
 
+################################################################################
+# Constructor ##################################################################
+################################################################################
 mvlttable = SMatrix{1,1,FiniteTruth}([⊥])
 mveqtable = SMatrix{1,1,FiniteTruth}([⊥])
 @test_throws ErrorException(
@@ -53,3 +56,13 @@ mveqtable = SMatrix{3,3,FiniteTruth}([[⊤ ⊥ ⊥]; [⊥ ⊤ ⊥]; [⊥ ⊥ ⊤
 mvlttable = SMatrix{1,1,FiniteTruth}([⊥])
 mveqtable = SMatrix{1,1,FiniteTruth}([⊤])
 @test_nowarn o = ManyValuedLinearOrder(mvlttable, mveqtable, booleanalgebra)
+
+################################################################################
+# Logger #######################################################################
+################################################################################
+mvlttable = SMatrix{2,2,FiniteTruth}([[⊥ ⊤]; [⊥ ⊥]])
+mveqtable = SMatrix{2,2,FiniteTruth}([[⊤ ⊥]; [⊥ ⊤]])
+o = ManyValuedLinearOrder(mvlttable, mveqtable, booleanalgebra)
+b = IOBuffer()
+print(b, o)
+@test String(take!(b)) == " ̃<: FiniteTruth[⊥ ⊤; ⊥ ⊥]\n ̃=: FiniteTruth[⊤ ⊥; ⊥ ⊤]"
