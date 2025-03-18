@@ -19,7 +19,7 @@ linear order `o`, i.e., ̃<(p1,p2) ≻ ⊥.
 """
 function checkInterval(p1::Point1D, p2::Point1D, o::ManyValuedLinearOrder)
     if !isaInterval(p1, p2, o)
-        error("`p1` and `p2` do not form an `Interval` in `o`.")
+        error("`p1` and `p2` do not form an `Interval` in `o`")
     end
 end
 
