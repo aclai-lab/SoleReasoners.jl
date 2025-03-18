@@ -62,7 +62,7 @@ Base.show(io::IO, i::Interval) = print(io, "[x$(i.p1.index),x$(i.p2.index)]")
         i2::Interval,
         o::ManyValuedLinearOrder
     )
-Many-valued evaluation function p1Rp2 = ̃=(i1p2,i2p1) for relation R=HS_A in
+Many-valued evaluation function i1Ri2 = ̃=(i1p2,i2p1) for relation R=HS_A in
 many-valued linear order `o` (how much `i2` is after `i1`).
 """
 function mveval(
@@ -72,4 +72,221 @@ function mveval(
     o::ManyValuedLinearOrder
 )
     return mveq(i1.p2, i2.p1, o)
+end
+
+"""
+    function mveval(
+        ::typeof(HS_L),
+        i1::Interval,
+        i2::Interval,
+        o::ManyValuedLinearOrder
+    )
+Many-valued evaluation function i1Ri2 = ̃<(i1p2,i2p1) for relation R=HS_L in
+many-valued linear order `o` (how much `i2` is later than `i1`).
+"""
+function mveval(
+    ::typeof(HS_L),
+    i1::Interval,
+    i2::Interval,
+    o::ManyValuedLinearOrder
+)
+    return mvlt(i1.p2, i2.p1, o)
+end
+
+"""
+    function mveval(
+        ::typeof(HS_B),
+        i1::Interval,
+        i2::Interval,
+        o::ManyValuedLinearOrder
+    )
+Many-valued evaluation function i1Ri2 = ̃=(i1p1,i2p1) ⋅ ̃<(i2p2,i1p2) for relation
+R=HS_B in many-valued linear order `o` (how much `i2` is at the begin of `i1`).
+"""
+function mveval(
+    ::typeof(HS_B),
+    i1::Interval,
+    i2::Interval,
+    o::ManyValuedLinearOrder
+)
+    return o.algebra.monoid(mveq(i1.p1, i2.p1, o), mvlt(i2.p2, i1.p2, o))
+end
+
+"""
+    function mveval(
+        ::typeof(HS_E),
+        i1::Interval,
+        i2::Interval,
+        o::ManyValuedLinearOrder
+    )
+Many-valued evaluation function i1Ri2 = ̃<(i1p1,i2p1) ⋅ ̃=(i1p2,i2p2) for relation
+R=HS_E in many-valued linear order `o` (how much `i2` is at the end of `i1`).
+"""
+function mveval(
+    ::typeof(HS_E),
+    i1::Interval,
+    i2::Interval,
+    o::ManyValuedLinearOrder
+)
+    return o.algebra.monoid(mvlt(i1.p1, i2.p1, o), mveq(i1.p2, i2.p2, o))
+end
+
+"""
+    function mveval(
+        ::typeof(HS_D),
+        i1::Interval,
+        i2::Interval,
+        o::ManyValuedLinearOrder
+    )
+Many-valued evaluation function i1Ri2 = ̃<(i1p1,i2p1) ⋅ ̃<(i2p2,i1p2) for relation
+R=HS_D in many-valued linear order `o` (how much `i2` is during `i1`).
+"""
+function mveval(
+    ::typeof(HS_D),
+    i1::Interval,
+    i2::Interval,
+    o::ManyValuedLinearOrder
+)
+    return o.algebra.monoid(mvlt(i1.p1, i2.p1, o), mvlt(i2.p2, i1.p2, o))
+end
+
+"""
+    function mveval(
+        ::typeof(HS_O),
+        i1::Interval,
+        i2::Interval,
+        o::ManyValuedLinearOrder
+    )
+Many-valued evaluation function
+i1Ri2 = ̃<(i1p1,i2p1) ⋅ ̃<(i2p1,i1p2) ⋅ ̃<(i1p2, i2p2) for relation R=HS_O in
+many-valued linear order `o` (how much `i2` is overlapping `i1`).
+"""
+function mveval(
+    ::typeof(HS_O),
+    i1::Interval,
+    i2::Interval,
+    o::ManyValuedLinearOrder
+)
+    return o.algebra.monoid(
+        o.algebra.monoid(mvlt(i1.p1, i2.p1, o), mvlt(i2.p1, i1.p2, o)),
+        mvlt(i1.p2, i2.p2, o)
+    )
+end
+
+"""
+    function mveval(
+        ::typeof(HS_Ai),
+        i1::Interval,
+        i2::Interval,
+        o::ManyValuedLinearOrder
+    )
+Many-valued evaluation function i1Ri2 = ̃=(i2p2,i1p1) for relation R=HS_Ai in
+many-valued linear order `o` (how much `i1` is after `i2`).
+"""
+function mveval(
+    ::typeof(HS_Ai),
+    i1::Interval,
+    i2::Interval,
+    o::ManyValuedLinearOrder
+)
+    return mveq(i2.p2, i1.p1, o)
+end
+
+"""
+    function mveval(
+        ::typeof(HS_Li),
+        i1::Interval,
+        i2::Interval,
+        o::ManyValuedLinearOrder
+    )
+Many-valued evaluation function i1Ri2 = ̃<(i2p2,i1p1) for relation R=HS_Li in
+many-valued linear order `o` (how much `i1` is later than `i2`).
+"""
+function mveval(
+    ::typeof(HS_Li),
+    i1::Interval,
+    i2::Interval,
+    o::ManyValuedLinearOrder
+)
+    return mvlt(i2.p2, i1.p1, o)
+end
+
+"""
+    function mveval(
+        ::typeof(HS_Bi),
+        i1::Interval,
+        i2::Interval,
+        o::ManyValuedLinearOrder
+    )
+Many-valued evaluation function i1Ri2 = ̃=(i1p1,i2p1) ⋅ ̃<(i1p2,i2p2) for relation
+R=HS_Bi in many-valued linear order `o` (how much `i1` is at the begin of `i2`).
+"""
+function mveval(
+    ::typeof(HS_Bi),
+    i1::Interval,
+    i2::Interval,
+    o::ManyValuedLinearOrder
+)
+    return o.algebra.monoid(mveq(i1.p1, i2.p1, o), mvlt(i1.p2, i2.p2, o))
+end
+
+"""
+    function mveval(
+        ::typeof(HS_Ei),
+        i1::Interval,
+        i2::Interval,
+        o::ManyValuedLinearOrder
+    )
+Many-valued evaluation function i1Ri2 = ̃<(i2p1,i1p1) ⋅ ̃=(i1p2,i2p2) for relation
+R=HS_Ei in many-valued linear order `o` (how much `i1` is at the end of `i2`).
+"""
+function mveval(
+    ::typeof(HS_Ei),
+    i1::Interval,
+    i2::Interval,
+    o::ManyValuedLinearOrder
+)
+    return o.algebra.monoid(mvlt(i2.p1, i1.p1, o), mveq(i1.p2, i2.p2, o))
+end
+
+"""
+    function mveval(
+        ::typeof(HS_Di),
+        i1::Interval,
+        i2::Interval,
+        o::ManyValuedLinearOrder
+    )
+Many-valued evaluation function i1Ri2 = ̃<(i2p1,i1p1) ⋅ ̃<(i1p2,i2p2) for relation
+R=HS_Di in many-valued linear order `o` (how much `i1` is during `i2`).
+"""
+function mveval(
+    ::typeof(HS_Di),
+    i1::Interval,
+    i2::Interval,
+    o::ManyValuedLinearOrder
+)
+    return o.algebra.monoid(mvlt(i2.p1, i1.p1, o), mvlt(i1.p2, i2.p2, o))
+end
+
+"""
+    function mveval(
+        ::typeof(HS_Oi),
+        i1::Interval,
+        i2::Interval,
+        o::ManyValuedLinearOrder
+    )
+Many-valued evaluation function
+i1Ri2 = ̃<(i2p1,i1p1) ⋅ ̃<(i1p1,i2p2) ⋅ ̃<(i2p2, i1p2) for relation R=HS_Oi in
+many-valued linear order `o` (how much `i1` is overlapping `i2`).
+"""
+function mveval(
+    ::typeof(HS_Oi),
+    i1::Interval,
+    i2::Interval,
+    o::ManyValuedLinearOrder
+)
+    return o.algebra.monoid(
+        o.algebra.monoid(mvlt(i2.p1, i1.p1, o), mvlt(i1.p1, i2.p2, o)),
+        mvlt(i2.p2, i1.p2, o)
+    )
 end
