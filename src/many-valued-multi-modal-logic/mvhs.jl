@@ -11,6 +11,11 @@ function isaInterval(p1::Point1D, p2::Point1D, o::ManyValuedLinearOrder)
     return !isbot(mvlt(p1, p2, o))
 end
 
+# Helper
+function isaInterval(p1::Int, p2::Int, o::ManyValuedLinearOrder)
+    return isaInterval(Point1D(p1), Point1D(p2), o)
+end
+
 """
     checkInterval(p1::Point1D, p2::Point1D, o::ManyValuedLinearOrder)
 
@@ -21,6 +26,11 @@ function checkInterval(p1::Point1D, p2::Point1D, o::ManyValuedLinearOrder)
     if !isaInterval(p1, p2, o)
         error("`p1` and `p2` do not form an `Interval` in `o`")
     end
+end
+
+# Helper
+function checkInterval(p1::Int, p2::Int, o::ManyValuedLinearOrder)
+    return checkInterval(Point1D(p1), Point1D(p2), o)
 end
 
 """
@@ -43,6 +53,15 @@ struct Interval
     )
         @boundscheck checkInterval(p1, p2, o)
         return new(p1, p2)
+    end
+
+    @inline function Interval(
+        p1::Int,
+        p2::Int,
+        o::ManyValuedLinearOrder
+    )
+        @boundscheck checkInterval(p1, p2, o)
+        return new(Point1D(p1), Point1D(p2))
     end
 end
 
