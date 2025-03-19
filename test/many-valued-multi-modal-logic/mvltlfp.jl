@@ -1,6 +1,6 @@
 using SoleLogics: LTLFP_F, LTLFP_P
 using SoleLogics.ManyValuedLogics: FiniteTruth, booleanalgebra
-using SoleReasoners: ManyValuedLinearOrder, Point1D, mveval, mveq, mvlt
+using SoleReasoners: ManyValuedLinearOrder, Point1D, mvlt, mveq, mvleq, mveval
 using StaticArrays: SMatrix
 
 ################################################################################
@@ -26,14 +26,18 @@ x2 = Point1D(UInt8(2))
 mvlttable = SMatrix{2,2,FiniteTruth}([[⊥ ⊤]; [⊥ ⊥]])
 mveqtable = SMatrix{2,2,FiniteTruth}([[⊤ ⊥]; [⊥ ⊤]])
 o = ManyValuedLinearOrder(mvlttable, mveqtable, booleanalgebra)
-@test isbot(mvlt(x1, x1, o))
-@test istop(mvlt(x1, x2, o))
-@test isbot(mvlt(x2, x1, o))
-@test isbot(mvlt(x2, x2, o))
-@test istop(mveq(x1, x1, o))
-@test isbot(mveq(x1, x2, o))
-@test isbot(mveq(x2, x1, o))
-@test istop(mveq(x2, x2, o))
+@test isbot(mvlt(x1,  x1, o))
+@test istop(mvlt(x1,  x2, o))
+@test isbot(mvlt(x2,  x1, o))
+@test isbot(mvlt(x2,  x2, o))
+@test istop(mveq(x1,  x1, o))
+@test isbot(mveq(x1,  x2, o))
+@test isbot(mveq(x2,  x1, o))
+@test istop(mveq(x2,  x2, o))
+@test istop(mvleq(x1, x1, o))
+@test istop(mvleq(x1, x2, o))
+@test isbot(mvleq(x2, x1, o))
+@test istop(mvleq(x2, x2, o))
 
 ################################################################################
 # Many-valued evaluation functions (CRISP case) ################################

@@ -77,8 +77,13 @@ for x1 = 1:10, x2 = 1:10
                 r2 = Rectangle(z1z2, t1t2)
                 if x2 < z1 || y2 < t1 || z2 < x1 || t2 < y1
                     @test istop(mveval(LRCC8_Rec_DC, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_EC, r1, r2, (ox, oy)))
+                elseif x1 == z2 || x2 == z1 || y1 == t2 || y2 == t1
+                    @test isbot(mveval(LRCC8_Rec_DC, r1, r2, (ox, oy)))
+                    @test istop(mveval(LRCC8_Rec_EC, r1, r2, (ox, oy)))
                 else
                     @test isbot(mveval(LRCC8_Rec_DC, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_EC, r1, r2, (ox, oy)))
                 end                
             end
         end

@@ -53,6 +53,16 @@ function mveq(x1::Point1D, x2::Point1D, o::ManyValuedLinearOrder)
 end
 
 """
+    mvleq(x1::Point1D, x2::Point1D, o::ManyValuedLinearOrder)
+
+Return the value for the ̃≤ function between two `Point1D`s `x1` and `x2`on the
+many-valued linear order `o` (i.e., ̃<(x1,x2) ∨ ̃=(x1,x2)).
+"""
+function mvleq(x1::Point1D, x2::Point1D, o::ManyValuedLinearOrder)
+    return o.algebra.join(mvlt(x1, x2, o), mveq(x1, x2, o))
+end
+
+"""
     function mveval(
         ::typeof(LTLFP_F),
         x1::Point1D,
