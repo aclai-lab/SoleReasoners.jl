@@ -1,3 +1,6 @@
+using SoleLogics: LRCC8_Rec_DC, LRCC8_Rec_EC, LRCC8_Rec_PO
+using SoleLogics: LRCC8_Rec_TPP, LRCC8_Rec_TPPi, LRCC8_Rec_NTPP, LRCC8_Rec_NTPPi
+
 """
     struct Rectangle
         ix::Interval
@@ -26,5 +29,35 @@ function Base.show(io::IO, r::Rectangle)
             "[x$(r.ix.p1.index),x$(r.ix.p2.index)]," *
             "[y$(r.iy.p1.index),y$(r.iy.p2.index)]" *
         ")"
+    )
+end
+
+"""
+    function mveval(
+        ::typeof(LRCC8_Rec_DC),
+        r1::Rectangle,
+        r2::Rectangle,
+        (ox,oy)::NTuple{2,ManyValuedLinearOrder}
+    )
+Many-valued evaluation function
+r1Rr2 = r1ixp2 ̃< r2ixp1 ∨ r1y2p2 ̃< r2iyp1 ∨ r2ixp2 ̃< r1ixp1 ∨ r2iyp2 ̃< r1iyp1
+for relation R=LRCC8_Rec_DC in many-valued linear orders `ox` and `oy` (how much
+`r2` is disconnected from `r1`).
+"""
+function mveval(
+    ::typeof(LRCC8_Rec_DC),
+    r1::Rectangle,
+    r2::Rectangle,
+    (ox,oy)::NTuple{2,ManyValuedLinearOrder}
+)
+    return ox.algebra.join(
+        ox.algebra.join(
+            mvlt(r1.ix.p2, r2.ix.p1, ox),
+            mvlt(r1.iy.p2, r2.iy.p1, oy)
+        ),
+        ox.algebra.join(
+            mvlt(r2.ix.p2, r1.ix.p1, ox),
+            mvlt(r2.iy.p2, r1.iy.p1, oy)
+        )
     )
 end
