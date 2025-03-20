@@ -78,12 +78,78 @@ for x1 = 1:10, x2 = 1:10
                 if x2 < z1 || y2 < t1 || z2 < x1 || t2 < y1
                     @test istop(mveval(LRCC8_Rec_DC, r1, r2, (ox, oy)))
                     @test isbot(mveval(LRCC8_Rec_EC, r1, r2, (ox, oy)))
+                    # @test isbot(mveval(LRCC8_Rec_PO, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_TPP, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_TPPi, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_NTPP, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_NTPPi, r1, r2, (ox, oy)))
                 elseif x1 == z2 || x2 == z1 || y1 == t2 || y2 == t1
                     @test isbot(mveval(LRCC8_Rec_DC, r1, r2, (ox, oy)))
                     @test istop(mveval(LRCC8_Rec_EC, r1, r2, (ox, oy)))
+                    # @test isbot(mveval(LRCC8_Rec_PO, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_TPP, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_TPPi, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_NTPP, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_NTPPi, r1, r2, (ox, oy)))
+                elseif x1 < z1 < x2 < z2 || z1 < x1 < z2 < x2 ||
+                       y1 < t1 < y2 < t2 || t1 < y1 < t2 < y1
+                    @test isbot(mveval(LRCC8_Rec_DC, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_EC, r1, r2, (ox, oy)))
+                    # @test istop(mveval(LRCC8_Rec_PO, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_TPP, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_TPPi, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_NTPP, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_NTPPi, r1, r2, (ox, oy)))
+                elseif (
+                    x1 == z1 && z2 <= x2 && y1 <= t1 && t2 <= y2 ||
+                    x2 == z2 && x1 <= z1 && y1 <= t1 && t2 <= y2 ||
+                    y1 == t1 && x1 <= z1 && z2 <= x2 && t2 <= y2 ||
+                    y2 == t2 && x1 <= z1 && z2 <= x2 && y1 <= t1
+                ) && !(x1 == z1 && x2 == z2 && y1 == t1 && y2 == t2)
+                    @test isbot(mveval(LRCC8_Rec_DC, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_EC, r1, r2, (ox, oy)))
+                    # @test isbot(mveval(LRCC8_Rec_PO, r1, r2, (ox, oy)))
+                    @test istop(mveval(LRCC8_Rec_TPP, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_TPPi, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_NTPP, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_NTPPi, r1, r2, (ox, oy)))   
+                elseif (
+                    x1 == z1 && x2 <= z2 && t1 <= y1 && y2 <= t2 ||
+                    x2 == z2 && z1 <= x1 && t1 <= y1 && y2 <= t2 ||
+                    y1 == t1 && z1 <= x1 && x2 <= z2 && y2 <= t2 ||
+                    y2 == t2 && z1 <= x1 && x2 <= z2 && t1 <= y1
+                ) && !(x1 == z1 && x2 == z2 && y1 == t1 && y2 == t2)
+                    @test isbot(mveval(LRCC8_Rec_DC, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_EC, r1, r2, (ox, oy)))
+                    # @test isbot(mveval(LRCC8_Rec_PO, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_TPP, r1, r2, (ox, oy)))
+                    @test istop(mveval(LRCC8_Rec_TPPi, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_NTPP, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_NTPPi, r1, r2, (ox, oy)))               
+                elseif x1 < z1 < z2 < x2 && y1 < t1 < t2 < y2
+                    @test isbot(mveval(LRCC8_Rec_DC, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_EC, r1, r2, (ox, oy)))
+                    # @test isbot(mveval(LRCC8_Rec_PO, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_TPP, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_TPPi, r1, r2, (ox, oy)))
+                    @test istop(mveval(LRCC8_Rec_NTPP, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_NTPPi, r1, r2, (ox, oy)))
+                elseif z1 < x1 < x2 < z2 && t1 < y1 < y2 < t2
+                    @test isbot(mveval(LRCC8_Rec_DC, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_EC, r1, r2, (ox, oy)))
+                    # @test isbot(mveval(LRCC8_Rec_PO, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_TPP, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_TPPi, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_NTPP, r1, r2, (ox, oy)))
+                    @test istop(mveval(LRCC8_Rec_NTPPi, r1, r2, (ox, oy)))
                 else
                     @test isbot(mveval(LRCC8_Rec_DC, r1, r2, (ox, oy)))
                     @test isbot(mveval(LRCC8_Rec_EC, r1, r2, (ox, oy)))
+                    # @test isbot(mveval(LRCC8_Rec_PO, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_TPP, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_TPPi, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_NTPP, r1, r2, (ox, oy)))
+                    @test isbot(mveval(LRCC8_Rec_NTPPi, r1, r2, (ox, oy)))
                 end                
             end
         end

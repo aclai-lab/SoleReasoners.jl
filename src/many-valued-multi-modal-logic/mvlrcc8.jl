@@ -111,3 +111,299 @@ function mveval(
         )
     )
 end
+
+"""
+    function mveval(
+        ::typeof(LRCC8_Rec_PO),
+        r1::Rectangle,
+        r2::Rectangle,
+        (ox,oy)::NTuple{2,ManyValuedLinearOrder}
+    )
+Many-valued evaluation function r1Rr2 for relation R=LRCC8_Rec_PO in many-valued
+linear orders `ox` and `oy` (how much `r2` is partially overlapping with `r1`).
+
+TODO: not working!!
+"""
+function mveval(
+    ::typeof(LRCC8_Rec_PO),
+    r1::Rectangle,
+    r2::Rectangle,
+    (ox,oy)::NTuple{2,ManyValuedLinearOrder}
+)
+    return ox.algebra.join(
+        ox.algebra.monoid(
+            ox.algebra.join(
+                mvlt(r1.ix.p1, r2.ix.p2, ox),
+                mvlt(r2.ix.p1, r1.ix.p2, ox)
+            ),
+            ox.algebra.join(
+                ox.algebra.monoid(
+                    ox.algebra.monoid(
+                        mvlt(r1.iy.p1, r2.iy.p1, oy),
+                        mvlt(r2.iy.p1, r1.iy.p2, oy)
+                    ),
+                    mvlt(r1.iy.p2, r2.iy.p2, oy)
+                ),
+                ox.algebra.monoid(
+                    ox.algebra.monoid(
+                        mvlt(r2.iy.p1, r1.iy.p1, oy),
+                        mvlt(r1.iy.p1, r2.iy.p2, oy)
+                    ),
+                    mvlt(r2.iy.p2, r1.iy.p2, oy)
+                )
+            )
+        ),
+        ox.algebra.monoid(
+            ox.algebra.join(
+                mvlt(r1.iy.p1, r2.iy.p2, oy),
+                mvlt(r2.iy.p1, r1.iy.p2, oy)
+            ),
+            ox.algebra.join(
+                ox.algebra.monoid(
+                    ox.algebra.monoid(
+                        mvlt(r1.ix.p1, r2.ix.p1, ox),
+                        mvlt(r2.ix.p1, r1.ix.p2, ox)
+                    ),
+                    mvlt(r1.ix.p2, r2.ix.p2, ox)
+                ),
+                ox.algebra.monoid(
+                    ox.algebra.monoid(
+                        mvlt(r2.ix.p1, r1.ix.p1, ox),
+                        mvlt(r1.ix.p1, r2.ix.p2, ox)
+                    ),
+                    mvlt(r2.ix.p2, r1.ix.p2, ox)
+                )
+            )
+        ),
+    )
+end
+
+"""
+    function mveval(
+        ::typeof(LRCC8_Rec_TPP),
+        r1::Rectangle,
+        r2::Rectangle,
+        (ox,oy)::NTuple{2,ManyValuedLinearOrder}
+    )
+Many-valued evaluation function r1Rr2 for relation R=LRCC8_Rec_TPP in
+many-valued linear orders `ox` and `oy` (how much `r2` is a tangential proper
+part of `r1`).
+"""
+function mveval(
+    ::typeof(LRCC8_Rec_TPP),
+    r1::Rectangle,
+    r2::Rectangle,
+    (ox,oy)::NTuple{2,ManyValuedLinearOrder}
+)
+    return ox.algebra.join(
+        ox.algebra.join(
+            ox.algebra.join(
+                ox.algebra.join(
+                    ox.algebra.monoid(
+                        ox.algebra.monoid(
+                            mveq(r1.ix.p1, r2.ix.p1, ox),
+                            mvlt(r2.ix.p2, r1.ix.p2, ox)
+                        ),
+                        ox.algebra.monoid(
+                            mvleq(r1.iy.p1, r2.iy.p1, oy),
+                            mvleq(r2.iy.p2, r1.iy.p2, oy)
+                        )
+                    ),
+                    ox.algebra.monoid(
+                        ox.algebra.monoid(
+                            mveq(r1.ix.p1, r2.ix.p1, ox),
+                            mvleq(r2.ix.p2, r1.ix.p2, ox)
+                        ),
+                        ox.algebra.monoid(
+                            mvlt(r1.iy.p1, r2.iy.p1, oy),
+                            mvleq(r2.iy.p2, r1.iy.p2, oy)
+                        )
+                    )
+                ),
+                ox.algebra.join(
+                    ox.algebra.monoid(
+                        ox.algebra.monoid(
+                            mveq(r1.ix.p1, r2.ix.p1, ox),
+                            mvleq(r2.ix.p2, r1.ix.p2, ox)
+                        ),
+                        ox.algebra.monoid(
+                            mvleq(r1.iy.p1, r2.iy.p1, oy),
+                            mvlt(r2.iy.p2, r1.iy.p2, oy)
+                        )
+                    ),
+                    ox.algebra.monoid(
+                        ox.algebra.monoid(
+                            mveq(r1.ix.p2, r2.ix.p2, ox),
+                            mvlt(r1.ix.p1, r2.ix.p1, ox)
+                        ),
+                        ox.algebra.monoid(
+                            mvleq(r1.iy.p1, r2.iy.p1, oy),
+                            mvleq(r2.iy.p2, r1.iy.p2, oy)
+                        )
+                    ),
+                )
+            ),
+            ox.algebra.join(
+                ox.algebra.join(
+                    ox.algebra.monoid(
+                        ox.algebra.monoid(
+                            mveq(r1.ix.p2, r2.ix.p2, ox),
+                            mvleq(r1.ix.p1, r2.ix.p1, ox)
+                        ),
+                        ox.algebra.monoid(
+                            mvlt(r1.iy.p1, r2.iy.p1, oy),
+                            mvleq(r2.iy.p2, r1.iy.p2, oy)
+                        )
+                    ),
+                    ox.algebra.monoid(
+                        ox.algebra.monoid(
+                            mveq(r1.ix.p2, r2.ix.p2, ox),
+                            mvleq(r1.ix.p1, r2.ix.p1, ox)
+                        ),
+                        ox.algebra.monoid(
+                            mvleq(r1.iy.p1, r2.iy.p1, oy),
+                            mvlt(r2.iy.p2, r1.iy.p2, oy)
+                        )
+                    ),
+                ),
+                ox.algebra.join(
+                    ox.algebra.monoid(
+                        ox.algebra.monoid(
+                            mveq(r1.iy.p1, r2.iy.p1, oy),
+                            mvlt(r1.ix.p1, r2.ix.p1, ox)
+                        ),
+                        ox.algebra.monoid(
+                            mvleq(r2.ix.p2, r1.ix.p2, ox),
+                            mvleq(r2.iy.p2, r1.iy.p2, oy)
+                        )
+                    ),
+                    ox.algebra.monoid(
+                        ox.algebra.monoid(
+                            mveq(r1.iy.p1, r2.iy.p1, oy),
+                            mvleq(r1.ix.p1, r2.ix.p1, ox)
+                        ),
+                        ox.algebra.monoid(
+                            mvlt(r2.ix.p2, r1.ix.p2, ox),
+                            mvleq(r2.iy.p2, r1.iy.p2, oy)
+                        )
+                    ),
+                )
+            )
+        ),
+        ox.algebra.join(
+            ox.algebra.join(
+                ox.algebra.monoid(
+                    ox.algebra.monoid(
+                        mveq(r1.iy.p1, r2.iy.p1, oy),
+                        mvleq(r1.ix.p1, r2.ix.p1, ox)
+                    ),
+                    ox.algebra.monoid(
+                        mvleq(r2.ix.p2, r1.ix.p2, ox),
+                        mvlt(r2.iy.p2, r1.iy.p2, oy)
+                    )
+                ),
+                ox.algebra.monoid(
+                    ox.algebra.monoid(
+                        mveq(r1.iy.p2, r2.iy.p2, oy),
+                        mvlt(r1.ix.p1, r2.ix.p1, ox)
+                    ),
+                    ox.algebra.monoid(
+                        mvleq(r2.ix.p2, r1.ix.p2, ox),
+                        mvleq(r1.iy.p1, r2.iy.p1, oy)
+                    )
+                )
+            ),
+            ox.algebra.join(
+                ox.algebra.monoid(
+                    ox.algebra.monoid(
+                        mveq(r1.iy.p2, r2.iy.p2, oy),
+                        mvleq(r1.ix.p1, r2.ix.p1, ox)
+                    ),
+                    ox.algebra.monoid(
+                        mvlt(r2.ix.p2, r1.ix.p2, ox),
+                        mvleq(r1.iy.p1, r2.iy.p1, oy)
+                    )
+                ),
+                ox.algebra.monoid(
+                    ox.algebra.monoid(
+                        mveq(r1.iy.p2, r2.iy.p2, oy),
+                        mvleq(r1.ix.p1, r2.ix.p1, ox)
+                    ),
+                    ox.algebra.monoid(
+                        mvleq(r2.ix.p2, r1.ix.p2, ox),
+                        mvlt(r1.iy.p1, r2.iy.p1, oy)
+                    )
+                )
+            )
+        )
+    )
+end
+
+"""
+    function mveval(
+        ::typeof(LRCC8_Rec_NTPP),
+        r1::Rectangle,
+        r2::Rectangle,
+        (ox,oy)::NTuple{2,ManyValuedLinearOrder}
+    )
+Many-valued evaluation function r1Rr2 for relation R=LRCC8_Rec_NTPP in
+many-valued linear orders `ox` and `oy` (how much `r2` is a non-tangential
+proper part of `r1`).
+"""
+function mveval(
+    ::typeof(LRCC8_Rec_NTPP),
+    r1::Rectangle,
+    r2::Rectangle,
+    (ox,oy)::NTuple{2,ManyValuedLinearOrder}
+)
+    return ox.algebra.monoid(
+        ox.algebra.monoid(
+            mvlt(r1.ix.p1, r2.ix.p1, ox),
+            mvlt(r2.ix.p2, r1.ix.p2, ox)
+        ),
+        ox.algebra.monoid(
+            mvlt(r1.iy.p1, r2.iy.p1, oy),
+            mvlt(r2.iy.p2, r1.iy.p2, oy)
+        )
+    )
+end
+
+"""
+    function mveval(
+        ::typeof(LRCC8_Rec_TPPi),
+        r1::Rectangle,
+        r2::Rectangle,
+        (ox,oy)::NTuple{2,ManyValuedLinearOrder}
+    )
+Many-valued evaluation function r1Rr2 for relation R=LRCC8_Rec_TPPi in
+many-valued linear orders `ox` and `oy` (how much `r1` is a tangential proper
+part of `r2`).
+"""
+function mveval(
+    ::typeof(LRCC8_Rec_TPPi),
+    r1::Rectangle,
+    r2::Rectangle,
+    (ox,oy)::NTuple{2,ManyValuedLinearOrder}
+)
+    return mveval(LRCC8_Rec_TPP, r2, r1, (ox,oy))
+end
+
+"""
+    function mveval(
+        ::typeof(LRCC8_Rec_NTPPi),
+        r1::Rectangle,
+        r2::Rectangle,
+        (ox,oy)::NTuple{2,ManyValuedLinearOrder}
+    )
+Many-valued evaluation function r1Rr2 for relation R=LRCC8_Rec_NTPPi in
+many-valued linear orders `ox` and `oy` (how much `r1` is a non-tangential
+proper part of `r2`).
+"""
+function mveval(
+    ::typeof(LRCC8_Rec_NTPPi),
+    r1::Rectangle,
+    r2::Rectangle,
+    (ox,oy)::NTuple{2,ManyValuedLinearOrder}
+)
+    return mveval(LRCC8_Rec_NTPP, r2, r1, (ox,oy))
+end
