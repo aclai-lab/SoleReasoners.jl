@@ -121,8 +121,6 @@ end
     )
 Many-valued evaluation function r1Rr2 for relation R=LRCC8_Rec_PO in many-valued
 linear orders `ox` and `oy` (how much `r2` is partially overlapping with `r1`).
-
-TODO: not working!!
 """
 function mveval(
     ::typeof(LRCC8_Rec_PO),
@@ -131,50 +129,86 @@ function mveval(
     (ox,oy)::NTuple{2,ManyValuedLinearOrder}
 )
     return ox.algebra.join(
-        ox.algebra.monoid(
-            ox.algebra.join(
-                mvlt(r1.ix.p1, r2.ix.p2, ox),
-                mvlt(r2.ix.p1, r1.ix.p2, ox)
-            ),
-            ox.algebra.join(
-                ox.algebra.monoid(
+        ox.algebra.join(
+            ox.algebra.monoid(
+                ox.algebra.join(
                     ox.algebra.monoid(
-                        mvlt(r1.iy.p1, r2.iy.p1, oy),
+                        ox.algebra.monoid(
+                            mvlt(r1.ix.p1, r2.ix.p1, ox),
+                            mvlt(r2.ix.p1, r1.ix.p2, ox)
+                        ),
+                        mvlt(r1.ix.p2, r2.ix.p2, ox)
+                    ),
+                    ox.algebra.monoid(
+                        ox.algebra.monoid(
+                            mvlt(r2.ix.p1, r1.ix.p1, ox),
+                            mvlt(r1.ix.p1, r2.ix.p2, ox)
+                        ),
+                        mvlt(r2.ix.p2, r1.ix.p2, ox)
+                    )
+                ),
+                ox.algebra.join(
+                    ox.algebra.monoid(
+                        mvleq(r1.iy.p1, r2.iy.p1, oy),
                         mvlt(r2.iy.p1, r1.iy.p2, oy)
                     ),
-                    mvlt(r1.iy.p2, r2.iy.p2, oy)
-                ),
-                ox.algebra.monoid(
                     ox.algebra.monoid(
-                        mvlt(r2.iy.p1, r1.iy.p1, oy),
+                        mvleq(r2.iy.p1, r1.iy.p1, oy),
                         mvlt(r1.iy.p1, r2.iy.p2, oy)
+                    )
+                )
+            ),
+            ox.algebra.monoid(
+                ox.algebra.join(
+                    ox.algebra.monoid(
+                        ox.algebra.monoid(
+                            mvlt(r1.iy.p1, r2.iy.p1, oy),
+                            mvlt(r2.iy.p1, r1.iy.p2, oy)
+                        ),
+                        mvlt(r1.iy.p2, r2.iy.p2, oy)
                     ),
-                    mvlt(r2.iy.p2, r1.iy.p2, oy)
+                    ox.algebra.monoid(
+                        ox.algebra.monoid(
+                            mvlt(r2.iy.p1, r1.iy.p1, oy),
+                            mvlt(r1.iy.p1, r2.iy.p2, oy)
+                        ),
+                        mvlt(r2.iy.p2, r1.iy.p2, oy)
+                    )
+                ),
+                ox.algebra.join(
+                    ox.algebra.monoid(
+                        mvleq(r1.ix.p1, r2.ix.p1, ox),
+                        mvlt(r2.ix.p1, r1.ix.p2, ox)
+                    ),
+                    ox.algebra.monoid(
+                        mvleq(r2.ix.p1, r1.ix.p1, ox),
+                        mvlt(r1.ix.p1, r2.ix.p2, ox)
+                    )
                 )
             )
         ),
-        ox.algebra.monoid(
-            ox.algebra.join(
-                mvlt(r1.iy.p1, r2.iy.p2, oy),
-                mvlt(r2.iy.p1, r1.iy.p2, oy)
-            ),
-            ox.algebra.join(
+        ox.algebra.join(
+            ox.algebra.monoid(
                 ox.algebra.monoid(
-                    ox.algebra.monoid(
-                        mvlt(r1.ix.p1, r2.ix.p1, ox),
-                        mvlt(r2.ix.p1, r1.ix.p2, ox)
-                    ),
+                    mvlt(r1.ix.p1, r2.ix.p1, ox),
+                    mvlt(r2.ix.p2, r1.ix.p2, ox)
+                ),
+                ox.algebra.monoid(
+                    mvlt(r2.iy.p1, r1.iy.p1, oy),
+                    mvlt(r1.iy.p2, r2.iy.p2, oy)
+                )
+            ),
+            ox.algebra.monoid(
+                ox.algebra.monoid(
+                    mvlt(r2.ix.p1, r1.ix.p1, ox),
                     mvlt(r1.ix.p2, r2.ix.p2, ox)
                 ),
                 ox.algebra.monoid(
-                    ox.algebra.monoid(
-                        mvlt(r2.ix.p1, r1.ix.p1, ox),
-                        mvlt(r1.ix.p1, r2.ix.p2, ox)
-                    ),
-                    mvlt(r2.ix.p2, r1.ix.p2, ox)
+                    mvlt(r1.iy.p1, r2.iy.p1, oy),
+                    mvlt(r2.iy.p2, r1.iy.p2, oy)
                 )
             )
-        ),
+        )
     )
 end
 
