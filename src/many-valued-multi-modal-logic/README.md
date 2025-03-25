@@ -15,7 +15,7 @@ reasoning tasks (e.g., frames should be dynamic).
 Currently supported logics are:
  - Many-Valued Linear Temporal Logic with Future and Past:
  [mvltlfp.jl](mvltlfp.jl)
- - Many-Valued Compass Logic: [mvcs.jl](mvcs.jl)
+ - Many-Valued Compass Logic: [mvcl.jl](mvcl.jl)
  - Many-Valued Halpern and Shoham's modal logic of time intervals:
  [mvhs.jl](mvhs.jl)
  - Many-Valued Lutz and Wolter's modal logic of topological relations with
