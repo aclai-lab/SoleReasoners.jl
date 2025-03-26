@@ -2361,7 +2361,7 @@ function mvhsalphasat(
         end
     end
     r = mvhsalphasat(metricheaps, choosenode, a, tableaux; verbose, timeout, diamondexpansion)
-    if isnothing(r) || r || diamondexpansion == 1.0
+    if isnothing(r) || r || isone(diamondexpansion)
         return r
     else
         @warn "WARNING: α-sat returned false with % diamond expansion set to $diamondexpansion"
@@ -2472,7 +2472,7 @@ function mvhsalphaprove(
     r = mvhsalphasat(metricheaps, choosenode, a, tableaux; verbose, timeout, diamondexpansion)
     if isnothing(r)
         return r
-    elseif !r || diamondexpansion == 1.0
+    elseif !r || isone(diamondexpansion)
         return !r
     else
         @warn "WARNING: α-val returned true with % diamond expansion set to $diamondexpansion"
