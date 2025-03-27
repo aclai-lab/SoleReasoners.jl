@@ -9,7 +9,7 @@ using StatsBase
 
 # @reexport using SoleLogics
 
-# include("core.jl")
+include("core.jl")
 
 # export naivechoosenode, roundrobin, sat
 
@@ -21,6 +21,11 @@ using StatsBase
 # export alphasat, prove, alphaprove
 
 include("many-valued-multi-modal-logic/many-valued-multi-modal-logic.jl")
+include("many-valued-multi-modal-tableau/many-valued-multi-modal-tableau.jl")
+include("many-valued-multi-modal-tableau/mvltlfp-tableau.jl")
+include("many-valued-multi-modal-tableau/mvcl-tableau.jl")
+include("many-valued-multi-modal-tableau/mvhs-tableau.jl")
+include("many-valued-multi-modal-tableau/mvlrcc8-tableau.jl")
 
 # include("mvhs.jl")
 # export mvhsalphasat, mvhsalphaprove
