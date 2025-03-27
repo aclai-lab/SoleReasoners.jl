@@ -1,6 +1,4 @@
 using SoleLogics
-using SoleLogics.ManyValuedLogics
-using SoleReasoners
 using Test
 
 function run_tests(list)
@@ -74,7 +72,22 @@ test_suites = [
     # ("Utils", ["utils.jl"]),
     (
         "Many-Valued Multi-Modal Logic",
-        ["many-valued-multi-modal-logic/many-valued-multi-modal-logic.jl"]
+        [
+            "many-valued-multi-modal-logic/many-valued-linear-order.jl",
+            "many-valued-multi-modal-logic/mvltlfp.jl",
+            "many-valued-multi-modal-logic/mvcl.jl",
+            "many-valued-multi-modal-logic/mvhs.jl",
+            "many-valued-multi-modal-logic/mvlrcc8.jl"
+        ]
+    ),
+    (
+        "Many-Valued Multi-Modal Tableau",
+        [
+            "many-valued-multi-modal-tableau.jl/mvltlfp-tableau.jl",
+            "many-valued-multi-modal-tableau.jl/mvcl-tableau.jl",
+            "many-valued-multi-modal-tableau.jl/mvhs-tableau.jl",
+            "many-valued-multi-modal-tableau.jl/mvlrcc8-tableau.jl"
+        ]
     )
 ]
 

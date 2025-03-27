@@ -1,3 +1,5 @@
+using SoleLogics: Formula, syntaxstring
+
 """
     abstract type ManyValuedMultiModalTableau end
 
@@ -16,7 +18,10 @@ or a tuple of two `ManyValuedLinearOrder`s.
 function Base.show(io::IO, t::T) where {T<:ManyValuedMultiModalTableau}
     print(
         io,
-        "$(t.judgement)(($(t.assertion[1]))⪯($(t.assertion[2])),$(t.world),F)"
+        "$(t.judgement)(" *
+        "$(syntaxstring(t.assertion[1]))" *
+        " ⪯ " *
+        "$(syntaxstring(t.assertion[2])), $(t.world), F)"
     )
 end
 
@@ -84,15 +89,24 @@ Return `true` if a tableu `t` is the root of the tableau, `false` otherwise.
 isroot(t::T) where {T<:ManyValuedMultiModalTableau} = isnothing(t.father)
 
 """
-    expand(t::T) where {T<:ManyValuedMultiModalTableau}
+    expand!(t::T) where {T<:ManyValuedMultiModalTableau}
 
 Set the `expanded` flag to `true`.
 """
-expand(t::T) where {T<:ManyValuedMultiModalTableau} = t.expand = true
+expand!(t::T) where {T<:ManyValuedMultiModalTableau} = t.expanded = true
 
 """
-    close(t::T) where {T<:ManyValuedMultiModalTableau}
+    close!(t::T) where {T<:ManyValuedMultiModalTableau}
 
 Set the `closed` flag to `true`.
 """
-close(t::T) where {T<:ManyValuedMultiModalTableau} = t.close = true
+close!(t::T) where {T<:ManyValuedMultiModalTableau} = t.closed = true
+
+"""
+    pushchild!(father::T, child::T) where {T<:ManyValuedMultiModalTableau}
+
+Push new `child` tableau to the `children` of `father` tableau.
+"""
+function pushchild!(father::T, child::T) where {T<:ManyValuedMultiModalTableau}
+    push!(father.children, child)
+end

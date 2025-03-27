@@ -47,7 +47,7 @@ mutable struct MVLTLFPTableau <: ManyValuedMultiModalTableau
         frame::ManyValuedLinearOrder,
         father::MVLTLFPTableau
     )
-        return new(
+        newtableau = new(
             judgement,
             assertion,
             world,
@@ -57,5 +57,7 @@ mutable struct MVLTLFPTableau <: ManyValuedMultiModalTableau
             false,
             false
         )
+        pushchild!(father, newtableau)
+        return newtableau
     end
 end

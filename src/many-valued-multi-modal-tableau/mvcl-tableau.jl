@@ -47,7 +47,7 @@ mutable struct MVCLTableau <: ManyValuedMultiModalTableau
         frame::NTuple{2,ManyValuedLinearOrder},
         father::MVCLTableau
     )
-        return new(
+        newtableau = new(
             judgement,
             assertion,
             world,
@@ -57,5 +57,7 @@ mutable struct MVCLTableau <: ManyValuedMultiModalTableau
             false,
             false
         )
+        pushchild!(father, newtableau)
+        return newtableau
     end
 end
