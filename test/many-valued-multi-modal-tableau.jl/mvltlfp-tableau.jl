@@ -1,7 +1,8 @@
 using SoleLogics.ManyValuedLogics: FiniteTruth, booleanalgebra
 using SoleReasoners: ManyValuedLinearOrder, Point1D
 using SoleReasoners: MVLTLFPTableau, judgement, assertion, world, frame, father
-using SoleReasoners: children, expanded, closed, isroot, expand!, close!
+using SoleReasoners: children, expanded, closed, isroot, isleaf, expand!, close!
+using SoleReasoners: findexpansionnode, findleaves
 using StaticArrays: SMatrix
 
 ################################################################################
@@ -46,10 +47,7 @@ print(b, t2)
 @test expanded(t0) == false
 @test closed(t0) == false
 @test isroot(t0) == true
-expand!(t0)
-@test expanded(t0) == true
-close!(t0)
-@test closed(t0) == true
+@test isleaf(t0) == false
 
 @test judgement(t1) == true
 @test assertion(t1) == (⊤, p)
@@ -60,10 +58,7 @@ close!(t0)
 @test expanded(t1) == false
 @test closed(t1) == false
 @test isroot(t1) == false
-expand!(t1)
-@test expanded(t1) == true
-close!(t1)
-@test closed(t1) == true
+@test isleaf(t1) == false
 
 @test judgement(t2) == true
 @test assertion(t2) == (⊤, q)
@@ -74,7 +69,89 @@ close!(t1)
 @test expanded(t2) == false
 @test closed(t2) == false
 @test isroot(t2) == false
-expand!(t2)
-@test expanded(t2) == true
-close!(t2)
+@test isleaf(t2) == true
+
+@test findexpansionnode(t2) == t0
+expand!(t0)
+@test expanded(t0) == true
+@test expanded(t1) == false
+@test expanded(t2) == false
+@test findexpansionnode(t2) == t1
+expand!(t1)
+@test expanded(t0) == true
+@test expanded(t1) == true
+@test expanded(t2) == false
+@test findexpansionnode(t2) == t2
+
+@test findleaves(t0) == [t2]
+@test findleaves(t1) == [t2]
+@test findleaves(t2) == [t2]
+
+close!(t1)
+@test closed(t0) == true
+@test closed(t1) == true
 @test closed(t2) == true
+
+φ = ∨(p, q)
+t0 = MVLTLFPTableau(true, (⊤, φ), x1, o)
+t1 = MVLTLFPTableau(true, (⊤, p), x1, o, t0)
+t2 = MVLTLFPTableau(true, (⊤, q), x1, o, t0)
+
+@test isnothing(father(t0))
+@test children(t0) == [t1, t2]
+@test closed(t0) == false
+@test isroot(t0) == true
+@test isleaf(t0) == false
+
+@test father(t1) == t0
+@test isempty(children(t1))
+@test closed(t1) == false
+@test isroot(t1) == false
+@test isleaf(t1) == true
+
+@test father(t2) == t0
+@test isempty(children(t2))
+@test closed(t2) == false
+@test isroot(t2) == false
+@test isleaf(t2) == true
+
+@test findexpansionnode(t1) == t0
+@test findexpansionnode(t2) == t0
+expand!(t0)
+@test expanded(t0) == true
+@test expanded(t1) == false
+@test expanded(t2) == false
+@test findexpansionnode(t1) == t1
+@test findexpansionnode(t2) == t2
+
+@test findleaves(t0) == [t1, t2]
+@test findleaves(t1) == [t1]
+@test findleaves(t2) == [t2]
+
+close!(t1)
+@test closed(t0) == false
+@test closed(t1) == true
+@test closed(t2) == false
+close!(t2)
+@test closed(t0) == true
+@test closed(t1) == true
+@test closed(t2) == true
+
+ts = Vector{MVLTLFPTableau}()
+push!(ts, MVLTLFPTableau(true, (⊤, φ), x1, o))
+for i in 1:10000
+    push!(ts, MVLTLFPTableau(true, (⊤, φ), x1, o, last(ts)))
+end
+l1 = MVLTLFPTableau(true, (⊤, φ), x1, o, last(ts))
+l2 = MVLTLFPTableau(true, (⊤, φ), x1, o, last(ts))
+l3 = MVLTLFPTableau(true, (⊤, φ), x1, o, last(ts))
+
+@test findleaves(first(ts)) == [l1, l2, l3]
+
+t0 = MVLTLFPTableau(true, (⊤, φ), x1, o)
+t1 = MVLTLFPTableau(true, (⊤, p), x1, o, t0)
+t2 = MVLTLFPTableau(true, (⊤, q), x1, o, t0)
+t3 = MVLTLFPTableau(true, (⊤, φ), x1, o, t2)
+t4 = MVLTLFPTableau(true, (⊤, φ), x1, o, t2)
+
+@test findleaves(t0) == [t1, t3, t4]
