@@ -1,11 +1,11 @@
 module SoleReasoners
 
-import Base: isempty, push!, Base.pop!, Order.lt
-using DataStructures
-using Random
-using Reexport
-using Base.Threads
-using StatsBase
+# import Base: isempty, push!, Base.pop!, Order.lt
+# using DataStructures
+# using Random
+# using Reexport
+# using Base.Threads
+# using StatsBase
 
 # @reexport using SoleLogics
 
@@ -20,6 +20,8 @@ using StatsBase
 # include("many-valued-tableau.jl")
 # export alphasat, prove, alphaprove
 
+include("abstract-tableau/abstract-tableau.jl")
+include("metric-heap/metric-heap.jl")
 include("many-valued-multi-modal-logic/many-valued-multi-modal-logic.jl")
 include("many-valued-multi-modal-tableau/many-valued-multi-modal-tableau.jl")
 include("many-valued-multi-modal-tableau/mvltlfp-tableau.jl")

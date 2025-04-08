@@ -105,18 +105,21 @@ t2 = MVLRCC8Tableau(true, (⊤, q), r1, (ox, oy), t0)
 
 @test isnothing(father(t0))
 @test children(t0) == [t1, t2]
+@test expanded(t0) == false
 @test closed(t0) == false
 @test isroot(t0) == true
 @test isleaf(t0) == false
 
 @test father(t1) == t0
 @test isempty(children(t1))
+@test expanded(t1) == false
 @test closed(t1) == false
 @test isroot(t1) == false
 @test isleaf(t1) == true
 
 @test father(t2) == t0
 @test isempty(children(t2))
+@test expanded(t2) == false
 @test closed(t2) == false
 @test isroot(t2) == false
 @test isleaf(t2) == true
