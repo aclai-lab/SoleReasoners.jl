@@ -1,4 +1,5 @@
-using DataStructures: BinaryHeap, extract_all!, isempty
+using DataStructures: BinaryHeap, extract_all!
+import DataStructures: isempty
 import Base.Order: lt
 
 """
