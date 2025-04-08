@@ -71,7 +71,11 @@ test_suites = [
     # ("HybridMVHSAlphaProve", ["hybrid-mvhs-prove-bc.jl"]),
     # ("Utils", ["utils.jl"]),
     ("Abstract Tableau", ["abstract-tableau/abstract-tableau.jl"]),
-    ("Metric Heap", ["metric-heap/metric-heap.jl"]),
+    (   "Metric Heap", [
+            "metric-heap/metric-heap.jl",
+            "metric-heap/metrics.jl"
+        ]
+    ),
     (
         "Many-Valued Multi-Modal Logic",
         [

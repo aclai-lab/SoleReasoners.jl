@@ -22,6 +22,8 @@ module SoleReasoners
 
 include("abstract-tableau/abstract-tableau.jl")
 include("metric-heap/metric-heap.jl")
+include("metric-heap/metrics.jl")
+include("metric-heap/choose-node.jl")
 include("many-valued-multi-modal-logic/many-valued-multi-modal-logic.jl")
 include("many-valued-multi-modal-tableau/many-valued-multi-modal-tableau.jl")
 include("many-valued-multi-modal-tableau/mvltlfp-tableau.jl")

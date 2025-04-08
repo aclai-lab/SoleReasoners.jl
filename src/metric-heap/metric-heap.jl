@@ -88,6 +88,9 @@ A `MetricHeap` is basically a heap parametrized over a metric, i.e., a function
 which extracts some information about a tableau branch, therefore containing in
 each node a tableau branch and the relative value for the metric, and which is 
 ordered as a min heap over this metric value.
+
+Note that all `MetricHeap`s are ordered from the smaller value to the greatest,
+and can contain negative values (all `Int`s).
 """
 mutable struct MetricHeap{F<:Function}
     const metric::F
@@ -134,10 +137,31 @@ end
 """
     push!(metricheap::MetricHeap, tableau::T) where {T<:AbstractTableau}
 
-Push new tableau to a MetricHeap.
+Push new `tableau` to a MetricHeap.
 """
 function push!(metricheap::MetricHeap, tableau::T) where {T<:AbstractTableau}
     push!(metricheap, MetricHeapNode(metric(metricheap), tableau))
+end
+
+"""
+    push!(
+        metricheaps::Vector{MetricHeap},
+        tableau::T
+    ) where {
+        T<:AbstractTableau
+    }
+
+Push new `tableau` to each metric heap.
+"""
+function push!(
+    metricheaps::Vector{MetricHeap},
+    tableau::T
+) where {
+    T<:AbstractTableau
+}
+    for metricheap ∈ metricheaps
+        push!(metricheap, tableau)
+    end
 end
 
 """
