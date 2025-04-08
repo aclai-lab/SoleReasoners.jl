@@ -5,7 +5,7 @@ using SoleLogics: Formula, syntaxstring
 
 Tableau to reason about Many-Valued Multi-Modal Logic; a subtype of
 `ManyValuedMultiModalTableau` is expected to have at least a `judgement`, an
-`assertion`, a 'world`, a `frame`, a `father`, an array of `children`, and two
+`assertion`, a `world`, a `frame`, a `father`, an array of `children`, and two
 flags `expanded` and `closed`.
 """
 abstract type ManyValuedMultiModalTableau <: AbstractTableau end

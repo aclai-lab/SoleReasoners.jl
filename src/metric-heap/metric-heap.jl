@@ -84,7 +84,7 @@ end
         metric::Function
     end
 
-A MetricHeap is basically a heap parametrized over a metric, i.e., a function
+A `MetricHeap` is basically a heap parametrized over a metric, i.e., a function
 which extracts some information about a tableau branch, therefore containing in
 each node a tableau branch and the relative value for the metric, and which is 
 ordered as a min heap over this metric value.
