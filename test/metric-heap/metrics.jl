@@ -92,7 +92,6 @@ push!(metricheaps, t4)
 expand!(t0)
 expand!(t2)
 close!(t1)
-cleanheaps!(metricheaps)
 @test roundrobin!(metricheaps, 42) == t2        # satisfiable branch
 close!(t2)
 @test isnothing(roundrobin!(metricheaps, 42))   # closed tableau
