@@ -76,6 +76,31 @@ push!(metricheaps, t4)
 @test_nowarn mostvoted!(metricheaps)
 @test_nowarn mostvoted!(metricheaps, 42)
 
+# Reset metricheaps
+metricheaps = [
+    MetricHeap(distancefromroot),
+    MetricHeap(inversedistancefromroot),
+    MetricHeap(distancefromroot)
+]
+push!(metricheaps, t0)
+push!(metricheaps, t1)
+push!(metricheaps, t2)
+push!(metricheaps, t3)
+push!(metricheaps, t4)
+
+expand!(t0)
+expand!(t2)
+close!(t1)
+@test roundrobin!(metricheaps, 42) == t2        # satisfiable branch
+close!(t2)
+@test isnothing(roundrobin!(metricheaps, 42))   # closed tableau
+
+# Reset tableaux and metricheaps
+t0 = LabeledTableau("t0", )
+t1 = LabeledTableau("t1", t0)
+t2 = LabeledTableau("t2", t0)
+t3 = LabeledTableau("t3", t1)
+t4 = LabeledTableau("t4", t1)
 metricheaps = [
     MetricHeap(distancefromroot),
     MetricHeap(inversedistancefromroot),
@@ -88,10 +113,9 @@ push!(metricheaps, t3)
 push!(metricheaps, t4)
 
 @test mostvoted!(metricheaps) == t0
-
 expand!(t0)
 expand!(t2)
 close!(t1)
-@test roundrobin!(metricheaps, 42) == t2        # satisfiable branch
+@test mostvoted!(metricheaps, 42) == t2        # satisfiable branch
 close!(t2)
-@test isnothing(roundrobin!(metricheaps, 42))   # closed tableau
+@test isnothing(mostvoted!(metricheaps, 42))   # closed tableau
