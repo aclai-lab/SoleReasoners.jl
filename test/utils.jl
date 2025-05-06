@@ -1,5 +1,3 @@
-using SoleReasoners
-
 @test booleantofuzzy(
     parseformula(
         "(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)"

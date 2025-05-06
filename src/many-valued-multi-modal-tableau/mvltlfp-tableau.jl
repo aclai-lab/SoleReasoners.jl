@@ -112,7 +112,7 @@ function newframes(t::MVLTLFPTableau, algebra::FiniteFLewAlgebra)
 end
 
 function alphasat(
-    ::MVLTLFPTableau,
+    ::Type{MVLTLFPTableau},
     α::T,
     φ::Formula,
     algebra::FiniteFLewAlgebra,
@@ -132,37 +132,36 @@ function alphasat(
     tableau = MVLTLFPTableau(true, (α, φ), x, o)
     metricheaps = Vector{MetricHeap}()  # Heaps to be used for node selection
     for metric ∈ metrics
-        metricheap = MetricHeap(metric)
+        push!(metricheaps, MetricHeap(metric))
+    end
+    for metricheap ∈ metricheaps
         push!(heap(metricheap), MetricHeapNode(metric(metricheap), tableau))
-        push!(metricheaps, metricheap)
     end
     return alphasat(metricheaps, choosenode, algebra; timeout)
 end
 
 function alphasat(
-    ::MVLTLFPTableau,
+    ::Type{MVLTLFPTableau},
     α::T,
     φ::Formula,
     algebra::FiniteFLewAlgebra;
-    rng = Random.GLOBAL_RNG,
     timeout::Union{Nothing, Int} = nothing
 ) where {
     T<:Truth
 }
-    randombranch(_::MVLTLFPTableau) = rand(rng, Int)
     return alphasat(
         MVLTLFPTableau,
         α,
         φ,
         algebra,
-        roundrobin,
+        roundrobin!,
         randombranch;
         timeout
     )
 end
 
 function alphaval(
-    ::MVLTLFPTableau,
+    ::Type{MVLTLFPTableau},
     α::T,
     φ::Formula,
     algebra::FiniteFLewAlgebra,
@@ -195,22 +194,20 @@ function alphaval(
 end
 
 function alphaval(
-    ::MVLTLFPTableau,
+    ::Type{MVLTLFPTableau},
     α::T,
     φ::Formula,
     algebra::FiniteFLewAlgebra;
-    rng = Random.GLOBAL_RNG,
     timeout::Union{Nothing, Int} = nothing
 ) where {
     T<:Truth
 }
-    randombranch(_::MVLTLFPTableau) = rand(rng, Int)
     return alphaval(
         MVLTLFPTableau,
         α,
         φ,
         algebra,
-        roundrobin,
+        roundrobin!,
         randombranch;
         timeout
     )

@@ -190,8 +190,8 @@ function alphasat(
                                 end
                             end
                         end
-                        if isempty(pairs) && leaf == expansionnode
-                            return true # found a satisfiable branch
+                        if isempty(pairs) && leaf == node
+                            push!(metricheaps, node)
                         end
                     end
                 else
@@ -273,8 +273,8 @@ function alphasat(
                                 end
                             end
                         end
-                        if isempty(pairs) && leaf == expansionnode
-                            return true # found a satisfiable branch
+                        if isempty(pairs) && leaf == node
+                            push!(metricheaps, node)
                         end
                     end
                 end
@@ -360,8 +360,8 @@ function alphasat(
                                 end
                             end
                         end
-                        if isempty(pairs) && leaf == expansionnode
-                            return true # found a satisfiable branch
+                        if isempty(pairs) && leaf == node
+                            push!(metricheaps, node)
                         end
                     end
                 else
@@ -447,8 +447,8 @@ function alphasat(
                                 end
                             end
                         end
-                        if isempty(pairs) && leaf == expansionnode
-                            return true # found a satisfiable branch
+                        if isempty(pairs) && leaf == node
+                            push!(metricheaps, node)
                         end
                     end
                 end
@@ -479,8 +479,8 @@ function alphasat(
                                 end
                             end
                         end
-                        if !newnodes && leaf == expansionnode
-                            return true # found a satisfiable branch
+                        if !newnodes && leaf == node
+                            push!(metricheaps, node)
                         else
                             ti = typeof(expansionnode)(
                                 true,
@@ -544,8 +544,8 @@ function alphasat(
                                 push!(metricheaps, ti)
                             end
                         end
-                        if !newnodes && leaf == expansionnode
-                            return true # found a satisfiable branch
+                        if !newnodes && leaf == node
+                            push!(metricheaps, node)
                         end
                     end
                 else
@@ -580,8 +580,9 @@ function alphasat(
                                 push!(metricheaps, ti)
                             end
                         end
-                        if isempty(maximalmembers(algebra, β)) && leaf == expansionnode
-                            return true # found a satisfiable branch
+                        if isempty(maximalmembers(algebra, β)) &&
+                           leaf == node
+                            push!(metricheaps, node)
                         end
                     end
                 end
@@ -677,8 +678,8 @@ function alphasat(
                                 end
                             end
                         end
-                        if isempty(pairs) && leaf == expansionnode
-                            return true # found a satisfiable branch
+                        if isempty(pairs) && leaf == node
+                            push!(metricheaps, node)
                         end
                     end
                 else
@@ -760,8 +761,8 @@ function alphasat(
                                 end
                             end
                         end
-                        if isempty(pairs) && leaf == expansionnode
-                            return true # found a satisfiable branch
+                        if isempty(pairs) && leaf == node
+                            push!(metricheaps, node)
                         end
                     end
                 end
@@ -792,8 +793,8 @@ function alphasat(
                                 end
                             end
                         end
-                        if !newnodes && leaf == expansionnode
-                            return true # found a satisfiable branch
+                        if !newnodes && leaf == node
+                            push!(metricheaps, node)
                         else
                             ti = typeof(expansionnode)(
                                 true,
@@ -857,7 +858,7 @@ function alphasat(
                                 push!(metricheaps, ti)
                             end
                         end
-                        if !newnodes && leaf == expansionnode
+                        if !newnodes && leaf == node
                             push!(metricheaps, node)
                         end
                     end
@@ -893,8 +894,9 @@ function alphasat(
                                 push!(metricheaps, ti)
                             end
                         end
-                        if isempty(minimalmembers(algebra, β)) && leaf == expansionnode
-                            return true # found a satisfiable branch
+                        if isempty(minimalmembers(algebra, β)) &&
+                           leaf == node
+                            push!(metricheaps, node)
                         end
                     end
                 end
@@ -916,7 +918,7 @@ function alphasat(
     algebra::FiniteFLewAlgebra,
     choosenode::Function,
     metrics::Function...;
-    timeout::Union{Nothing, Int} = nothing
+    kwargs...
 ) where {
     T<:ManyValuedMultiModalTableau,
     T1<:Truth
@@ -931,7 +933,7 @@ function alphaval(
     algebra::FiniteFLewAlgebra,
     choosenode::Function,
     metrics::Function...;
-    timeout::Union{Nothing, Int} = nothing
+    kwargs...
 ) where {
     T<:ManyValuedMultiModalTableau,
     T1<:Truth

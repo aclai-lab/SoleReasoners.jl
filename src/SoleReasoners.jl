@@ -23,7 +23,9 @@ module SoleReasoners
 include("abstract-tableau/abstract-tableau.jl")
 include("metric-heap/metric-heap.jl")
 include("metric-heap/metrics.jl")
+export randombranch, distancefromroot, inversedistancefromroot
 include("metric-heap/choose-node.jl")
+export roundrobin!, mostvoted!
 include("many-valued-multi-modal-logic/many-valued-multi-modal-logic.jl")
 include("many-valued-multi-modal-tableau/many-valued-multi-modal-tableau.jl")
 include("many-valued-multi-modal-tableau/alphasat.jl")
@@ -31,6 +33,10 @@ include("many-valued-multi-modal-tableau/mvltlfp-tableau.jl")
 include("many-valued-multi-modal-tableau/mvcl-tableau.jl")
 include("many-valued-multi-modal-tableau/mvhs-tableau.jl")
 include("many-valued-multi-modal-tableau/mvlrcc8-tableau.jl")
+include("utils.jl")
+export booleantofuzzy
+
+export alphasat, alphaval
 # include("mvhs.jl")
 # export mvhsalphasat, mvhsalphaprove
 

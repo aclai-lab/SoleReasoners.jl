@@ -1,6 +1,8 @@
-############################################################################################
-#### Utils #################################################################################
-############################################################################################
+using SoleLogics: Atom, BooleanTruth, children as subformulas, →, ⊥
+
+################################################################################
+#### Utils #####################################################################
+################################################################################
 
 """
     dimacstosole(dimacscnf::String)::Formula
@@ -42,9 +44,9 @@ function booleantofuzzy(φ::Formula)
     if token(φ) isa Union{Atom, BooleanTruth}
         return φ
     elseif token(φ) isa NamedConnective{:¬}
-        return →(booleantofuzzy(children(φ)[1]),⊥)
+        return →(booleantofuzzy(subformulas(φ)[1]),⊥)
     else
-        (a, b) = children(φ)
+        (a, b) = subformulas(φ)
         return token(φ)(booleantofuzzy(a), booleantofuzzy(b))
     end
 end
@@ -53,9 +55,9 @@ function ibooleantofuzzy(φ::Formula)
     if token(φ) isa Union{Atom, BooleanTruth}
         return φ
     elseif token(φ) isa NamedConnective{:¬}
-        return →(ibooleantofuzzy(children(φ)[1]),FiniteIndexTruth(2))
+        return →(ibooleantofuzzy(subformulas(φ)[1]),FiniteIndexTruth(2))
     else
-        (a, b) = children(φ)
+        (a, b) = subformulas(φ)
         return token(φ)(ibooleantofuzzy(a), ibooleantofuzzy(b))
     end
 end

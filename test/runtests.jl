@@ -1,4 +1,5 @@
 using SoleLogics
+using SoleReasoners
 using Test
 
 function run_tests(list)
@@ -93,6 +94,14 @@ test_suites = [
             "many-valued-multi-modal-tableau.jl/mvcl-tableau.jl",
             "many-valued-multi-modal-tableau.jl/mvhs-tableau.jl",
             "many-valued-multi-modal-tableau.jl/mvlrcc8-tableau.jl"
+        ]
+    ),
+    (
+        "α-sat",
+        [
+            "alphasat/many-valued-propositional-logic/G4.jl",
+            "alphasat/many-valued-propositional-logic/L4.jl",
+            "alphasat/many-valued-propositional-logic/H4.jl"
         ]
     )
 ]
