@@ -1,3 +1,6 @@
+using Combinatorics: with_replacement_combinations, permutations
+using SoleLogics.ManyValuedLogics: getdomain
+
 """
     mutable struct MVLTLFPTableau <: ManyValuedMultiModalTableau
         const judgement::Bool
@@ -60,4 +63,155 @@ mutable struct MVLTLFPTableau <: ManyValuedMultiModalTableau
         pushchild!(father, newtableau)
         return newtableau
     end
+end
+
+function worlds(::Type{MVLTLFPTableau}, frame::ManyValuedLinearOrder)
+    return Point1D.([UInt8(1):UInt8(cardinality(frame))]...)
+end
+
+function newframes(t::MVLTLFPTableau, algebra::FiniteFLewAlgebra)
+    f = frame(t)
+    n = cardinality(f)
+    combs = unique(
+        [
+            (
+                collect.(
+                    permutations.(
+                        with_replacement_combinations(getdomain(algebra), n)
+                    )
+                )...
+            )...
+        ]
+    )
+    os = Vector{ManyValuedLinearOrder}([f])
+    for ltzcomb in combs
+        for gtzcomb in combs
+            for eqzcomb in combs
+                mvlt = Matrix(undef, n+1, n+1)
+                mvlt[1:n, 1:n] = f.mvlt
+                mvlt[1:n, n+1] = ltzcomb
+                mvlt[n+1, 1:n] = gtzcomb
+                mvlt[n+1, n+1] = FiniteTruth(2)
+                mvlt = SMatrix(mvlt)
+                mveq = Matrix(undef, n+1, n+1)
+                mveq[1:n, 1:n] = f.mveq
+                mveq[1:n, n+1] = eqzcomb
+                mveq[n+1, 1:n] = eqzcomb
+                mveq[n+1, n+1] = FiniteTruth(1)
+                mveq = SMatrix(mveq)
+                if isaManyValuedLinearOrder(mvlt, mveq, algebra)
+                    push!(
+                        os,
+                        @inbounds ManyValuedLinearOrder(mvlt, mveq, algebra)
+                    )
+                end
+            end
+        end
+    end
+    return os
+end
+
+function alphasat(
+    ::MVLTLFPTableau,
+    α::T,
+    φ::Formula,
+    algebra::FiniteFLewAlgebra,
+    choosenode::Function,
+    metrics::Function...;
+    timeout::Union{Nothing, Int} = nothing
+) where {
+    T<:Truth
+}
+    if !isa(α, FiniteTruth) α = convert(FiniteTruth, α)::FiniteTruth end
+    x = Point1D(1)
+    o = ManyValuedLinearOrder(
+        SMatrix{1,1}([FiniteTruth(2)]),
+        SMatrix{1,1}([FiniteTruth(1)]),
+        algebra
+    )
+    tableau = MVLTLFPTableau(true, (α, φ), x, o)
+    metricheaps = Vector{MetricHeap}()  # Heaps to be used for node selection
+    for metric ∈ metrics
+        metricheap = MetricHeap(metric)
+        push!(heap(metricheap), MetricHeapNode(metric(metricheap), tableau))
+        push!(metricheaps, metricheap)
+    end
+    return alphasat(metricheaps, choosenode, algebra; timeout)
+end
+
+function alphasat(
+    ::MVLTLFPTableau,
+    α::T,
+    φ::Formula,
+    algebra::FiniteFLewAlgebra;
+    rng = Random.GLOBAL_RNG,
+    timeout::Union{Nothing, Int} = nothing
+) where {
+    T<:Truth
+}
+    randombranch(_::MVLTLFPTableau) = rand(rng, Int)
+    return alphasat(
+        MVLTLFPTableau,
+        α,
+        φ,
+        algebra,
+        roundrobin,
+        randombranch;
+        timeout
+    )
+end
+
+function alphaval(
+    ::MVLTLFPTableau,
+    α::T,
+    φ::Formula,
+    algebra::FiniteFLewAlgebra,
+    choosenode::Function,
+    metrics::Function...;
+    timeout::Union{Nothing, Int} = nothing
+) where {
+    T<:Truth
+}
+    if !isa(α, FiniteTruth) α = convert(FiniteTruth, α)::FiniteTruth end
+    x = Point1D(1)
+    o = ManyValuedLinearOrder(
+        SMatrix{1,1}([FiniteTruth(2)]),
+        SMatrix{1,1}([FiniteTruth(1)]),
+        algebra
+    )
+    tableau = MVLTLFPTableau(false, (α, φ), x, o)
+    metricheaps = Vector{MetricHeap}()  # Heaps to be used for node selection
+    for metric ∈ metrics
+        metricheap = MetricHeap(metric)
+        push!(heap(metricheap), MetricHeapNode(metric(metricheap), tableau))
+        push!(metricheaps, metricheap)
+    end
+    r = alphasat(metricheaps, choosenode, algebra; timeout)
+    if isnothing(r)
+        return r
+    else
+        return !r
+    end
+end
+
+function alphaval(
+    ::MVLTLFPTableau,
+    α::T,
+    φ::Formula,
+    algebra::FiniteFLewAlgebra;
+    rng = Random.GLOBAL_RNG,
+    timeout::Union{Nothing, Int} = nothing
+) where {
+    T<:Truth
+}
+    randombranch(_::MVLTLFPTableau) = rand(rng, Int)
+    return alphaval(
+        MVLTLFPTableau,
+        α,
+        φ,
+        algebra,
+        roundrobin,
+        randombranch;
+        timeout
+    )
 end

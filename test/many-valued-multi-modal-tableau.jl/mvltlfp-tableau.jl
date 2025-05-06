@@ -1,4 +1,5 @@
 using SoleLogics.ManyValuedLogics: FiniteTruth, booleanalgebra
+using SoleLogics: LTLFP_F, LTLFP_P, box
 using SoleReasoners: ManyValuedLinearOrder, Point1D
 using SoleReasoners: MVLTLFPTableau, judgement, assertion, world, frame, father
 using SoleReasoners: children, expanded, closed, isroot, isleaf, expand!, close!
@@ -158,3 +159,203 @@ t3 = MVLTLFPTableau(true, (⊤, φ), x1, o, t2)
 t4 = MVLTLFPTableau(true, (⊤, φ), x1, o, t2)
 
 @test findleaves(t0) == [t1, t3, t4]
+
+################################################################################
+# α-sat ########################################################################
+################################################################################
+using SoleLogics.ManyValuedLogics: G3, α
+using SoleReasoners: MetricHeap, distancefromroot, inversedistancefromroot
+using SoleReasoners: alphasat, roundrobin!
+
+metricheaps = [
+    MetricHeap(distancefromroot),
+    MetricHeap(inversedistancefromroot),
+    MetricHeap(distancefromroot)
+]
+t0 = MVLTLFPTableau(true, (⊤, ⊥), x1, o)
+push!(metricheaps, t0)
+@test !alphasat(metricheaps, roundrobin!, booleanalgebra)   # X1
+
+metricheaps = [
+    MetricHeap(distancefromroot),
+    MetricHeap(inversedistancefromroot),
+    MetricHeap(distancefromroot)
+]
+t0 = MVLTLFPTableau(false, (α, α), x1, o)
+push!(metricheaps, t0)
+@test !alphasat(metricheaps, roundrobin!, G3)   # X2
+
+metricheaps = [
+    MetricHeap(distancefromroot),
+    MetricHeap(inversedistancefromroot),
+    MetricHeap(distancefromroot)
+]
+t0 = MVLTLFPTableau(false, (⊥, α), x1, o)
+push!(metricheaps, t0)
+@test !alphasat(metricheaps, roundrobin!, G3)   # X3
+
+metricheaps = [
+    MetricHeap(distancefromroot),
+    MetricHeap(inversedistancefromroot),
+    MetricHeap(distancefromroot)
+]
+t0 = MVLTLFPTableau(false, (α, ⊤), x1, o)
+push!(metricheaps, t0)
+@test !alphasat(metricheaps, roundrobin!, G3)   # X4
+
+metricheaps = [
+    MetricHeap(distancefromroot),
+    MetricHeap(inversedistancefromroot),
+    MetricHeap(distancefromroot)
+]
+t0 = MVLTLFPTableau(false, (⊥, φ), x1, o)
+push!(metricheaps, t0)
+@test !alphasat(metricheaps, roundrobin!, booleanalgebra)   # X3
+
+metricheaps = [
+    MetricHeap(distancefromroot),
+    MetricHeap(inversedistancefromroot),
+    MetricHeap(distancefromroot)
+]
+t0 = MVLTLFPTableau(false, (φ, ⊤), x1, o)
+push!(metricheaps, t0)
+@test !alphasat(metricheaps, roundrobin!, booleanalgebra)   # X4
+
+metricheaps = [
+    MetricHeap(distancefromroot),
+    MetricHeap(inversedistancefromroot),
+    MetricHeap(distancefromroot)
+]
+t0 = MVLTLFPTableau(true, (⊤, φ), x1, o)
+push!(metricheaps, t0)
+t1 = MVLTLFPTableau(false, (α, φ), x1, o, t0)
+push!(metricheaps, t1)
+@test !alphasat(metricheaps, roundrobin!, G3)   # X5
+
+metricheaps = [
+    MetricHeap(distancefromroot),
+    MetricHeap(inversedistancefromroot),
+    MetricHeap(distancefromroot)
+]
+t0 = MVLTLFPTableau(false, (α, φ), x1, o)
+push!(metricheaps, t0)
+t1 = MVLTLFPTableau(true, (⊤, φ), x1, o, t0)
+push!(metricheaps, t1)
+@test !alphasat(metricheaps, roundrobin!, G3)   # X5
+
+metricheaps = [
+    MetricHeap(distancefromroot),
+    MetricHeap(inversedistancefromroot),
+    MetricHeap(distancefromroot)
+]
+t0 = MVLTLFPTableau(true, (⊤, ∧(⊥, ⊥)), x1, o)
+push!(metricheaps, t0)
+@test !alphasat(metricheaps, roundrobin!, booleanalgebra)    # T∧
+
+metricheaps = [
+    MetricHeap(distancefromroot),
+    MetricHeap(inversedistancefromroot),
+    MetricHeap(distancefromroot)
+]
+t0 = MVLTLFPTableau(true, (⊤, ∧(⊥, ⊤)), x1, o)
+push!(metricheaps, t0)
+@test !alphasat(metricheaps, roundrobin!, booleanalgebra)    # T∧
+
+metricheaps = [
+    MetricHeap(distancefromroot),
+    MetricHeap(inversedistancefromroot),
+    MetricHeap(distancefromroot)
+]
+t0 = MVLTLFPTableau(true, (⊤, ∧(⊤, ⊥)), x1, o)
+push!(metricheaps, t0)
+@test !alphasat(metricheaps, roundrobin!, booleanalgebra)    # T∧
+
+metricheaps = [
+    MetricHeap(distancefromroot),
+    MetricHeap(inversedistancefromroot),
+    MetricHeap(distancefromroot)
+]
+t0 = MVLTLFPTableau(true, (⊤, ∧(⊤, ⊤)), x1, o)
+push!(metricheaps, t0)
+@test alphasat(metricheaps, roundrobin!, booleanalgebra)    # T∧
+
+metricheaps = [
+    MetricHeap(distancefromroot),
+    MetricHeap(inversedistancefromroot),
+    MetricHeap(distancefromroot)
+]
+t0 = MVLTLFPTableau(true, (⊤, ∨(⊥, ⊥)), x1, o)
+push!(metricheaps, t0)
+@test !alphasat(metricheaps, roundrobin!, booleanalgebra)    # F∨
+
+metricheaps = [
+    MetricHeap(distancefromroot),
+    MetricHeap(inversedistancefromroot),
+    MetricHeap(distancefromroot)
+]
+t0 = MVLTLFPTableau(true, (⊤, ∨(⊥, ⊤)), x1, o)
+push!(metricheaps, t0)
+@test alphasat(metricheaps, roundrobin!, booleanalgebra)    # F∨
+
+metricheaps = [
+    MetricHeap(distancefromroot),
+    MetricHeap(inversedistancefromroot),
+    MetricHeap(distancefromroot)
+]
+t0 = MVLTLFPTableau(true, (⊤, ∨(⊤, ⊥)), x1, o)
+push!(metricheaps, t0)
+@test alphasat(metricheaps, roundrobin!, booleanalgebra)    # F∨
+
+metricheaps = [
+    MetricHeap(distancefromroot),
+    MetricHeap(inversedistancefromroot),
+    MetricHeap(distancefromroot)
+]
+t0 = MVLTLFPTableau(true, (⊤, ∨(⊤, ⊤)), x1, o)
+push!(metricheaps, t0)
+@test alphasat(metricheaps, roundrobin!, booleanalgebra)    # F∨
+
+metricheaps = [
+    MetricHeap(distancefromroot),
+    MetricHeap(inversedistancefromroot),
+    MetricHeap(distancefromroot)
+]
+t0 = MVLTLFPTableau(true, (⊤, →(⊥, ⊥)), x1, o)
+push!(metricheaps, t0)
+@test alphasat(metricheaps, roundrobin!, booleanalgebra)    # T→
+
+metricheaps = [
+    MetricHeap(distancefromroot),
+    MetricHeap(inversedistancefromroot),
+    MetricHeap(distancefromroot)
+]
+t0 = MVLTLFPTableau(true, (⊤, →(⊥, ⊤)), x1, o)
+push!(metricheaps, t0)
+@test alphasat(metricheaps, roundrobin!, booleanalgebra)    # T→
+
+metricheaps = [
+    MetricHeap(distancefromroot),
+    MetricHeap(inversedistancefromroot),
+    MetricHeap(distancefromroot)
+]
+t0 = MVLTLFPTableau(true, (⊤, →(⊤, ⊥)), x1, o)
+push!(metricheaps, t0)
+@test !alphasat(metricheaps, roundrobin!, booleanalgebra)    # T→
+
+metricheaps = [
+    MetricHeap(distancefromroot),
+    MetricHeap(inversedistancefromroot),
+    MetricHeap(distancefromroot)
+]
+t0 = MVLTLFPTableau(true, (⊤, →(⊤, ⊤)), x1, o)
+push!(metricheaps, t0)
+@test alphasat(metricheaps, roundrobin!, booleanalgebra)    # T→
+
+metricheaps = [
+    MetricHeap(distancefromroot),
+    MetricHeap(inversedistancefromroot),
+    MetricHeap(distancefromroot)
+]
+t0 = MVLTLFPTableau(true, (⊤, φ), x1, o)
+push!(metricheaps, t0)
+@test alphasat(metricheaps, roundrobin!, booleanalgebra)

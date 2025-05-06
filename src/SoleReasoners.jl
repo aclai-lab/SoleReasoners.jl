@@ -26,11 +26,11 @@ include("metric-heap/metrics.jl")
 include("metric-heap/choose-node.jl")
 include("many-valued-multi-modal-logic/many-valued-multi-modal-logic.jl")
 include("many-valued-multi-modal-tableau/many-valued-multi-modal-tableau.jl")
+include("many-valued-multi-modal-tableau/alphasat.jl")
 include("many-valued-multi-modal-tableau/mvltlfp-tableau.jl")
 include("many-valued-multi-modal-tableau/mvcl-tableau.jl")
 include("many-valued-multi-modal-tableau/mvhs-tableau.jl")
 include("many-valued-multi-modal-tableau/mvlrcc8-tableau.jl")
-
 # include("mvhs.jl")
 # export mvhsalphasat, mvhsalphaprove
 

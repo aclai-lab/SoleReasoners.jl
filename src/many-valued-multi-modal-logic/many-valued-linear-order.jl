@@ -170,6 +170,14 @@ struct ManyValuedLinearOrder
 end
 
 """
+    cardinality(o::ManyValuedLinearOrder)
+
+Return the `cardinality` (i.e., number of `Point1D`s), in the
+'ManyValuedLinearOrder`.
+"""
+cardinality(o::ManyValuedLinearOrder) = size(o.mvlt)[1]
+
+"""
     show(io::IO, o::ManyValuedLinearOrder)
 
 A `ManyValuedLinearOrder` is printed with the tables for the many-valued
