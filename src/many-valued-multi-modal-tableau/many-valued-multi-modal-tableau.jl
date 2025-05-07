@@ -39,21 +39,41 @@ Return the frame associated with a tableu `t`.
 frame(t::T) where {T<:ManyValuedMultiModalTableau} = t.frame
 
 """
-    worlds(t::T) where {T<:ManyValuedMultiModalTableau}
+    worlds(
+        ::Type{T},
+        frame::Union{ManyValuedLinearOrder, NTuple{2, ManyValuedLinearOrder}}
+    ) where {
+        T<:ManyValuedMultiModalTableau
+    }
 
 Return all the worlds in the `frame` associated with a tableau `t`.
 """
-function worlds(t::T) where {T<:ManyValuedMultiModalTableau}
+function worlds(
+    ::Type{T},
+    frame::Union{ManyValuedLinearOrder, NTuple{2, ManyValuedLinearOrder}}
+) where {
+    T<:ManyValuedMultiModalTableau
+}
     error("Please, specify how to return all worlds in `frame(t::$T)`")
 end
 
 """
-    newframes(t::T) where {T<:ManyValuedMultiModalTableau}
+    newframes(
+    ::Type{T},
+    algebra::FiniteFLewAlgebra
+) where {
+    T<:ManyValuedMultiModalTableau
+}
 
 Return all the new possible `frame`s for a tableau of type `T`.
 """
-function newframes(t::T) where {T<:ManyValuedMultiModalTableau}
-    error("Please, specify how to generate new frames for t::$T`")
+function newframes(
+    ::Type{T},
+    algebra::FiniteFLewAlgebra
+) where {
+    T<:ManyValuedMultiModalTableau
+}
+    error("Please, specify how to generate new frames for `t::$T`")
 end
 
 """

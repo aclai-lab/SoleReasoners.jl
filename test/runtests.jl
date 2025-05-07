@@ -89,10 +89,11 @@ test_suites = [
     (
         "Many-Valued Multi-Modal Tableau",
         [
-            "many-valued-multi-modal-tableau.jl/mvltlfp-tableau.jl",
-            "many-valued-multi-modal-tableau.jl/mvcl-tableau.jl",
-            "many-valued-multi-modal-tableau.jl/mvhs-tableau.jl",
-            "many-valued-multi-modal-tableau.jl/mvlrcc8-tableau.jl"
+            "many-valued-multi-modal-tableau/many-valued-multi-modal-talbeau.jl",
+            "many-valued-multi-modal-tableau/mvltlfp-tableau.jl",
+            "many-valued-multi-modal-tableau/mvcl-tableau.jl",
+            "many-valued-multi-modal-tableau/mvhs-tableau.jl",
+            "many-valued-multi-modal-tableau/mvlrcc8-tableau.jl"
         ]
     ),
     (

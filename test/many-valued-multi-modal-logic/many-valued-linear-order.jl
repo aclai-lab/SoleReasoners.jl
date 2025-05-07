@@ -1,5 +1,6 @@
 using SoleLogics.ManyValuedLogics: FiniteTruth, booleanalgebra, G3, H4, α, β
-using SoleReasoners: ManyValuedLinearOrder, isaManyValuedLinearOrder
+using SoleReasoners: ManyValuedLinearOrder
+using SoleReasoners: isaManyValuedLinearOrder, cardinality
 using StaticArrays: SMatrix
 
 ################################################################################
@@ -75,3 +76,8 @@ o = ManyValuedLinearOrder(mvlttable, mveqtable, booleanalgebra)
 b = IOBuffer()
 print(b, o)
 @test String(take!(b)) == " ̃<: FiniteTruth[⊥ ⊤; ⊥ ⊥]\n ̃=: FiniteTruth[⊤ ⊥; ⊥ ⊤]"
+
+################################################################################
+# Utils ########################################################################
+################################################################################
+@test cardinality(o) == 2
