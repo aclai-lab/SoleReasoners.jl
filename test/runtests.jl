@@ -16,8 +16,6 @@ test_suites = [
     # ("Sat", ["sat.jl",]),
     # ("HeytingAlphaSat", ["heytingalphasat.jl",]),
     # ("HeytingAlphaProve", ["heytingalphaprove.jl",]),
-    # ("AlphaSat", ["alphasat.jl",]),
-    # ("AlphaProve", ["alphaprove.jl",]),
     # (
     #     "BackwardCompatibility - Alphasat - booleanalgebra",
     #     ["backwardcompatibility/alphasat/booleanalgebra.jl"]
@@ -71,6 +69,7 @@ test_suites = [
     # ("HybridMVHSAlphaSat", ["hybrid-mvhs-sat-bc.jl"]),
     # ("HybridMVHSAlphaProve", ["hybrid-mvhs-prove-bc.jl"]),
     # ("Utils", ["utils.jl"]),
+
     ("Abstract Tableau", ["abstract-tableau/abstract-tableau.jl"]),
     (   "Metric Heap", [
             "metric-heap/metric-heap.jl",
@@ -102,6 +101,14 @@ test_suites = [
             "alphasat/many-valued-propositional-logic/G4.jl",
             "alphasat/many-valued-propositional-logic/L4.jl",
             "alphasat/many-valued-propositional-logic/H4.jl"
+        ]
+    ),
+    (
+        "α-val",
+        [
+            "alphaval/many-valued-propositional-logic/G4.jl",
+            "alphaval/many-valued-propositional-logic/L4.jl",
+            "alphaval/many-valued-propositional-logic/H4.jl"
         ]
     )
 ]

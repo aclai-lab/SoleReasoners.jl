@@ -367,7 +367,7 @@ function alphasat(
                 else
                     # F→
                     for βi ∈ getdomain(algebra)
-                        for γi ∈ getdomain(alebgra)
+                        for γi ∈ getdomain(algebra)
                             if !precedeq(
                                 algebra,
                                 β,

@@ -181,9 +181,10 @@ function alphaval(
     tableau = MVLTLFPTableau(false, (α, φ), x, o)
     metricheaps = Vector{MetricHeap}()  # Heaps to be used for node selection
     for metric ∈ metrics
-        metricheap = MetricHeap(metric)
+        push!(metricheaps, MetricHeap(metric))
+    end
+    for metricheap ∈ metricheaps
         push!(heap(metricheap), MetricHeapNode(metric(metricheap), tableau))
-        push!(metricheaps, metricheap)
     end
     r = alphasat(metricheaps, choosenode, algebra; timeout)
     if isnothing(r)

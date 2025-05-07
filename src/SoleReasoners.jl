@@ -29,14 +29,18 @@ export roundrobin!, mostvoted!
 include("many-valued-multi-modal-logic/many-valued-multi-modal-logic.jl")
 include("many-valued-multi-modal-tableau/many-valued-multi-modal-tableau.jl")
 include("many-valued-multi-modal-tableau/alphasat.jl")
+export alphasat, alphaval
 include("many-valued-multi-modal-tableau/mvltlfp-tableau.jl")
+export MVLTLFPTableau
 include("many-valued-multi-modal-tableau/mvcl-tableau.jl")
+export MVCLTableau
 include("many-valued-multi-modal-tableau/mvhs-tableau.jl")
+export MVHSTableau
 include("many-valued-multi-modal-tableau/mvlrcc8-tableau.jl")
+export MVLRCC8Tableau
 include("utils.jl")
 export booleantofuzzy
 
-export alphasat, alphaval
 # include("mvhs.jl")
 # export mvhsalphasat, mvhsalphaprove
 
