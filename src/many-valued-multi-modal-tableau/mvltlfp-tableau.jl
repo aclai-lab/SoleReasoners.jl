@@ -92,13 +92,13 @@ function newframes(t::MVLTLFPTableau, algebra::FiniteFLewAlgebra)
                 mvlt[1:n, n+1] = ltzcomb
                 mvlt[n+1, 1:n] = gtzcomb
                 mvlt[n+1, n+1] = FiniteTruth(2)
-                mvlt = SMatrix(mvlt)
+                mvlt = SMatrix{n+1,n+1,FiniteTruth}(mvlt)
                 mveq = Matrix(undef, n+1, n+1)
                 mveq[1:n, 1:n] = f.mveq
                 mveq[1:n, n+1] = eqzcomb
                 mveq[n+1, 1:n] = eqzcomb
                 mveq[n+1, n+1] = FiniteTruth(1)
-                mveq = SMatrix(mveq)
+                mveq = SMatrix{n+1,n+1,FiniteTruth}(mveq)
                 if isaManyValuedLinearOrder(mvlt, mveq, algebra)
                     push!(
                         os,

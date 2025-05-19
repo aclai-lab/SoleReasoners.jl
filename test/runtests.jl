@@ -102,6 +102,7 @@ test_suites = [
             "alphasat/mvltlfp-tableau/G4.jl",
             "alphasat/mvltlfp-tableau/L4.jl",
             "alphasat/mvltlfp-tableau/H4.jl",
+            "alphasat/mvhs-tableau/booleanalgebra.jl",
             "alphasat/mvhs-tableau/G4.jl",
             "alphasat/mvhs-tableau/L4.jl",
             "alphasat/mvhs-tableau/H4.jl"
@@ -110,11 +111,15 @@ test_suites = [
     (
         "α-val",
         [
+            "alphaval/mvltlfp-tableau/G4.jl",
+            "alphaval/mvltlfp-tableau/L4.jl",
+            "alphaval/mvltlfp-tableau/H4.jl",
+            "alphaval/mvhs-tableau/booleanalgebra.jl",
             "alphaval/mvhs-tableau/G4.jl",
             "alphaval/mvhs-tableau/L4.jl",
             "alphaval/mvhs-tableau/H4.jl"
         ]
-    )
+    ),
 ]
 
 @testset "SoleReasoners.jl" begin

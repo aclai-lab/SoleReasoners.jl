@@ -82,9 +82,28 @@ function alphasat(
             @warn "Timeout"
             return nothing
         end
+        # if using too much memory, try to free memory calling full GC sweep
+        if cycle%100==0 && getfreemem() < gettotmem()*5e-2
+            @warn "Calling Garbage Collector"
+            GC.gc()
+        end
+        # if using too much memory, kill execution to avoid crashes
+        if cycle%100==0 && getfreemem() < gettotmem()*5e-2
+            @warn "Too much memory being used, exiting"
+            return nothing
+        end
         node = choosenode(metricheaps, cycle)
         isnothing(node) && return false # all branches are closed
-        expanded(node) && return true   # found a satisfiable branch
+        if expanded(node)
+            # println(node.frame)
+            # result = [node]
+            # while (!isroot(node))
+            #     node = node.father
+            #     push!(result, node)
+            # end
+            # for r in reverse(result) println(r) end
+            return true   # found a satisfiable branch
+        end
         expansionnode = findexpansionnode(node)
         expand!(expansionnode)
         if assertion(expansionnode) isa Tuple{Truth, Truth}
@@ -479,8 +498,8 @@ function alphasat(
                                 end
                             end
                         end
-                        if !newnodes && leaf == node
-                            push!(metricheaps, node)
+                        if !newnodes && leaf == expansionnode
+                            return true # found satisfiable branch
                         else
                             ti = typeof(expansionnode)(
                                 true,
@@ -793,8 +812,8 @@ function alphasat(
                                 end
                             end
                         end
-                        if !newnodes && leaf == node
-                            push!(metricheaps, node)
+                        if !newnodes && leaf == expansionnode
+                            return true # found satisfiable branch
                         else
                             ti = typeof(expansionnode)(
                                 true,
