@@ -68,7 +68,7 @@ end
 Return all the new possible `frame`s for a tableau of type `T`.
 """
 function newframes(
-    ::Type{T},
+    t::T,
     algebra::FiniteFLewAlgebra
 ) where {
     T<:ManyValuedMultiModalTableau

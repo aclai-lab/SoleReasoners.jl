@@ -6,7 +6,7 @@ using StaticArrays: SMatrix
 ################################################################################
 # Constructor ##################################################################
 ################################################################################
-mutable struct myManyValuedMultiModalTableau <: ManyValuedMultiModalTableau
+mutable struct MyManyValuedMultiModalTableau <: ManyValuedMultiModalTableau
     const judgement::Nothing
     const assertion::NTuple{2, Nothing}
     const world::Nothing
@@ -16,7 +16,7 @@ mutable struct myManyValuedMultiModalTableau <: ManyValuedMultiModalTableau
     expanded::Nothing
     closed::Nothing
 
-    function myManyValuedMultiModalTableau(frame::ManyValuedLinearOrder)
+    function MyManyValuedMultiModalTableau(frame::ManyValuedLinearOrder)
         new(
             nothing,
             (nothing, nothing),
@@ -41,10 +41,12 @@ o = ManyValuedLinearOrder(
 
 @test_throws ErrorException(
     "Please, specify how to return all worlds in " *
-    "`frame(t::myManyValuedMultiModalTableau)`"
-) worlds(myManyValuedMultiModalTableau, o)
+    "`frame(t::MyManyValuedMultiModalTableau)`"
+) worlds(MyManyValuedMultiModalTableau, o)
+
+myManyValuedMultiModalTableau = MyManyValuedMultiModalTableau(o)
 
 @test_throws ErrorException(
     "Please, specify how to generate new frames for " *
-    "`t::myManyValuedMultiModalTableau`"
+    "`t::MyManyValuedMultiModalTableau`"
 ) newframes(myManyValuedMultiModalTableau, booleanalgebra)

@@ -1,3 +1,5 @@
+using Base.Threads
+
 """
     mutable struct MVHSTableau <: ManyValuedMultiModalTableau
         const judgement::Bool
@@ -74,10 +76,11 @@ function worlds(::Type{MVHSTableau}, frame::ManyValuedLinearOrder)
     )
 end
 
-function newframes(t::MVHSTableau, algebra::FiniteFLewAlgebra)
+function newframes(t::MVHSTableau, algebra::FiniteFLewAlgebra; timeout=nothing, t0=nothing)
     f = frame(t)
     n = cardinality(f)
     os = Vector{ManyValuedLinearOrder}([f])
+    lock = Threads.ReentrantLock();
     zcombs = unique(
         [
             (
@@ -89,7 +92,7 @@ function newframes(t::MVHSTableau, algebra::FiniteFLewAlgebra)
             )...
         ]
     )
-    for ltzcomb in zcombs
+    @threads for ltzcomb in zcombs
         for gtzcomb in zcombs
             for eqzcomb in zcombs
                 mvlt = Matrix(undef, n+1, n+1)
@@ -105,8 +108,8 @@ function newframes(t::MVHSTableau, algebra::FiniteFLewAlgebra)
                 mveq[n+1, n+1] = FiniteTruth(1)
                 mveq = SMatrix{n+1,n+1,FiniteTruth}(mveq)
                 if isaManyValuedLinearOrder(mvlt, mveq, algebra)
-                    o = ManyValuedLinearOrder(mvlt, mveq, algebra)
-                    push!(os, @inbounds o)
+                    oz = @inbounds ManyValuedLinearOrder(mvlt, mveq, algebra)
+                    @lock lock push!(os, oz)
                     tcombs = unique(
                         [
                             (
@@ -124,27 +127,29 @@ function newframes(t::MVHSTableau, algebra::FiniteFLewAlgebra)
                     for lttcomb in tcombs
                         for gttcomb in tcombs
                             for eqtcomb in tcombs
+                                if !isnothing(timeout) &&
+                                   (time_ns()-t0)/1e9 > timeout
+                                    return nothing
+                                end
                                 mvlt = Matrix(undef, n+2, n+2)
-                                mvlt[1:n+1, 1:n+1] = o.mvlt
+                                mvlt[1:n+1, 1:n+1] = oz.mvlt
                                 mvlt[1:n+1, n+2  ] = lttcomb
                                 mvlt[n+2,   1:n+1] = gttcomb
                                 mvlt[n+2,   n+2  ] = FiniteTruth(2)
                                 mvlt = SMatrix{n+2,n+2,FiniteTruth}(mvlt)
                                 mveq = Matrix(undef, n+2, n+2)
-                                mveq[1:n+1, 1:n+1] = o.mveq
+                                mveq[1:n+1, 1:n+1] = oz.mveq
                                 mveq[1:n+1, n+2  ] = eqtcomb
                                 mveq[n+2,   1:n+1] = eqtcomb
                                 mveq[n+2,   n+2  ] = FiniteTruth(1)
                                 mveq = SMatrix{n+2,n+2,FiniteTruth}(mveq)
                                 if isaManyValuedLinearOrder(mvlt, mveq, algebra)
-                                    push!(
-                                        os,
-                                        @inbounds ManyValuedLinearOrder(
-                                            mvlt,
-                                            mveq,
-                                            algebra
-                                        )
+                                    ot = @inbounds ManyValuedLinearOrder(
+                                        mvlt,
+                                        mveq,
+                                        algebra
                                     )
+                                    @lock lock push!(os, ot)
                                 end
                             end
                         end

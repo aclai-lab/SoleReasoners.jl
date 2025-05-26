@@ -95,6 +95,7 @@ function alphasat(
         node = choosenode(metricheaps, cycle)
         isnothing(node) && return false # all branches are closed
         if expanded(node)
+            # DEBUG (satisfiable branch)
             # println(node.frame)
             # result = [node]
             # while (!isroot(node))
@@ -105,6 +106,7 @@ function alphasat(
             return true   # found a satisfiable branch
         end
         expansionnode = findexpansionnode(node)
+        # println("$cycle\t$expansionnode") # DEBUG (expansion node)
         expand!(expansionnode)
         if assertion(expansionnode) isa Tuple{Truth, Truth}
             # β ⪯ γ
@@ -517,7 +519,12 @@ function alphasat(
                         newleaves = false    
                         r = relation(token(φ))
                         w = world(expansionnode)
-                        for fi in newframes(leaf, algebra)
+                        frames = newframes(leaf, algebra; timeout=timeout, t0=t0)
+                        if isnothing(frames)
+                            @warn "Timeout"
+                            return nothing
+                        end
+                        for fi in frames
                             for wi in worlds(typeof(expansionnode), fi)
                                 βi = mveval(r, w, wi, fi)
                                 γ = algebra.monoid(β, βi)
@@ -534,7 +541,7 @@ function alphasat(
                                 end
                             end
                         end
-                        if !newleaves
+                        if !newleaves && leaf == node
                             push!(metricheaps, node)
                         end
                     end
@@ -599,8 +606,7 @@ function alphasat(
                                 push!(metricheaps, ti)
                             end
                         end
-                        if isempty(maximalmembers(algebra, β)) &&
-                           leaf == node
+                        if isempty(maximalmembers(algebra, β)) && leaf == node
                             push!(metricheaps, node)
                         end
                     end
@@ -831,11 +837,16 @@ function alphasat(
                         newleaves = false    
                         r = relation(token(φ))
                         w = world(expansionnode)
-                        for fi in newframes(leaf, algebra)
+                        frames = newframes(leaf, algebra; timeout=timeout, t0=t0)
+                        if isnothing(frames)
+                            @warn "Timeout"
+                            return nothing
+                        end
+                        for fi in frames
                             for wi in worlds(typeof(expansionnode), fi)
                                 βi = mveval(r, w, wi, fi)
                                 γ = algebra.implication(βi, β)
-                                if !isbot(γ)
+                                if !istop(γ)
                                     ti = typeof(expansionnode)(
                                         false,
                                         (ψ, γ),
@@ -848,7 +859,7 @@ function alphasat(
                                 end
                             end
                         end
-                        if !newleaves
+                        if !newleaves && leaf == node
                             push!(metricheaps, node)
                         end
                     end
@@ -913,8 +924,7 @@ function alphasat(
                                 push!(metricheaps, ti)
                             end
                         end
-                        if isempty(minimalmembers(algebra, β)) &&
-                           leaf == node
+                        if isempty(minimalmembers(algebra, β)) && leaf == node
                             push!(metricheaps, node)
                         end
                     end
