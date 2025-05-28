@@ -14,8 +14,6 @@ println("Julia version: ", VERSION)
 
 test_suites = [
     # ("Sat", ["sat.jl",]),
-    # ("HeytingAlphaSat", ["heytingalphasat.jl",]),
-    # ("HeytingAlphaProve", ["heytingalphaprove.jl",]),
     # (
     #     "BackwardCompatibility - Alphasat - booleanalgebra",
     #     ["backwardcompatibility/alphasat/booleanalgebra.jl"]
@@ -57,14 +55,8 @@ test_suites = [
     #     ["backwardcompatibility/alphaprove/H9.jl"]
     # ),
     # ("MVHS", ["mvhs.jl"]),
-    # ("IndexAlphaSat", ["ialphasat.jl",]),
-    # ("IndexAlphaProve", ["ialphaprove.jl",]),
     # ("HybridAlphaSat", ["hybridalphasat.jl"]),
     # ("HybridAlphaProve", ["hybridalphaprove.jl"]),
-    # ("IndexHybridAlphaSat", ["ihybridalphasat.jl"]),
-    # ("IndexHybridAlphaProve", ["ihybridalphaprove.jl"]),
-    # ("IndexHybridAlphaSatBackwardCompatibility", ["ihybridalphasatbc.jl"]),
-    # ("IndexHybridAlphaProveBackwardCompatibility", ["ihybridalphaprovebc.jl"]),
     # ("HybridMVHSTableau", ["hybrid-modal-tableau.jl"]),
     # ("HybridMVHSAlphaSat", ["hybrid-mvhs-sat-bc.jl"]),
     # ("HybridMVHSAlphaProve", ["hybrid-mvhs-prove-bc.jl"]),
