@@ -13,7 +13,13 @@ end
 println("Julia version: ", VERSION)
 
 test_suites = [
-    # ("Sat", ["sat.jl",]),
+    ("Abstract Tableau", ["abstract-tableau/abstract-tableau.jl"]),
+    (   "Metric Heap", [
+            "metric-heap/metric-heap.jl",
+            "metric-heap/metrics.jl"
+        ]
+    ),
+    ("Sat", ["propositional-tableau/sat.jl",]),
     # (
     #     "BackwardCompatibility - Alphasat - booleanalgebra",
     #     ["backwardcompatibility/alphasat/booleanalgebra.jl"]
@@ -54,20 +60,8 @@ test_suites = [
     #     "BackwardCompatibility - Alphaprove - H9",
     #     ["backwardcompatibility/alphaprove/H9.jl"]
     # ),
-    # ("MVHS", ["mvhs.jl"]),
     # ("HybridAlphaSat", ["hybridalphasat.jl"]),
     # ("HybridAlphaProve", ["hybridalphaprove.jl"]),
-    # ("HybridMVHSTableau", ["hybrid-modal-tableau.jl"]),
-    # ("HybridMVHSAlphaSat", ["hybrid-mvhs-sat-bc.jl"]),
-    # ("HybridMVHSAlphaProve", ["hybrid-mvhs-prove-bc.jl"]),
-    # ("Utils", ["utils.jl"]),
-
-    ("Abstract Tableau", ["abstract-tableau/abstract-tableau.jl"]),
-    (   "Metric Heap", [
-            "metric-heap/metric-heap.jl",
-            "metric-heap/metrics.jl"
-        ]
-    ),
     (
         "Many-Valued Multi-Modal Logic",
         [
@@ -112,6 +106,7 @@ test_suites = [
             "alphaval/mvhs-tableau/H4.jl"
         ]
     ),
+    ("Utils", ["utils.jl"]),
 ]
 
 @testset "SoleReasoners.jl" begin
