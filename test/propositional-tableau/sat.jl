@@ -65,9 +65,13 @@
     "(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)"
 )) == false
 
-@test sat(dimacstosole("test/benchmark/sat/uf50-01.cnf")) == true
+@test sat(
+    dimacstosole("propositional-tableau/benchmark/sat/uf50-01.cnf")
+) == true
 
-@test sat(dimacstosole("test/benchmark/sat/uf50-02.cnf")) == true
+@test sat(
+    dimacstosole("propositional-tableau/benchmark/sat/uf50-02.cnf")
+) == true
 
 @atoms p
 
