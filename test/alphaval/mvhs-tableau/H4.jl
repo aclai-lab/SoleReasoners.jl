@@ -437,7 +437,8 @@ for boxX in [
 ]
     # k axiom
     # TODO: inverse version
-    result = alphaval(
+    local result = alphaval(
+        MVHSTableau,
         ⊤,
         →(
             boxX(→(p,q)),
@@ -465,7 +466,8 @@ for (boxX,diamondXi) in [
     (boxOi, boxO),
 ]
     # TODO: inverse version
-    result = alphaval(
+    local result = alphaval(
+        MVHSTableau,
         ⊤,
         →(
             p,
@@ -484,7 +486,8 @@ end
 ###################################################
 # TODO: inverse version
 result = alphaval(
-    ⊤,
+    MVHSTableau,
+        ⊤,
     →(
         diamondD(diamondD(p)),
         diamondD(p)
@@ -501,7 +504,8 @@ for diamondX in [
     diamondE
 ]
     # TODO: inverse version
-    result = alphaval(
+    local result = alphaval(
+        MVHSTableau,
         ⊤,
         →(
             diamondX(diamondX(p)),
@@ -519,7 +523,8 @@ end
 ## Theorem 3 ######################################
 ###################################################
 result = alphaval(
-    ⊤,
+    MVHSTableau,
+        ⊤,
     →(
         diamondL(p),
         diamondA(diamondA(p))
@@ -531,7 +536,8 @@ if !isnothing(result)
     @test result == true
 end
 result = alphaval(
-    ⊤,
+    MVHSTableau,
+        ⊤,
     →(
         diamondD(p),
         diamondB(diamondE(p))
@@ -543,7 +549,8 @@ if !isnothing(result)
     @test result == true
 end
 result = alphaval(
-    ⊤,
+    MVHSTableau,
+        ⊤,
     →(
         diamondD(p),
         diamondE(diamondB(p))
@@ -555,7 +562,8 @@ if !isnothing(result)
     @test result == true
 end
 result = alphaval(
-    ⊤,
+    MVHSTableau,
+        ⊤,
     →(
         diamondO(p),
         diamondE(diamondBi(p))
@@ -567,7 +575,8 @@ if !isnothing(result)
     @test result == true
 end
 result = alphaval(
-    ⊤,
+    MVHSTableau,
+        ⊤,
     →(
         diamondA(diamondA(p)),
         diamondL(p)
@@ -579,7 +588,8 @@ if !isnothing(result)
     @test result == false
 end
 result = alphaval(
-    ⊤,
+    MVHSTableau,
+        ⊤,
     →(
         diamondB(diamondE(p)),
         diamondD(p)
@@ -591,7 +601,8 @@ if !isnothing(result)
     @test result == false
 end
 result = alphaval(
-    ⊤,
+    MVHSTableau,
+        ⊤,
     →(
         diamondE(diamondB(p)),
         diamondD(p)
@@ -603,7 +614,8 @@ if !isnothing(result)
     @test result == false
 end
 result = alphaval(
-    ⊤,
+    MVHSTableau,
+        ⊤,
     →(
         diamondE(diamondBi(p)),
         diamondO(p)
@@ -615,7 +627,8 @@ if !isnothing(result)
     @test result == false
 end
 result = alphaval(
-    ⊤,
+    MVHSTableau,
+        ⊤,
     →(
         diamondL(p),
         diamondBi(boxE(diamondBi(diamondE(p))))
@@ -627,7 +640,8 @@ if !isnothing(result)
     @test result == false
 end
 result = alphaval(
-    ⊤,
+    MVHSTableau,
+        ⊤,
     →(
         diamondBi(boxE(diamondBi(diamondE(p)))),
         diamondL(p)
