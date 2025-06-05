@@ -51,17 +51,6 @@ function booleantofuzzy(φ::Formula)
     end
 end
 
-function ibooleantofuzzy(φ::Formula)
-    if token(φ) isa Union{Atom, BooleanTruth}
-        return φ
-    elseif token(φ) isa NamedConnective{:¬}
-        return →(ibooleantofuzzy(subformulas(φ)[1]),FiniteIndexTruth(2))
-    else
-        (a, b) = subformulas(φ)
-        return token(φ)(ibooleantofuzzy(a), ibooleantofuzzy(b))
-    end
-end
-
 function getmemuse()
     f = open( "/proc/self/stat" )
     s = read( f, String )
