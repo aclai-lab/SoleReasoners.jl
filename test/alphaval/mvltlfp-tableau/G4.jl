@@ -5,6 +5,35 @@
 using SoleLogics.ManyValuedLogics: G4, getdomain
 using SoleLogics.ManyValuedLogics: α, β
 
+p, q = Atom.(["p", "q"])
+
+diamondA = diamond(IA_A)
+diamondL = diamond(IA_L)
+diamondB = diamond(IA_B)
+diamondE = diamond(IA_E)
+diamondD = diamond(IA_D)
+diamondO = diamond(IA_O)
+diamondAi = diamond(IA_Ai)
+diamondLi = diamond(IA_Li)
+diamondBi = diamond(IA_Bi)
+diamondEi = diamond(IA_Ei)
+diamondDi = diamond(IA_Di)
+diamondOi = diamond(IA_Oi)
+boxA = box(IA_A)
+boxL = box(IA_L)
+boxB = box(IA_B)
+boxE = box(IA_E)
+boxD = box(IA_D)
+boxO = box(IA_O)
+boxAi = box(IA_Ai)
+boxLi = box(IA_Li)
+boxBi = box(IA_Bi)
+boxEi = box(IA_Ei)
+boxDi = box(IA_Di)
+boxOi = box(IA_Oi)
+
+timeout = 60
+
 ################################################################################
 ## Base cases ##################################################################
 ################################################################################
@@ -39,121 +68,121 @@ for i ∈ getdomain(G4)
     end
 end
 
-@test alphaval(MVLTLFPTableau, ⊥, parseformula("p"), G4) == true
-@test alphaval(MVLTLFPTableau, α, parseformula("p"), G4) == false
-@test alphaval(MVLTLFPTableau, β, parseformula("p"), G4) == false
-@test alphaval(MVLTLFPTableau, ⊤, parseformula("p"), G4) == false
+@test alphaval(MVLTLFPTableau, ⊥, p, G4) == true
+@test alphaval(MVLTLFPTableau, α, p, G4) == false
+@test alphaval(MVLTLFPTableau, β, p, G4) == false
+@test alphaval(MVLTLFPTableau, ⊤, p, G4) == false
 
 ################################################################################
 ## (Strong) disjunction ########################################################
 ################################################################################
 
-@test alphaval(MVLTLFPTableau, ⊥, ∨(parseformula("p"), ⊥), G4) == true
-@test alphaval(MVLTLFPTableau, ⊥, ∨(parseformula("p"), α), G4) == true
-@test alphaval(MVLTLFPTableau, ⊥, ∨(parseformula("p"), β), G4) == true
-@test alphaval(MVLTLFPTableau, ⊥, ∨(parseformula("p"), ⊤), G4) == true
-@test alphaval(MVLTLFPTableau, α, ∨(parseformula("p"), ⊥), G4) == false
-@test alphaval(MVLTLFPTableau, α, ∨(parseformula("p"), α), G4) == true
-@test alphaval(MVLTLFPTableau, α, ∨(parseformula("p"), β), G4) == true
-@test alphaval(MVLTLFPTableau, α, ∨(parseformula("p"), ⊤), G4) == true
-@test alphaval(MVLTLFPTableau, β, ∨(parseformula("p"), ⊥), G4) == false
-@test alphaval(MVLTLFPTableau, β, ∨(parseformula("p"), α), G4) == false
-@test alphaval(MVLTLFPTableau, β, ∨(parseformula("p"), β), G4) == true
-@test alphaval(MVLTLFPTableau, β, ∨(parseformula("p"), ⊤), G4) == true
-@test alphaval(MVLTLFPTableau, ⊤, ∨(parseformula("p"), ⊥), G4) == false
-@test alphaval(MVLTLFPTableau, ⊤, ∨(parseformula("p"), α), G4) == false
-@test alphaval(MVLTLFPTableau, ⊤, ∨(parseformula("p"), β), G4) == false
-@test alphaval(MVLTLFPTableau, ⊤, ∨(parseformula("p"), ⊤), G4) == true
+@test alphaval(MVLTLFPTableau, ⊥, ∨(p, ⊥), G4) == true
+@test alphaval(MVLTLFPTableau, ⊥, ∨(p, α), G4) == true
+@test alphaval(MVLTLFPTableau, ⊥, ∨(p, β), G4) == true
+@test alphaval(MVLTLFPTableau, ⊥, ∨(p, ⊤), G4) == true
+@test alphaval(MVLTLFPTableau, α, ∨(p, ⊥), G4) == false
+@test alphaval(MVLTLFPTableau, α, ∨(p, α), G4) == true
+@test alphaval(MVLTLFPTableau, α, ∨(p, β), G4) == true
+@test alphaval(MVLTLFPTableau, α, ∨(p, ⊤), G4) == true
+@test alphaval(MVLTLFPTableau, β, ∨(p, ⊥), G4) == false
+@test alphaval(MVLTLFPTableau, β, ∨(p, α), G4) == false
+@test alphaval(MVLTLFPTableau, β, ∨(p, β), G4) == true
+@test alphaval(MVLTLFPTableau, β, ∨(p, ⊤), G4) == true
+@test alphaval(MVLTLFPTableau, ⊤, ∨(p, ⊥), G4) == false
+@test alphaval(MVLTLFPTableau, ⊤, ∨(p, α), G4) == false
+@test alphaval(MVLTLFPTableau, ⊤, ∨(p, β), G4) == false
+@test alphaval(MVLTLFPTableau, ⊤, ∨(p, ⊤), G4) == true
 
-@test alphaval(MVLTLFPTableau, ⊥, ∨(⊥, parseformula("p")), G4) == true
-@test alphaval(MVLTLFPTableau, ⊥, ∨(α, parseformula("p")), G4) == true 
-@test alphaval(MVLTLFPTableau, ⊥, ∨(β, parseformula("p")), G4) == true 
-@test alphaval(MVLTLFPTableau, ⊥, ∨(⊤, parseformula("p")), G4) == true 
-@test alphaval(MVLTLFPTableau, α, ∨(⊥, parseformula("p")), G4) == false
-@test alphaval(MVLTLFPTableau, α, ∨(α, parseformula("p")), G4) == true 
-@test alphaval(MVLTLFPTableau, α, ∨(β, parseformula("p")), G4) == true 
-@test alphaval(MVLTLFPTableau, α, ∨(⊤, parseformula("p")), G4) == true 
-@test alphaval(MVLTLFPTableau, β, ∨(⊥, parseformula("p")), G4) == false 
-@test alphaval(MVLTLFPTableau, β, ∨(α, parseformula("p")), G4) == false 
-@test alphaval(MVLTLFPTableau, β, ∨(β, parseformula("p")), G4) == true 
-@test alphaval(MVLTLFPTableau, β, ∨(⊤, parseformula("p")), G4) == true 
-@test alphaval(MVLTLFPTableau, ⊤, ∨(⊥, parseformula("p")), G4) == false 
-@test alphaval(MVLTLFPTableau, ⊤, ∨(α, parseformula("p")), G4) == false 
-@test alphaval(MVLTLFPTableau, ⊤, ∨(β, parseformula("p")), G4) == false 
-@test alphaval(MVLTLFPTableau, ⊤, ∨(⊤, parseformula("p")), G4) == true 
+@test alphaval(MVLTLFPTableau, ⊥, ∨(⊥, p), G4) == true
+@test alphaval(MVLTLFPTableau, ⊥, ∨(α, p), G4) == true 
+@test alphaval(MVLTLFPTableau, ⊥, ∨(β, p), G4) == true 
+@test alphaval(MVLTLFPTableau, ⊥, ∨(⊤, p), G4) == true 
+@test alphaval(MVLTLFPTableau, α, ∨(⊥, p), G4) == false
+@test alphaval(MVLTLFPTableau, α, ∨(α, p), G4) == true 
+@test alphaval(MVLTLFPTableau, α, ∨(β, p), G4) == true 
+@test alphaval(MVLTLFPTableau, α, ∨(⊤, p), G4) == true 
+@test alphaval(MVLTLFPTableau, β, ∨(⊥, p), G4) == false 
+@test alphaval(MVLTLFPTableau, β, ∨(α, p), G4) == false 
+@test alphaval(MVLTLFPTableau, β, ∨(β, p), G4) == true 
+@test alphaval(MVLTLFPTableau, β, ∨(⊤, p), G4) == true 
+@test alphaval(MVLTLFPTableau, ⊤, ∨(⊥, p), G4) == false 
+@test alphaval(MVLTLFPTableau, ⊤, ∨(α, p), G4) == false 
+@test alphaval(MVLTLFPTableau, ⊤, ∨(β, p), G4) == false 
+@test alphaval(MVLTLFPTableau, ⊤, ∨(⊤, p), G4) == true 
 
 @test alphaval(
     MVLTLFPTableau,
     ⊥,
-    ∨(parseformula("p"), parseformula("p")),
+    ∨(p, p),
     G4
 ) == true
 @test alphaval(
     MVLTLFPTableau,
     α,
-    ∨(parseformula("p"), parseformula("p")),
+    ∨(p, p),
     G4
 ) == false
 @test alphaval(
     MVLTLFPTableau,
     β,
-    ∨(parseformula("p"), parseformula("p")),
+    ∨(p, p),
     G4
 ) == false
 @test alphaval(
     MVLTLFPTableau,
     ⊤,
-    ∨(parseformula("p"), parseformula("p")),
-    G4
-) == false
-
-@test alphaval(
-    MVLTLFPTableau,
-    ⊥,
-    ∨(parseformula("p"), parseformula("q")),
-    G4
-) == true
-@test alphaval(
-    MVLTLFPTableau,
-    α,
-    ∨(parseformula("p"), parseformula("q")),
-    G4
-) == false
-@test alphaval(
-    MVLTLFPTableau,
-    β,
-    ∨(parseformula("p"), parseformula("q")),
-    G4
-) == false
-@test alphaval(
-    MVLTLFPTableau,
-    ⊤,
-    ∨(parseformula("p"), parseformula("q")),
+    ∨(p, p),
     G4
 ) == false
 
 @test alphaval(
     MVLTLFPTableau,
     ⊥,
-    ∨(parseformula("q"), parseformula("p")),
+    ∨(p, q),
     G4
 ) == true
 @test alphaval(
     MVLTLFPTableau,
     α,
-    ∨(parseformula("q"), parseformula("p")),
+    ∨(p, q),
     G4
 ) == false
 @test alphaval(
     MVLTLFPTableau,
     β,
-    ∨(parseformula("q"), parseformula("p")),
+    ∨(p, q),
     G4
 ) == false
 @test alphaval(
     MVLTLFPTableau,
     ⊤,
-    ∨(parseformula("q"), parseformula("p")),
+    ∨(p, q),
+    G4
+) == false
+
+@test alphaval(
+    MVLTLFPTableau,
+    ⊥,
+    ∨(q, p),
+    G4
+) == true
+@test alphaval(
+    MVLTLFPTableau,
+    α,
+    ∨(q, p),
+    G4
+) == false
+@test alphaval(
+    MVLTLFPTableau,
+    β,
+    ∨(q, p),
+    G4
+) == false
+@test alphaval(
+    MVLTLFPTableau,
+    ⊤,
+    ∨(q, p),
     G4
 ) == false
 
@@ -161,112 +190,112 @@ end
 ## (Strong) conjunction ########################################################
 ################################################################################
 
-@test alphaval(MVLTLFPTableau, ⊥, ∧(parseformula("p"), ⊥), G4) == true
-@test alphaval(MVLTLFPTableau, ⊥, ∧(parseformula("p"), α), G4) == true
-@test alphaval(MVLTLFPTableau, ⊥, ∧(parseformula("p"), β), G4) == true
-@test alphaval(MVLTLFPTableau, ⊥, ∧(parseformula("p"), ⊤), G4) == true
-@test alphaval(MVLTLFPTableau, α, ∧(parseformula("p"), ⊥), G4) == false
-@test alphaval(MVLTLFPTableau, α, ∧(parseformula("p"), α), G4) == false
-@test alphaval(MVLTLFPTableau, α, ∧(parseformula("p"), β), G4) == false
-@test alphaval(MVLTLFPTableau, α, ∧(parseformula("p"), ⊤), G4) == false
-@test alphaval(MVLTLFPTableau, β, ∧(parseformula("p"), ⊥), G4) == false
-@test alphaval(MVLTLFPTableau, β, ∧(parseformula("p"), α), G4) == false
-@test alphaval(MVLTLFPTableau, β, ∧(parseformula("p"), β), G4) == false
-@test alphaval(MVLTLFPTableau, β, ∧(parseformula("p"), ⊤), G4) == false
-@test alphaval(MVLTLFPTableau, ⊤, ∧(parseformula("p"), ⊥), G4) == false
-@test alphaval(MVLTLFPTableau, ⊤, ∧(parseformula("p"), α), G4) == false
-@test alphaval(MVLTLFPTableau, ⊤, ∧(parseformula("p"), β), G4) == false
-@test alphaval(MVLTLFPTableau, ⊤, ∧(parseformula("p"), ⊤), G4) == false
+@test alphaval(MVLTLFPTableau, ⊥, ∧(p, ⊥), G4) == true
+@test alphaval(MVLTLFPTableau, ⊥, ∧(p, α), G4) == true
+@test alphaval(MVLTLFPTableau, ⊥, ∧(p, β), G4) == true
+@test alphaval(MVLTLFPTableau, ⊥, ∧(p, ⊤), G4) == true
+@test alphaval(MVLTLFPTableau, α, ∧(p, ⊥), G4) == false
+@test alphaval(MVLTLFPTableau, α, ∧(p, α), G4) == false
+@test alphaval(MVLTLFPTableau, α, ∧(p, β), G4) == false
+@test alphaval(MVLTLFPTableau, α, ∧(p, ⊤), G4) == false
+@test alphaval(MVLTLFPTableau, β, ∧(p, ⊥), G4) == false
+@test alphaval(MVLTLFPTableau, β, ∧(p, α), G4) == false
+@test alphaval(MVLTLFPTableau, β, ∧(p, β), G4) == false
+@test alphaval(MVLTLFPTableau, β, ∧(p, ⊤), G4) == false
+@test alphaval(MVLTLFPTableau, ⊤, ∧(p, ⊥), G4) == false
+@test alphaval(MVLTLFPTableau, ⊤, ∧(p, α), G4) == false
+@test alphaval(MVLTLFPTableau, ⊤, ∧(p, β), G4) == false
+@test alphaval(MVLTLFPTableau, ⊤, ∧(p, ⊤), G4) == false
 
-@test alphaval(MVLTLFPTableau, ⊥, ∧(⊥, parseformula("p")), G4) == true 
-@test alphaval(MVLTLFPTableau, ⊥, ∧(α, parseformula("p")), G4) == true 
-@test alphaval(MVLTLFPTableau, ⊥, ∧(β, parseformula("p")), G4) == true 
-@test alphaval(MVLTLFPTableau, ⊥, ∧(⊤, parseformula("p")), G4) == true 
-@test alphaval(MVLTLFPTableau, α, ∧(⊥, parseformula("p")), G4) == false
-@test alphaval(MVLTLFPTableau, α, ∧(α, parseformula("p")), G4) == false 
-@test alphaval(MVLTLFPTableau, α, ∧(β, parseformula("p")), G4) == false 
-@test alphaval(MVLTLFPTableau, α, ∧(⊤, parseformula("p")), G4) == false 
-@test alphaval(MVLTLFPTableau, β, ∧(⊥, parseformula("p")), G4) == false 
-@test alphaval(MVLTLFPTableau, β, ∧(α, parseformula("p")), G4) == false 
-@test alphaval(MVLTLFPTableau, β, ∧(β, parseformula("p")), G4) == false 
-@test alphaval(MVLTLFPTableau, β, ∧(⊤, parseformula("p")), G4) == false 
-@test alphaval(MVLTLFPTableau, ⊤, ∧(⊥, parseformula("p")), G4) == false 
-@test alphaval(MVLTLFPTableau, ⊤, ∧(α, parseformula("p")), G4) == false 
-@test alphaval(MVLTLFPTableau, ⊤, ∧(β, parseformula("p")), G4) == false 
-@test alphaval(MVLTLFPTableau, ⊤, ∧(⊤, parseformula("p")), G4) == false 
+@test alphaval(MVLTLFPTableau, ⊥, ∧(⊥, p), G4) == true 
+@test alphaval(MVLTLFPTableau, ⊥, ∧(α, p), G4) == true 
+@test alphaval(MVLTLFPTableau, ⊥, ∧(β, p), G4) == true 
+@test alphaval(MVLTLFPTableau, ⊥, ∧(⊤, p), G4) == true 
+@test alphaval(MVLTLFPTableau, α, ∧(⊥, p), G4) == false
+@test alphaval(MVLTLFPTableau, α, ∧(α, p), G4) == false 
+@test alphaval(MVLTLFPTableau, α, ∧(β, p), G4) == false 
+@test alphaval(MVLTLFPTableau, α, ∧(⊤, p), G4) == false 
+@test alphaval(MVLTLFPTableau, β, ∧(⊥, p), G4) == false 
+@test alphaval(MVLTLFPTableau, β, ∧(α, p), G4) == false 
+@test alphaval(MVLTLFPTableau, β, ∧(β, p), G4) == false 
+@test alphaval(MVLTLFPTableau, β, ∧(⊤, p), G4) == false 
+@test alphaval(MVLTLFPTableau, ⊤, ∧(⊥, p), G4) == false 
+@test alphaval(MVLTLFPTableau, ⊤, ∧(α, p), G4) == false 
+@test alphaval(MVLTLFPTableau, ⊤, ∧(β, p), G4) == false 
+@test alphaval(MVLTLFPTableau, ⊤, ∧(⊤, p), G4) == false 
 
 @test alphaval(
     MVLTLFPTableau,
     ⊥,
-    ∧(parseformula("p"), parseformula("p")),
+    ∧(p, p),
     G4
 ) == true
 @test alphaval(
     MVLTLFPTableau,
     α,
-    ∧(parseformula("p"), parseformula("p")),
+    ∧(p, p),
     G4
 ) == false
 @test alphaval(
     MVLTLFPTableau,
     β,
-    ∧(parseformula("p"), parseformula("p")),
+    ∧(p, p),
     G4
 ) == false
 @test alphaval(
     MVLTLFPTableau,
     ⊤,
-    ∧(parseformula("p"), parseformula("p")),
-    G4
-) == false
-
-@test alphaval(
-    MVLTLFPTableau,
-    ⊥,
-    ∧(parseformula("p"), parseformula("q")),
-    G4
-) == true
-@test alphaval(
-    MVLTLFPTableau,
-    α,
-    ∧(parseformula("p"), parseformula("q")),
-    G4
-) == false
-@test alphaval(
-    MVLTLFPTableau,
-    β,
-    ∧(parseformula("p"), parseformula("q")),
-    G4
-) == false
-@test alphaval(
-    MVLTLFPTableau,
-    ⊤,
-    ∧(parseformula("p"), parseformula("q")),
+    ∧(p, p),
     G4
 ) == false
 
 @test alphaval(
     MVLTLFPTableau,
     ⊥,
-    ∧(parseformula("q"), parseformula("p")),
+    ∧(p, q),
     G4
 ) == true
 @test alphaval(
     MVLTLFPTableau,
     α,
-    ∧(parseformula("q"), parseformula("p")),
+    ∧(p, q),
     G4
 ) == false
 @test alphaval(
     MVLTLFPTableau,
     β,
-    ∧(parseformula("q"), parseformula("p")),
+    ∧(p, q),
     G4
 ) == false
 @test alphaval(
     MVLTLFPTableau,
     ⊤,
-    ∧(parseformula("q"), parseformula("p")),
+    ∧(p, q),
+    G4
+) == false
+
+@test alphaval(
+    MVLTLFPTableau,
+    ⊥,
+    ∧(q, p),
+    G4
+) == true
+@test alphaval(
+    MVLTLFPTableau,
+    α,
+    ∧(q, p),
+    G4
+) == false
+@test alphaval(
+    MVLTLFPTableau,
+    β,
+    ∧(q, p),
+    G4
+) == false
+@test alphaval(
+    MVLTLFPTableau,
+    ⊤,
+    ∧(q, p),
     G4
 ) == false
 
@@ -274,111 +303,111 @@ end
 ## Implication #################################################################
 ################################################################################
 
-@test alphaval(MVLTLFPTableau, ⊥, →(parseformula("p"), ⊥), G4) == true
-@test alphaval(MVLTLFPTableau, ⊥, →(parseformula("p"), α), G4) == true
-@test alphaval(MVLTLFPTableau, ⊥, →(parseformula("p"), β), G4) == true
-@test alphaval(MVLTLFPTableau, ⊥, →(parseformula("p"), ⊤), G4) == true
-@test alphaval(MVLTLFPTableau, α, →(parseformula("p"), ⊥), G4) == false
-@test alphaval(MVLTLFPTableau, α, →(parseformula("p"), α), G4) == true
-@test alphaval(MVLTLFPTableau, α, →(parseformula("p"), β), G4) == true
-@test alphaval(MVLTLFPTableau, α, →(parseformula("p"), ⊤), G4) == true
-@test alphaval(MVLTLFPTableau, β, →(parseformula("p"), ⊥), G4) == false
-@test alphaval(MVLTLFPTableau, β, →(parseformula("p"), α), G4) == false
-@test alphaval(MVLTLFPTableau, β, →(parseformula("p"), β), G4) == true
-@test alphaval(MVLTLFPTableau, β, →(parseformula("p"), ⊤), G4) == true
-@test alphaval(MVLTLFPTableau, ⊤, →(parseformula("p"), ⊥), G4) == false
-@test alphaval(MVLTLFPTableau, ⊤, →(parseformula("p"), α), G4) == false
-@test alphaval(MVLTLFPTableau, ⊤, →(parseformula("p"), β), G4) == false
-@test alphaval(MVLTLFPTableau, ⊤, →(parseformula("p"), ⊤), G4) == true
+@test alphaval(MVLTLFPTableau, ⊥, →(p, ⊥), G4) == true
+@test alphaval(MVLTLFPTableau, ⊥, →(p, α), G4) == true
+@test alphaval(MVLTLFPTableau, ⊥, →(p, β), G4) == true
+@test alphaval(MVLTLFPTableau, ⊥, →(p, ⊤), G4) == true
+@test alphaval(MVLTLFPTableau, α, →(p, ⊥), G4) == false
+@test alphaval(MVLTLFPTableau, α, →(p, α), G4) == true
+@test alphaval(MVLTLFPTableau, α, →(p, β), G4) == true
+@test alphaval(MVLTLFPTableau, α, →(p, ⊤), G4) == true
+@test alphaval(MVLTLFPTableau, β, →(p, ⊥), G4) == false
+@test alphaval(MVLTLFPTableau, β, →(p, α), G4) == false
+@test alphaval(MVLTLFPTableau, β, →(p, β), G4) == true
+@test alphaval(MVLTLFPTableau, β, →(p, ⊤), G4) == true
+@test alphaval(MVLTLFPTableau, ⊤, →(p, ⊥), G4) == false
+@test alphaval(MVLTLFPTableau, ⊤, →(p, α), G4) == false
+@test alphaval(MVLTLFPTableau, ⊤, →(p, β), G4) == false
+@test alphaval(MVLTLFPTableau, ⊤, →(p, ⊤), G4) == true
 
-@test alphaval(MVLTLFPTableau, ⊥, →(⊥, parseformula("p")), G4) == true
-@test alphaval(MVLTLFPTableau, ⊥, →(α, parseformula("p")), G4) == true
-@test alphaval(MVLTLFPTableau, ⊥, →(β, parseformula("p")), G4) == true
-@test alphaval(MVLTLFPTableau, ⊥, →(⊤, parseformula("p")), G4) == true
-@test alphaval(MVLTLFPTableau, α, →(⊥, parseformula("p")), G4) == true
-@test alphaval(MVLTLFPTableau, α, →(α, parseformula("p")), G4) == false
-@test alphaval(MVLTLFPTableau, α, →(β, parseformula("p")), G4) == false
-@test alphaval(MVLTLFPTableau, α, →(⊤, parseformula("p")), G4) == false
-@test alphaval(MVLTLFPTableau, β, →(⊥, parseformula("p")), G4) == true
-@test alphaval(MVLTLFPTableau, β, →(α, parseformula("p")), G4) == false
-@test alphaval(MVLTLFPTableau, β, →(β, parseformula("p")), G4) == false
-@test alphaval(MVLTLFPTableau, β, →(⊤, parseformula("p")), G4) == false
-@test alphaval(MVLTLFPTableau, ⊤, →(⊥, parseformula("p")), G4) == true
-@test alphaval(MVLTLFPTableau, ⊤, →(α, parseformula("p")), G4) == false
-@test alphaval(MVLTLFPTableau, ⊤, →(β, parseformula("p")), G4) == false
-@test alphaval(MVLTLFPTableau, ⊤, →(⊤, parseformula("p")), G4) == false
+@test alphaval(MVLTLFPTableau, ⊥, →(⊥, p), G4) == true
+@test alphaval(MVLTLFPTableau, ⊥, →(α, p), G4) == true
+@test alphaval(MVLTLFPTableau, ⊥, →(β, p), G4) == true
+@test alphaval(MVLTLFPTableau, ⊥, →(⊤, p), G4) == true
+@test alphaval(MVLTLFPTableau, α, →(⊥, p), G4) == true
+@test alphaval(MVLTLFPTableau, α, →(α, p), G4) == false
+@test alphaval(MVLTLFPTableau, α, →(β, p), G4) == false
+@test alphaval(MVLTLFPTableau, α, →(⊤, p), G4) == false
+@test alphaval(MVLTLFPTableau, β, →(⊥, p), G4) == true
+@test alphaval(MVLTLFPTableau, β, →(α, p), G4) == false
+@test alphaval(MVLTLFPTableau, β, →(β, p), G4) == false
+@test alphaval(MVLTLFPTableau, β, →(⊤, p), G4) == false
+@test alphaval(MVLTLFPTableau, ⊤, →(⊥, p), G4) == true
+@test alphaval(MVLTLFPTableau, ⊤, →(α, p), G4) == false
+@test alphaval(MVLTLFPTableau, ⊤, →(β, p), G4) == false
+@test alphaval(MVLTLFPTableau, ⊤, →(⊤, p), G4) == false
 
 @test alphaval(
     MVLTLFPTableau,
     ⊥,
-    →(parseformula("p"), parseformula("p")),
+    →(p, p),
     G4
 ) == true
 @test alphaval(
     MVLTLFPTableau,
     α,
-    →(parseformula("p"), parseformula("p")),
+    →(p, p),
     G4
 ) == true
 @test alphaval(
     MVLTLFPTableau,
     β,
-    →(parseformula("p"), parseformula("p")),
+    →(p, p),
     G4
 ) == true
 @test alphaval(
     MVLTLFPTableau,
     ⊤,
-    →(parseformula("p"), parseformula("p")),
+    →(p, p),
     G4
 ) == true
 
 @test alphaval(
     MVLTLFPTableau,
     ⊥,
-    →(parseformula("p"), parseformula("q")),
+    →(p, q),
     G4
 ) == true
 @test alphaval(
     MVLTLFPTableau,
     α,
-    →(parseformula("p"), parseformula("q")),
+    →(p, q),
     G4
 ) == false
 @test alphaval(
     MVLTLFPTableau,
     β,
-    →(parseformula("p"), parseformula("q")),
+    →(p, q),
     G4
 ) == false
 @test alphaval(
     MVLTLFPTableau,
     ⊤,
-    →(parseformula("p"), parseformula("q")),
+    →(p, q),
     G4
 ) == false
 
 @test alphaval(
     MVLTLFPTableau,
     ⊥,
-    →(parseformula("q"), parseformula("p")),
+    →(q, p),
     G4
 ) == true
 @test alphaval(
     MVLTLFPTableau,
     α,
-    →(parseformula("q"), parseformula("p")),
+    →(q, p),
     G4
 ) == false
 @test alphaval(
     MVLTLFPTableau,
     β,
-    →(parseformula("q"), parseformula("p")),
+    →(q, p),
     G4
 ) == false
 @test alphaval(
     MVLTLFPTableau,
     ⊤,
-    →(parseformula("q"), parseformula("p")),
+    →(q, p),
     G4
 ) == false

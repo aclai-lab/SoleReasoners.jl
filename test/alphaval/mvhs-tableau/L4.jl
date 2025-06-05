@@ -5,6 +5,35 @@
 using SoleLogics.ManyValuedLogics: Ł4, getdomain
 using SoleLogics.ManyValuedLogics: α, β
 
+p, q = Atom.(["p", "q"])
+
+diamondA = diamond(IA_A)
+diamondL = diamond(IA_L)
+diamondB = diamond(IA_B)
+diamondE = diamond(IA_E)
+diamondD = diamond(IA_D)
+diamondO = diamond(IA_O)
+diamondAi = diamond(IA_Ai)
+diamondLi = diamond(IA_Li)
+diamondBi = diamond(IA_Bi)
+diamondEi = diamond(IA_Ei)
+diamondDi = diamond(IA_Di)
+diamondOi = diamond(IA_Oi)
+boxA = box(IA_A)
+boxL = box(IA_L)
+boxB = box(IA_B)
+boxE = box(IA_E)
+boxD = box(IA_D)
+boxO = box(IA_O)
+boxAi = box(IA_Ai)
+boxLi = box(IA_Li)
+boxBi = box(IA_Bi)
+boxEi = box(IA_Ei)
+boxDi = box(IA_Di)
+boxOi = box(IA_Oi)
+
+timeout = 60
+
 ################################################################################
 ## Base cases ##################################################################
 ################################################################################
@@ -39,121 +68,121 @@ for i ∈ getdomain(Ł4)
     end
 end
 
-@test alphaval(MVHSTableau, ⊥, parseformula("p"), Ł4) == true
-@test alphaval(MVHSTableau, α, parseformula("p"), Ł4) == false
-@test alphaval(MVHSTableau, β, parseformula("p"), Ł4) == false
-@test alphaval(MVHSTableau, ⊤, parseformula("p"), Ł4) == false
+@test alphaval(MVHSTableau, ⊥, p, Ł4) == true
+@test alphaval(MVHSTableau, α, p, Ł4) == false
+@test alphaval(MVHSTableau, β, p, Ł4) == false
+@test alphaval(MVHSTableau, ⊤, p, Ł4) == false
 
 ################################################################################
 ## (Strong) disjunction ########################################################
 ################################################################################
 
-@test alphaval(MVHSTableau, ⊥, ∨(parseformula("p"), ⊥), Ł4) == true
-@test alphaval(MVHSTableau, ⊥, ∨(parseformula("p"), α), Ł4) == true
-@test alphaval(MVHSTableau, ⊥, ∨(parseformula("p"), β), Ł4) == true
-@test alphaval(MVHSTableau, ⊥, ∨(parseformula("p"), ⊤), Ł4) == true
-@test alphaval(MVHSTableau, α, ∨(parseformula("p"), ⊥), Ł4) == false
-@test alphaval(MVHSTableau, α, ∨(parseformula("p"), α), Ł4) == true
-@test alphaval(MVHSTableau, α, ∨(parseformula("p"), β), Ł4) == true
-@test alphaval(MVHSTableau, α, ∨(parseformula("p"), ⊤), Ł4) == true
-@test alphaval(MVHSTableau, β, ∨(parseformula("p"), ⊥), Ł4) == false
-@test alphaval(MVHSTableau, β, ∨(parseformula("p"), α), Ł4) == false
-@test alphaval(MVHSTableau, β, ∨(parseformula("p"), β), Ł4) == true
-@test alphaval(MVHSTableau, β, ∨(parseformula("p"), ⊤), Ł4) == true
-@test alphaval(MVHSTableau, ⊤, ∨(parseformula("p"), ⊥), Ł4) == false
-@test alphaval(MVHSTableau, ⊤, ∨(parseformula("p"), α), Ł4) == false
-@test alphaval(MVHSTableau, ⊤, ∨(parseformula("p"), β), Ł4) == false
-@test alphaval(MVHSTableau, ⊤, ∨(parseformula("p"), ⊤), Ł4) == true
+@test alphaval(MVHSTableau, ⊥, ∨(p, ⊥), Ł4) == true
+@test alphaval(MVHSTableau, ⊥, ∨(p, α), Ł4) == true
+@test alphaval(MVHSTableau, ⊥, ∨(p, β), Ł4) == true
+@test alphaval(MVHSTableau, ⊥, ∨(p, ⊤), Ł4) == true
+@test alphaval(MVHSTableau, α, ∨(p, ⊥), Ł4) == false
+@test alphaval(MVHSTableau, α, ∨(p, α), Ł4) == true
+@test alphaval(MVHSTableau, α, ∨(p, β), Ł4) == true
+@test alphaval(MVHSTableau, α, ∨(p, ⊤), Ł4) == true
+@test alphaval(MVHSTableau, β, ∨(p, ⊥), Ł4) == false
+@test alphaval(MVHSTableau, β, ∨(p, α), Ł4) == false
+@test alphaval(MVHSTableau, β, ∨(p, β), Ł4) == true
+@test alphaval(MVHSTableau, β, ∨(p, ⊤), Ł4) == true
+@test alphaval(MVHSTableau, ⊤, ∨(p, ⊥), Ł4) == false
+@test alphaval(MVHSTableau, ⊤, ∨(p, α), Ł4) == false
+@test alphaval(MVHSTableau, ⊤, ∨(p, β), Ł4) == false
+@test alphaval(MVHSTableau, ⊤, ∨(p, ⊤), Ł4) == true
 
-@test alphaval(MVHSTableau, ⊥, ∨(⊥, parseformula("p")), Ł4) == true
-@test alphaval(MVHSTableau, ⊥, ∨(α, parseformula("p")), Ł4) == true 
-@test alphaval(MVHSTableau, ⊥, ∨(β, parseformula("p")), Ł4) == true 
-@test alphaval(MVHSTableau, ⊥, ∨(⊤, parseformula("p")), Ł4) == true 
-@test alphaval(MVHSTableau, α, ∨(⊥, parseformula("p")), Ł4) == false
-@test alphaval(MVHSTableau, α, ∨(α, parseformula("p")), Ł4) == true 
-@test alphaval(MVHSTableau, α, ∨(β, parseformula("p")), Ł4) == true 
-@test alphaval(MVHSTableau, α, ∨(⊤, parseformula("p")), Ł4) == true 
-@test alphaval(MVHSTableau, β, ∨(⊥, parseformula("p")), Ł4) == false 
-@test alphaval(MVHSTableau, β, ∨(α, parseformula("p")), Ł4) == false 
-@test alphaval(MVHSTableau, β, ∨(β, parseformula("p")), Ł4) == true 
-@test alphaval(MVHSTableau, β, ∨(⊤, parseformula("p")), Ł4) == true 
-@test alphaval(MVHSTableau, ⊤, ∨(⊥, parseformula("p")), Ł4) == false 
-@test alphaval(MVHSTableau, ⊤, ∨(α, parseformula("p")), Ł4) == false 
-@test alphaval(MVHSTableau, ⊤, ∨(β, parseformula("p")), Ł4) == false 
-@test alphaval(MVHSTableau, ⊤, ∨(⊤, parseformula("p")), Ł4) == true 
+@test alphaval(MVHSTableau, ⊥, ∨(⊥, p), Ł4) == true
+@test alphaval(MVHSTableau, ⊥, ∨(α, p), Ł4) == true 
+@test alphaval(MVHSTableau, ⊥, ∨(β, p), Ł4) == true 
+@test alphaval(MVHSTableau, ⊥, ∨(⊤, p), Ł4) == true 
+@test alphaval(MVHSTableau, α, ∨(⊥, p), Ł4) == false
+@test alphaval(MVHSTableau, α, ∨(α, p), Ł4) == true 
+@test alphaval(MVHSTableau, α, ∨(β, p), Ł4) == true 
+@test alphaval(MVHSTableau, α, ∨(⊤, p), Ł4) == true 
+@test alphaval(MVHSTableau, β, ∨(⊥, p), Ł4) == false 
+@test alphaval(MVHSTableau, β, ∨(α, p), Ł4) == false 
+@test alphaval(MVHSTableau, β, ∨(β, p), Ł4) == true 
+@test alphaval(MVHSTableau, β, ∨(⊤, p), Ł4) == true 
+@test alphaval(MVHSTableau, ⊤, ∨(⊥, p), Ł4) == false 
+@test alphaval(MVHSTableau, ⊤, ∨(α, p), Ł4) == false 
+@test alphaval(MVHSTableau, ⊤, ∨(β, p), Ł4) == false 
+@test alphaval(MVHSTableau, ⊤, ∨(⊤, p), Ł4) == true 
 
 @test alphaval(
     MVHSTableau,
     ⊥,
-    ∨(parseformula("p"), parseformula("p")),
+    ∨(p, p),
     Ł4
 ) == true
 @test alphaval(
     MVHSTableau,
     α,
-    ∨(parseformula("p"), parseformula("p")),
+    ∨(p, p),
     Ł4
 ) == false
 @test alphaval(
     MVHSTableau,
     β,
-    ∨(parseformula("p"), parseformula("p")),
+    ∨(p, p),
     Ł4
 ) == false
 @test alphaval(
     MVHSTableau,
     ⊤,
-    ∨(parseformula("p"), parseformula("p")),
-    Ł4
-) == false
-
-@test alphaval(
-    MVHSTableau,
-    ⊥,
-    ∨(parseformula("p"), parseformula("q")),
-    Ł4
-) == true
-@test alphaval(
-    MVHSTableau,
-    α,
-    ∨(parseformula("p"), parseformula("q")),
-    Ł4
-) == false
-@test alphaval(
-    MVHSTableau,
-    β,
-    ∨(parseformula("p"), parseformula("q")),
-    Ł4
-) == false
-@test alphaval(
-    MVHSTableau,
-    ⊤,
-    ∨(parseformula("p"), parseformula("q")),
+    ∨(p, p),
     Ł4
 ) == false
 
 @test alphaval(
     MVHSTableau,
     ⊥,
-    ∨(parseformula("q"), parseformula("p")),
+    ∨(p, q),
     Ł4
 ) == true
 @test alphaval(
     MVHSTableau,
     α,
-    ∨(parseformula("q"), parseformula("p")),
+    ∨(p, q),
     Ł4
 ) == false
 @test alphaval(
     MVHSTableau,
     β,
-    ∨(parseformula("q"), parseformula("p")),
+    ∨(p, q),
     Ł4
 ) == false
 @test alphaval(
     MVHSTableau,
     ⊤,
-    ∨(parseformula("q"), parseformula("p")),
+    ∨(p, q),
+    Ł4
+) == false
+
+@test alphaval(
+    MVHSTableau,
+    ⊥,
+    ∨(q, p),
+    Ł4
+) == true
+@test alphaval(
+    MVHSTableau,
+    α,
+    ∨(q, p),
+    Ł4
+) == false
+@test alphaval(
+    MVHSTableau,
+    β,
+    ∨(q, p),
+    Ł4
+) == false
+@test alphaval(
+    MVHSTableau,
+    ⊤,
+    ∨(q, p),
     Ł4
 ) == false
 
@@ -161,112 +190,112 @@ end
 ## (Strong) conjunction ########################################################
 ################################################################################
 
-@test alphaval(MVHSTableau, ⊥, ∧(parseformula("p"), ⊥), Ł4) == true
-@test alphaval(MVHSTableau, ⊥, ∧(parseformula("p"), α), Ł4) == true
-@test alphaval(MVHSTableau, ⊥, ∧(parseformula("p"), β), Ł4) == true
-@test alphaval(MVHSTableau, ⊥, ∧(parseformula("p"), ⊤), Ł4) == true
-@test alphaval(MVHSTableau, α, ∧(parseformula("p"), ⊥), Ł4) == false
-@test alphaval(MVHSTableau, α, ∧(parseformula("p"), α), Ł4) == false
-@test alphaval(MVHSTableau, α, ∧(parseformula("p"), β), Ł4) == false
-@test alphaval(MVHSTableau, α, ∧(parseformula("p"), ⊤), Ł4) == false
-@test alphaval(MVHSTableau, β, ∧(parseformula("p"), ⊥), Ł4) == false
-@test alphaval(MVHSTableau, β, ∧(parseformula("p"), α), Ł4) == false
-@test alphaval(MVHSTableau, β, ∧(parseformula("p"), β), Ł4) == false
-@test alphaval(MVHSTableau, β, ∧(parseformula("p"), ⊤), Ł4) == false
-@test alphaval(MVHSTableau, ⊤, ∧(parseformula("p"), ⊥), Ł4) == false
-@test alphaval(MVHSTableau, ⊤, ∧(parseformula("p"), α), Ł4) == false
-@test alphaval(MVHSTableau, ⊤, ∧(parseformula("p"), β), Ł4) == false
-@test alphaval(MVHSTableau, ⊤, ∧(parseformula("p"), ⊤), Ł4) == false
+@test alphaval(MVHSTableau, ⊥, ∧(p, ⊥), Ł4) == true
+@test alphaval(MVHSTableau, ⊥, ∧(p, α), Ł4) == true
+@test alphaval(MVHSTableau, ⊥, ∧(p, β), Ł4) == true
+@test alphaval(MVHSTableau, ⊥, ∧(p, ⊤), Ł4) == true
+@test alphaval(MVHSTableau, α, ∧(p, ⊥), Ł4) == false
+@test alphaval(MVHSTableau, α, ∧(p, α), Ł4) == false
+@test alphaval(MVHSTableau, α, ∧(p, β), Ł4) == false
+@test alphaval(MVHSTableau, α, ∧(p, ⊤), Ł4) == false
+@test alphaval(MVHSTableau, β, ∧(p, ⊥), Ł4) == false
+@test alphaval(MVHSTableau, β, ∧(p, α), Ł4) == false
+@test alphaval(MVHSTableau, β, ∧(p, β), Ł4) == false
+@test alphaval(MVHSTableau, β, ∧(p, ⊤), Ł4) == false
+@test alphaval(MVHSTableau, ⊤, ∧(p, ⊥), Ł4) == false
+@test alphaval(MVHSTableau, ⊤, ∧(p, α), Ł4) == false
+@test alphaval(MVHSTableau, ⊤, ∧(p, β), Ł4) == false
+@test alphaval(MVHSTableau, ⊤, ∧(p, ⊤), Ł4) == false
 
-@test alphaval(MVHSTableau, ⊥, ∧(⊥, parseformula("p")), Ł4) == true 
-@test alphaval(MVHSTableau, ⊥, ∧(α, parseformula("p")), Ł4) == true 
-@test alphaval(MVHSTableau, ⊥, ∧(β, parseformula("p")), Ł4) == true 
-@test alphaval(MVHSTableau, ⊥, ∧(⊤, parseformula("p")), Ł4) == true 
-@test alphaval(MVHSTableau, α, ∧(⊥, parseformula("p")), Ł4) == false
-@test alphaval(MVHSTableau, α, ∧(α, parseformula("p")), Ł4) == false 
-@test alphaval(MVHSTableau, α, ∧(β, parseformula("p")), Ł4) == false 
-@test alphaval(MVHSTableau, α, ∧(⊤, parseformula("p")), Ł4) == false 
-@test alphaval(MVHSTableau, β, ∧(⊥, parseformula("p")), Ł4) == false 
-@test alphaval(MVHSTableau, β, ∧(α, parseformula("p")), Ł4) == false 
-@test alphaval(MVHSTableau, β, ∧(β, parseformula("p")), Ł4) == false 
-@test alphaval(MVHSTableau, β, ∧(⊤, parseformula("p")), Ł4) == false 
-@test alphaval(MVHSTableau, ⊤, ∧(⊥, parseformula("p")), Ł4) == false 
-@test alphaval(MVHSTableau, ⊤, ∧(α, parseformula("p")), Ł4) == false 
-@test alphaval(MVHSTableau, ⊤, ∧(β, parseformula("p")), Ł4) == false 
-@test alphaval(MVHSTableau, ⊤, ∧(⊤, parseformula("p")), Ł4) == false 
+@test alphaval(MVHSTableau, ⊥, ∧(⊥, p), Ł4) == true 
+@test alphaval(MVHSTableau, ⊥, ∧(α, p), Ł4) == true 
+@test alphaval(MVHSTableau, ⊥, ∧(β, p), Ł4) == true 
+@test alphaval(MVHSTableau, ⊥, ∧(⊤, p), Ł4) == true 
+@test alphaval(MVHSTableau, α, ∧(⊥, p), Ł4) == false
+@test alphaval(MVHSTableau, α, ∧(α, p), Ł4) == false 
+@test alphaval(MVHSTableau, α, ∧(β, p), Ł4) == false 
+@test alphaval(MVHSTableau, α, ∧(⊤, p), Ł4) == false 
+@test alphaval(MVHSTableau, β, ∧(⊥, p), Ł4) == false 
+@test alphaval(MVHSTableau, β, ∧(α, p), Ł4) == false 
+@test alphaval(MVHSTableau, β, ∧(β, p), Ł4) == false 
+@test alphaval(MVHSTableau, β, ∧(⊤, p), Ł4) == false 
+@test alphaval(MVHSTableau, ⊤, ∧(⊥, p), Ł4) == false 
+@test alphaval(MVHSTableau, ⊤, ∧(α, p), Ł4) == false 
+@test alphaval(MVHSTableau, ⊤, ∧(β, p), Ł4) == false 
+@test alphaval(MVHSTableau, ⊤, ∧(⊤, p), Ł4) == false 
 
 @test alphaval(
     MVHSTableau,
     ⊥,
-    ∧(parseformula("p"), parseformula("p")),
+    ∧(p, p),
     Ł4
 ) == true
 @test alphaval(
     MVHSTableau,
     α,
-    ∧(parseformula("p"), parseformula("p")),
+    ∧(p, p),
     Ł4
 ) == false
 @test alphaval(
     MVHSTableau,
     β,
-    ∧(parseformula("p"), parseformula("p")),
+    ∧(p, p),
     Ł4
 ) == false
 @test alphaval(
     MVHSTableau,
     ⊤,
-    ∧(parseformula("p"), parseformula("p")),
-    Ł4
-) == false
-
-@test alphaval(
-    MVHSTableau,
-    ⊥,
-    ∧(parseformula("p"), parseformula("q")),
-    Ł4
-) == true
-@test alphaval(
-    MVHSTableau,
-    α,
-    ∧(parseformula("p"), parseformula("q")),
-    Ł4
-) == false
-@test alphaval(
-    MVHSTableau,
-    β,
-    ∧(parseformula("p"), parseformula("q")),
-    Ł4
-) == false
-@test alphaval(
-    MVHSTableau,
-    ⊤,
-    ∧(parseformula("p"), parseformula("q")),
+    ∧(p, p),
     Ł4
 ) == false
 
 @test alphaval(
     MVHSTableau,
     ⊥,
-    ∧(parseformula("q"), parseformula("p")),
+    ∧(p, q),
     Ł4
 ) == true
 @test alphaval(
     MVHSTableau,
     α,
-    ∧(parseformula("q"), parseformula("p")),
+    ∧(p, q),
     Ł4
 ) == false
 @test alphaval(
     MVHSTableau,
     β,
-    ∧(parseformula("q"), parseformula("p")),
+    ∧(p, q),
     Ł4
 ) == false
 @test alphaval(
     MVHSTableau,
     ⊤,
-    ∧(parseformula("q"), parseformula("p")),
+    ∧(p, q),
+    Ł4
+) == false
+
+@test alphaval(
+    MVHSTableau,
+    ⊥,
+    ∧(q, p),
+    Ł4
+) == true
+@test alphaval(
+    MVHSTableau,
+    α,
+    ∧(q, p),
+    Ł4
+) == false
+@test alphaval(
+    MVHSTableau,
+    β,
+    ∧(q, p),
+    Ł4
+) == false
+@test alphaval(
+    MVHSTableau,
+    ⊤,
+    ∧(q, p),
     Ł4
 ) == false
 
@@ -274,111 +303,111 @@ end
 ## Implication #################################################################
 ################################################################################
 
-@test alphaval(MVHSTableau, ⊥, →(parseformula("p"), ⊥), Ł4) == true
-@test alphaval(MVHSTableau, ⊥, →(parseformula("p"), α), Ł4) == true
-@test alphaval(MVHSTableau, ⊥, →(parseformula("p"), β), Ł4) == true
-@test alphaval(MVHSTableau, ⊥, →(parseformula("p"), ⊤), Ł4) == true
-@test alphaval(MVHSTableau, α, →(parseformula("p"), ⊥), Ł4) == false
-@test alphaval(MVHSTableau, α, →(parseformula("p"), α), Ł4) == true
-@test alphaval(MVHSTableau, α, →(parseformula("p"), β), Ł4) == true
-@test alphaval(MVHSTableau, α, →(parseformula("p"), ⊤), Ł4) == true
-@test alphaval(MVHSTableau, β, →(parseformula("p"), ⊥), Ł4) == false
-@test alphaval(MVHSTableau, β, →(parseformula("p"), α), Ł4) == false
-@test alphaval(MVHSTableau, β, →(parseformula("p"), β), Ł4) == true
-@test alphaval(MVHSTableau, β, →(parseformula("p"), ⊤), Ł4) == true
-@test alphaval(MVHSTableau, ⊤, →(parseformula("p"), ⊥), Ł4) == false
-@test alphaval(MVHSTableau, ⊤, →(parseformula("p"), α), Ł4) == false
-@test alphaval(MVHSTableau, ⊤, →(parseformula("p"), β), Ł4) == false
-@test alphaval(MVHSTableau, ⊤, →(parseformula("p"), ⊤), Ł4) == true
+@test alphaval(MVHSTableau, ⊥, →(p, ⊥), Ł4) == true
+@test alphaval(MVHSTableau, ⊥, →(p, α), Ł4) == true
+@test alphaval(MVHSTableau, ⊥, →(p, β), Ł4) == true
+@test alphaval(MVHSTableau, ⊥, →(p, ⊤), Ł4) == true
+@test alphaval(MVHSTableau, α, →(p, ⊥), Ł4) == false
+@test alphaval(MVHSTableau, α, →(p, α), Ł4) == true
+@test alphaval(MVHSTableau, α, →(p, β), Ł4) == true
+@test alphaval(MVHSTableau, α, →(p, ⊤), Ł4) == true
+@test alphaval(MVHSTableau, β, →(p, ⊥), Ł4) == false
+@test alphaval(MVHSTableau, β, →(p, α), Ł4) == false
+@test alphaval(MVHSTableau, β, →(p, β), Ł4) == true
+@test alphaval(MVHSTableau, β, →(p, ⊤), Ł4) == true
+@test alphaval(MVHSTableau, ⊤, →(p, ⊥), Ł4) == false
+@test alphaval(MVHSTableau, ⊤, →(p, α), Ł4) == false
+@test alphaval(MVHSTableau, ⊤, →(p, β), Ł4) == false
+@test alphaval(MVHSTableau, ⊤, →(p, ⊤), Ł4) == true
 
-@test alphaval(MVHSTableau, ⊥, →(⊥, parseformula("p")), Ł4) == true
-@test alphaval(MVHSTableau, ⊥, →(α, parseformula("p")), Ł4) == true
-@test alphaval(MVHSTableau, ⊥, →(β, parseformula("p")), Ł4) == true
-@test alphaval(MVHSTableau, ⊥, →(⊤, parseformula("p")), Ł4) == true
-@test alphaval(MVHSTableau, α, →(⊥, parseformula("p")), Ł4) == true
-@test alphaval(MVHSTableau, α, →(α, parseformula("p")), Ł4) == true
-@test alphaval(MVHSTableau, α, →(β, parseformula("p")), Ł4) == true
-@test alphaval(MVHSTableau, α, →(⊤, parseformula("p")), Ł4) == false
-@test alphaval(MVHSTableau, β, →(⊥, parseformula("p")), Ł4) == true
-@test alphaval(MVHSTableau, β, →(α, parseformula("p")), Ł4) == true
-@test alphaval(MVHSTableau, β, →(β, parseformula("p")), Ł4) == false
-@test alphaval(MVHSTableau, β, →(⊤, parseformula("p")), Ł4) == false
-@test alphaval(MVHSTableau, ⊤, →(⊥, parseformula("p")), Ł4) == true
-@test alphaval(MVHSTableau, ⊤, →(α, parseformula("p")), Ł4) == false
-@test alphaval(MVHSTableau, ⊤, →(β, parseformula("p")), Ł4) == false
-@test alphaval(MVHSTableau, ⊤, →(⊤, parseformula("p")), Ł4) == false
+@test alphaval(MVHSTableau, ⊥, →(⊥, p), Ł4) == true
+@test alphaval(MVHSTableau, ⊥, →(α, p), Ł4) == true
+@test alphaval(MVHSTableau, ⊥, →(β, p), Ł4) == true
+@test alphaval(MVHSTableau, ⊥, →(⊤, p), Ł4) == true
+@test alphaval(MVHSTableau, α, →(⊥, p), Ł4) == true
+@test alphaval(MVHSTableau, α, →(α, p), Ł4) == true
+@test alphaval(MVHSTableau, α, →(β, p), Ł4) == true
+@test alphaval(MVHSTableau, α, →(⊤, p), Ł4) == false
+@test alphaval(MVHSTableau, β, →(⊥, p), Ł4) == true
+@test alphaval(MVHSTableau, β, →(α, p), Ł4) == true
+@test alphaval(MVHSTableau, β, →(β, p), Ł4) == false
+@test alphaval(MVHSTableau, β, →(⊤, p), Ł4) == false
+@test alphaval(MVHSTableau, ⊤, →(⊥, p), Ł4) == true
+@test alphaval(MVHSTableau, ⊤, →(α, p), Ł4) == false
+@test alphaval(MVHSTableau, ⊤, →(β, p), Ł4) == false
+@test alphaval(MVHSTableau, ⊤, →(⊤, p), Ł4) == false
 
 @test alphaval(
     MVHSTableau,
     ⊥,
-    →(parseformula("p"), parseformula("p")),
+    →(p, p),
     Ł4
 ) == true
 @test alphaval(
     MVHSTableau,
     α,
-    →(parseformula("p"), parseformula("p")),
+    →(p, p),
     Ł4
 ) == true
 @test alphaval(
     MVHSTableau,
     β,
-    →(parseformula("p"), parseformula("p")),
+    →(p, p),
     Ł4
 ) == true
 @test alphaval(
     MVHSTableau,
     ⊤,
-    →(parseformula("p"), parseformula("p")),
+    →(p, p),
     Ł4
 ) == true
 
 @test alphaval(
     MVHSTableau,
     ⊥,
-    →(parseformula("p"), parseformula("q")),
+    →(p, q),
     Ł4
 ) == true
 @test alphaval(
     MVHSTableau,
     α,
-    →(parseformula("p"), parseformula("q")),
+    →(p, q),
     Ł4
 ) == false
 @test alphaval(
     MVHSTableau,
     β,
-    →(parseformula("p"), parseformula("q")),
+    →(p, q),
     Ł4
 ) == false
 @test alphaval(
     MVHSTableau,
     ⊤,
-    →(parseformula("p"), parseformula("q")),
+    →(p, q),
     Ł4
 ) == false
 
 @test alphaval(
     MVHSTableau,
     ⊥,
-    →(parseformula("q"), parseformula("p")),
+    →(q, p),
     Ł4
 ) == true
 @test alphaval(
     MVHSTableau,
     α,
-    →(parseformula("q"), parseformula("p")),
+    →(q, p),
     Ł4
 ) == false
 @test alphaval(
     MVHSTableau,
     β,
-    →(parseformula("q"), parseformula("p")),
+    →(q, p),
     Ł4
 ) == false
 @test alphaval(
     MVHSTableau,
     ⊤,
-    →(parseformula("q"), parseformula("p")),
+    →(q, p),
     Ł4
 ) == false

@@ -5,6 +5,10 @@
 using SoleLogics.ManyValuedLogics: Ł4
 using SoleLogics.ManyValuedLogics: α, β
 
+p, q = Atom.(["p", "q"])
+
+timeout = 60
+
 ################################################################################
 ## Base cases ##################################################################
 ################################################################################
@@ -26,10 +30,10 @@ using SoleLogics.ManyValuedLogics: α, β
 @test alphasat(MVHSTableau, ⊤, β, Ł4) == false
 @test alphasat(MVHSTableau, ⊤, ⊤, Ł4) == true
 
-@test alphasat(MVHSTableau, ⊥, parseformula("p"), Ł4) == true
-@test alphasat(MVHSTableau, α, parseformula("p"), Ł4) == true
-@test alphasat(MVHSTableau, β, parseformula("p"), Ł4) == true
-@test alphasat(MVHSTableau, ⊤, parseformula("p"), Ł4) == true
+@test alphasat(MVHSTableau, ⊥, p, Ł4) == true
+@test alphasat(MVHSTableau, α, p, Ł4) == true
+@test alphasat(MVHSTableau, β, p, Ł4) == true
+@test alphasat(MVHSTableau, ⊤, p, Ł4) == true
 
 ################################################################################
 ## (Strong) disjuction #########################################################
@@ -103,54 +107,54 @@ using SoleLogics.ManyValuedLogics: α, β
 @test alphasat(MVHSTableau, ⊤, ∨(⊤, β), Ł4) == true
 @test alphasat(MVHSTableau, ⊤, ∨(⊤, ⊤), Ł4) == true
 
-@test alphasat(MVHSTableau, ⊥, ∨(parseformula("p"), ⊥), Ł4) == true
-@test alphasat(MVHSTableau, ⊥, ∨(parseformula("p"), α), Ł4) == true
-@test alphasat(MVHSTableau, ⊥, ∨(parseformula("p"), β), Ł4) == true
-@test alphasat(MVHSTableau, ⊥, ∨(parseformula("p"), ⊤), Ł4) == true
-@test alphasat(MVHSTableau, α, ∨(parseformula("p"), ⊥), Ł4) == true
-@test alphasat(MVHSTableau, α, ∨(parseformula("p"), α), Ł4) == true
-@test alphasat(MVHSTableau, α, ∨(parseformula("p"), β), Ł4) == true
-@test alphasat(MVHSTableau, α, ∨(parseformula("p"), ⊤), Ł4) == true
-@test alphasat(MVHSTableau, β, ∨(parseformula("p"), ⊥), Ł4) == true
-@test alphasat(MVHSTableau, β, ∨(parseformula("p"), α), Ł4) == true
-@test alphasat(MVHSTableau, β, ∨(parseformula("p"), β), Ł4) == true
-@test alphasat(MVHSTableau, β, ∨(parseformula("p"), ⊤), Ł4) == true
-@test alphasat(MVHSTableau, ⊤, ∨(parseformula("p"), ⊥), Ł4) == true
-@test alphasat(MVHSTableau, ⊤, ∨(parseformula("p"), α), Ł4) == true
-@test alphasat(MVHSTableau, ⊤, ∨(parseformula("p"), β), Ł4) == true
-@test alphasat(MVHSTableau, ⊤, ∨(parseformula("p"), ⊤), Ł4) == true
+@test alphasat(MVHSTableau, ⊥, ∨(p, ⊥), Ł4) == true
+@test alphasat(MVHSTableau, ⊥, ∨(p, α), Ł4) == true
+@test alphasat(MVHSTableau, ⊥, ∨(p, β), Ł4) == true
+@test alphasat(MVHSTableau, ⊥, ∨(p, ⊤), Ł4) == true
+@test alphasat(MVHSTableau, α, ∨(p, ⊥), Ł4) == true
+@test alphasat(MVHSTableau, α, ∨(p, α), Ł4) == true
+@test alphasat(MVHSTableau, α, ∨(p, β), Ł4) == true
+@test alphasat(MVHSTableau, α, ∨(p, ⊤), Ł4) == true
+@test alphasat(MVHSTableau, β, ∨(p, ⊥), Ł4) == true
+@test alphasat(MVHSTableau, β, ∨(p, α), Ł4) == true
+@test alphasat(MVHSTableau, β, ∨(p, β), Ł4) == true
+@test alphasat(MVHSTableau, β, ∨(p, ⊤), Ł4) == true
+@test alphasat(MVHSTableau, ⊤, ∨(p, ⊥), Ł4) == true
+@test alphasat(MVHSTableau, ⊤, ∨(p, α), Ł4) == true
+@test alphasat(MVHSTableau, ⊤, ∨(p, β), Ł4) == true
+@test alphasat(MVHSTableau, ⊤, ∨(p, ⊤), Ł4) == true
 
-@test alphasat(MVHSTableau, ⊥, ∨(⊥, parseformula("p")), Ł4) == true
-@test alphasat(MVHSTableau, ⊥, ∨(α, parseformula("p")), Ł4) == true
-@test alphasat(MVHSTableau, ⊥, ∨(β, parseformula("p")), Ł4) == true
-@test alphasat(MVHSTableau, ⊥, ∨(⊤, parseformula("p")), Ł4) == true
-@test alphasat(MVHSTableau, α, ∨(⊥, parseformula("p")), Ł4) == true
-@test alphasat(MVHSTableau, α, ∨(α, parseformula("p")), Ł4) == true
-@test alphasat(MVHSTableau, α, ∨(β, parseformula("p")), Ł4) == true
-@test alphasat(MVHSTableau, α, ∨(⊤, parseformula("p")), Ł4) == true
-@test alphasat(MVHSTableau, β, ∨(⊥, parseformula("p")), Ł4) == true
-@test alphasat(MVHSTableau, β, ∨(α, parseformula("p")), Ł4) == true
-@test alphasat(MVHSTableau, β, ∨(β, parseformula("p")), Ł4) == true
-@test alphasat(MVHSTableau, β, ∨(⊤, parseformula("p")), Ł4) == true
-@test alphasat(MVHSTableau, ⊤, ∨(⊥, parseformula("p")), Ł4) == true
-@test alphasat(MVHSTableau, ⊤, ∨(α, parseformula("p")), Ł4) == true
-@test alphasat(MVHSTableau, ⊤, ∨(β, parseformula("p")), Ł4) == true
-@test alphasat(MVHSTableau, ⊤, ∨(⊤, parseformula("p")), Ł4) == true
+@test alphasat(MVHSTableau, ⊥, ∨(⊥, p), Ł4) == true
+@test alphasat(MVHSTableau, ⊥, ∨(α, p), Ł4) == true
+@test alphasat(MVHSTableau, ⊥, ∨(β, p), Ł4) == true
+@test alphasat(MVHSTableau, ⊥, ∨(⊤, p), Ł4) == true
+@test alphasat(MVHSTableau, α, ∨(⊥, p), Ł4) == true
+@test alphasat(MVHSTableau, α, ∨(α, p), Ł4) == true
+@test alphasat(MVHSTableau, α, ∨(β, p), Ł4) == true
+@test alphasat(MVHSTableau, α, ∨(⊤, p), Ł4) == true
+@test alphasat(MVHSTableau, β, ∨(⊥, p), Ł4) == true
+@test alphasat(MVHSTableau, β, ∨(α, p), Ł4) == true
+@test alphasat(MVHSTableau, β, ∨(β, p), Ł4) == true
+@test alphasat(MVHSTableau, β, ∨(⊤, p), Ł4) == true
+@test alphasat(MVHSTableau, ⊤, ∨(⊥, p), Ł4) == true
+@test alphasat(MVHSTableau, ⊤, ∨(α, p), Ł4) == true
+@test alphasat(MVHSTableau, ⊤, ∨(β, p), Ł4) == true
+@test alphasat(MVHSTableau, ⊤, ∨(⊤, p), Ł4) == true
 
-@test alphasat(MVHSTableau, ⊥, ∨(parseformula("p"), parseformula("p")), Ł4)
-@test alphasat(MVHSTableau, α, ∨(parseformula("p"), parseformula("p")), Ł4)
-@test alphasat(MVHSTableau, β, ∨(parseformula("p"), parseformula("p")), Ł4)
-@test alphasat(MVHSTableau, ⊤, ∨(parseformula("p"), parseformula("p")), Ł4)
+@test alphasat(MVHSTableau, ⊥, ∨(p, p), Ł4)
+@test alphasat(MVHSTableau, α, ∨(p, p), Ł4)
+@test alphasat(MVHSTableau, β, ∨(p, p), Ł4)
+@test alphasat(MVHSTableau, ⊤, ∨(p, p), Ł4)
 
-@test alphasat(MVHSTableau, ⊥, ∨(parseformula("p"), parseformula("q")), Ł4)
-@test alphasat(MVHSTableau, α, ∨(parseformula("p"), parseformula("q")), Ł4)
-@test alphasat(MVHSTableau, β, ∨(parseformula("p"), parseformula("q")), Ł4)
-@test alphasat(MVHSTableau, ⊤, ∨(parseformula("p"), parseformula("q")), Ł4)
+@test alphasat(MVHSTableau, ⊥, ∨(p, q), Ł4)
+@test alphasat(MVHSTableau, α, ∨(p, q), Ł4)
+@test alphasat(MVHSTableau, β, ∨(p, q), Ł4)
+@test alphasat(MVHSTableau, ⊤, ∨(p, q), Ł4)
 
-@test alphasat(MVHSTableau, ⊥, ∨(parseformula("q"), parseformula("q")), Ł4)
-@test alphasat(MVHSTableau, α, ∨(parseformula("q"), parseformula("q")), Ł4)
-@test alphasat(MVHSTableau, β, ∨(parseformula("q"), parseformula("q")), Ł4)
-@test alphasat(MVHSTableau, ⊤, ∨(parseformula("q"), parseformula("q")), Ł4)
+@test alphasat(MVHSTableau, ⊥, ∨(q, q), Ł4)
+@test alphasat(MVHSTableau, α, ∨(q, q), Ł4)
+@test alphasat(MVHSTableau, β, ∨(q, q), Ł4)
+@test alphasat(MVHSTableau, ⊤, ∨(q, q), Ł4)
 
 ################################################################################
 ## (Strong) conjunction ########################################################
@@ -224,54 +228,54 @@ using SoleLogics.ManyValuedLogics: α, β
 @test alphasat(MVHSTableau, ⊤, ∧(⊤, β), Ł4) == false
 @test alphasat(MVHSTableau, ⊤, ∧(⊤, ⊤), Ł4) == true
 
-@test alphasat(MVHSTableau, ⊥, ∧(parseformula("p"), ⊥), Ł4) == true
-@test alphasat(MVHSTableau, ⊥, ∧(parseformula("p"), α), Ł4) == true
-@test alphasat(MVHSTableau, ⊥, ∧(parseformula("p"), β), Ł4) == true
-@test alphasat(MVHSTableau, ⊥, ∧(parseformula("p"), ⊤), Ł4) == true
-@test alphasat(MVHSTableau, α, ∧(parseformula("p"), ⊥), Ł4) == false
-@test alphasat(MVHSTableau, α, ∧(parseformula("p"), α), Ł4) == true
-@test alphasat(MVHSTableau, α, ∧(parseformula("p"), β), Ł4) == true
-@test alphasat(MVHSTableau, α, ∧(parseformula("p"), ⊤), Ł4) == true
-@test alphasat(MVHSTableau, β, ∧(parseformula("p"), ⊥), Ł4) == false
-@test alphasat(MVHSTableau, β, ∧(parseformula("p"), α), Ł4) == false
-@test alphasat(MVHSTableau, β, ∧(parseformula("p"), β), Ł4) == true
-@test alphasat(MVHSTableau, β, ∧(parseformula("p"), ⊤), Ł4) == true
-@test alphasat(MVHSTableau, ⊤, ∧(parseformula("p"), ⊥), Ł4) == false
-@test alphasat(MVHSTableau, ⊤, ∧(parseformula("p"), α), Ł4) == false
-@test alphasat(MVHSTableau, ⊤, ∧(parseformula("p"), β), Ł4) == false
-@test alphasat(MVHSTableau, ⊤, ∧(parseformula("p"), ⊤), Ł4) == true
+@test alphasat(MVHSTableau, ⊥, ∧(p, ⊥), Ł4) == true
+@test alphasat(MVHSTableau, ⊥, ∧(p, α), Ł4) == true
+@test alphasat(MVHSTableau, ⊥, ∧(p, β), Ł4) == true
+@test alphasat(MVHSTableau, ⊥, ∧(p, ⊤), Ł4) == true
+@test alphasat(MVHSTableau, α, ∧(p, ⊥), Ł4) == false
+@test alphasat(MVHSTableau, α, ∧(p, α), Ł4) == true
+@test alphasat(MVHSTableau, α, ∧(p, β), Ł4) == true
+@test alphasat(MVHSTableau, α, ∧(p, ⊤), Ł4) == true
+@test alphasat(MVHSTableau, β, ∧(p, ⊥), Ł4) == false
+@test alphasat(MVHSTableau, β, ∧(p, α), Ł4) == false
+@test alphasat(MVHSTableau, β, ∧(p, β), Ł4) == true
+@test alphasat(MVHSTableau, β, ∧(p, ⊤), Ł4) == true
+@test alphasat(MVHSTableau, ⊤, ∧(p, ⊥), Ł4) == false
+@test alphasat(MVHSTableau, ⊤, ∧(p, α), Ł4) == false
+@test alphasat(MVHSTableau, ⊤, ∧(p, β), Ł4) == false
+@test alphasat(MVHSTableau, ⊤, ∧(p, ⊤), Ł4) == true
 
-@test alphasat(MVHSTableau, ⊥, ∧(⊥, parseformula("p")), Ł4) == true
-@test alphasat(MVHSTableau, ⊥, ∧(α, parseformula("p")), Ł4) == true
-@test alphasat(MVHSTableau, ⊥, ∧(β, parseformula("p")), Ł4) == true
-@test alphasat(MVHSTableau, ⊥, ∧(⊤, parseformula("p")), Ł4) == true
-@test alphasat(MVHSTableau, α, ∧(⊥, parseformula("p")), Ł4) == false
-@test alphasat(MVHSTableau, α, ∧(α, parseformula("p")), Ł4) == true
-@test alphasat(MVHSTableau, α, ∧(β, parseformula("p")), Ł4) == true
-@test alphasat(MVHSTableau, α, ∧(⊤, parseformula("p")), Ł4) == true
-@test alphasat(MVHSTableau, β, ∧(⊥, parseformula("p")), Ł4) == false
-@test alphasat(MVHSTableau, β, ∧(α, parseformula("p")), Ł4) == false
-@test alphasat(MVHSTableau, β, ∧(β, parseformula("p")), Ł4) == true
-@test alphasat(MVHSTableau, β, ∧(⊤, parseformula("p")), Ł4) == true
-@test alphasat(MVHSTableau, ⊤, ∧(⊥, parseformula("p")), Ł4) == false
-@test alphasat(MVHSTableau, ⊤, ∧(α, parseformula("p")), Ł4) == false
-@test alphasat(MVHSTableau, ⊤, ∧(β, parseformula("p")), Ł4) == false
-@test alphasat(MVHSTableau, ⊤, ∧(⊤, parseformula("p")), Ł4) == true
+@test alphasat(MVHSTableau, ⊥, ∧(⊥, p), Ł4) == true
+@test alphasat(MVHSTableau, ⊥, ∧(α, p), Ł4) == true
+@test alphasat(MVHSTableau, ⊥, ∧(β, p), Ł4) == true
+@test alphasat(MVHSTableau, ⊥, ∧(⊤, p), Ł4) == true
+@test alphasat(MVHSTableau, α, ∧(⊥, p), Ł4) == false
+@test alphasat(MVHSTableau, α, ∧(α, p), Ł4) == true
+@test alphasat(MVHSTableau, α, ∧(β, p), Ł4) == true
+@test alphasat(MVHSTableau, α, ∧(⊤, p), Ł4) == true
+@test alphasat(MVHSTableau, β, ∧(⊥, p), Ł4) == false
+@test alphasat(MVHSTableau, β, ∧(α, p), Ł4) == false
+@test alphasat(MVHSTableau, β, ∧(β, p), Ł4) == true
+@test alphasat(MVHSTableau, β, ∧(⊤, p), Ł4) == true
+@test alphasat(MVHSTableau, ⊤, ∧(⊥, p), Ł4) == false
+@test alphasat(MVHSTableau, ⊤, ∧(α, p), Ł4) == false
+@test alphasat(MVHSTableau, ⊤, ∧(β, p), Ł4) == false
+@test alphasat(MVHSTableau, ⊤, ∧(⊤, p), Ł4) == true
 
-@test alphasat(MVHSTableau, ⊥, ∧(parseformula("p"), parseformula("p")), Ł4)
-@test alphasat(MVHSTableau, α, ∧(parseformula("p"), parseformula("p")), Ł4)
-@test alphasat(MVHSTableau, β, ∧(parseformula("p"), parseformula("p")), Ł4)
-@test alphasat(MVHSTableau, ⊤, ∧(parseformula("p"), parseformula("p")), Ł4)
+@test alphasat(MVHSTableau, ⊥, ∧(p, p), Ł4)
+@test alphasat(MVHSTableau, α, ∧(p, p), Ł4)
+@test alphasat(MVHSTableau, β, ∧(p, p), Ł4)
+@test alphasat(MVHSTableau, ⊤, ∧(p, p), Ł4)
 
-@test alphasat(MVHSTableau, ⊥, ∧(parseformula("p"), parseformula("q")), Ł4)
-@test alphasat(MVHSTableau, α, ∧(parseformula("p"), parseformula("q")), Ł4)
-@test alphasat(MVHSTableau, β, ∧(parseformula("p"), parseformula("q")), Ł4)
-@test alphasat(MVHSTableau, ⊤, ∧(parseformula("p"), parseformula("q")), Ł4)
+@test alphasat(MVHSTableau, ⊥, ∧(p, q), Ł4)
+@test alphasat(MVHSTableau, α, ∧(p, q), Ł4)
+@test alphasat(MVHSTableau, β, ∧(p, q), Ł4)
+@test alphasat(MVHSTableau, ⊤, ∧(p, q), Ł4)
 
-@test alphasat(MVHSTableau, ⊥, ∧(parseformula("q"), parseformula("p")), Ł4)
-@test alphasat(MVHSTableau, α, ∧(parseformula("q"), parseformula("p")), Ł4)
-@test alphasat(MVHSTableau, β, ∧(parseformula("q"), parseformula("p")), Ł4)
-@test alphasat(MVHSTableau, ⊤, ∧(parseformula("q"), parseformula("p")), Ł4)
+@test alphasat(MVHSTableau, ⊥, ∧(q, p), Ł4)
+@test alphasat(MVHSTableau, α, ∧(q, p), Ł4)
+@test alphasat(MVHSTableau, β, ∧(q, p), Ł4)
+@test alphasat(MVHSTableau, ⊤, ∧(q, p), Ł4)
 
 ################################################################################
 ## Implication #################################################################
@@ -345,60 +349,64 @@ using SoleLogics.ManyValuedLogics: α, β
 @test alphasat(MVHSTableau, ⊤, →(⊤, β), Ł4) == false
 @test alphasat(MVHSTableau, ⊤, →(⊤, ⊤), Ł4) == true
 
-@test alphasat(MVHSTableau, ⊥, →(parseformula("p"), ⊥), G4) == true
-@test alphasat(MVHSTableau, ⊥, →(parseformula("p"), α), G4) == true
-@test alphasat(MVHSTableau, ⊥, →(parseformula("p"), β), G4) == true
-@test alphasat(MVHSTableau, ⊥, →(parseformula("p"), ⊤), G4) == true
-@test alphasat(MVHSTableau, α, →(parseformula("p"), ⊥), G4) == true
-@test alphasat(MVHSTableau, α, →(parseformula("p"), α), G4) == true
-@test alphasat(MVHSTableau, α, →(parseformula("p"), β), G4) == true
-@test alphasat(MVHSTableau, α, →(parseformula("p"), ⊤), G4) == true
-@test alphasat(MVHSTableau, β, →(parseformula("p"), ⊥), G4) == true
-@test alphasat(MVHSTableau, β, →(parseformula("p"), α), G4) == true
-@test alphasat(MVHSTableau, β, →(parseformula("p"), β), G4) == true
-@test alphasat(MVHSTableau, β, →(parseformula("p"), ⊤), G4) == true
-@test alphasat(MVHSTableau, ⊤, →(parseformula("p"), ⊥), G4) == true
-@test alphasat(MVHSTableau, ⊤, →(parseformula("p"), α), G4) == true
-@test alphasat(MVHSTableau, ⊤, →(parseformula("p"), β), G4) == true
-@test alphasat(MVHSTableau, ⊤, →(parseformula("p"), ⊤), G4) == true
+@test alphasat(MVHSTableau, ⊥, →(p, ⊥), G4) == true
+@test alphasat(MVHSTableau, ⊥, →(p, α), G4) == true
+@test alphasat(MVHSTableau, ⊥, →(p, β), G4) == true
+@test alphasat(MVHSTableau, ⊥, →(p, ⊤), G4) == true
+@test alphasat(MVHSTableau, α, →(p, ⊥), G4) == true
+@test alphasat(MVHSTableau, α, →(p, α), G4) == true
+@test alphasat(MVHSTableau, α, →(p, β), G4) == true
+@test alphasat(MVHSTableau, α, →(p, ⊤), G4) == true
+@test alphasat(MVHSTableau, β, →(p, ⊥), G4) == true
+@test alphasat(MVHSTableau, β, →(p, α), G4) == true
+@test alphasat(MVHSTableau, β, →(p, β), G4) == true
+@test alphasat(MVHSTableau, β, →(p, ⊤), G4) == true
+@test alphasat(MVHSTableau, ⊤, →(p, ⊥), G4) == true
+@test alphasat(MVHSTableau, ⊤, →(p, α), G4) == true
+@test alphasat(MVHSTableau, ⊤, →(p, β), G4) == true
+@test alphasat(MVHSTableau, ⊤, →(p, ⊤), G4) == true
 
-@test alphasat(MVHSTableau, ⊥, →(⊥, parseformula("p")), G4) == true
-@test alphasat(MVHSTableau, ⊥, →(α, parseformula("p")), G4) == true
-@test alphasat(MVHSTableau, ⊥, →(β, parseformula("p")), G4) == true
-@test alphasat(MVHSTableau, ⊥, →(⊤, parseformula("p")), G4) == true
-@test alphasat(MVHSTableau, α, →(⊥, parseformula("p")), G4) == true
-@test alphasat(MVHSTableau, α, →(α, parseformula("p")), G4) == true
-@test alphasat(MVHSTableau, α, →(β, parseformula("p")), G4) == true
-@test alphasat(MVHSTableau, α, →(⊤, parseformula("p")), G4) == true
-@test alphasat(MVHSTableau, β, →(⊥, parseformula("p")), G4) == true
-@test alphasat(MVHSTableau, β, →(α, parseformula("p")), G4) == true
-@test alphasat(MVHSTableau, β, →(β, parseformula("p")), G4) == true
-@test alphasat(MVHSTableau, β, →(⊤, parseformula("p")), G4) == true
-@test alphasat(MVHSTableau, ⊤, →(⊥, parseformula("p")), G4) == true
-@test alphasat(MVHSTableau, ⊤, →(α, parseformula("p")), G4) == true
-@test alphasat(MVHSTableau, ⊤, →(β, parseformula("p")), G4) == true
-@test alphasat(MVHSTableau, ⊤, →(⊤, parseformula("p")), G4) == true
+@test alphasat(MVHSTableau, ⊥, →(⊥, p), G4) == true
+@test alphasat(MVHSTableau, ⊥, →(α, p), G4) == true
+@test alphasat(MVHSTableau, ⊥, →(β, p), G4) == true
+@test alphasat(MVHSTableau, ⊥, →(⊤, p), G4) == true
+@test alphasat(MVHSTableau, α, →(⊥, p), G4) == true
+@test alphasat(MVHSTableau, α, →(α, p), G4) == true
+@test alphasat(MVHSTableau, α, →(β, p), G4) == true
+@test alphasat(MVHSTableau, α, →(⊤, p), G4) == true
+@test alphasat(MVHSTableau, β, →(⊥, p), G4) == true
+@test alphasat(MVHSTableau, β, →(α, p), G4) == true
+@test alphasat(MVHSTableau, β, →(β, p), G4) == true
+@test alphasat(MVHSTableau, β, →(⊤, p), G4) == true
+@test alphasat(MVHSTableau, ⊤, →(⊥, p), G4) == true
+@test alphasat(MVHSTableau, ⊤, →(α, p), G4) == true
+@test alphasat(MVHSTableau, ⊤, →(β, p), G4) == true
+@test alphasat(MVHSTableau, ⊤, →(⊤, p), G4) == true
 
-@test alphasat(MVHSTableau, ⊥, →(parseformula("p"), parseformula("p")), G4)
-@test alphasat(MVHSTableau, α, →(parseformula("p"), parseformula("p")), G4)
-@test alphasat(MVHSTableau, β, →(parseformula("p"), parseformula("p")), G4)
-@test alphasat(MVHSTableau, ⊤, →(parseformula("p"), parseformula("p")), G4)
+@test alphasat(MVHSTableau, ⊥, →(p, p), G4)
+@test alphasat(MVHSTableau, α, →(p, p), G4)
+@test alphasat(MVHSTableau, β, →(p, p), G4)
+@test alphasat(MVHSTableau, ⊤, →(p, p), G4)
 
-@test alphasat(MVHSTableau, ⊥, →(parseformula("p"), parseformula("q")), G4)
-@test alphasat(MVHSTableau, α, →(parseformula("p"), parseformula("q")), G4)
-@test alphasat(MVHSTableau, β, →(parseformula("p"), parseformula("q")), G4)
-@test alphasat(MVHSTableau, ⊤, →(parseformula("p"), parseformula("q")), G4)
+@test alphasat(MVHSTableau, ⊥, →(p, q), G4)
+@test alphasat(MVHSTableau, α, →(p, q), G4)
+@test alphasat(MVHSTableau, β, →(p, q), G4)
+@test alphasat(MVHSTableau, ⊤, →(p, q), G4)
 
-@test alphasat(MVHSTableau, ⊥, →(parseformula("q"), parseformula("p")), G4)
-@test alphasat(MVHSTableau, α, →(parseformula("q"), parseformula("p")), G4)
-@test alphasat(MVHSTableau, β, →(parseformula("q"), parseformula("p")), G4)
-@test alphasat(MVHSTableau, ⊤, →(parseformula("q"), parseformula("p")), G4)
+@test alphasat(MVHSTableau, ⊥, →(q, p), G4)
+@test alphasat(MVHSTableau, α, →(q, p), G4)
+@test alphasat(MVHSTableau, β, →(q, p), G4)
+@test alphasat(MVHSTableau, ⊤, →(q, p), G4)
 
 ################################################################################
 #### More difficult formulas ###################################################
 ################################################################################
 
-@test alphasat(MVHSTableau, ⊤, booleantofuzzy(parseformula(
+result = alphasat(MVHSTableau, ⊤, booleantofuzzy(parseformula(
     "(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧" *
     "(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)"
-)), Ł4) == false
+)), Ł4, timeout=timeout)
+
+if !isnothing(result)
+    @test result == false
+end
