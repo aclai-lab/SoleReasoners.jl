@@ -2,10 +2,14 @@
 #### H4 ########################################################################
 ################################################################################
 
+using SoleLogics: LTLFP_F, LTLFP_P
 using SoleLogics.ManyValuedLogics: H4
 using SoleLogics.ManyValuedLogics: α, β
 
 p, q = Atom.(["p", "q"])
+
+diamondLTLFP_F, diamondLTLFP_P = diamond.([LTLFP_F, LTLFP_P])
+boxLTLFP_F, boxLTLFP_P = box.([LTLFP_F, LTLFP_P])
 
 timeout = 30
 
@@ -406,6 +410,82 @@ result = alphasat(MVLTLFPTableau, ⊤, booleantofuzzy(parseformula(
     "(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧" *
     "(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)"
 )), H4, timeout=timeout)
+
+if !isnothing(result)
+    @test result == false
+end
+
+################################################################################
+#### Modal cases ###############################################################
+################################################################################
+
+result = alphasat(
+    MVLTLFPTableau,
+    ⊥,
+    ∧(diamondLTLFP_F(p), boxLTLFP_F(→(p, ⊥))),
+    H4,
+    timeout=timeout
+)
+
+if !isnothing(result)
+    @test result == true
+end
+
+result = alphasat(
+    MVLTLFPTableau,
+    α,
+    ∧(diamondLTLFP_F(p), boxLTLFP_F(→(p, ⊥))),
+    H4,
+    timeout=timeout
+)
+
+if !isnothing(result)
+    @test result == false
+end
+
+result = alphasat(
+    MVLTLFPTableau,
+    ⊤,
+    ∧(diamondLTLFP_F(p), boxLTLFP_F(→(p, ⊥))),
+    H4,
+    timeout=timeout
+)
+
+if !isnothing(result)
+    @test result == false
+end
+
+result = alphasat(
+    MVLTLFPTableau,
+    ⊥,
+    ∧(diamondLTLFP_P(p), boxLTLFP_P(→(p, ⊥))),
+    H4,
+    timeout=timeout
+)
+
+if !isnothing(result)
+    @test result == true
+end
+
+result = alphasat(
+    MVLTLFPTableau,
+    α,
+    ∧(diamondLTLFP_P(p), boxLTLFP_P(→(p, ⊥))),
+    H4,
+    timeout=timeout
+)
+
+if !isnothing(result)
+    @test result == false
+end
+
+result = alphasat(
+    MVLTLFPTableau,
+    ⊤,
+    ∧(diamondLTLFP_P(p), boxLTLFP_P(→(p, ⊥))),
+    H4,
+    timeout=timeout
+)
 
 if !isnothing(result)
     @test result == false

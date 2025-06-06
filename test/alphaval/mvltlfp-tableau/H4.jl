@@ -2,35 +2,14 @@
 #### H4 ########################################################################
 ################################################################################
 
+using SoleLogics: LTLFP_F, LTLFP_P
 using SoleLogics.ManyValuedLogics: H4, getdomain
 using SoleLogics.ManyValuedLogics: α, β
 
 p, q = Atom.(["p", "q"])
 
-diamondA = diamond(IA_A)
-diamondL = diamond(IA_L)
-diamondB = diamond(IA_B)
-diamondE = diamond(IA_E)
-diamondD = diamond(IA_D)
-diamondO = diamond(IA_O)
-diamondAi = diamond(IA_Ai)
-diamondLi = diamond(IA_Li)
-diamondBi = diamond(IA_Bi)
-diamondEi = diamond(IA_Ei)
-diamondDi = diamond(IA_Di)
-diamondOi = diamond(IA_Oi)
-boxA = box(IA_A)
-boxL = box(IA_L)
-boxB = box(IA_B)
-boxE = box(IA_E)
-boxD = box(IA_D)
-boxO = box(IA_O)
-boxAi = box(IA_Ai)
-boxLi = box(IA_Li)
-boxBi = box(IA_Bi)
-boxEi = box(IA_Ei)
-boxDi = box(IA_Di)
-boxOi = box(IA_Oi)
+diamondLTLFP_F, diamondLTLFP_P = diamond.([LTLFP_F, LTLFP_P])
+boxLTLFP_F, boxLTLFP_P = box.([LTLFP_F, LTLFP_P])
 
 timeout = 30
 
@@ -411,3 +390,52 @@ end
     →(q, p),
     H4
 ) == false
+
+################################################################################
+#### Modal cases ###############################################################
+################################################################################
+#### Examples from Fuzzy Sets and Systems 456 (2023) ###########################
+################################################################################
+
+###################################################
+## Theorem 1 ######################################
+###################################################
+for boxX in [
+    boxLTLFP_F,
+    boxLTLFP_P
+]
+    # k axiom
+    # TODO: inverse version
+    local result = alphaval(
+        MVLTLFPTableau,
+        ⊤,
+        →(
+            boxX(→(p,q)),
+            →(boxX(p),boxX(q))
+        ),
+        H4,
+        timeout=timeout
+    )
+    if !isnothing(result)
+        @test result == true
+    end
+end
+for (boxX,diamondXi) in [
+    (boxLTLFP_F,  diamondLTLFP_P),
+    (boxLTLFP_P,  diamondLTLFP_F)
+]
+    # TODO: inverse version
+    local result = alphaval(
+        MVLTLFPTableau,
+        ⊤,
+        →(
+            p,
+            boxX(diamondXi(p))
+        ),
+        H4,
+        timeout=timeout
+    )
+    if !isnothing(result)
+        @test result == true
+    end
+end
