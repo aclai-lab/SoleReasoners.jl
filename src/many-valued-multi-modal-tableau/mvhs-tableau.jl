@@ -76,7 +76,12 @@ function worlds(::Type{MVHSTableau}, frame::ManyValuedLinearOrder)
     )
 end
 
-function newframes(t::MVHSTableau, algebra::FiniteFLewAlgebra; timeout=nothing, t0=nothing)
+function newframes(
+    t::MVHSTableau,
+    algebra::FiniteFLewAlgebra;
+    timeout=nothing,
+    t0=nothing
+)
     f = frame(t)
     n = cardinality(f)
     os = Vector{ManyValuedLinearOrder}([f])

@@ -69,7 +69,12 @@ function worlds(::Type{MVLTLFPTableau}, frame::ManyValuedLinearOrder)
     return Point1D.([UInt8(1):UInt8(cardinality(frame))]...)
 end
 
-function newframes(t::MVLTLFPTableau, algebra::FiniteFLewAlgebra)
+function newframes(
+    t::MVLTLFPTableau,
+    algebra::FiniteFLewAlgebra;
+    timeout=nothing,
+    t0=nothing
+)
     f = frame(t)
     n = cardinality(f)
     combs = unique(
@@ -84,9 +89,14 @@ function newframes(t::MVLTLFPTableau, algebra::FiniteFLewAlgebra)
         ]
     )
     os = Vector{ManyValuedLinearOrder}([f])
+    lock = Threads.ReentrantLock();
     for ltzcomb in combs
         for gtzcomb in combs
             for eqzcomb in combs
+                if !isnothing(timeout) &&
+                    (time_ns()-t0)/1e9 > timeout
+                    return nothing
+                end
                 mvlt = Matrix(undef, n+1, n+1)
                 mvlt[1:n, 1:n] = f.mvlt
                 mvlt[1:n, n+1] = ltzcomb
@@ -100,10 +110,8 @@ function newframes(t::MVLTLFPTableau, algebra::FiniteFLewAlgebra)
                 mveq[n+1, n+1] = FiniteTruth(1)
                 mveq = SMatrix{n+1,n+1,FiniteTruth}(mveq)
                 if isaManyValuedLinearOrder(mvlt, mveq, algebra)
-                    push!(
-                        os,
-                        @inbounds ManyValuedLinearOrder(mvlt, mveq, algebra)
-                    )
+                    oz = @inbounds ManyValuedLinearOrder(mvlt, mveq, algebra)
+                    @lock lock push!(os, oz)
                 end
             end
         end
