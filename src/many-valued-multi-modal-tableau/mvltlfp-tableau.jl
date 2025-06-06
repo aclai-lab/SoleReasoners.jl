@@ -1,3 +1,4 @@
+using Base.Threads
 using Combinatorics: with_replacement_combinations, permutations
 using SoleLogics.ManyValuedLogics: getdomain
 
