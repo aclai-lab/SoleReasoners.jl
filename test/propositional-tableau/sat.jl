@@ -73,7 +73,7 @@
     dimacstosole("propositional-tableau/benchmark/sat/uf50-02.cnf")
 ) == true
 
-@atoms p
+p = Atom("p")
 
 # Define a new logical operator `⊕`
 import SoleLogics: arity
