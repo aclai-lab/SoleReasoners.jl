@@ -452,18 +452,18 @@ for boxX in [
     end
 end
 for (boxX,diamondXi) in [
-    (boxA,  boxAi),
-    (boxL,  boxLi),
-    (boxB,  boxBi),
-    (boxE,  boxEi),
-    (boxD,  boxDi),
-    (boxO,  boxOi),
-    (boxAi, boxA),
-    (boxLi, boxL),
-    (boxBi, boxB),
-    (boxEi, boxE),
-    (boxDi, boxD),
-    (boxOi, boxO),
+    (boxA,  diamondAi),
+    (boxL,  diamondLi),
+    (boxB,  diamondBi),
+    (boxE,  diamondEi),
+    (boxD,  diamondDi),
+    (boxO,  diamondOi),
+    (boxAi, diamondA),
+    (boxLi, diamondL),
+    (boxBi, diamondB),
+    (boxEi, diamondE),
+    (boxDi, diamondD),
+    (boxOi, diamondO),
 ]
     # TODO: inverse version
     local result = alphaval(

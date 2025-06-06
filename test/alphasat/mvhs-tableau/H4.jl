@@ -430,7 +430,7 @@ timeout = 30
 result = alphasat(MVHSTableau, ⊤, booleantofuzzy(parseformula(
     "(x∨y∨z)∧(x∨y∨¬z)∧(x∨¬y∨z)∧(x∨¬y∨¬z)∧" *
     "(¬x∨y∨z)∧(¬x∨y∨¬z)∧(¬x∨¬y∨z)∧(¬x∨¬y∨¬z)"
-)), H4)
+)), H4, timeout=timeout)
 
 if !isnothing(result)
     @test result == false
