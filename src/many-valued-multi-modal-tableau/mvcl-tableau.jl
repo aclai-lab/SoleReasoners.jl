@@ -100,18 +100,18 @@ function newframes(
                     (time_ns()-t0)/1e9 > timeout
                     return nothing
                 end
-                mvlt = Matrix(undef, n+1, n+1)
-                mvlt[1:n, 1:n] = ox.mvlt
-                mvlt[1:n, n+1] = ltzcomb
-                mvlt[n+1, 1:n] = gtzcomb
-                mvlt[n+1, n+1] = FiniteTruth(2)
-                mvlt = SMatrix{n+1,n+1,FiniteTruth}(mvlt)
-                mveq = Matrix(undef, n+1, n+1)
-                mveq[1:n, 1:n] = ox.mveq
-                mveq[1:n, n+1] = eqzcomb
-                mveq[n+1, 1:n] = eqzcomb
-                mveq[n+1, n+1] = FiniteTruth(1)
-                mveq = SMatrix{n+1,n+1,FiniteTruth}(mveq)
+                mvlt = Matrix(undef, nx+1, nx+1)
+                mvlt[1:nx, 1:nx] = ox.mvlt
+                mvlt[1:nx, nx+1] = ltzcomb
+                mvlt[nx+1, 1:nx] = gtzcomb
+                mvlt[nx+1, nx+1] = FiniteTruth(2)
+                mvlt = SMatrix{nx+1,nx+1,FiniteTruth}(mvlt)
+                mveq = Matrix(undef, nx+1, nx+1)
+                mveq[1:nx, 1:nx] = ox.mveq
+                mveq[1:nx, nx+1] = eqzcomb
+                mveq[nx+1, 1:nx] = eqzcomb
+                mveq[nx+1, nx+1] = FiniteTruth(1)
+                mveq = SMatrix{nx+1,nx+1,FiniteTruth}(mveq)
                 if isaManyValuedLinearOrder(mvlt, mveq, algebra)
                     oz = @inbounds ManyValuedLinearOrder(mvlt, mveq, algebra)
                     @lock lock push!(osx, oz)
@@ -137,18 +137,18 @@ function newframes(
                     (time_ns()-t0)/1e9 > timeout
                     return nothing
                 end
-                mvlt = Matrix(undef, n+1, n+1)
-                mvlt[1:n, 1:n] = oy.mvlt
-                mvlt[1:n, n+1] = ltzcomb
-                mvlt[n+1, 1:n] = gtzcomb
-                mvlt[n+1, n+1] = FiniteTruth(2)
-                mvlt = SMatrix{n+1,n+1,FiniteTruth}(mvlt)
-                mveq = Matrix(undef, n+1, n+1)
-                mveq[1:n, 1:n] = oy.mveq
-                mveq[1:n, n+1] = eqzcomb
-                mveq[n+1, 1:n] = eqzcomb
-                mveq[n+1, n+1] = FiniteTruth(1)
-                mveq = SMatrix{n+1,n+1,FiniteTruth}(mveq)
+                mvlt = Matrix(undef, ny+1, ny+1)
+                mvlt[1:ny, 1:ny] = oy.mvlt
+                mvlt[1:ny, ny+1] = ltzcomb
+                mvlt[ny+1, 1:ny] = gtzcomb
+                mvlt[ny+1, ny+1] = FiniteTruth(2)
+                mvlt = SMatrix{ny+1,ny+1,FiniteTruth}(mvlt)
+                mveq = Matrix(undef, ny+1, ny+1)
+                mveq[1:ny, 1:ny] = oy.mveq
+                mveq[1:ny, ny+1] = eqzcomb
+                mveq[ny+1, 1:ny] = eqzcomb
+                mveq[ny+1, ny+1] = FiniteTruth(1)
+                mveq = SMatrix{ny+1,ny+1,FiniteTruth}(mveq)
                 if isaManyValuedLinearOrder(mvlt, mveq, algebra)
                     oz = @inbounds ManyValuedLinearOrder(mvlt, mveq, algebra)
                     @lock lock push!(osy, oz)
