@@ -25,7 +25,7 @@ boxLRCC8_Rec_TPPi  = box(LRCC8_Rec_TPPi)
 boxLRCC8_Rec_NTPP  = box(LRCC8_Rec_NTPP)
 boxLRCC8_Rec_NTPPi = box(LRCC8_Rec_NTPPi)
 
-timeout = 30
+timeout = 10
 
 ################################################################################
 ## Base cases ##################################################################

@@ -11,7 +11,7 @@ p, q = Atom.(["p", "q"])
 diamondLTLFP_F, diamondLTLFP_P = diamond.([LTLFP_F, LTLFP_P])
 boxLTLFP_F, boxLTLFP_P = box.([LTLFP_F, LTLFP_P])
 
-timeout = 30
+timeout = 10
 
 ################################################################################
 ## Base cases ##################################################################

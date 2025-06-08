@@ -30,7 +30,7 @@ boxEi = box(IA_Ei)
 boxDi = box(IA_Di)
 boxOi = box(IA_Oi)
 
-timeout = 30
+timeout = 10
 
 ################################################################################
 ## Propositional logic axioms ##################################################
