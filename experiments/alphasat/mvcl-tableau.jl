@@ -16,40 +16,23 @@ max_timeout = 30 # seconds
 
 verbose = false
 
-using SoleLogics: HS_A, HS_L, HS_B, HS_E, HS_D, HS_O
-using SoleLogics: HS_Ai, HS_Li, HS_Bi, HS_Ei, HS_Di, HS_Oi
+using SoleLogics: CL_N, CL_S, CL_E, CL_W
 
-mvhsoperators = Vector{Connective}(BASE_MANY_VALUED_CONNECTIVES)
+mvcloperators = Vector{Connective}(BASE_MANY_VALUED_CONNECTIVES)
 append!(
-    mvhsoperators,
+    mvcloperators,
     [
-        diamond(IA_A),
-        diamond(IA_L),
-        diamond(IA_B),
-        diamond(IA_E),
-        diamond(IA_D),
-        diamond(IA_O),
-        diamond(IA_Ai),
-        diamond(IA_Li),
-        diamond(IA_Bi),
-        diamond(IA_Ei),
-        diamond(IA_Di),
-        diamond(IA_Oi),
-        box(IA_A),
-        box(IA_L),
-        box(IA_B),
-        box(IA_E),
-        box(IA_D),
-        box(IA_O),
-        box(IA_Ai),
-        box(IA_Li),
-        box(IA_Bi),
-        box(IA_Ei),
-        box(IA_Di),
-        box(IA_Oi)
+        diamond(CL_N),
+        diamond(CL_S),
+        diamond(CL_E),
+        diamond(CL_W),
+        box(CL_N),
+        box(CL_S),
+        box(CL_E),
+        box(CL_W)
     ]
 )
-mvhsopweights = [8, 8, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+mvclopweights = [8, 8, 8, 3, 3, 3, 3, 3, 3, 3, 3]
 
 using SoleLogics.ManyValuedLogics: booleanalgebra, G3, Ł3, G4, Ł4, H4
 using SoleLogics.ManyValuedLogics: G5, G6, H6_1, H6_2, H6_3, H6
@@ -88,7 +71,7 @@ for a in algebras
     aotpicker = (rng)->StatsBase.sample(rng, aot, aotweights)
 
     for height in min_height:max_height
-        verbose && println("MVHS Alphasat on " * a[1] * " formulas of height " * string(height))
+        verbose && println("MVCL Alphasat on " * a[1] * " formulas of height " * string(height))
         e_time = 0
         j = 0
         sat = 0
@@ -100,8 +83,8 @@ for a in algebras
                 MersenneTwister(i),
                 height,
                 myalphabet,
-                mvhsoperators,
-                opweights = mvhsopweights,
+                mvcloperators,
+                opweights = mvclopweights,
                 basecase = aotpicker,
                 mode = :full
             )
@@ -110,7 +93,7 @@ for a in algebras
                 j += 1
                 t0 = time_ns()
                 r = alphasat(
-                    MVHSTableau,
+                    MVCLTableau,
                     t,
                     f,
                     a[2],
