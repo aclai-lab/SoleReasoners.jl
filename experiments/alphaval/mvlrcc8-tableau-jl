@@ -143,6 +143,8 @@ for a in algebras
         tot_timeouts[findall(x->x==a, algebras)...] += timeouts
         tot_val[findall(x->x==a, algebras)...] += val
         tot_unval[findall(x->x==a, algebras)...] += unval
+
+        flush(stdout)
     end
 
     # Latex

@@ -136,6 +136,8 @@ for a in algebras
         tot_timeouts[findall(x->x==a, algebras)...] += timeouts
         tot_sat[findall(x->x==a, algebras)...] += sat
         tot_unsat[findall(x->x==a, algebras)...] += unsat
+
+        flush(stdout)
     end
 
     # Latex
