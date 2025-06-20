@@ -100,6 +100,10 @@ function newframes(
     @threads for ltzcomb in zcombs
         for gtzcomb in zcombs
             for eqzcomb in zcombs
+                if !isnothing(timeout) &&
+                    (time_ns()-t0)/1e9 > timeout
+                    return nothing
+                end
                 mvlt = Matrix(undef, n+1, n+1)
                 mvlt[1:n, 1:n] = f.mvlt
                 mvlt[1:n, n+1] = ltzcomb

@@ -100,7 +100,11 @@ function newframes(
     )
     @threads for ltzcomb in zcombsx
         for gtzcomb in zcombsx
-            for eqzcomb in zcombsx                
+            for eqzcomb in zcombsx
+                if !isnothing(timeout) &&
+                    (time_ns()-t0)/1e9 > timeout
+                    return nothing
+                end          
                 mvlt = Matrix(undef, nx+1, nx+1)
                 mvlt[1:nx, 1:nx] = ox.mvlt
                 mvlt[1:nx, nx+1] = ltzcomb
@@ -178,6 +182,10 @@ function newframes(
     @threads for ltzcomb in zcombsy
         for gtzcomb in zcombsy
             for eqzcomb in zcombsy
+                if !isnothing(timeout) &&
+                    (time_ns()-t0)/1e9 > timeout
+                    return nothing
+                end
                 mvlt = Matrix(undef, ny+1, ny+1)
                 mvlt[1:ny, 1:ny] = oy.mvlt
                 mvlt[1:ny, ny+1] = ltzcomb
@@ -211,7 +219,7 @@ function newframes(
                         for gttcomb in tcombsy
                             for eqtcomb in tcombsy
                                 if !isnothing(timeout) &&
-                                (time_ns()-t0)/1e9 > timeout
+                                   (time_ns()-t0)/1e9 > timeout
                                     return nothing
                                 end
                                 mvlt = Matrix(undef, ny+2, ny+2)
