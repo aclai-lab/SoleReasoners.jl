@@ -525,6 +525,10 @@ function alphasat(
                             return nothing
                         end
                         for fi in frames
+                            if !isnothing(timeout) &&
+                                (time_ns()-t0)/1e9 > timeout
+                                return nothing
+                            end
                             for wi in worlds(typeof(expansionnode), fi)
                                 βi = mveval(r, w, wi, fi)
                                 γ = algebra.monoid(β, βi)
@@ -843,6 +847,10 @@ function alphasat(
                             return nothing
                         end
                         for fi in frames
+                            if !isnothing(timeout) &&
+                                (time_ns()-t0)/1e9 > timeout
+                                return nothing
+                            end
                             for wi in worlds(typeof(expansionnode), fi)
                                 βi = mveval(r, w, wi, fi)
                                 γ = algebra.implication(βi, β)
