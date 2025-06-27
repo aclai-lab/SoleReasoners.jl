@@ -9,10 +9,10 @@ import SoleLogics: sample
 myalphabet = Atom.(["p", "q", "r"])
 
 min_height = 1
-max_height = 5
+max_height = 6
 max_it = 99999
-max_avg = 100
-max_timeout = 30 # seconds
+max_avg = 200
+max_timeout = 60 # seconds
 
 verbose = false
 

@@ -1,3 +1,4 @@
+using SoleLogics: height
 using Random: rand, Xoshiro
 
 """
@@ -22,7 +23,7 @@ end
     distancefromroot(t::T) where {T<:AbstractTableau}
 
 `metric` assignign to each node its distance from the root giving priority to
-smaller distances (i.e., breadth-first search).
+smaller distances (somewhat similar to breadth-first search).
 """
 function distancefromroot(t::T) where {T<:AbstractTableau}
     distance = 0;
@@ -37,7 +38,7 @@ end
     inversedistancefromroot(t::T) where {T<:AbstractTableau}
 
 `metric` assignign to each node its distance from the root giving priority to
-larger distances (i.e., breadth-first search).
+larger distances (somewhat similar to deep-first search).
 """
 function inversedistancefromroot(t::T) where {T<:AbstractTableau}
     distance = 0;
@@ -46,4 +47,19 @@ function inversedistancefromroot(t::T) where {T<:AbstractTableau}
         t = father(t)
     end
     return -distance
+end
+
+"""
+    formulaheight(t::T) where {T<:ManyValuedMultiModalTableau}
+
+`metric` assignign to each node the height of its formula in the `assertion`,
+or `0` in case the `assertion` is of the type `{<:Truth,<:Truth}`.
+"""
+function formulaheight(t::T) where {T<:ManyValuedMultiModalTableau}
+    a = assertion(t)
+    if a[1] isa Truth
+        return height(a[2])
+    else
+        return height(a[1])
+    end
 end
