@@ -16,30 +16,19 @@ max_timeout = 60 # seconds
 
 verbose = false
 
-using SoleLogics: LRCC8_Rec_DC, LRCC8_Rec_EC, LRCC8_Rec_PO
-using SoleLogics: LRCC8_Rec_TPP, LRCC8_Rec_TPPi, LRCC8_Rec_NTPP, LRCC8_Rec_NTPPi
+using SoleLogics: LTLFP_F, LTLFP_P
 
-mvlrcc8operators = Vector{Connective}(BASE_MANY_VALUED_CONNECTIVES)
+mvltlfpoperators = Vector{Connective}(BASE_MANY_VALUED_CONNECTIVES)
 append!(
-    mvlrcc8operators,
+    mvltlfpoperators,
     [
-        diamond(LRCC8_Rec_DC),
-        diamond(LRCC8_Rec_EC),
-        diamond(LRCC8_Rec_PO),
-        diamond(LRCC8_Rec_TPP),
-        diamond(LRCC8_Rec_TPPi),
-        diamond(LRCC8_Rec_NTPP),
-        diamond(LRCC8_Rec_NTPPi),
-        box(LRCC8_Rec_DC),
-        box(LRCC8_Rec_EC),
-        box(LRCC8_Rec_PO),
-        box(LRCC8_Rec_TPP),
-        box(LRCC8_Rec_TPPi),
-        box(LRCC8_Rec_NTPP),
-        box(LRCC8_Rec_NTPPi)
+        diamond(LTLFP_F),
+        diamond(LTLFP_P),
+        box(LTLFP_F),
+        box(LTLFP_P)
     ]
 )
-mvlrcc8opweights = [14, 14, 14, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+mvltlfpopweights = [4, 4, 4, 3, 3, 3, 3]
 
 using SoleLogics.ManyValuedLogics: booleanalgebra, G3, Ł3, G4, Ł4, H4
 using SoleLogics.ManyValuedLogics: G5, G6, H6_1, H6_2, H6_3, H6
@@ -61,7 +50,6 @@ algebras = [
 
 # Latex
 tot_timeouts = zeros(Int64, length(algebras))   # tot timeouts for each algebra
-tot_n_timeouts = zeros(Int64, length(algebras)) # tot no timeouts for each alg.
 tot_val = zeros(Int64, length(algebras))        # tot val for each algebra
 tot_unval = zeros(Int64, length(algebras))      # tot unval for each algebra
 
@@ -79,7 +67,7 @@ for a in algebras
     aotpicker = (rng)->StatsBase.sample(rng, aot, aotweights)
 
     for height in min_height:max_height
-        verbose && println("MVLRCC8 Alphaval on " * a[1] * " formulas of height " * string(height))
+        verbose && println("MVLTLFP Alphaval on " * a[1] * " formulas of height " * string(height))
         e_time = 0
         j = 0
         val = 0
@@ -91,8 +79,8 @@ for a in algebras
                 MersenneTwister(i),
                 height,
                 myalphabet,
-                mvlrcc8operators,
-                opweights = mvlrcc8opweights,
+                mvltlfpoperators,
+                opweights = mvltlfpopweights,
                 basecase = aotpicker,
                 mode = :full
             )
@@ -101,10 +89,12 @@ for a in algebras
                 j += 1
                 t0 = time_ns()
                 r = alphaval(
-                    MVLRCC8Tableau,
+                    MVLTLFPTableau,
                     t,
                     f,
                     a[2],
+                    roundrobin!,
+                    formulaheight;
                     timeout=max_timeout
                 )
                 t1 = time_ns()
@@ -142,7 +132,6 @@ for a in algebras
         times[height-min_height+1] = (e_time/1e6)/(max_avg - timeouts)
 
         tot_timeouts[findall(x->x==a, algebras)...] += timeouts
-        tot_n_timeouts[findall(x->x==a, algebras)...] += max_avg - timeouts
         tot_val[findall(x->x==a, algebras)...] += val
         tot_unval[findall(x->x==a, algebras)...] += unval
 
@@ -159,7 +148,7 @@ for a in algebras
     for i in 1:length(ntos)
         print("($(i+min_height-1),$(ntos[i]))")
     end
-    println("\nVal:")
+    println("\nval:")
     for i in 1:length(vals)
         print("($(i+min_height-1),$(vals[i]))")
     end
@@ -178,10 +167,6 @@ end
 println("\nTimeouts")
 for i in 1:length(tot_timeouts)
     print("({$(algebras[i][1])},$(tot_timeouts[i]))")
-end
-println("\nNo timeouts")
-for i in 1:length(tot_n_timeouts)
-    print("({$(algebras[i][1])},$tot_n_timeouts)")
 end
 println("\n\nAlphaval")
 for i in 1:length(tot_val)

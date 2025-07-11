@@ -9,7 +9,7 @@ import SoleLogics: sample
 myalphabet = Atom.(["p", "q", "r"])
 
 min_height = 1
-max_height = 6
+max_height = 7
 max_it = 99999
 max_avg = 200
 max_timeout = 60 # seconds
@@ -50,6 +50,7 @@ algebras = [
 
 # Latex
 tot_timeouts = zeros(Int64, length(algebras))   # tot timeouts for each algebra
+tot_n_timeouts = zeros(Int64, length(algebras)) # tot no timeouts for each alg.
 tot_sat = zeros(Int64, length(algebras))        # tot sat for each algebra
 tot_unsat = zeros(Int64, length(algebras))      # tot unsat for each algebra
 
@@ -130,6 +131,7 @@ for a in algebras
         times[height-min_height+1] = (e_time/1e6)/(max_avg - timeouts)
 
         tot_timeouts[findall(x->x==a, algebras)...] += timeouts
+        tot_n_timeouts[findall(x->x==a, algebras)...] += max_avg - timeouts
         tot_sat[findall(x->x==a, algebras)...] += sat
         tot_unsat[findall(x->x==a, algebras)...] += unsat
 
@@ -165,6 +167,10 @@ end
 println("\nTimeouts")
 for i in 1:length(tot_timeouts)
     print("({$(algebras[i][1])},$(tot_timeouts[i]))")
+end
+println("\nNo timeouts")
+for i in 1:length(tot_n_timeouts)
+    print("({$(algebras[i][1])},$tot_n_timeouts)")
 end
 println("\n\nAlphasat")
 for i in 1:length(tot_sat)
