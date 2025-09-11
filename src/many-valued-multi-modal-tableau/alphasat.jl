@@ -948,6 +948,47 @@ function alphasat(
     end
 end
 
+"""
+    function alphasat(
+        ::T,
+        α::T1,
+        φ::Formula,
+        algebra::FiniteFLewAlgebra,
+        choosenode::Function,
+        metrics::Function...;
+        kwargs...
+    ) where {
+        T<:ManyValuedMultiModalTableau,
+        T1<:Truth
+    }
+
+Given a formula, return true if an interpretation that satisfies the `formula`
+with value at least `α` from a specified `algebra` exists, false otherwise.
+
+The first argument should be a subtype of `ManyValuedMultiModalTableau`;
+currently supported tableaux are: `MVLTLFPTableau`, `MVCLTableau`,
+`MVHSTableau` and `MVLRCC8Tableau`.
+
+`choosenode` should be a function taking a vector of metricheaps as an argument
+(and eventually a counter) and giving a tableau (or nothing) as output that is
+used to extract a node representing a branch to be expanded. If nothing, all
+branches are closed.
+
+`metrics` should be functions taking a tableau as an argument and giving an
+integer as output that are used to model the order in which tableau branches are 
+xpanded. For example, one could declare the following metric functions:
+
+    mf1(t::Tableau) = noperators(t.formula)
+    mf2(t::Tableau) = height(t.formula)
+
+The first metric will generate a metricheap proposing to expand first branches
+comprising the node containing the formula with the less number of operators,
+the second metric will generate a metricheap proposing to expand first branches
+comprising the node containing the formula of less height.
+
+`choosenode` will then be used to choose which policy to follow (e.g., choosing
+the node voted by most heaps, or alternating between each heap at each cycle).
+"""
 function alphasat(
     ::T,
     α::T1,
@@ -963,6 +1004,48 @@ function alphasat(
     error("Please, specify `alphasat` for `$T<:ManyValuedMultiModalTableau`")
 end
 
+"""
+    function alphaval(
+        ::T,
+        α::T1,
+        φ::Formula,
+        algebra::FiniteFLewAlgebra,
+        choosenode::Function,
+        metrics::Function...;
+        kwargs...
+    ) where {
+        T<:ManyValuedMultiModalTableau,
+        T1<:Truth
+    }
+
+Given a formula, return true if any possible interpretation satisfies the
+`formula` with value at least `α` from a specified `algebra` exists, false
+otherwise.
+
+The first argument should be a subtype of `ManyValuedMultiModalTableau`;
+currently supported tableaux are: `MVLTLFPTableau`, `MVCLTableau`,
+`MVHSTableau` and `MVLRCC8Tableau`.
+
+`choosenode` should be a function taking a vector of metricheaps as an argument
+(and eventually a counter) and giving a tableau (or nothing) as output that is
+used to extract a node representing a branch to be expanded. If nothing, all
+branches are closed.
+
+`metrics` should be functions taking a tableau as an argument and giving an
+integer as output that are used to model the order in which tableau branches are 
+xpanded. For example, one could declare the following metric functions:
+
+    mf1(t::Tableau) = noperators(t.formula)
+    mf2(t::Tableau) = height(t.formula)
+
+The first metric will generate a metricheap proposing to expand first branches
+comprising the node containing the formula with the less number of operators,
+the second metric will generate a metricheap proposing to expand first branches
+comprising the node containing the formula of less height.
+
+`choosenode` will then be used to choose which policy to follow (e.g., choosing
+the node voted by most heaps, or alternating between each heap at each cycle).
+"""
 function alphaval(
     ::T,
     α::T1,

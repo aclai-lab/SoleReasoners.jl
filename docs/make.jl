@@ -17,9 +17,12 @@ makedocs(;
     pages = [
         "Home" => "index.md",
         "Getting started" => "getting-started.md",
-        # "Many-Valued logics" => "many-valued-logics.md",
-        # "Developer documentation" => "developer-documentation.md",
-    ],
+        "Abstract Tableau" => "abstract-tableau.md",
+        "Metric Heap" => "metric-heap.md",
+        "Many-Valued Multi-Modal Logic" => "many-valued-multi-modal-logic.md",
+        "Many-Valued Multi-Modal Tableau" => "many-valued-multi-modal-tableau.md",
+        # "Examples" => "examples.md",
+        ],
     # NOTE: warning
     warnonly = :true,
 )

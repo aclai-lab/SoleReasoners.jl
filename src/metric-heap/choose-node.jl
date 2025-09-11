@@ -43,7 +43,7 @@ end
 Choose a leaf using the provided `MetricHeap`s, returning the leaf which is the
 head of most of the heaps. In case
 
-To prevent starvation, use [`roundrobin`](@ref) instead.
+To prevent starvation, use [`roundrobin!`](@ref) instead.
 """
 function mostvoted!(metricheaps::Vector{MetricHeap}, args...)
     candidates = Vector{AbstractTableau}()
