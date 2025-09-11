@@ -28,6 +28,7 @@ makedocs(;
 
 deploydocs(;
     repo = "github.com/aclai-lab/SoleReasoners.jl",
+    devbranch = "main",
     target = "build",
     branch = "gh-pages",
     versions=["main" => "main", "stable" => "v^", "v#.#", "dev" => "dev"],
