@@ -20,6 +20,8 @@ include("metric-heap/metrics.jl")
 export randombranch, distancefromroot, inversedistancefromroot, formulaheight
 include("metric-heap/choose-node.jl")
 export roundrobin!, mostvoted!
+include("embedding/embedding.jl")
+include("embedding/spartacus.jl")
 include("utils/utils.jl")
 export booleantofuzzy, dimacstosole
 

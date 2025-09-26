@@ -68,6 +68,13 @@ test_suites = [
             "alphaval/mvlrcc8-tableau/H4.jl"
         ]
     ),
+    (
+        "embedding",
+        [
+            "embedding/embedding.jl",
+            "embedding/spartacus.jl"
+        ]
+    ),
     ("Utils", ["utils/utils.jl"]),
 ]
 
