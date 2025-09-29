@@ -1,27 +1,71 @@
 using SoleLogics: SyntaxBranch, check
 
-# Embedding
-function embed(φ::SyntaxBranch, e::E) where {E<:AbstractVector}
-    return map(m->(count(map(w->check(φ, m, w), m.frame.worlds))>0), e)
+function embed(φ::SyntaxBranch, e::E; memo::M) where {E<:AbstractVector, M<:AbstractDict}
+    return map(
+        m->(
+            count(
+                map(
+                    w->check(φ, m, w; use_memo=memo[m]),
+                    m.frame.worlds
+                )
+            ) > 0
+        ),
+        e
+    )
 end
-sat(φ::SyntaxBranch, e::E) where {E<:AbstractVector} = count(embed(φ, e))>0
-unsat(φ::SyntaxBranch, e::E) where {E<:AbstractVector} = !sat(φ, e)
-val(φ::SyntaxBranch, e::E) where {E<:AbstractVector} = unsat(¬(φ), e)
-unval(φ::SyntaxBranch, e::E) where {E<:AbstractVector} = !val(φ, e)
-function eqv(φ::SyntaxBranch, ψ::SyntaxBranch, e::E) where {E<:AbstractVector}
-    return embed(φ, e) == embed(ψ, e)
+
+function sat(φ::SyntaxBranch, e::E; memo::M) where {E<:AbstractVector, M<:AbstractDict}
+    return count(embed(φ, e; memo=memo)) > 0
 end
-function ent(φ::SyntaxBranch, ψ::SyntaxBranch, e::E) where {E<:AbstractVector}
-    a = embed(φ, e)
-    b = embed(ψ, e)
+
+function unsat(φ::SyntaxBranch, e::E; memo::M) where {E<:AbstractVector, M<:AbstractDict}
+    return !sat(φ, e; memo=memo)
+end
+
+function val(φ::SyntaxBranch, e::E; memo::M) where {E<:AbstractVector, M<:AbstractDict}
+    return unsat(¬(φ), e; memo=memo)
+end
+
+function unval(φ::SyntaxBranch, e::E; memo::M) where {E<:AbstractVector, M<:AbstractDict}
+    return !val(φ, e; memo=memo)
+end
+
+function eqv(φ::SyntaxBranch, ψ::SyntaxBranch, e::E; memo::M) where {E<:AbstractVector, M<:AbstractDict}
+    return embed(φ, e; memo=memo) == embed(ψ, e; memo=memo)
+end
+
+function ent(φ::SyntaxBranch, ψ::SyntaxBranch, e::E; memo::M) where {E<:AbstractVector, M<:AbstractDict}
+    a = embed(φ, e; memo=memo)
+    b = embed(ψ, e; memo=memo)
     return (a .&& b) == a
 end
-# # Old version (only on w0)
-# function val0(φ::SyntaxBranch, e::E) where {E<:AbstractVector}
-#     return countmap(map(x->check(φ, x, first(x.frame.worlds)), e))[0] == 0
-# end
-# unval0(φ::SyntaxBranch, e::E) where {E<:AbstractVector} = !val0(φ, e)
-# function unsat0(φ::SyntaxBranch, e::E) where {E<:AbstractVector}
-#     return countmap(map(x->check(φ, x, first(x.frame.worlds)), e))[1] == 0
-# end
-# sat0(φ::SyntaxBranch, e::E) where {E<:AbstractVector} = !unsat0(φ, e)
+
+function embed0(φ::SyntaxBranch, e::E; memo::M) where {E<:AbstractVector, M<:AbstractDict}
+    return map(m->check(φ, m, first(m.frame.worlds); use_memo=memo[m]), e)
+end
+
+function sat0(φ::SyntaxBranch, e::E; memo::M) where {E<:AbstractVector, M<:AbstractDict}
+    return count(embed0(φ, e; memo)) > 0
+end
+
+function unsat0(φ::SyntaxBranch, e::E; memo::M) where {E<:AbstractVector, M<:AbstractDict}
+    return !sat0(φ, e; memo=memo)
+end
+
+function val0(φ::SyntaxBranch, e::E; memo::M) where {E<:AbstractVector, M<:AbstractDict}
+    return unsat0(¬(φ), e; memo=memo)
+end
+
+function unval0(φ::SyntaxBranch, e::E; memo::M) where {E<:AbstractVector, M<:AbstractDict}
+    return !val0(φ, e; memo=memo)
+end
+
+function eqv0(φ::SyntaxBranch, ψ::SyntaxBranch, e::E; memo::M) where {E<:AbstractVector, M<:AbstractDict}
+    return embed0(φ, e; memo=memo) == embed0(ψ, e; memo=memo)
+end
+
+function ent0(φ::SyntaxBranch, ψ::SyntaxBranch, e::E; memo::M) where {E<:AbstractVector, M<:AbstractDict}
+    a = embed0(φ, e; memo=memo)
+    b = embed0(ψ, e; memo=memo)
+    return (a .&& b) == a
+end

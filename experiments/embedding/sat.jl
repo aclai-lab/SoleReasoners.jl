@@ -1,7 +1,8 @@
-using Graphs, Random, SoleLogics, StatsBase, Test
+using Graphs, Random, SoleLogics, StatsBase, Test, ThreadSafeDicts
+
 # using TikzGraphs, TikzPictures
 
-using SoleReasoners: sat, installspartacus, ssat
+using SoleReasoners: sat, sat0, installspartacus, ssat
 
 installspartacus()
 
@@ -37,6 +38,11 @@ for nw in 2:maxw
     end
 end
 
+memo = ThreadSafeDict{KripkeStructure, ThreadSafeDict{SyntaxTree,Worlds{SoleLogics.World}}}()
+for m in e
+    memo[m] = ThreadSafeDict{SyntaxTree,Worlds{SoleLogics.World}}()
+end
+
 println("\nSATISFIABILITY")
 tot_tp = 0
 tot_fp = 0
@@ -66,7 +72,7 @@ for h in minh:maxh
             mode = :full
         )
         t0 = time_ns()
-        re = sat(φ, e)
+        re = sat0(φ, e; memo=memo)
         te += time_ns() - t0
         t0 = time_ns()
         rs = ssat(φ)

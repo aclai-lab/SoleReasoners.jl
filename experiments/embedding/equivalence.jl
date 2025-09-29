@@ -1,7 +1,7 @@
-using Graphs, Random, SoleLogics, StatsBase, Test
+using Graphs, Random, SoleLogics, StatsBase, Test, ThreadSafeDicts
 # using TikzGraphs, TikzPictures
 
-using SoleReasoners: eqv, installspartacus, seqv
+using SoleReasoners: eqv, eqv0, installspartacus, seqv
 
 installspartacus()
 
@@ -35,6 +35,11 @@ for nw in 2:maxw
         end
         push!(e, KripkeStructure(f, v))
     end
+end
+
+memo = ThreadSafeDict{KripkeStructure, ThreadSafeDict{SyntaxTree,Worlds{SoleLogics.World}}}()
+for m in e
+    memo[m] = ThreadSafeDict{SyntaxTree,Worlds{SoleLogics.World}}()
 end
 
 println("\nEQUIVALENCE")
@@ -75,7 +80,7 @@ for h in minh:maxh
             mode = :full
         )
         t0 = time_ns()
-        re = eqv(φ, ψ, e)
+        re = eqv0(φ, ψ, e; memo)
         te += time_ns() - t0
         t0 = time_ns()
         rs = seqv(φ, ψ)
