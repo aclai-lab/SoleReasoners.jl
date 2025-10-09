@@ -1,21 +1,19 @@
-using SoleLogics: SyntaxBranch, check
+using Base.Threads: @threads
+using SoleLogics: AnyWorld, SyntaxBranch, check
+using StaticArrays: SVector
 
 function embed(φ::SyntaxBranch, e::E; memo::M) where {E<:AbstractVector, M<:AbstractDict}
-    return map(
-        m->(
-            count(
-                map(
-                    w->check(φ, m, w; use_memo=memo[m]),
-                    m.frame.worlds
-                )
-            ) > 0
-        ),
-        e
-    )
+    return SVector{length(e), Bool}(map(m->check(φ, m, AnyWorld(); use_memo=memo[m], memo_max_height=2), e))
 end
 
 function sat(φ::SyntaxBranch, e::E; memo::M) where {E<:AbstractVector, M<:AbstractDict}
-    return count(embed(φ, e; memo=memo)) > 0
+    # return count(embed(φ, e; memo=memo)) > 0
+    @threads for m in e
+        if check(φ, m, AnyWorld(); use_memo=memo[m], memo_max_height=2)
+            return true
+        end
+    end
+    return false
 end
 
 function unsat(φ::SyntaxBranch, e::E; memo::M) where {E<:AbstractVector, M<:AbstractDict}
@@ -37,35 +35,5 @@ end
 function ent(φ::SyntaxBranch, ψ::SyntaxBranch, e::E; memo::M) where {E<:AbstractVector, M<:AbstractDict}
     a = embed(φ, e; memo=memo)
     b = embed(ψ, e; memo=memo)
-    return (a .&& b) == a
-end
-
-function embed0(φ::SyntaxBranch, e::E; memo::M) where {E<:AbstractVector, M<:AbstractDict}
-    return map(m->check(φ, m, first(m.frame.worlds); use_memo=memo[m]), e)
-end
-
-function sat0(φ::SyntaxBranch, e::E; memo::M) where {E<:AbstractVector, M<:AbstractDict}
-    return count(embed0(φ, e; memo)) > 0
-end
-
-function unsat0(φ::SyntaxBranch, e::E; memo::M) where {E<:AbstractVector, M<:AbstractDict}
-    return !sat0(φ, e; memo=memo)
-end
-
-function val0(φ::SyntaxBranch, e::E; memo::M) where {E<:AbstractVector, M<:AbstractDict}
-    return unsat0(¬(φ), e; memo=memo)
-end
-
-function unval0(φ::SyntaxBranch, e::E; memo::M) where {E<:AbstractVector, M<:AbstractDict}
-    return !val0(φ, e; memo=memo)
-end
-
-function eqv0(φ::SyntaxBranch, ψ::SyntaxBranch, e::E; memo::M) where {E<:AbstractVector, M<:AbstractDict}
-    return embed0(φ, e; memo=memo) == embed0(ψ, e; memo=memo)
-end
-
-function ent0(φ::SyntaxBranch, ψ::SyntaxBranch, e::E; memo::M) where {E<:AbstractVector, M<:AbstractDict}
-    a = embed0(φ, e; memo=memo)
-    b = embed0(ψ, e; memo=memo)
-    return (a .&& b) == a
+    return (a .& b) == a
 end
