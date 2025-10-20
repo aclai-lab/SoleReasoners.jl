@@ -2,7 +2,7 @@ using Graphs, Random, SoleLogics, StatsBase, Test, ThreadSafeDicts
 
 # using TikzGraphs, TikzPictures
 
-using SoleReasoners: sat, sat0, installspartacus, ssat
+using SoleReasoners: sat, installspartacus, ssat
 
 installspartacus()
 
@@ -38,9 +38,9 @@ for nw in 2:maxw
     end
 end
 
-memo = ThreadSafeDict{KripkeStructure, ThreadSafeDict{SyntaxTree,Worlds{SoleLogics.World}}}()
+memo = ThreadSafeDict{KripkeStructure, ThreadSafeDict{Union{Atom, BooleanTruth, SyntaxBranch},Worlds{SoleLogics.World}}}()
 for m in e
-    memo[m] = ThreadSafeDict{SyntaxTree,Worlds{SoleLogics.World}}()
+    memo[m] = ThreadSafeDict{Union{Atom, BooleanTruth, SyntaxBranch},Worlds{SoleLogics.World}}()
 end
 
 println("\nSATISFIABILITY")
@@ -51,8 +51,10 @@ tot_fn = 0
 tot_te = 0
 tot_ts = 0
 minh = 1
-maxh = 10
-nφ = 500
+maxh = 50
+nφ = 1
+tte = zeros(Float16, maxh-minh+1)
+tts = zeros(Float16, maxh-minh+1)
 for h in minh:maxh
     tp = 0
     fp = 0
@@ -72,24 +74,24 @@ for h in minh:maxh
             mode = :full
         )
         t0 = time_ns()
-        re = sat0(φ, e; memo=memo)
+        # re = sat(φ, e; memo=memo)
         te += time_ns() - t0
         t0 = time_ns()
-        rs = ssat(φ)
+        rs = ssat(φ; timeout = 60)
         ts += time_ns() - t0
-        if rs
-            if re
-                tp += 1
-            else
-                fn += 1
-            end
-        else
-            if re
-                fp += 1
-            else
-                tn += 1
-            end
-        end
+        # if rs
+        #     if re
+        #         tp += 1
+        #     else
+        #         fn += 1
+        #     end
+        # else
+        #     if re
+        #         fp += 1
+        #     else
+        #         tn += 1
+        #     end
+        # end
     end
     global tot_tp += tp
     global tot_fp += fp
@@ -100,8 +102,20 @@ for h in minh:maxh
     println("TP: $tp\tFP: $fp\tTN: $tn\tFN: $fn")
     println("Embdegging avg. time: $(te/nφ) ns")
     println("Spartacus avg. time: $(ts/nφ) ns")
+    tte[h-minh+1] = te/nφ
+    tts[h-minh+1] = ts/nφ
 end
 println("\nRESULTS:")
 println("TP: $tot_tp\tFP: $tot_fp\tTN: $tot_tn\tFN: $tot_fn")
 println("Embdegging avg. time: $(tot_te/((maxh-minh+1)*nφ)) ns")
 println("Spartacus avg. time: $(tot_ts/((maxh-minh+1)*nφ)) ns")
+println("LATEX: ")
+println("Embedding:")
+for i in 1:length(tte)
+    print("($(i+minh-1),$(tte[i]))")
+end
+println("Spartacus:")
+for i in 1:length(tte)
+    print("($(i+minh-1),$(tte[i]))")
+end
+println("\n\n")
