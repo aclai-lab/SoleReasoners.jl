@@ -1,4 +1,5 @@
-using SoleLogics: SyntaxBranch
+using UUIDs
+using SoleLogics: Atom, BooleanTruth, SyntaxBranch
 
 isspartacusinstalled() = isfile(joinpath(@__DIR__, "spartacus/spartacus"))
 
@@ -9,7 +10,7 @@ function installspartacus()
     end
 end
 
-function soletospartacus(φ::SyntaxBranch)
+function soletospartacus(φ::Union{Atom, BooleanTruth, SyntaxBranch})
     s = syntaxstring(φ)
     r = Vector{Char}()
     for c in s
@@ -36,16 +37,46 @@ function soletospartacus(φ::SyntaxBranch)
     return String(r)
 end
 
-function ssat(φ::SyntaxBranch)
+function ssat(φ::Union{Atom, BooleanTruth, SyntaxBranch}; timeout=Union{Nothing, Int} = nothing)
     b = IOBuffer()
     s = joinpath(@__DIR__, "spartacus/spartacus")
-    run(
-        pipeline(
-            `$s --formula="$(soletospartacus(φ))"`,
-            stdout = b
+    uuid = UUIDs.uuid4()
+    filepath = "$(tempdir())/temp$uuid"
+    touch(filepath)
+    open(filepath, "w") do file
+        write(file, soletospartacus(φ))
+    end
+    if isnothing(timeout)
+        run(
+            pipeline(
+                `$s --file="$filepath"`,
+                stdout = b
+            )
         )
-    )
-    r = take!(b) 
+        r = take!(b) 
+    else
+        run(
+            pipeline(
+                `$s --file="$filepath" --timeout=$timeout`,
+                stdout = b
+            )
+        )
+        r = take!(b)
+        if r[lastindex(r)-7:lastindex(r)] == UInt8[
+            0x54,
+            0x69,
+            0x6d,
+            0x65,
+            0x6f,
+            0x75,
+            0x74,
+            0x0a
+        ]
+            @warn "Timeout\n"
+            return nothing  # timeout
+        end
+    end
+    rm(filepath)
     return r[lastindex(r)-12:lastindex(r)] == UInt8[
         0x0a,
         0x73,
@@ -62,8 +93,8 @@ function ssat(φ::SyntaxBranch)
         0x0a
     ]
 end
-sunsat(φ::SyntaxBranch) = !ssat(φ)
-sval(φ::SyntaxBranch) = sunsat(¬(φ))
-sunval(φ::SyntaxBranch) = !sval(φ)
-seqv(φ::SyntaxBranch, ψ::SyntaxBranch) = sval(∧(→(φ, ψ), →(ψ, φ)))  # φ <=> ψ
-sent(φ::SyntaxBranch, ψ::SyntaxBranch) = sval(→(φ, ψ))  # φ => ψ
+sunsat(φ::Union{Atom, BooleanTruth, SyntaxBranch}) = !ssat(φ)
+sval(φ::Union{Atom, BooleanTruth, SyntaxBranch}) = sunsat(¬(φ))
+sunval(φ::Union{Atom, BooleanTruth, SyntaxBranch}) = !sval(φ)
+seqv(φ::Union{Atom, BooleanTruth, SyntaxBranch}, ψ::Union{Atom, BooleanTruth, SyntaxBranch}) = sval(∧(→(φ, ψ), →(ψ, φ)))  # φ <=> ψ
+sent(φ::Union{Atom, BooleanTruth, SyntaxBranch}, ψ::Union{Atom, BooleanTruth, SyntaxBranch}) = sval(→(φ, ψ))  # φ => ψ
