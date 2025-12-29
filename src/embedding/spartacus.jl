@@ -37,7 +37,7 @@ function soletospartacus(φ::Union{Atom, BooleanTruth, SyntaxBranch})
     return String(r)
 end
 
-function ssat(φ::Union{Atom, BooleanTruth, SyntaxBranch}; timeout=Union{Nothing, Int} = nothing)
+function ssat(φ::Union{Atom, BooleanTruth, SyntaxBranch}; timeout::Union{Nothing, Int} = nothing)
     b = IOBuffer()
     s = joinpath(@__DIR__, "spartacus/spartacus")
     uuid = UUIDs.uuid4()
