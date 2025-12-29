@@ -3,8 +3,8 @@ name: CI
 on:
   # Triggers the workflow on push (but only for the "main" branch) or pull request events
   push:
-    branches:
-      - main
+    # branches:
+    #  - main
     tags: ['*']
   pull_request:
 
