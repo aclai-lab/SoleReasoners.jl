@@ -3,7 +3,6 @@ using SoleLogics
 using SoleLogics.ManyValuedLogics
 using SoleReasoners
 using StatsBase
-import SoleBase: initrng
 import SoleLogics: sample
 
 myalphabet = Atom.(["p", "q", "r"])
@@ -35,16 +34,15 @@ append!(
 mvclopweights = [8, 8, 8, 3, 3, 3, 3, 3, 3, 3, 3]
 
 using SoleLogics.ManyValuedLogics: booleanalgebra, G3, Ł3, G4, Ł4, H4
-using SoleLogics.ManyValuedLogics: G5, G6, H6_1, H6_2, H6_3, H6
+using SoleLogics.ManyValuedLogics: G6, H6_1, H6_2, H6_3, H6, H9
 
 algebras = [
-    # ("BA",   booleanalgebra),
-    # ("G3",   G3            ),
-    # ("Ł3",   Ł3            ),
-    # ("G4",   G4            ),
-    # ("Ł4",   Ł4            ),
-    # ("H4",   H4            ),
-    ("G5",   G5            ),
+    ("BA",   booleanalgebra),
+    ("G3",   G3            ),
+    ("Ł3",   Ł3            ),
+    ("G4",   G4            ),
+    ("Ł4",   Ł4            ),
+    ("H4",   H4            ),
     ("G6",   G6            ),
     ("H6_1", H6_1          ),
     ("H6_2", H6_2          ),
@@ -67,7 +65,7 @@ for a in algebras
     unsats = zeros(Int64, max_height-min_height+1)  # unsat for each height
     times = zeros(Float16, max_height-min_height+1) # times for each height
 
-    rng = initrng(Random.GLOBAL_RNG)
+    rng = Random.GLOBAL_RNG
     aot = vcat(myalphabet,getdomain(a[2])) # atoms or truths
     aotweights = StatsBase.uweights(length(myalphabet)+length(getdomain(a[2])))
     aotpicker = (rng)->StatsBase.sample(rng, aot, aotweights)
