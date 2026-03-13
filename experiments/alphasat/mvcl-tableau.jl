@@ -9,7 +9,7 @@ import SoleLogics: sample
 myalphabet = Atom.(["p", "q", "r"])
 
 min_height = 1
-max_height = 7
+max_height = 6
 max_it = 99999
 max_avg = 200
 max_timeout = 60 # seconds
@@ -38,18 +38,19 @@ using SoleLogics.ManyValuedLogics: booleanalgebra, G3, Ł3, G4, Ł4, H4
 using SoleLogics.ManyValuedLogics: G5, G6, H6_1, H6_2, H6_3, H6
 
 algebras = [
-    ("BA",   booleanalgebra),
-    ("G3",   G3            ),
-    ("Ł3",   Ł3            ),
-    ("G4",   G4            ),
-    ("Ł4",   Ł4            ),
-    ("H4",   H4            ),
-    # ("G5",   G5            ),
-    # ("G6",   G6            ),
-    # ("H6_1", H6_1          ),
-    # ("H6_2", H6_2          ),
-    # ("H6_3", H6_3          ),
-    # ("H6",   H6            )
+    # ("BA",   booleanalgebra),
+    # ("G3",   G3            ),
+    # ("Ł3",   Ł3            ),
+    # ("G4",   G4            ),
+    # ("Ł4",   Ł4            ),
+    # ("H4",   H4            ),
+    ("G5",   G5            ),
+    ("G6",   G6            ),
+    ("H6_1", H6_1          ),
+    ("H6_2", H6_2          ),
+    ("H6_3", H6_3          ),
+    ("H6",   H6            ),
+    ("H9",   H9            )
 ]
 
 # Latex
@@ -165,6 +166,7 @@ for a in algebras
         print("($(i+min_height-1),$(times[i]))")
     end
     println("\n\n")
+    flush(stdout)
 end
 
 # Latex
