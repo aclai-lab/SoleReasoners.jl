@@ -11,13 +11,14 @@ function findsimilar(
 ) where {
     T<:ManyValuedMultiModalTableau
 }
+    w = world(tableau)
     ψ = assertion(tableau)[2]
     if judgement(tableau)
         γ = assertion(tableau)[1]
-        # Looking for false(β⪯ψ, ...) where β⪯γ
+        # Looking for false(β⪯ψ, w, ...) where β⪯γ
         while !isroot(tableau)
             tableau = tableau.father
-            if !judgement(tableau)
+            if world(tableau) == w && !judgement(tableau)
                 if assertion(tableau)[1] isa Truth && assertion(tableau)[2] == ψ
                     β = convert(FiniteTruth, assertion(tableau)[1])::FiniteTruth
                     if precedeq(algebra, β, γ)
@@ -28,12 +29,52 @@ function findsimilar(
         end
     else
         β = assertion(tableau)[1]
-        # Looking for true(γ⪯ψ, ...) where β⪯γ
+        # Looking for true(γ⪯ψ, w, ...) where β⪯γ
         while !isroot(tableau)
             tableau = tableau.father
-            if judgement(tableau)
+            if world(tableau) == w && judgement(tableau)
                 if assertion(tableau)[1] isa Truth && assertion(tableau)[2] == ψ
                     γ = convert(FiniteTruth, assertion(tableau)[1])::FiniteTruth
+                    if precedeq(algebra, β, γ)
+                        return true
+                    end
+                end
+            end
+        end
+    end
+    return false
+end
+
+function findsimilaropt(
+    tableau::T,
+    algebra::FiniteFLewAlgebra
+) where {
+    T<:ManyValuedMultiModalTableau
+}
+    w = world(tableau)
+    ψ = assertion(tableau)[1]
+    if judgement(tableau)
+        β = assertion(tableau)[2]
+        # Looking for false(ψ⪯γ, w, ...) where β⪯γ
+        while !isroot(tableau)
+            tableau = tableau.father
+            if world(tableau) == w && !judgement(tableau)
+                if assertion(tableau)[2] isa Truth && assertion(tableau)[1] == ψ
+                    γ = convert(FiniteTruth, assertion(tableau)[2])::FiniteTruth
+                    if precedeq(algebra, β, γ)
+                        return true
+                    end
+                end
+            end
+        end
+    else
+        γ = assertion(tableau)[2]
+        # Looking for true(ψ⪯β, w, ...) where β⪯γ
+        while !isroot(tableau)
+            tableau = tableau.father
+            if world(tableau) == w && judgement(tableau)
+                if assertion(tableau)[2] isa Truth && assertion(tableau)[1] == ψ
+                    β = convert(FiniteTruth, assertion(tableau)[2])::FiniteTruth
                     if precedeq(algebra, β, γ)
                         return true
                     end
@@ -625,6 +666,8 @@ function alphasat(
             β = convert(FiniteTruth, assertion(expansionnode)[2])::FiniteTruth
             if !judgement(expansionnode) && istop(β)
                 close!(expansionnode)   # X4
+            elseif findsimilaropt(expansionnode, algebra)
+                close!(expansionnode)   # X5bis
             elseif token(φ) isa NamedConnective{:∨} && !istop(β)
                 (ψ, ε) = subformulas(φ)
                 pairs = Set{NTuple{2,FiniteTruth}}()
