@@ -1,7 +1,7 @@
 # SoleReasoners.jl
 
 [![Docs](https://img.shields.io/badge/docs-stable-blue.svg)](https://aclai-lab.github.io/SoleReasoners.jl/)
-[![Build Status](https://api.cirrus-ci.com/github/aclai-lab/SoleReasoners.jl.svg?branch=main)](https://cirrus-ci.com/github/aclai-lab/SoleReasoners.jl)
+[![CI](https://github.com/aclai-lab/SoleReasoners.jl/actions/workflows/ci.yml/badge.svg)](https://github.com/aclai-lab/SoleReasoners.jl/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/aclai-lab/SoleReasoners.jl/branch/main/graph/badge.svg?token=LT9IYIYNFI)](https://codecov.io/gh/aclai-lab/SoleReasoners.jl)
 
 [SoleReasoners](https://github.com/aclai-lab/SoleReasoners.jl/) is a Julia package for [automated reasoning](https://en.wikipedia.org/wiki/Automated_reasoning) up to Many-Valued Multi-Modal Logic built on top of [SoleLogics.jl](https://github.com/aclai-lab/SoleLogics.jl/), and part of [Sole.jl](https://github.com/aclai-lab/Sole.jl), an open-source framework for symbolic machine learning.
