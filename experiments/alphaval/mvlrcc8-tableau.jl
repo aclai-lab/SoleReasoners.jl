@@ -3,13 +3,12 @@ using SoleLogics
 using SoleLogics.ManyValuedLogics
 using SoleReasoners
 using StatsBase
-import SoleBase: initrng
 import SoleLogics: sample
 
 myalphabet = Atom.(["p", "q", "r"])
 
 min_height = 1
-max_height = 7
+max_height = 6
 max_it = 99999
 max_avg = 200
 max_timeout = 60 # seconds
@@ -42,7 +41,7 @@ append!(
 mvlrcc8opweights = [14, 14, 14, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
 
 using SoleLogics.ManyValuedLogics: booleanalgebra, G3, Ł3, G4, Ł4, H4
-using SoleLogics.ManyValuedLogics: G5, G6, H6_1, H6_2, H6_3, H6
+using SoleLogics.ManyValuedLogics: G6, H6_1, H6_2, H6_3, H6, H9
 
 algebras = [
     ("BA",   booleanalgebra),
@@ -51,12 +50,12 @@ algebras = [
     ("G4",   G4            ),
     ("Ł4",   Ł4            ),
     ("H4",   H4            ),
-    # ("G5",   G5            ),
-    # ("G6",   G6            ),
-    # ("H6_1", H6_1          ),
-    # ("H6_2", H6_2          ),
-    # ("H6_3", H6_3          ),
-    # ("H6",   H6            )
+    ("G6",   G6            ),
+    ("H6_1", H6_1          ),
+    ("H6_2", H6_2          ),
+    ("H6_3", H6_3          ),
+    ("H6",   H6            ),
+    ("H9",   H9            )
 ]
 
 # Latex
@@ -73,7 +72,7 @@ for a in algebras
     unvals = zeros(Int64, max_height-min_height+1)  # unval for each height
     times = zeros(Float16, max_height-min_height+1) # times for each height
 
-    rng = initrng(Random.GLOBAL_RNG)
+    rng = Random.GLOBAL_RNG
     aot = vcat(myalphabet,getdomain(a[2])) # atoms or truths
     aotweights = StatsBase.uweights(length(myalphabet)+length(getdomain(a[2])))
     aotpicker = (rng)->StatsBase.sample(rng, aot, aotweights)
@@ -172,6 +171,7 @@ for a in algebras
         print("($(i+min_height-1),$(times[i]))")
     end
     println("\n\n")
+    flush(stdout)
 end
 
 # Latex

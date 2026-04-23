@@ -7,6 +7,5 @@ Manifest.toml
 docs/build/
 .vscode
 experiments/*/formulas/*/
-experiments/*/results/*
 results/
 test/alphaval/mvhs-tableau/enriched_valid*
