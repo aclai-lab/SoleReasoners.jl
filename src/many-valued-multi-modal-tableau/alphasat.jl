@@ -108,6 +108,21 @@ function findtableau(
     return false
 end
 
+"""
+    alphasat(metricheaps, choosenode, algebra; timeout=nothing)
+
+Run the many-valued multi-modal tableau search for α-satisfiability.
+
+Returns `true` when the search finds an expanded (satisfiable) branch,
+`false` when all branches are closed, and `nothing` when the search exits
+because `timeout` elapsed or memory use remained too high after a garbage
+collection attempt. `nothing` means **undetermined**, not unsatisfiable; a
+consumer must not conflate it with `false`.
+
+For Boolean formulas, apply [`booleantofuzzy`](@ref) before passing the
+formula to `alphasat`, so Boolean negations are represented as implication
+to bottom.
+"""
 function alphasat(
     metricheaps::Vector{MetricHeap},
     choosenode::F,
