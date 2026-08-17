@@ -5,7 +5,22 @@ using SoleLogics.ManyValuedLogics: FiniteFLewAlgebra, FiniteTruth
 using SoleLogics.ManyValuedLogics: precedeq, getdomain
 using SoleLogics.ManyValuedLogics: maximalmembers, minimalmembers
 
-function findsimilar(
+"""
+    findsimilarwitness(
+        tableau::T,
+        algebra::FiniteFLewAlgebra
+    ) where {
+        T<:ManyValuedMultiModalTableau
+    }
+
+Search the ancestors of `tableau` for an `X5`-closure witness (see
+[`BranchClosure`](@ref)): a node on the same world with the opposite judgement
+on the same formula, whose truth bound conflicts with `tableau`'s via
+`precedeq`. Return that ancestor node, or `nothing` if none is found.
+
+[`findsimilar`](@ref) is `!isnothing(findsimilarwitness(tableau, algebra))`.
+"""
+function findsimilarwitness(
     tableau::T,
     algebra::FiniteFLewAlgebra
 ) where {
@@ -22,7 +37,7 @@ function findsimilar(
                 if assertion(tableau)[1] isa Truth && assertion(tableau)[2] == ψ
                     β = convert(FiniteTruth, assertion(tableau)[1])::FiniteTruth
                     if precedeq(algebra, β, γ)
-                        return true
+                        return tableau
                     end
                 end
             end
@@ -36,16 +51,39 @@ function findsimilar(
                 if assertion(tableau)[1] isa Truth && assertion(tableau)[2] == ψ
                     γ = convert(FiniteTruth, assertion(tableau)[1])::FiniteTruth
                     if precedeq(algebra, β, γ)
-                        return true
+                        return tableau
                     end
                 end
             end
         end
     end
-    return false
+    return nothing
 end
 
-function findsimilaropt(
+function findsimilar(
+    tableau::T,
+    algebra::FiniteFLewAlgebra
+) where {
+    T<:ManyValuedMultiModalTableau
+}
+    return !isnothing(findsimilarwitness(tableau, algebra))
+end
+
+"""
+    findsimilaroptwitness(
+        tableau::T,
+        algebra::FiniteFLewAlgebra
+    ) where {
+        T<:ManyValuedMultiModalTableau
+    }
+
+Search the ancestors of `tableau` for an `X5bis`-closure witness (see
+[`BranchClosure`](@ref)); the `φ⪯β` counterpart of [`findsimilarwitness`](@ref).
+Return that ancestor node, or `nothing` if none is found.
+
+[`findsimilaropt`](@ref) is `!isnothing(findsimilaroptwitness(tableau, algebra))`.
+"""
+function findsimilaroptwitness(
     tableau::T,
     algebra::FiniteFLewAlgebra
 ) where {
@@ -62,7 +100,7 @@ function findsimilaropt(
                 if assertion(tableau)[2] isa Truth && assertion(tableau)[1] == ψ
                     γ = convert(FiniteTruth, assertion(tableau)[2])::FiniteTruth
                     if precedeq(algebra, β, γ)
-                        return true
+                        return tableau
                     end
                 end
             end
@@ -76,13 +114,22 @@ function findsimilaropt(
                 if assertion(tableau)[2] isa Truth && assertion(tableau)[1] == ψ
                     β = convert(FiniteTruth, assertion(tableau)[2])::FiniteTruth
                     if precedeq(algebra, β, γ)
-                        return true
+                        return tableau
                     end
                 end
             end
         end
     end
-    return false
+    return nothing
+end
+
+function findsimilaropt(
+    tableau::T,
+    algebra::FiniteFLewAlgebra
+) where {
+    T<:ManyValuedMultiModalTableau
+}
+    return !isnothing(findsimilaroptwitness(tableau, algebra))
 end
 
 function findtableau(
@@ -112,16 +159,21 @@ function alphasat(
     metricheaps::Vector{MetricHeap},
     choosenode::F,
     algebra::FiniteFLewAlgebra;
-    timeout::Union{Nothing, Int} = nothing
+    timeout::Union{Nothing, Int} = nothing,
+    certificate::Bool = false
 ) where {
     F<:Function
 }
     cycle = 1
     t0 = time_ns()
+    closures = certificate ? Vector{BranchClosure}() : nothing
+    elapsed() = (time_ns()-t0)/1e9
+    outcome(result, cert=nothing) = certificate ? (result, cert) : result
     while true
-        if !isnothing(timeout) && (time_ns()-t0)/1e9 > timeout
+        if !isnothing(timeout) && elapsed() > timeout
             @warn "Timeout"
-            return nothing
+            return outcome(nothing, certificate ?
+                UndeterminedCertificate(:timeout, cycle, elapsed()) : nothing)
         end
         # if using too much memory, try to free memory calling full GC sweep
         if cycle%100==0 && getfreemem() < gettotmem()*5e-2
@@ -131,10 +183,13 @@ function alphasat(
         # if using too much memory, kill execution to avoid crashes
         if cycle%100==0 && getfreemem() < gettotmem()*5e-2
             @warn "Too much memory being used, exiting"
-            return nothing
+            return outcome(nothing, certificate ?
+                UndeterminedCertificate(:memory, cycle, elapsed()) : nothing)
         end
         node = choosenode(metricheaps, cycle)
-        isnothing(node) && return false # all branches are closed
+        if isnothing(node) # all branches are closed
+            return outcome(false, certificate ? UnsatCertificate(closures) : nothing)
+        end
         if expanded(node)
             # DEBUG (satisfiable branch)
             # println(node.frame)
@@ -144,7 +199,12 @@ function alphasat(
             #     push!(result, node)
             # end
             # for r in reverse(result) println(r) end
-            return true   # found a satisfiable branch
+            return outcome(true, certificate ?
+                SatCertificate(
+                    unique([s.world for s in branchsteps(node)]),
+                    frame(node),
+                    branchsteps(node)
+                ) : nothing)   # found a satisfiable branch
         end
         expansionnode = findexpansionnode(node)
         # println("$cycle\t$expansionnode") # DEBUG (expansion node)
@@ -154,9 +214,18 @@ function alphasat(
             β = convert(FiniteTruth, assertion(expansionnode)[1])::FiniteTruth
             γ = convert(FiniteTruth, assertion(expansionnode)[2])::FiniteTruth
             if judgement(expansionnode) && !precedeq(algebra, β, γ)
+                certificate && push!(closures, BranchClosure(
+                    :X1, judgement(expansionnode), assertion(expansionnode),
+                    world(expansionnode), nothing, branchsteps(expansionnode)
+                ))
                 close!(expansionnode)  # X1
             elseif !judgement(expansionnode) &&
                 (isbot(β) || istop(γ) || precedeq(algebra, β, γ))  # X3, X4, X2
+                    certificate && push!(closures, BranchClosure(
+                        isbot(β) ? :X3 : istop(γ) ? :X4 : :X2,
+                        judgement(expansionnode), assertion(expansionnode),
+                        world(expansionnode), nothing, branchsteps(expansionnode)
+                    ))
                     close!(expansionnode)
             else
                 # no condition matched, push node back into metricheaps
@@ -167,8 +236,16 @@ function alphasat(
             β = convert(FiniteTruth, assertion(expansionnode)[1])::FiniteTruth
             φ = assertion(expansionnode)[2]
             if !judgement(expansionnode) && isbot(β)
+                certificate && push!(closures, BranchClosure(
+                    :X3, judgement(expansionnode), assertion(expansionnode),
+                    world(expansionnode), nothing, branchsteps(expansionnode)
+                ))
                 close!(expansionnode)   # X3
-            elseif findsimilar(expansionnode, algebra)
+            elseif (w5 = findsimilarwitness(expansionnode, algebra); !isnothing(w5))
+                certificate && push!(closures, BranchClosure(
+                    :X5, judgement(expansionnode), assertion(expansionnode),
+                    world(expansionnode), branchstep(w5), branchsteps(expansionnode)
+                ))
                 close!(expansionnode)   # X5
             elseif token(φ) isa NamedConnective{:∧} && !isbot(β)
                 (ψ, ε) = subformulas(φ)
@@ -542,7 +619,12 @@ function alphasat(
                             end
                         end
                         if !newnodes && leaf == expansionnode
-                            return true # found satisfiable branch
+                            return outcome(true, certificate ?
+                                SatCertificate(
+                                    unique([s.world for s in branchsteps(leaf)]),
+                                    frame(leaf),
+                                    branchsteps(leaf)
+                                ) : nothing) # found satisfiable branch
                         else
                             ti = typeof(expansionnode)(
                                 true,
@@ -563,12 +645,14 @@ function alphasat(
                         frames = newframes(leaf, algebra; timeout=timeout, t0=t0)
                         if isnothing(frames)
                             @warn "Timeout"
-                            return nothing
+                            return outcome(nothing, certificate ?
+                                UndeterminedCertificate(:timeout, cycle, elapsed()) : nothing)
                         end
                         for fi in frames
                             if !isnothing(timeout) &&
                                 (time_ns()-t0)/1e9 > timeout
-                                return nothing
+                                return outcome(nothing, certificate ?
+                                    UndeterminedCertificate(:timeout, cycle, elapsed()) : nothing)
                             end
                             for wi in worlds(typeof(expansionnode), fi)
                                 βi = mveval(r, w, wi, fi)
@@ -665,8 +749,16 @@ function alphasat(
             φ = assertion(expansionnode)[1]
             β = convert(FiniteTruth, assertion(expansionnode)[2])::FiniteTruth
             if !judgement(expansionnode) && istop(β)
+                certificate && push!(closures, BranchClosure(
+                    :X4, judgement(expansionnode), assertion(expansionnode),
+                    world(expansionnode), nothing, branchsteps(expansionnode)
+                ))
                 close!(expansionnode)   # X4
-            elseif findsimilaropt(expansionnode, algebra)
+            elseif (w5bis = findsimilaroptwitness(expansionnode, algebra); !isnothing(w5bis))
+                certificate && push!(closures, BranchClosure(
+                    :X5bis, judgement(expansionnode), assertion(expansionnode),
+                    world(expansionnode), branchstep(w5bis), branchsteps(expansionnode)
+                ))
                 close!(expansionnode)   # X5bis
             elseif token(φ) isa NamedConnective{:∨} && !istop(β)
                 (ψ, ε) = subformulas(φ)
@@ -866,7 +958,12 @@ function alphasat(
                             end
                         end
                         if !newnodes && leaf == expansionnode
-                            return true # found satisfiable branch
+                            return outcome(true, certificate ?
+                                SatCertificate(
+                                    unique([s.world for s in branchsteps(leaf)]),
+                                    frame(leaf),
+                                    branchsteps(leaf)
+                                ) : nothing) # found satisfiable branch
                         else
                             ti = typeof(expansionnode)(
                                 true,
@@ -887,12 +984,14 @@ function alphasat(
                         frames = newframes(leaf, algebra; timeout=timeout, t0=t0)
                         if isnothing(frames)
                             @warn "Timeout"
-                            return nothing
+                            return outcome(nothing, certificate ?
+                                UndeterminedCertificate(:timeout, cycle, elapsed()) : nothing)
                         end
                         for fi in frames
                             if !isnothing(timeout) &&
                                 (time_ns()-t0)/1e9 > timeout
-                                return nothing
+                                return outcome(nothing, certificate ?
+                                    UndeterminedCertificate(:timeout, cycle, elapsed()) : nothing)
                             end
                             for wi in worlds(typeof(expansionnode), fi)
                                 βi = mveval(r, w, wi, fi)

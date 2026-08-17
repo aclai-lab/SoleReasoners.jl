@@ -6,6 +6,17 @@ include("propositional-tableau/propositional-tableau.jl")
 export sat
 include("many-valued-multi-modal-logic/many-valued-multi-modal-logic.jl")
 include("many-valued-multi-modal-tableau/many-valued-multi-modal-tableau.jl")
+include("many-valued-multi-modal-tableau/certificate.jl")
+export TableauCertificate,
+    BranchStep,
+    BranchClosure,
+    UnsatCertificate,
+    SatCertificate,
+    UndeterminedCertificate,
+    branchstep,
+    branchsteps,
+    certificatedict,
+    serialize_alphasat
 include("many-valued-multi-modal-tableau/alphasat.jl")
 export alphasat, alphaval
 include("many-valued-multi-modal-tableau/mvltlfp-tableau.jl")
