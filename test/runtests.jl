@@ -55,6 +55,12 @@ test_suites = [
         ]
     ),
     (
+        "α-sat certificate",
+        [
+            "alphasat/certificate.jl"
+        ]
+    ),
+    (
         "α-val",
         [
             "alphaval/mvltlfp-tableau/G4.jl",

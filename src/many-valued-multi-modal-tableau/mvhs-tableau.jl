@@ -177,7 +177,8 @@ function alphasat(
     algebra::FiniteFLewAlgebra,
     choosenode::Function,
     metrics::Function...;
-    timeout::Union{Nothing, Int} = nothing
+    timeout::Union{Nothing, Int} = nothing,
+    certificate::Bool = false
 ) where {
     T<:Truth
 }
@@ -216,7 +217,7 @@ function alphasat(
             push!(heap(metricheap), MetricHeapNode(metric(metricheap), tableau))
         end
     end
-    return alphasat(metricheaps, choosenode, algebra; timeout)
+    return alphasat(metricheaps, choosenode, algebra; timeout, certificate)
 end
 
 function alphasat(
@@ -224,7 +225,8 @@ function alphasat(
     α::T,
     φ::Formula,
     algebra::FiniteFLewAlgebra;
-    timeout::Union{Nothing, Int} = nothing
+    timeout::Union{Nothing, Int} = nothing,
+    certificate::Bool = false
 ) where {
     T<:Truth
 }
@@ -235,7 +237,8 @@ function alphasat(
         algebra,
         roundrobin!,
         randombranch;
-        timeout
+        timeout,
+        certificate
     )
 end
 
