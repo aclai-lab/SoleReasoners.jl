@@ -21,7 +21,7 @@ makedocs(;
         "Metric Heap" => "metric-heap.md",
         "Many-Valued Multi-Modal Logic" => "many-valued-multi-modal-logic.md",
         "Many-Valued Multi-Modal Tableau" => "many-valued-multi-modal-tableau.md",
-        # "Examples" => "examples.md",
+        "Examples" => "examples.md",
         ],
     # NOTE: warning
     warnonly = :true,
